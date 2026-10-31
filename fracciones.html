@@ -59,6 +59,7 @@
   </section>
 </div>
 
+<script src="sonido.js"></script>
 <script src="construir.js"></script>
 <script>
 const NS="http://www.w3.org/2000/svg";
@@ -121,20 +122,23 @@ r2();
 
 // Bandeja 3
 let score=0,ans;
+const NV=Niveles(document.getElementById("qpie"),['Mitades, tercios y cuartos','Hasta octavos','Quintos, décimos y doceavos','Doceavos y dieciseisavos','Simplificar la fracción'],()=>q());
 function q(){
-  const ds=[2,3,4,5,6,8];const d=ds[Math.floor(Math.random()*ds.length)];
-  const n=1+Math.floor(Math.random()*(d-1));ans=`${n}/${d}`;
+  const L=NV.get(),ds=[[2,3,4],[2,3,4,5,6,8],[5,6,8,10,12],[8,9,10,12,16],[4,6,8,10,12]][L];const d=ds[Math.floor(Math.random()*ds.length)];
+  let n=1+Math.floor(Math.random()*(d-1));if(L===4){const c=[];for(let i=1;i<d;i++)if(gcd(i,d)>1)c.push(i);n=c[Math.floor(Math.random()*c.length)];}
+  ans=L===4?(n/gcd(n,d))+'/'+(d/gcd(n,d)):`${n}/${d}`;
   drawPie(document.getElementById("qpie"),d,Array.from({length:d},(_,i)=>i<n));
   const chk=t=>{
     const m=document.getElementById("qmsg");
-    if(t===ans){score++;document.getElementById("score").textContent=score;m.innerHTML=`<span class="ok">¡Correcto!</span> ${n} piezas coloreadas de ${d} partes iguales.`;setTimeout(q,1400);}
+    if(t===ans){score++;document.getElementById("score").textContent=score;m.innerHTML=`<span class="ok">¡Correcto!</span> ${n} piezas coloreadas de ${d} partes iguales${L===4?`, es decir ${n}/${d} = ${ans}`:''}.`;setTimeout(q,1400);}
     else m.innerHTML=`<span class="bad">Casi.</span> Cuenta primero cuántas partes tiene el círculo (abajo) y luego las rojas (arriba).`;
   };
   Construir(document.getElementById("opts"),{n:2,sep:"/",labels:["rojas","partes en total"],submit:v=>chk(v[0]+"/"+v[1])});
-  document.getElementById("qmsg").textContent="Escribe la fracción: piezas rojas arriba, partes totales abajo.";
+  document.getElementById("qmsg").textContent=L===4?"Escribe la fracción simplificada (la más pequeña equivalente).":"Escribe la fracción: piezas rojas arriba, partes totales abajo.";
 }
 document.getElementById("next").onclick=q;q();
 </script>
 
 <script src="taller.js"></script>
+<script src="pantalla.js"></script>
 </body></html>

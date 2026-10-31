@@ -148,6 +148,7 @@
   </section>
 </div>
 <button id="next" hidden aria-hidden="true" tabindex="-1">Siguiente</button>
+<script src="sonido.js"></script>
 <script>
 const $=s=>document.querySelector(s);
 const h=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;};
@@ -254,6 +255,11 @@ function mk(N,MODES){
   const digs=S=>Array.from({length:NC},(_,i)=>Math.floor(S/Math.pow(10,NC-1-i))%10);
   const val=a=>a.reduce((x,d)=>x*10+d,0);
   const fmtS=S=>{const ip=Math.floor(S/SC),fp=String(S%SC).padStart(4,'0').replace(/0+$/,'');const I=String(ip).replace(/\B(?=(\d{3})+(?!\d))/g,',');return fp?I+'.'+fp:I;};
+  const NIVD=['Números de 2 cifras','Hasta 4 cifras','Números grandes','Un decimal','Dos o tres decimales','Grandes con decimales'];
+  let lv=0;
+  const R=(a,b)=>a+rnd(b-a+1);
+  function rndL(){const D=[()=>R(10,99)*SC,()=>R(10,9999)*SC,()=>R(1000,999999)*SC,()=>R(1,99)*SC+R(1,9)*SC/10,()=>{const k=2+rnd(2),m=Math.pow(10,k);return R(1,999)*SC+R(1,m-1)*SC/m;},null][lv];return D?D():rndS();}
+  const carries=(a,b,m)=>{const x=digs(a),y=digs(b);return m==='sumar'?x.some((d,i)=>d+y[i]>=10):x.some((d,i)=>d<y[i]);};
   const rndS=()=>{const ni=1+rnd(5),ip=rnd(Math.pow(10,ni)),k=rnd(4),fp=k?(1+rnd(Math.pow(10,k)-1))*Math.pow(10,4-k):0;return Math.max(ip*SC+fp,SC/10);};
   const words=a=>a.map((d,i)=>{const e=4-i;return d?`${d} ${nameOf(e,d)}`:'';}).filter(Boolean).join(' + ');
   const CN={g:'verde',b:'azul',r:'roja',lg:'verde claro',lb:'azul claro',pk:'rosa'};
@@ -298,14 +304,16 @@ function mk(N,MODES){
     $('#i'+N).innerHTML='<b>Pista:</b> alinea los puntos y trabaja de derecha a izquierda.<br>'+L.join('<br>');}
   function nuevo(){done=false;flash=[];cur=Array(NC).fill(0);$('#i'+N).innerHTML='';$('#x'+N).innerHTML='';
     if(mode==='libre'){$('#q'+N).textContent='';}
-    else if(mode==='formar'){exp=rndS();$('#q'+N).innerHTML=`Forma el número <b>${fmtS(exp)}</b>`;}
-    else{let g=0;do{A=rndS();B=rndS();if(mode==='restar'&&A<B){const t=A;A=B;B=t;}g++;}while(g<200&&((mode==='sumar'&&A+B>=1e9)||A===B||(A%SC===0&&B%SC===0)));
+    else if(mode==='formar'){exp=rndL();$('#q'+N).innerHTML=`Forma el número <b>${fmtS(exp)}</b>`;}
+    else{let g=0;do{A=rndL();B=rndL();if(mode==='restar'&&A<B){const t=A;A=B;B=t;}g++;}while(g<400&&((mode==='sumar'&&A+B>=1e9)||A===B||(lv>=3&&A%SC===0&&B%SC===0)||(lv===0&&carries(A,B,mode))||(lv===1&&!carries(A,B,mode))));
       exp=mode==='sumar'?A+B:A-B;$('#q'+N).innerHTML=`${fmtS(A)} ${mode==='sumar'?'+':'−'} ${fmtS(B)} = ?`;}
     draw();}
-  function chips(){const c=$('#m'+N);c.innerHTML='';MODES.forEach(([k,t])=>c.appendChild(btn(mode===k?'on':'',t,()=>{mode=k;chips();nuevo();})));}
+  const nvd=h('div','niv');$('#m'+N).insertAdjacentElement('afterend',nvd);
+  function nivs(){nvd.innerHTML='';nvd.hidden=mode==='libre';nvd.appendChild(h('span','lbl2','Nivel'));NIVD.forEach((t,i)=>{const b=btn(lv===i?'on':'',String(i+1),()=>{lv=i;nivs();nuevo();});b.title=t;b.setAttribute('aria-label','Nivel '+(i+1)+': '+t);b.style.minWidth='46px';nvd.appendChild(b);});nvd.appendChild(h('span','lbl2',NIVD[lv]+(N===5&&lv===0?' (sin llevar ni pedir prestado)':N===5&&lv===1?' (con llevada o préstamo)':'')));}
+  function chips(){const c=$('#m'+N);c.innerHTML='';nivs();MODES.forEach(([k,t])=>c.appendChild(btn(mode===k?'on':'',t,()=>{mode=k;chips();nuevo();})));}
   $('#ck'+N).onclick=()=>check(false);$('#h'+N).onclick=pista;$('#n'+N).onclick=nuevo;
   secs.push({root:$('#s'+N),next(){if(mode==='libre'){cur=digs(rndS());draw();}else nuevo();}});
-  chips();nuevo();
+  nuevo();chips();
 }
 mk(4,[['libre','Libre'],['formar','Formar un número']]);
 mk(5,[['sumar','Sumar'],['restar','Restar']]);
@@ -428,4 +436,5 @@ secs.forEach(s=>{s.root.addEventListener('pointerdown',()=>{active=s;},true);s.r
 $('#next').addEventListener('click',()=>active.next());
 </script>
 <script src="taller.js"></script>
+<script src="pantalla.js"></script>
 </body></html>

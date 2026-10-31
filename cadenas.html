@@ -3,6 +3,7 @@
 <title>Tablas de multiplicar · Cadenas de cuentas interactivas</title><!--seo--><meta name="description" content="Aprende las tablas de multiplicar con cadenas de cuentas de colores y rectángulos de cuentas. Taller interactivo estilo Montessori para niñas y niños, gratis y sin internet."><link rel="canonical" href="https://elodiestrupiechonski.github.io/Talleres-Matematicas/cadenas.html"><meta property="og:type" content="website"><meta property="og:locale" content="es_MX"><meta property="og:site_name" content="Talleres de Matemáticas"><meta property="og:title" content="Tablas de multiplicar · Cadenas de cuentas interactivas"><meta property="og:description" content="Aprende las tablas de multiplicar con cadenas de cuentas de colores y rectángulos de cuentas. Taller interactivo estilo Montessori para niñas y niños, gratis y sin internet."><meta property="og:url" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/cadenas.html"><meta property="og:image" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/icons/og.png"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Tablas de multiplicar · Cadenas de cuentas interactivas", "description": "Aprende las tablas de multiplicar con cadenas de cuentas de colores y rectángulos de cuentas. Taller interactivo estilo Montessori para niñas y niños, gratis y sin internet.", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/cadenas.html", "inLanguage": "es-MX", "isAccessibleForFree": true, "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/", "author": [{"@type": "Person", "name": "Elodie Strupiechonski"}, {"@type": "Person", "name": "Andrés de Luna Bugallo"}], "learningResourceType": "Recurso interactivo", "typicalAgeRange": "9-11", "educationalLevel": "Primaria", "teaches": "Multiplicación", "isPartOf": {"@type": "WebSite", "name": "Talleres de Matemáticas", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/"}}</script><!--/seo-->
 <link rel="stylesheet" href="taller.css">
 <style>
+.pf #s3 .pf-inner{display:grid;grid-template-columns:auto 1fr;column-gap:28px;row-gap:10px;align-content:start}.pf #s3 .pf-inner>h2,.pf #s3 .pf-inner>#q3{grid-column:1/-1}.pf #s3 .pf-inner>#o3{grid-column:1;grid-row:3}.pf #s3 .pf-inner>#mat3{grid-column:2;grid-row:3 / span 3;align-self:start}.pf #s3 .pf-inner>#m3{grid-column:1;grid-row:4}.pf #s3 .pf-inner>p:last-child{grid-column:1;grid-row:5}
 .lbl{font-family:var(--display);font-weight:600;color:var(--muted);margin-bottom:6px;display:block}
 .ed{flex:1;min-width:min(100%,260px)}
 .bwrap{width:min(100%,470px);flex:none}
@@ -14,6 +15,7 @@ button:disabled{opacity:.4}
 .seg{display:flex;flex-direction:column;align-items:center;gap:3px}
 .seg .beads{display:flex;gap:2px}
 .seg small{font-family:var(--display);font-weight:700;font-size:.85rem}
+@media (max-height:700px){.pf .tabla{width:min(100%,440px)!important}}
 .tabla{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));width:min(100%,572px);gap:1px;background:var(--tray-edge);border:3px solid var(--fg);border-radius:6px;font-family:var(--display);flex:none}
 .tabla .t,.tabla .hd{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:clamp(14px,2.2vw,16px);padding:0;min-height:0;min-width:0;border:0;border-radius:0;background:var(--card);color:var(--fg);font-weight:700}
 .tabla .hd{background:var(--tray);color:var(--muted)}
@@ -67,6 +69,7 @@ button:disabled{opacity:.4}
   </section>
 </div>
 <button id="next" hidden aria-hidden="true" tabindex="-1">Siguiente</button>
+<script src="sonido.js"></script>
 <script src="construir.js"></script>
 <script>
 const $=s=>document.querySelector(s);
@@ -124,10 +127,11 @@ const bead=n=>`<svg width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy
 /* Bandeja 3 */
 (function(){
   let score=0,cur,done;
-  function q(){done=false;$('#m3').textContent='';const a=2+rnd(9),b=2+rnd(9),p=a*b;let ans,txt,pool;
-    if(Math.random()<.5){ans=p;txt=`¿Cuánto es <b>${a} × ${b}</b>?`;pool=[p-a,p+a,p-b,p+b,p+1,p-1,p+10];}
+  const NV=Niveles($('#mat3'),['Tablas del 2 al 5','Tablas hasta el 10','Número que falta','Factores hasta 12, sin cuentas','Reto: hasta 12 × 12, todo mezclado'],()=>q());
+  function q(){done=false;$('#m3').textContent='';const L=NV.get(),lim=[[2,5],[2,10],[2,10],[2,12],[6,12]][L],a=lim[0]+rnd(lim[1]-lim[0]+1),b=lim[0]+rnd(lim[1]-lim[0]+1),p=a*b;let ans,txt,pool;
+    if(L===0||L===1||(L===4&&Math.random()<.5)||(L===3&&Math.random()<.3)){ans=p;txt=`¿Cuánto es <b>${a} × ${b}</b>?`;pool=[p-a,p+a,p-b,p+b,p+1,p-1,p+10];}
     else{ans=b;txt=`<b>${a} × ? = ${p}</b>. ¿Qué número falta?`;pool=[b-1,b+1,b+2,b-2,a,p-a];}
-    cur={ans,a,b,p};$('#q3').innerHTML=txt;{const m=$('#mat3');m.innerHTML='';m.style.gridTemplateRows=`repeat(${a},18px)`;for(let i=0;i<p;i++){const e=document.createElement('i');e.style.cssText=`width:18px;height:18px;border-radius:50%;border:2px solid var(--fg);box-sizing:border-box;background:${BC[a]||'#ccc'}`;m.appendChild(e);}}
+    cur={ans,a,b,p};$('#q3').innerHTML=txt;{const m=$('#mat3');m.innerHTML='';m.style.gridTemplateRows=`repeat(${a},18px)`;for(let i=0;i<(L>=3?0:p);i++){const e=document.createElement('i');e.style.cssText=`width:18px;height:18px;border-radius:50%;border:2px solid var(--fg);box-sizing:border-box;background:${BC[a]||'#ccc'}`;m.appendChild(e);}}
     const set=new Set([ans]);shuffle(pool.slice()).forEach(x=>{if(set.size<4&&x>0&&x!==ans)set.add(x);});let g=1;while(set.size<4)set.add(ans+g++);
     Construir($('#o3'),{max:3,submit:v=>res(v[0])});}
   function res(x){if(x===cur.ans){if(!done){score++;$('#sc3').textContent=score;}done=true;$('#m3').innerHTML=`<span class="ok">¡Correcto!</span> ${cur.a} × ${cur.b} = ${cur.p}. Pulsa Siguiente.`;}
@@ -141,4 +145,5 @@ secs.forEach(s=>{s.root.addEventListener('pointerdown',()=>{active=s;},true);s.r
 $('#next').addEventListener('click',()=>active.next());
 </script>
 <script src="taller.js"></script>
+<script src="pantalla.js"></script>
 </body></html>

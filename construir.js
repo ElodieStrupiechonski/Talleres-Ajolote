@@ -20,9 +20,9 @@
     }
     if (sp.unit){ var u=document.createElement('span'); u.className='cn-unit'; u.textContent=sp.unit; caja.appendChild(u); }
     var pad=document.createElement('div'); pad.className='cn-pad';
-    ['7','8','9','4','5','6','1','2','3','⌫','0','✓'].forEach(function(k){
+    ['1','2','3','4','5','6','7','8','9','0','⌫','✓'].forEach(function(k){
       var b=document.createElement('button'); b.type='button'; b.className='cn-k'+(k==='✓'?' cn-ok':'');
-      b.textContent=k; if (k==='⌫') b.setAttribute('aria-label','Borrar'); if (k==='✓'){ b.setAttribute('aria-label','Comprobar'); b.textContent='✓ Comprobar'; }
+      b.textContent=k; if (k==='⌫'){ b.setAttribute('aria-label','Borrar'); b.style.gridColumn='span 2'; } if (k==='✓'){ b.setAttribute('aria-label','Comprobar'); b.textContent='✓ Comprobar'; }
       b.onclick=function(){
         if (k==='⌫'){ vals[foco]=vals[foco].slice(0,-1); }
         else if (k==='✓'){
@@ -38,3 +38,19 @@
   };
 
 })();
+
+/* Selector de niveles compartido: Niveles(ancla, nombres, alCambiar) -> {get()}. Nunca bloquea niveles. */
+window.Niveles = function(ancla, nombres, cb){
+  var caja=document.createElement('div'); caja.className='niv'; var lv=0;
+  function pinta(){
+    caja.innerHTML='';
+    var t=document.createElement('span'); t.className='lbl2'; t.textContent='Nivel'; caja.appendChild(t);
+    nombres.forEach(function(n,i){ var b=document.createElement('button'); b.type='button'; b.textContent=String(i+1); b.className=lv===i?'on':'';
+      b.title=n; b.setAttribute('aria-label','Nivel '+(i+1)+': '+n); b.style.minWidth='46px';
+      b.onclick=function(){ lv=i; pinta(); cb&&cb(i); }; caja.appendChild(b); });
+    var d=document.createElement('span'); d.className='lbl2'; d.textContent=nombres[lv]; caja.appendChild(d);
+  }
+  var nodo=ancla; while(nodo.parentNode && !(nodo.parentNode.classList && nodo.parentNode.classList.contains('tray')) && nodo.parentNode!==document.body) nodo=nodo.parentNode;
+  nodo.parentNode.insertBefore(caja,nodo); pinta();
+  return { get:function(){return lv;} };
+};

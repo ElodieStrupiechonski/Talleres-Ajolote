@@ -67,6 +67,7 @@
   </section>
 </div>
 <button id="next" hidden aria-hidden="true" tabindex="-1">Siguiente</button>
+<script src="sonido.js"></script>
 <script src="construir.js"></script>
 <script>
 const $=s=>document.querySelector(s);
@@ -150,8 +151,9 @@ const secs=[];
 /* Bandeja 3 */
 (function(){
   const B=Board($('#b3'),()=>{});let score=0,cur,done=false;
-  function q(){B.clear();done=false;const ks=Object.keys(P);const k=ks[rnd(ks.length)];let f,r;
-    do{f=rnd(8);r=k==='peon'?1+rnd(6):rnd(8);}while(false);
+  const NV=Niveles($('#b3'),['Torre y rey','Alfil y peón','Caballo','Dama','Todas las piezas, en cualquier casilla'],()=>q());
+  function q(){B.clear();done=false;const L=NV.get(),ks=[['torre','rey'],['alfil','peon'],['caballo'],['dama'],Object.keys(P)][L];const k=ks[rnd(ks.length)];let f,r;
+    do{f=rnd(8);r=k==='peon'?1+rnd(6):rnd(8);if(L<4&&Math.random()<.5){f=2+rnd(4);r=k==='peon'?1+rnd(6):2+rnd(4);}}while(false);
     const mv=moves(k,f,r),a=mv.length;cur={k,f,r,mv,a};
     B.at(f,r).textContent=P[k].g;B.at(f,r).classList.add('sel');
     $('#q3').innerHTML=`${P[k].n} está en <b>${nm(f,r)}</b>. ¿A cuántas casillas puede ir?`;
@@ -172,4 +174,5 @@ secs.forEach(s=>{s.root.addEventListener('pointerdown',()=>{active=s;},true);s.r
 $('#next').addEventListener('click',()=>active.next());
 </script>
 <script src="taller.js"></script>
+<script src="pantalla.js"></script>
 </body></html>

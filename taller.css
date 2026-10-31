@@ -86,6 +86,36 @@ button.ayuda{align-self:flex-start;min-height:44px;font-size:1rem;background:var
 .cn-campo.vacio{color:var(--muted);font-weight:400}
 .cn-campo.foco{border-color:var(--acc);box-shadow:0 0 0 3px var(--acc)}
 .cn-sep,.cn-unit{font-family:var(--display);font-weight:700;font-size:1.3rem;padding-bottom:14px}
-.cn-pad{display:grid;grid-template-columns:repeat(3,64px);gap:6px}
+.cn-pad{display:grid;grid-template-columns:repeat(5,60px);gap:6px}
 .cn-k{min-width:0;height:54px;padding:0;font-size:1.4rem}
-.cn-ok{grid-column:1/-1;height:48px;font-size:1.05rem;background:var(--acc);color:var(--acc-fg)}
+.cn-ok{grid-column:span 3;height:54px;font-size:1.05rem;background:var(--acc);color:var(--acc-fg)}
+
+/* Pantalla fija: una bandeja por pantalla */
+body.pf{height:100vh;height:100dvh;overflow:hidden;padding:0;display:flex;flex-direction:column;font-size:17px;line-height:1.35}
+.pf .pf-top{display:flex;align-items:center;gap:12px;padding:6px 12px;flex:none}
+.pf .pf-top h1{font-size:1.35rem;margin:0}
+.pf .pf-top .back{min-height:44px;padding:4px 14px;font-size:1.05rem}
+.pf .pf-sp{flex:1}
+.pf .pf-slot{display:inline-flex;align-items:center;gap:8px}
+.pf .pf-cr{font-size:.85rem;color:var(--muted)}
+.pf .wrap{flex:1;min-height:0;max-width:none;margin:0;padding:0 12px;display:block;position:relative}
+.pf .wrap>header,.pf .pie-creditos,.pf .step{display:none}
+.pf .tray{display:none;height:100%;box-sizing:border-box;overflow:hidden;padding:0;border-width:5px}
+.pf .tray.pf-on{display:block}
+.pf .pf-inner{display:flex;flex-direction:column;gap:10px;padding:12px 14px;transform-origin:0 0;box-sizing:border-box}
+.pf h2{font-size:1.35rem}
+.pf .big{font-size:2.1rem}
+.pf .note{padding:8px 12px}
+.pf .row{gap:14px}
+.pf .pf-nav{display:flex;gap:8px;padding:6px 12px 8px;flex:none;overflow-x:auto}
+.pf .pf-tab{flex:none;min-height:46px;font-size:1rem;padding:6px 14px;white-space:nowrap}
+.pf .res-btn{position:static;display:none}
+.pf.ver-aciertos .res-btn,.ver-aciertos .pf .res-btn{display:inline-flex}
+.pf .pf-inner{position:relative}
+.pf .pf-inner>h2{padding-right:130px}
+.pf button.ayuda{position:absolute;top:8px;right:12px;min-height:40px;padding:4px 12px;font-size:.95rem;z-index:2}
+
+.snd-btn{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:4px 12px;font-size:.95rem}
+.snd-btn svg{flex:none}
+
+.niv{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:4px 0}.niv .lbl2{font-family:var(--display);font-weight:600;color:var(--muted)}

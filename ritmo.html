@@ -18,30 +18,47 @@ button:disabled{opacity:.4}
 .pad{display:flex;flex-wrap:wrap;gap:8px}
 .pad button{color:#41362b;font-weight:800;min-width:92px;border:2px solid var(--fg)}
 .sum{font-family:var(--display);font-size:1.2rem}
+
+.lines{display:flex;flex-direction:column;gap:8px;width:100%}
+.line{display:flex;align-items:center;gap:10px}
+.line .tag{flex:none;width:96px;font-family:var(--display);font-weight:700;font-size:.9rem;color:var(--muted)}
+.line .bar{flex:1}
+.line.sel .tag{color:var(--fg)}
+.line.sel .bar{box-shadow:0 0 0 3px var(--acc)}
+.bar .fg.rest{background:repeating-linear-gradient(45deg,#d9d3c7 0 6px,#ece7dc 6px 12px)!important;color:#5a4f40}
+.pad button.rest{background:repeating-linear-gradient(45deg,#d9d3c7 0 6px,#ece7dc 6px 12px)}
+.pad{align-items:stretch}
+.who{display:flex;gap:8px;flex-wrap:wrap}
+.niv{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.niv .lbl2{font-family:var(--display);font-weight:600;color:var(--muted)}
 </style></head><body>
 <div class="wrap">
   <a class="back" href="index.html">← Todos los talleres</a>
   <header class="col">
     <h1>Ritmo y fracciones</h1>
-    <p class="lead">Las figuras musicales son fracciones de un compás entero. Armamos y escuchamos.</p>
+    <p class="lead">Las figuras musicales son fracciones de un compás entero. Armamos, escuchamos y en los niveles altos tocamos con dos instrumentos.</p>
   </header>
   <section class="tray" id="s1" aria-labelledby="t1">
     <span class="step">Bandeja 1 · Figuras como fracciones</span>
     <h2 id="t1">Un compás es un entero</h2>
-    <p>Agrega figuras hasta llenar el compás (suma 1).</p>
-    <p class="det">Un compás de 4 tiempos vale <b>1</b> entero. La redonda llena todo el compás, la blanca es ½, la negra ¼, la corchea ⅛ y la semicorchea 1⁄16. Agrega figuras hasta llenar el compás.</p>
-    <div class="bar" id="bar1" aria-label="Compás"></div>
+    <p>Agrega figuras y silencios hasta llenar el compás (suma 1).</p>
+    <p class="det">Un compás de 4 tiempos vale <b>1</b> entero. La redonda llena todo el compás, la blanca es ½, la negra ¼, la corchea ⅛ y la semicorchea 1⁄16. Un silencio dura lo mismo que su figura, pero no suena. Con dos instrumentos, cada línea debe sumar 1 y suenan juntas.</p>
+    <div class="niv" id="nv1"></div>
+    <div class="lines" id="bars1"></div>
     <p class="sum" id="s1t" aria-live="polite"></p>
+    <div class="who" id="who1"></div>
     <div class="pad" id="pad1"></div>
     <div class="btns"><button id="u1" type="button">Quitar la última</button><button id="c1" type="button">Borrar</button><button id="p1" type="button">▶ Escuchar</button></div>
   </section>
   <section class="tray" id="s2" aria-labelledby="t2">
     <span class="step">Bandeja 2 · Completa el compás</span>
     <h2 id="t2">¿Qué falta para llegar a 1?</h2>
-    <p>Agrega las figuras que faltan para sumar 1.</p>
-    <p class="det">Las figuras con borde punteado ya están puestas. Agrega las que falten para que el compás sume exactamente 1.</p>
-    <div class="bar" id="bar2" aria-label="Compás por completar"></div>
+    <p>Agrega lo que falta para que cada línea sume 1.</p>
+    <p class="det">Las figuras con borde punteado ya están puestas. Agrega las que falten para que el compás sume exactamente 1. Los silencios cuentan igual que las figuras.</p>
+    <div class="niv" id="nv2"></div>
+    <div class="lines" id="bars2"></div>
     <p class="sum" id="s2t" aria-live="polite"></p>
+    <div class="who" id="who2"></div>
     <div class="pad" id="pad2"></div>
     <div class="btns"><button id="u2" type="button">Quitar la última</button><button id="h2" type="button">Pista</button><button id="p2" type="button">▶ Escuchar</button><button id="n2" type="button">Siguiente</button></div>
     <p class="note" id="m2" aria-live="polite"></p>
@@ -49,15 +66,16 @@ button:disabled{opacity:.4}
   <section class="tray" id="s3" aria-labelledby="t3">
     <span class="step">Bandeja 3 · Ponte a prueba</span>
     <h2 id="t3">Suma las figuras</h2>
-    
+    <div class="niv" id="nv3"></div>
     <p id="q3" style="font-size:1.25rem"></p>
-    <div id="v3" style="display:flex;flex-direction:column;gap:8px"></div>
+    <div id="v3" class="lines"></div>
     <div class="chips" id="o3"></div>
     <p class="note" id="m3" aria-live="polite"></p>
     <p>Aciertos: <b id="sc3">0</b> · <button id="n3" type="button">Siguiente</button></p>
   </section>
 </div>
 <button id="next" hidden aria-hidden="true" tabindex="-1">Siguiente</button>
+<script src="sonido.js"></script>
 <script src="construir.js"></script>
 <script>
 const $=s=>document.querySelector(s);
@@ -68,62 +86,99 @@ const gcd=(a,b)=>b?gcd(b,a%b):a;
 const shuffle=a=>a.sort(()=>Math.random()-.5);
 const fr=(n,d)=>{if(n===0)return '0';const g=gcd(n,d);n/=g;d/=g;return d===1?String(n):n+'/'+d;};
 const secs=[];
-const FIG=[{k:'redonda',u:16,c:'#86aedb'},{k:'blanca',u:8,c:'#86c496'},{k:'negra',u:4,c:'#f09b8a'},{k:'corchea',u:2,c:'#c4a6e0'},{k:'semicorchea',u:1,c:'#f2c77a'}];
+const NOTAS=[{k:'redonda',u:16,c:'#86aedb'},{k:'blanca',u:8,c:'#86c496'},{k:'negra',u:4,c:'#f09b8a'},{k:'corchea',u:2,c:'#c4a6e0'},{k:'semicorchea',u:1,c:'#f2c77a'}];
+const SILE=NOTAS.map(f=>({k:'silencio de '+f.k,base:f.k,u:f.u,c:'#ddd6c8',r:true}));
 const tx=u=>fr(u,16);
-let AC=null;
-function tone(t,d){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();
-  const o=AC.createOscillator(),g=AC.createGain();o.type='triangle';o.frequency.value=523;o.connect(g);g.connect(AC.destination);
-  const s=AC.currentTime+t;g.gain.setValueAtTime(0,s);g.gain.linearRampToValueAtTime(.35,s+.01);g.gain.exponentialRampToValueAtTime(.001,s+d);o.start(s);o.stop(s+d+.02);}catch(e){}}
-function play(list,barEl){const U=0.125;let t=0;
-  list.forEach((f,i)=>{tone(t*U,Math.min(.35,f.u*U*.9));
-    setTimeout(()=>{const k=barEl.children[i];if(k){k.classList.add('play');setTimeout(()=>k.classList.remove('play'),Math.max(120,f.u*U*900));}},t*U*1000);t+=f.u;});}
-function barView(el,items){el.innerHTML='';items.forEach(f=>{const d=h('div','fg'+(f.lock?' lock':''));d.style.width=(f.u/16*100)+'%';d.style.background=f.c;
-  d.innerHTML=f.u>=2?`${f.k}<small>${tx(f.u)}</small>`:`<small>${tx(f.u)}</small>`;el.appendChild(d);});}
 const sum=a=>a.reduce((s,f)=>s+f.u,0);
-function pad(el,list,onAdd){el.innerHTML='';FIG.forEach(f=>{const b=btn('',f.k[0].toUpperCase()+f.k.slice(1)+' '+tx(f.u),()=>onAdd(f));b.style.background=f.c;b.disabled=sum(list)+f.u>16;el.appendChild(b);});}
+// Niveles: figuras y silencios disponibles y número de líneas (instrumentos)
+const NIV=[
+  {t:'Figuras grandes',n:[0,1,2],r:[],l:1},
+  {t:'Con corcheas',n:[0,1,2,3],r:[2],l:1},
+  {t:'Todas las figuras y silencios',n:[0,1,2,3,4],r:[0,1,2,3,4],l:1},
+  {t:'Dos instrumentos',n:[0,1,2,3],r:[1,2,3],l:2},
+  {t:'Dos instrumentos, todo',n:[0,1,2,3,4],r:[0,1,2,3,4],l:2}];
+const LIN=['Flauta','Marimba'];
+let nivel=0;const listeners=[];
+function chipsNivel(box){box.innerHTML='';box.appendChild(h('span','lbl2','Nivel'));
+  NIV.forEach((v,i)=>{const b=btn(nivel===i?'on':'',String(i+1),()=>{nivel=i;listeners.forEach(f=>f());});b.title=v.t;b.setAttribute('aria-label','Nivel '+(i+1)+': '+v.t);b.style.minWidth='48px';box.appendChild(b);});
+  box.appendChild(h('span','lbl2',NIV[nivel].t));}
+const disp=()=>{const v=NIV[nivel];return {n:v.n.map(i=>NOTAS[i]),r:v.r.map(i=>SILE[i])};};
+// Sonido: flauta (sostenida toda la figura) y marimba (golpe que decae durante la figura)
+const U=0.125,PEN=[[523.25,587.33,659.25,783.99,880],[261.63,329.63,392,440,293.66]];
+function play(lines,barsEl){
+  const dur=Math.max(...lines.map(sum))*U;
+  lines.forEach((L,ln)=>{let t=0;L.forEach((f,i)=>{
+    if(!f.r&&window.Snd&&Snd.on()){const fq=PEN[ln][(i*2+ln)%5],d=Math.max(0.08,f.u*U-0.03);
+      if(ln===0)Snd.voz(fq,t*U,d,{vol:0.13,sost:true,ataque:0.03,relevo:0.12,armV:0.12});
+      else Snd.voz(fq,t*U,Math.max(0.2,f.u*U),{vol:0.15,tipo:'triangle',armV:0.25,ataque:0.006});}
+    const tt=t;setTimeout(()=>{const k=barsEl[ln]&&barsEl[ln].children[i];if(k){k.classList.add('play');setTimeout(()=>k.classList.remove('play'),Math.max(120,f.u*U*900));}},tt*U*1000);t+=f.u;});});
+}
+function barView(el,items){el.innerHTML='';items.forEach(f=>{const d=h('div','fg'+(f.lock?' lock':'')+(f.r?' rest':''));d.style.width=(f.u/16*100)+'%';d.style.background=f.c;
+  d.innerHTML=f.u>=4?`${f.r?'silencio':f.k}<small>${tx(f.u)}</small>`:`<small>${tx(f.u)}</small>`;d.title=f.k;el.appendChild(d);});}
+// Muestra una o dos líneas; devuelve los elementos barra
+function mostrar(cont,lines,sel){cont.innerHTML='';const out=[];lines.forEach((L,i)=>{const w=h('div','line'+(sel===i&&lines.length>1?' sel':''));if(lines.length>1)w.appendChild(h('span','tag',LIN[i]));const b=h('div','bar');barView(b,L);w.appendChild(b);cont.appendChild(w);out.push(b);});return out;}
+function pad(el,lists,line,onAdd){el.innerHTML='';const d=disp(),total=sum(lists[line]);
+  [d.n,d.r].forEach(g=>g.forEach(f=>{const b=btn(f.r?'rest':'',(f.r?'Silencio ':f.k[0].toUpperCase()+f.k.slice(1)+' ')+(f.r?f.base+' ':'')+tx(f.u),()=>onAdd(f));if(!f.r)b.style.background=f.c;b.style.color='#41362b';b.style.minWidth='92px';b.disabled=total+f.u>16;el.appendChild(b);}));}
+function quien(el,n,line,set){el.innerHTML='';if(n<2)return;el.appendChild(h('span','lbl2','Agregar a:'));LIN.forEach((t,i)=>el.appendChild(btn(line===i?'on':'',t,()=>set(i))));}
+const resumen=(lists)=>lists.map((L,i)=>{const s=sum(L);return (lists.length>1?LIN[i]+': ':'')+`<b>${s?tx(s):'0'}</b>`+(s===16?' <span class="ok">✓</span>':s?` · falta ${tx(16-s)}`:'');}).join(' &nbsp;·&nbsp; ');
 
 /* Bandeja 1 */
 (function(){
-  let L=[];
-  function draw(){barView($('#bar1'),L);pad($('#pad1'),L,f=>{L.push(f);draw();});
-    const s=sum(L);$('#s1t').innerHTML=`Suma: <b>${s?tx(s):'0'}</b>`+(s===16?' · <span class="ok">¡Compás completo!</span>':s?` · falta ${tx(16-s)}`:'');}
-  $('#u1').onclick=()=>{L.pop();draw();};$('#c1').onclick=()=>{L=[];draw();};$('#p1').onclick=()=>play(L,$('#bar1'));
-  secs.push({root:$('#s1'),next(){if(sum(L)===16)L=[];else{const f=FIG[2+rnd(3)];if(sum(L)+f.u<=16)L.push(f);}draw();}});
+  let L=[[],[]],line=0,bars=[];
+  const lines=()=>L.slice(0,NIV[nivel].l);
+  function draw(){chipsNivel($('#nv1'));bars=mostrar($('#bars1'),lines(),line);quien($('#who1'),NIV[nivel].l,line,i=>{line=i;draw();});
+    pad($('#pad1'),L,line,f=>{L[line].push(f);draw();});
+    const ok=lines().every(x=>sum(x)===16);$('#s1t').innerHTML='Suma: '+resumen(lines())+(ok?' · <span class="ok">¡Compás completo!</span>':'');}
+  function reinicia(){L=[[],[]];line=0;draw();}
+  $('#u1').onclick=()=>{L[line].pop();draw();};$('#c1').onclick=reinicia;$('#p1').onclick=()=>play(lines(),bars);
+  listeners.push(reinicia);
+  secs.push({root:$('#s1'),next(){const l=lines();if(l.every(x=>sum(x)===16)){reinicia();return;}const d=disp(),all=[...d.n,...d.r];const f=all[rnd(all.length)];if(sum(L[line])+f.u<=16)L[line].push(f);draw();}});
   draw();
 })();
 
 /* Bandeja 2 */
 (function(){
-  let L,fixedN;
-  function nuevo(){L=[];let tot=0,n=1+rnd(3);const need=4+rnd(9);
-    while(n--&&tot<need){const opts=FIG.filter(f=>tot+f.u<=12);const f=opts[rnd(opts.length)];L.push({...f,lock:true});tot+=f.u;}
-    if(tot===16||tot===0){L=[{...FIG[1],lock:true}];}fixedN=L.length;$('#m2').textContent='';draw();}
-  function draw(){barView($('#bar2'),L);pad($('#pad2'),L,f=>{L.push(f);draw();});
-    const s=sum(L);$('#s2t').innerHTML=`Suma: <b>${s?tx(s):'0'}</b>`+(s===16?' · <span class="ok">¡Compás completo!</span>':'');
-    if(s===16)$('#m2').innerHTML='Muy bien: las figuras suman 1. Pulsa ▶ para escucharlo o Siguiente.';}
-  $('#u2').onclick=()=>{if(L.length>fixedN){L.pop();draw();}};
-  $('#h2').onclick=()=>{$('#m2').innerHTML=`Pista: ya hay ${tx(sum(L))||'0'}. Para llegar a 1 falta <b>${tx(16-sum(L))}</b>.`;};
-  $('#p2').onclick=()=>play(L,$('#bar2'));$('#n2').onclick=nuevo;
-  secs.push({root:$('#s2'),next:nuevo});nuevo();
+  let L=[[],[]],fixedN=[0,0],line=0,bars=[];
+  const lines=()=>L.slice(0,NIV[nivel].l);
+  function nuevo(){L=[[],[]];const d=disp(),all=[...d.n,...d.r];
+    for(let ln=0;ln<NIV[nivel].l;ln++){let tot=0,n=1+rnd(3);const need=4+rnd(9);
+      while(n--&&tot<need){const opts=all.filter(f=>tot+f.u<=12);if(!opts.length)break;const f=opts[rnd(opts.length)];L[ln].push({...f,lock:true});tot+=f.u;}
+      if(tot===16||tot===0)L[ln]=[{...NOTAS[1],lock:true}];fixedN[ln]=L[ln].length;}
+    line=0;$('#m2').textContent='';draw();}
+  function draw(){chipsNivel($('#nv2'));bars=mostrar($('#bars2'),lines(),line);quien($('#who2'),NIV[nivel].l,line,i=>{line=i;draw();});
+    pad($('#pad2'),L,line,f=>{L[line].push(f);draw();});
+    const ok=lines().every(x=>sum(x)===16);$('#s2t').innerHTML='Suma: '+resumen(lines())+(ok?' · <span class="ok">¡Compás completo!</span>':'');
+    if(ok)$('#m2').innerHTML='Muy bien: todo suma 1. Pulsa ▶ para escucharlo o Siguiente.';}
+  $('#u2').onclick=()=>{if(L[line].length>fixedN[line]){L[line].pop();draw();}};
+  $('#h2').onclick=()=>{$('#m2').innerHTML='Pista: '+lines().map((x,i)=>(lines().length>1?LIN[i]+': ':'')+`ya hay ${tx(sum(x))||'0'}, falta <b>${tx(16-sum(x))}</b>`).join(' · ')+'.';};
+  $('#p2').onclick=()=>play(lines(),bars);$('#n2').onclick=nuevo;
+  listeners.push(nuevo);secs.push({root:$('#s2'),next:nuevo});nuevo();
 })();
 
 /* Bandeja 3 */
 (function(){
   let score=0,cur,done;
-  function q(){done=false;$('#m3').textContent='';let ans,txt,opts;
-    if(Math.random()<.6){const n=2+rnd(2);let a;do{a=[];for(let i=0;i<n;i++)a.push(FIG[1+rnd(4)]);}while(sum(a)>16||sum(a)===0);
-      const s=sum(a);ans=tx(s);txt=`${a.map(f=>`una ${f.k} (${tx(f.u)})`).join(' + ')} = ?`;
-      const set=new Set([ans]);let g=0;while(set.size<4&&g++<40){const v=s+[-3,-2,-1,1,2,3][rnd(6)];if(v>0&&v<=16)set.add(tx(v));}opts=[...set];
-      cur={ans,items:a,msg:`${a.map(f=>tx(f.u)).join(' + ')} = ${a.map(f=>f.u).join('+')}/16 = ${ans}.`};}
-    else{const i=rnd(4),j=i+1+rnd(4-i);const big=FIG[i],sm=FIG[j];const r=big.u/sm.u;
-      ans=String(r);txt=`¿Cuántas ${sm.k}s caben en una ${big.k}?`;const set=new Set([ans]);[r*2,Math.max(1,r/2),r+2,r+1,r-1].forEach(v=>{if(set.size<4&&v>0&&Number.isInteger(v))set.add(String(v));});opts=[...set];
-      cur={ans,big,sm,r,msg:`${tx(big.u)} ÷ ${tx(sm.u)} = ${r}.`};}
-    $('#q3').textContent=txt;const v=$('#v3');v.innerHTML='';const mk=L=>{const d=h('div','bar');barView(d,L);v.appendChild(d);};if(cur.items){mk(cur.items);}else{mk([cur.big]);mk(Array.from({length:cur.r},()=>cur.sm));}const o=$('#o3');
-    if(cur.items)Construir(o,{n:2,sep:'/',labels:['arriba','abajo'],max:2,submit:v=>res(fr(v[0],v[1]))});
-    else Construir(o,{max:2,submit:v=>res(String(v[0]))});}
+  const nom=f=>(f.r?'un ':'una ')+f.k;
+  function q(){done=false;$('#m3').textContent='';chipsNivel($('#nv3'));const d=disp(),all=[...d.n,...d.r],v=$('#v3'),o=$('#o3');v.innerHTML='';
+    const tipos=['suma','cuantas'];if(NIV[nivel].l===2)tipos.push('falta2','falta2');
+    const t=tipos[rnd(tipos.length)];
+    if(t==='suma'){const n=2+rnd(2);let a,g=0;do{a=[];for(let i=0;i<n;i++)a.push(all[rnd(all.length)]);g++;}while(g<300&&(sum(a)>16||sum(a)===0||a.every(f=>f.r)));
+      const s=sum(a);cur={ans:tx(s),msg:`${a.map(f=>tx(f.u)).join(' + ')} = ${a.map(f=>f.u).join('+')}/16 = ${tx(s)}.`};
+      $('#q3').textContent=a.map(f=>`${nom(f)} (${tx(f.u)})`).join(' + ')+' = ?';mostrar(v,[a],0);
+      Construir(o,{n:2,sep:'/',labels:['arriba','abajo'],max:2,submit:x=>res(fr(x[0],x[1]))});}
+    else if(t==='cuantas'){const ns=NIV[nivel].n.map(i=>NOTAS[i]);let i=rnd(ns.length-1),j=i+1+rnd(ns.length-1-i);const big=ns[i],sm=ns[j],r=big.u/sm.u;
+      const rest=nivel>=2&&Math.random()<.5;const sm2=rest?SILE[NOTAS.indexOf(sm)]:sm;
+      cur={ans:String(r),msg:`${tx(big.u)} ÷ ${tx(sm.u)} = ${r}.`};$('#q3').textContent=`¿Cuántos ${rest?'silencios de ':''}${sm.k}${rest?'':'s'}${rest?'':''} caben en ${nom(big)}?`.replace('silencios de '+sm.k+'','silencios de '+sm.k);
+      mostrar(v,[[big],Array.from({length:r},()=>sm2)],-1);Construir(o,{max:2,submit:x=>res(String(x[0]))});}
+    else{const l1=[];let tot=0;while(tot<16){const op=all.filter(f=>tot+f.u<=16);const f=op[rnd(op.length)];l1.push(f);tot+=f.u;}
+      const l2=[];let t2=0,need=4+rnd(9);while(t2<need){const op=all.filter(f=>t2+f.u<=12);if(!op.length)break;const f=op[rnd(op.length)];l2.push(f);t2+=f.u;}
+      if(t2===0||t2===16){l2.length=0;l2.push(NOTAS[1]);t2=8;}
+      cur={ans:tx(16-t2),msg:`1 − ${tx(t2)} = ${tx(16-t2)}.`};$('#q3').textContent='La línea de la flauta ya suma 1. ¿Cuánto le falta a la marimba para sumar 1?';
+      mostrar(v,[l1,l2],-1);Construir(o,{n:2,sep:'/',labels:['arriba','abajo'],max:2,submit:x=>res(fr(x[0],x[1]))});}
+  }
   function res(x){if(x===cur.ans){if(!done){score++;$('#sc3').textContent=score;}done=true;$('#m3').innerHTML=`<span class="ok">¡Correcto!</span> ${cur.msg} Pulsa Siguiente.`;}
-    else $('#m3').innerHTML='<span class="bad">Casi.</span> Piensa en dieciseisavos: la redonda son 16, la blanca 8, la negra 4, la corchea 2 y la semicorchea 1.';}
-  $('#n3').addEventListener('click',q);secs.push({root:$('#s3'),next:q});q();
+    else $('#m3').innerHTML='<span class="bad">Casi.</span> Piensa en dieciseisavos: la redonda son 16, la blanca 8, la negra 4, la corchea 2 y la semicorchea 1. Un silencio vale lo mismo que su figura.';}
+  $('#n3').addEventListener('click',q);listeners.push(q);secs.push({root:$('#s3'),next:q});q();
 })();
 
 let active=secs[0];
@@ -131,4 +186,5 @@ secs.forEach(s=>{s.root.addEventListener('pointerdown',()=>{active=s;},true);s.r
 $('#next').addEventListener('click',()=>active.next());
 </script>
 <script src="taller.js"></script>
+<script src="pantalla.js"></script>
 </body></html>

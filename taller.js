@@ -109,8 +109,9 @@
     var datos={}, t0=Date.now();
     function nombre(n){ var tr=n.closest&&n.closest('.tray'); if(!tr) return 'General'; var h=tr.querySelector('h2'),st=tr.querySelector('.step'); return (st?st.textContent.split('·')[0].trim()+' · ':'')+(h?h.textContent.trim():''); }
     function cuenta(n){ if(n.nodeType!==1) return;
+      if(window.Snd && n.closest && n.closest('.cambio') && (n.textContent||'').trim()) Snd.exchange();
       var lst=(n.matches&&n.matches('.ok,.bad'))?[n]:Array.prototype.slice.call(n.querySelectorAll?n.querySelectorAll('.ok,.bad'):[]);
-      lst.forEach(function(e){ var k=nombre(e); datos[k]=datos[k]||{ok:0,bad:0}; datos[k][e.classList.contains('ok')?'ok':'bad']++; }); }
+      lst.forEach(function(e){ if(window.Snd){ if(e.classList.contains('ok')) Snd.ok(); else Snd.bad(); } var k=nombre(e); datos[k]=datos[k]||{ok:0,bad:0}; datos[k][e.classList.contains('ok')?'ok':'bad']++; }); }
     new MutationObserver(function(ms){ ms.forEach(function(m){ m.addedNodes.forEach(cuenta); }); }).observe(document.body,{childList:true,subtree:true});
     var btn=document.createElement('button'); btn.type='button'; btn.className='res-btn'; btn.textContent='Resumen'; document.body.appendChild(btn);
     var pan=document.createElement('div'); pan.className='res-panel'; pan.hidden=true; document.body.appendChild(pan);

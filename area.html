@@ -5,6 +5,7 @@
 <style>
 input[type=range]{width:min(280px,100%);accent-color:var(--blue)}
 .board{width:100%;max-width:560px}
+@media (max-height:700px){.pf .board{max-width:400px}}
 .cell{cursor:pointer}
 </style></head><body>
 <div class="wrap">
@@ -59,6 +60,7 @@ input[type=range]{width:min(280px,100%);accent-color:var(--blue)}
     </div>
   </section>
 </div>
+<script src="sonido.js"></script>
 <script src="construir.js"></script>
 <script>
 const $=id=>document.getElementById(id),NS="http://www.w3.org/2000/svg",U=40,X0=20,Y0=20,W=10,H=8;
@@ -100,20 +102,24 @@ function r2(){
 
 // Bandeja 3
 let score=0;
+const NV=Niveles($("g3"),['Rectángulos pequeños','Rectángulos más grandes','Rectángulos y triángulos','Área o perímetro','Encontrar la altura'],()=>q());
 function q(){
-  const tri=Math.random()<.4;let b=2+Math.floor(Math.random()*8),h=2+Math.floor(Math.random()*6);
+  const L=NV.get(),R0=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+  const tri=(L===2&&Math.random()<.5)||(L>=3&&Math.random()<.3);let b=L===0?R0(2,6):R0(2,9),h=L===0?R0(2,4):R0(2,7);
   if(tri&&(b*h)%2)b++;
-  const a=tri?b*h/2:b*h,s=$("g3");grid(s);const x=X0,y=ry(h);
+  const kind=L===3&&!tri&&Math.random()<.5?'per':L===4&&!tri?'alt':'area';
+  const a=kind==='per'?2*(b+h):kind==='alt'?h:tri?b*h/2:b*h,s=$("g3");grid(s);const x=X0,y=ry(h);
   if(tri)s.appendChild(el("polygon",{points:`${x},${y+h*U} ${x+b*U},${y+h*U} ${x},${y}`,"stroke-width":3},"fill:var(--red);opacity:.75;stroke:var(--fg)"));
   else s.appendChild(el("rect",{x,y,width:b*U,height:h*U,"stroke-width":3},"fill:var(--blue);opacity:.6;stroke:var(--fg)"));
   const chk=v=>{
-    if(v===a){score++;$("score").textContent=score;$("qmsg").innerHTML=`<span class="ok">¡Correcto!</span> ${b} × ${h}${tri?" ÷ 2":""} = ${a} u².`;setTimeout(q,1600);}
+    if(v===a){score++;$("score").textContent=score;$("qmsg").innerHTML=`<span class="ok">¡Correcto!</span> ${kind==='per'?`2 × (${b} + ${h}) = ${a} u`:kind==='alt'?`${b*h} ÷ ${b} = ${a} u`:`${b} × ${h}${tri?" ÷ 2":""} = ${a} u²`}.`;setTimeout(q,1600);}
     else $("qmsg").innerHTML=`<span class="bad">Casi.</span> Cuenta la base y la altura en la cuadrícula.${tri?" Recuerda que el triángulo es la mitad del rectángulo.":""} Cuidado: sumar los lados da el perímetro, no el área.`;
   };
-  Construir($("opts"),{unit:"u²",submit:x=>chk(x[0])});
-  $("qmsg").textContent="Escribe el área y toca Comprobar.";
+  Construir($("opts"),{unit:kind==='area'?"u²":"u",submit:x=>chk(x[0])});
+  $("qmsg").textContent=kind==='per'?`Escribe el PERÍMETRO (la suma de todos los lados), no el área.`:kind==='alt'?`El área de este rectángulo es ${b*h} u² y su base mide ${b} u. ¿Cuánto mide la altura?`:"Escribe el área y toca Comprobar.";
 }
 $("next").onclick=q;q();
 </script>
 <script src="taller.js"></script>
+<script src="pantalla.js"></script>
 </body></html>

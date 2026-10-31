@@ -17,6 +17,7 @@ svg.ang{width:min(100%,360px);height:auto;touch-action:none;background:var(--car
 .ang .base{stroke:var(--blue);stroke-width:4;stroke-linecap:round}
 .ang .tk{stroke:var(--muted);stroke-width:1}
 .ang .knob{fill:var(--red);stroke:#fff;stroke-width:3;cursor:grab}
+.niv{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:4px 0}.niv .lbl2{font-family:var(--display);font-weight:600;color:var(--muted)}.clk text{font-size:13px}
 </style></head><body>
 <div class="wrap">
   <a class="back" href="index.html">← Todos los talleres</a>
@@ -41,7 +42,7 @@ svg.ang{width:min(100%,360px);height:auto;touch-action:none;background:var(--car
   <section class="tray" id="s2" aria-labelledby="t2">
     <span class="step">Bandeja 2 · Medir con el transportador</span>
     <h2 id="t2">Lee la escala correcta</h2>
-    <p>Mide siempre desde el 0 de la línea azul.</p>
+    <div class="niv" id="nv2"></div><p>Mide siempre desde el 0 de la línea azul.</p>
     <p class="det">El transportador tiene dos escalas. Para medir, empieza siempre desde el 0 de la línea azul.</p>
     <div class="row">
       <svg class="ang" id="a2" viewBox="0 0 300 180" role="img" aria-label="Transportador"></svg>
@@ -56,6 +57,7 @@ svg.ang{width:min(100%,360px);height:auto;touch-action:none;background:var(--car
   <section class="tray" id="s3" aria-labelledby="t3">
     <span class="step">Bandeja 3 · Ponte a prueba</span>
     <h2 id="t3">Tipos, fracciones y triángulos</h2>
+    <div class="niv" id="nv3"></div>
     
     <div class="row">
       <svg class="ang" id="a3" viewBox="0 0 300 200" role="img" aria-label="Figura de la pregunta"></svg>
@@ -67,8 +69,26 @@ svg.ang{width:min(100%,360px);height:auto;touch-action:none;background:var(--car
       </div>
     </div>
   </section>
+  <section class="tray" id="s4" aria-labelledby="t4">
+    <span class="step">Bandeja 4 · Construye el ángulo</span>
+    <h2 id="t4">Abre el ángulo que se pide</h2>
+    <div class="niv" id="nv4"></div>
+    <p class="det">Arrastra el punto rojo (o usa los botones) hasta que el ángulo mida lo que se pide y pulsa Comprobar. Con sonido, el tono sube cuando el ángulo se abre.</p>
+    <p id="q4" style="font-size:1.25rem"></p>
+    <div class="row">
+      <svg class="ang" id="a4" viewBox="0 0 300 300" role="img" aria-label="Ángulo a construir"></svg>
+      <div class="col ed">
+        <div class="btns"><button id="m4a" type="button">−15°</button><button id="m4b" type="button">−5°</button><button id="p4b" type="button">+5°</button><button id="p4a" type="button">+15°</button></div>
+        <p class="note"><span class="big" id="v4">0°</span></p>
+        <div class="btns"><button id="c4" type="button">✓ Comprobar</button><button id="h4" type="button">Pista</button><button id="n4" type="button">Siguiente</button></div>
+        <p class="note" id="m4" aria-live="polite"></p>
+        <p>Aciertos: <b id="sc4">0</b></p>
+      </div>
+    </div>
+  </section>
 </div>
 <button id="next" hidden aria-hidden="true" tabindex="-1">Siguiente</button>
+<script src="sonido.js"></script>
 <script src="construir.js"></script>
 <script>
 const $=s=>document.querySelector(s);
@@ -79,6 +99,11 @@ const gcd=(a,b)=>b?gcd(b,a%b):a;
 const shuffle=a=>a.sort(()=>Math.random()-.5);
 const fr=(n,d)=>{if(n===0)return '0';const g=gcd(n,d);n/=g;d/=g;return d===1?String(n):n+'/'+d;};
 const secs=[];
+const NIVT=['Ángulos básicos','Múltiplos de 15°','Más de media vuelta','Cálculos y reloj','Retos combinados'];
+let nivel=0;const listeners=[];
+function chipsNivel(box){box.innerHTML='';box.appendChild(h('span','lbl2','Nivel'));
+  NIVT.forEach((t,i)=>{const b=btn(nivel===i?'on':'',String(i+1),()=>{nivel=i;listeners.forEach(f=>f());});b.title=t;b.setAttribute('aria-label','Nivel '+(i+1)+': '+t);b.style.minWidth='48px';box.appendChild(b);});
+  box.appendChild(h('span','lbl2',NIVT[nivel]));}
 
 const NS='http://www.w3.org/2000/svg';
 const rad=d=>d*Math.PI/180;
@@ -107,7 +132,7 @@ function tipo(a){return a===0?'nulo':a<90?'agudo':a===90?'recto':a<180?'obtuso':
     const g=gcd(th,360);
     $('#i1').innerHTML=`<span class="big">${th}°</span><br>Es un ángulo <b>${tipo(th)}</b>.<br>${th===360?'Ocupa todo el círculo (360 ÷ 360 = 1).':'Ocupa '+(th?fr(th,360):'0')+' del círculo ('+th+' ÷ 360).'}`;
   }
-  function set(v){th=Math.max(0,Math.min(360,v));draw();}
+  function set(v){const o=th;th=Math.max(0,Math.min(360,v));if(th!==o&&window.Snd)Snd.angulo(th);draw();}
   let drag=false;
   function fromEvent(e){const r=svg.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*300,y=(e.clientY-r.top)/r.height*300;
     let d=Math.atan2(cy-y,x-cx)*180/Math.PI;if(d<0)d+=360;d=Math.round(d/5)*5;if(d>=360)d=(th>180?360:0);return d;}
@@ -138,13 +163,15 @@ function tipo(a){return a===0?'nulo':a<90?'agudo':a===90?'recto':a<180?'obtuso':
     svg.innerHTML=s;
   }
   function q(){done=false;$('#m2').textContent='';
-    const phi=10+5*rnd(35),flip=Math.random()<.5;cur=phi;proto(phi,flip);
+    chipsNivel($('#nv2'));
+    const pool=[[30,45,60,90,120,135,150],null,null][Math.min(nivel,2)];
+    const phi=pool?pool[rnd(pool.length)]:nivel===1?10*(1+rnd(17)):5*(2+rnd(33)),flip=nivel===0?false:Math.random()<.5;cur=phi;proto(phi,flip);
     const set=new Set([phi,180-phi]);while(set.size<4){const v=phi+[-10,-5,5,10][rnd(4)];if(v>0&&v<180)set.add(v);}
     Construir($('#o2'),{max:3,unit:'°',submit:v=>ans(v[0])});cur={phi,flip};}
-  function ans(x){if(x===cur.phi){if(!done){score++;$('#sc2').textContent=score;}done=true;$('#m2').innerHTML=`<span class="ok">¡Correcto!</span> Medimos ${cur.phi}° (${tipo(cur.phi)}). Pulsa Siguiente.`;}
+  function ans(x){if(x===cur.phi){if(!done){score++;$('#sc2').textContent=score;}done=true;if(window.Snd)Snd.angulo(cur.phi);$('#m2').innerHTML=`<span class="ok">¡Correcto!</span> Medimos ${cur.phi}° (${tipo(cur.phi)}). Pulsa Siguiente.`;}
     else if(x===180-cur.phi)$('#m2').innerHTML=`<span class="bad">Leíste la escala del otro lado.</span> La línea azul debe quedar en el 0 de la escala que usas.`;
     else $('#m2').innerHTML='<span class="bad">Casi.</span> Cuenta las rayitas desde el 0 de la línea azul.';}
-  $('#n2').addEventListener('click',q);secs.push({root:$('#s2'),next:q});q();
+  $('#n2').addEventListener('click',q);listeners.push(q);secs.push({root:$('#s2'),next:q});q();
 })();
 
 /* Bandeja 3 */
@@ -169,25 +196,78 @@ function tipo(a){return a===0?'nulo':a<90?'agudo':a===90?'recto':a<180?'obtuso':
       `<text x="${f1(Q[1][0]-56)}" y="${f1(Q[1][1]-6)}" style="font-size:14px;fill:var(--fg)">${B}°</text>`+
       `<text x="${f1(Q[2][0]-8)}" y="${f1(Math.max(14,Q[2][1]-8))}" style="font-size:18px;fill:var(--red);font-weight:700">?</text>`;
   }
-  function q(){done=false;$('#m3').textContent='';const t=rnd(3);let opts,ans;
-    if(t===0){const a=[20,30,45,60,90,110,120,135,150,180][rnd(10)];showAngle(a,false);
-      $('#q3').innerHTML='¿Qué tipo de ángulo es este?';opts=['agudo','recto','obtuso','llano'];ans=tipo(a);
-      cur={ans,msg:`${a}° es un ángulo ${ans}.`};}
-    else if(t===1){const a=[30,45,60,90,120,135,180,270][rnd(8)];showAngle(a,true);
-      $('#q3').innerHTML='La parte sombreada es, ¿qué fracción del círculo?';ans=fr(a,360);
-      const set=new Set([ans,fr(a,180),fr(360,a)===ans?'1':fr(360,a),fr(a,90)]);let g=2;while(set.size<4)set.add('1/'+(g++));opts=[...set].slice(0,4);if(!opts.includes(ans))opts[0]=ans;
-      cur={ans,msg:`${a}° ÷ 360° = ${ans} del círculo.`};}
-    else{let A,B;do{A=20+5*rnd(24);B=20+5*rnd(24);}while(A+B>160);triangle(A,B);const C=180-A-B;
-      $('#q3').innerHTML=`Los ángulos de un triángulo suman 180°. ¿Cuánto mide el tercero?`;ans=C+'°';
-      const set=new Set([ans,(A+B)+'°',(C+10)+'°',(C-10>0?C-10:C+20)+'°']);let g=5;while(set.size<4)set.add((C+g++*5)+'°');opts=[...set];
-      cur={ans,msg:`180° − ${A}° − ${B}° = ${C}°.`};}
-    const o=$('#o3');
-    if(t===0){o.classList.remove('cn');o.innerHTML='';shuffle(opts.slice()).forEach(x=>o.appendChild(btn('',x,()=>res(x))));}
-    else if(t===1)Construir(o,{n:2,sep:'/',labels:['arriba','abajo'],max:3,submit:v=>res(fr(v[0],v[1]))});
-    else Construir(o,{max:3,unit:'°',submit:v=>res(v[0]+'°')});}
-  function res(x){if(x===cur.ans){if(!done){score++;$('#sc3').textContent=score;}done=true;$('#m3').innerHTML=`<span class="ok">¡Correcto!</span> ${cur.msg} Pulsa Siguiente.`;}
+  function reloj(hh,mm){
+    const cx=100,cy=100,R=80;let t=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="var(--card)" stroke="var(--fg)" stroke-width="3"/>`;
+    for(let i=1;i<=12;i++){const p=pt(cx,cy,R-14,90-i*30);t+=`<text x="${f1(p[0])}" y="${f1(p[1]+4)}" text-anchor="middle">${i}</text>`;}
+    const ah=90-((hh%12)*30+mm*0.5),am=90-mm*6,ph=pt(cx,cy,R*0.5,ah),pm=pt(cx,cy,R*0.78,am);
+    t+=`<line x1="${cx}" y1="${cy}" x2="${f1(ph[0])}" y2="${f1(ph[1])}" stroke="var(--blue)" stroke-width="6" stroke-linecap="round"/><line x1="${cx}" y1="${cy}" x2="${f1(pm[0])}" y2="${f1(pm[1])}" stroke="var(--red)" stroke-width="4" stroke-linecap="round"/><circle cx="${cx}" cy="${cy}" r="4" fill="var(--fg)"/>`;
+    svg.setAttribute('viewBox','-40 0 300 200');svg.innerHTML=t;}
+  const T={
+   tipo(){const a=(nivel>=2?[20,45,90,110,135,180,210,270,300]:[20,30,45,60,90,110,120,135,150,180])[rnd(nivel>=2?9:10)];showAngle(a,false);
+     return {q:'¿Qué tipo de ángulo es este?',opts:['agudo','recto','obtuso','llano'].concat(nivel>=2?['entrante (mayor que 180°)']:[]),ans:tipo(a),msg:`${a}° es un ángulo ${tipo(a)}.`};},
+   frac(){const a=(nivel>=2?[30,45,60,90,120,135,180,270,300]:[90,180,270,120,60])[rnd(nivel>=2?9:5)];showAngle(a,true);
+     const ans=fr(a,360);return {q:'La parte sombreada es, ¿qué fracción del círculo?',num:'frac',ans,msg:`${a}° ÷ 360° = ${ans} del círculo.`};},
+   comp(){const a=5*(2+rnd(16));svg.innerHTML=`<line class="base" x1="40" y1="170" x2="260" y2="170"/><line class="ray" x1="40" y1="170" x2="40" y2="30"/><path d="M40,170 L${f1(40+90*Math.cos(rad(a)))},${f1(170-90*Math.sin(rad(a)))}" stroke="var(--fg)" stroke-width="3"/><text x="90" y="160" style="font-size:15px">${a}°</text><text x="48" y="80" style="font-size:18px;fill:var(--red);font-weight:700">?</text>`;
+     return {q:`Dos ángulos suman 90° (son complementarios). Uno mide ${a}°. ¿Cuánto mide el otro?`,num:'deg',ans:(90-a)+'°',msg:`90° − ${a}° = ${90-a}°.`};},
+   supl(){const a=5*(3+rnd(28));svg.innerHTML=`<line class="base" x1="20" y1="150" x2="280" y2="150"/><line class="ray" x1="150" y1="150" x2="${f1(150+110*Math.cos(rad(a)))}" y2="${f1(150-110*Math.sin(rad(a)))}"/><text x="${f1(150+40*Math.cos(rad(a/2)))}" y="${f1(150-40*Math.sin(rad(a/2)))}" style="font-size:15px">${a}°</text><text x="120" y="135" style="font-size:18px;fill:var(--red);font-weight:700">?</text>`;
+     return {q:`Dos ángulos forman una línea recta (son suplementarios). Uno mide ${a}°. ¿Cuánto mide el otro?`,num:'deg',ans:(180-a)+'°',msg:`180° − ${a}° = ${180-a}°.`};},
+   tri(){let A,B;do{A=20+5*rnd(24);B=20+5*rnd(24);}while(A+B>160);triangle(A,B);const C=180-A-B;
+     return {q:'Los ángulos de un triángulo suman 180°. ¿Cuánto mide el tercero?',num:'deg',ans:C+'°',msg:`180° − ${A}° − ${B}° = ${C}°.`};},
+   iso(){const v=20+10*rnd(12),b=(180-v)/2;triangle(b,b);svg.innerHTML=svg.innerHTML.split('>'+b+'°<').join('>?<').replace('>?</text></svg>','>?</text>').replace(/(<text[^>]*fill:var\(--red\)[^>]*>)\?</,'$1'+v+'°<');svg.innerHTML+=`<text x="150" y="196" text-anchor="middle" style="font-size:13px;fill:var(--muted)">dos lados iguales</text>`;
+     return {q:`Este triángulo tiene dos lados iguales y su ángulo desigual mide ${v}°. ¿Cuánto mide cada uno de los ángulos iguales?`,num:'deg',ans:b+'°',msg:`(180° − ${v}°) ÷ 2 = ${b}°.`};},
+   entr(){const a=[200,210,225,240,250,270,300,315,330][rnd(9)];showAngle(a,true);
+     return {q:`El ángulo sombreado mide ${a}°. ¿Cuánto mide la parte que falta para dar la vuelta completa?`,num:'deg',ans:(360-a)+'°',msg:`360° − ${a}° = ${360-a}°.`};},
+   rel(){const m=[0,30],hh=1+rnd(12),mm=m[rnd(2)];reloj(hh,mm);const g=Math.abs(30*hh-5.5*mm)%360,ans=Math.min(g,360-g);
+     return {q:`El reloj marca las ${hh}:${mm===0?'00':'30'}. ¿Cuántos grados (el menor) hay entre las manecillas?`,num:'deg',ans:ans+'°',msg:`Cada hora son 30°. Entre las manecillas hay ${ans}°.`};},
+   rel2(){const hh=1+rnd(12),mm=2*rnd(30);reloj(hh,mm);const g=Math.abs(30*hh-5.5*mm)%360,ans=Math.min(g,360-g);
+     return {q:`El reloj marca las ${hh}:${String(mm).padStart(2,'0')}. ¿Cuántos grados (el menor) hay entre las manecillas?`,num:'deg',ans:(Math.round(ans*10)/10)+'°',msg:`La manecilla de los minutos avanza 6° por minuto y la de las horas 0.5° por minuto. Ángulo = |30·${hh} − 5.5·${mm}| = ${Math.round(ans*10)/10}°.`};},
+   cuad(){const A=60+10*rnd(8),B=60+10*rnd(6),C=60+10*rnd(5),D=360-A-B-C;if(D<30||D>170)return T.cuad();
+     svg.setAttribute('viewBox','0 0 300 200');svg.innerHTML=`<rect x="70" y="40" width="160" height="120" fill="var(--gold)" fill-opacity=".4" stroke="var(--fg)" stroke-width="3"/><text x="76" y="56" style="font-size:13px">${A}°</text><text x="190" y="56" style="font-size:13px">${B}°</text><text x="190" y="154" style="font-size:13px">${C}°</text><text x="78" y="154" style="font-size:18px;fill:var(--red);font-weight:700">?</text>`;
+     return {q:`Los ángulos de un cuadrilátero suman 360°. Tres miden ${A}°, ${B}° y ${C}°. ¿Cuánto mide el cuarto?`,num:'deg',ans:D+'°',msg:`360° − ${A}° − ${B}° − ${C}° = ${D}°.`};},
+   alr(){const a=20+10*rnd(8),b=30+10*rnd(8),c=40+10*rnd(5),d=360-a-b-c;if(d<20)return T.alr();
+     svg.setAttribute('viewBox','0 0 300 200');svg.innerHTML=`<circle cx="150" cy="100" r="70" fill="none" stroke="var(--tray-edge)" stroke-dasharray="4 4"/><text x="150" y="104" text-anchor="middle" style="font-size:14px">${a}° · ${b}° · ${c}° · ?</text>`;
+     return {q:`Cuatro ángulos llenan una vuelta alrededor de un punto. Tres miden ${a}°, ${b}° y ${c}°. ¿Cuánto mide el cuarto?`,num:'deg',ans:d+'°',msg:`360° − ${a}° − ${b}° − ${c}° = ${d}°.`};}
+  };
+  const POOL=[['tipo','tipo','tri'],['tipo','frac','comp','supl','tri'],['tipo','frac','comp','supl','tri','entr'],['comp','supl','tri','iso','entr','rel','cuad'],['rel2','rel2','iso','cuad','alr','entr','tri','supl']];
+  function q(){done=false;$('#m3').textContent='';chipsNivel($('#nv3'));
+    if(nivel===0&&false){}
+    const k=POOL[nivel][rnd(POOL[nivel].length)],r=T[k]();cur=r;$('#q3').innerHTML=r.q;const o=$('#o3');
+    if(r.opts){o.classList.remove('cn');o.innerHTML='';shuffle(r.opts.slice()).forEach(x=>o.appendChild(btn('',x,()=>res(x))));}
+    else if(r.num==='frac')Construir(o,{n:2,sep:'/',labels:['arriba','abajo'],max:3,submit:v=>res(fr(v[0],v[1]))});
+    else Construir(o,{max:3,unit:r.num==='deg'?'°':'',submit:v=>res(v[0]+'°')});}
+  function res(x){if(x===cur.ans){if(!done){score++;$('#sc3').textContent=score;}done=true;if(window.Snd)Snd.angulo(120);$('#m3').innerHTML=`<span class="ok">¡Correcto!</span> ${cur.msg} Pulsa Siguiente.`;}
     else $('#m3').innerHTML='<span class="bad">Casi.</span> Piensa: 90° es un ángulo recto, 180° es media vuelta y 360° es una vuelta completa.';}
-  $('#n3').addEventListener('click',q);secs.push({root:$('#s3'),next:q});q();
+  $('#n3').addEventListener('click',q);listeners.push(q);secs.push({root:$('#s3'),next:q});q();
+})();
+
+/* Bandeja 4: construir el ángulo */
+(function(){
+  const svg=$('#a4'),cx=150,cy=150,R=120;let th=0,goal=0,done=false,score=0,step=5;
+  const POOLS=[[30,45,60,90,120,180],[15,30,45,60,75,90,105,120,135,150,165,180],[195,210,225,240,255,270,285,300,315,330,345,360],null,null];
+  function draw(){let t='<circle cx="150" cy="150" r="120" fill="none" stroke="var(--tray-edge)" stroke-width="2"/>';
+    for(let d=0;d<360;d+=15){const a=pt(cx,cy,R,d),b=pt(cx,cy,R-(d%90===0?14:7),d);t+=`<line class="tk" x1="${f1(a[0])}" y1="${f1(a[1])}" x2="${f1(b[0])}" y2="${f1(b[1])}"/>`;}
+    t+=sector(cx,cy,R,0,th)+`<line class="base" x1="150" y1="150" x2="270" y2="150"/>`;const e=pt(cx,cy,R,th);
+    t+=`<line class="ray" x1="150" y1="150" x2="${f1(e[0])}" y2="${f1(e[1])}"/><circle class="knob" cx="${f1(e[0])}" cy="${f1(e[1])}" r="12"/>`;
+    svg.innerHTML=t;$('#v4').textContent=th+'°';}
+  function set(v){const o=th;th=Math.max(0,Math.min(360,v));if(th!==o&&window.Snd)Snd.angulo(th);draw();}
+  let drag=false;function fromEvent(e){const r=svg.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*300,y=(e.clientY-r.top)/r.height*300;let d=Math.atan2(cy-y,x-cx)*180/Math.PI;if(d<0)d+=360;d=Math.round(d/5)*5;if(d>=360)d=(th>180?360:0);return d;}
+  svg.addEventListener('pointerdown',e=>{drag=true;svg.setPointerCapture(e.pointerId);e.preventDefault();set(fromEvent(e));});
+  svg.addEventListener('pointermove',e=>{if(drag)set(fromEvent(e));});['pointerup','pointercancel'].forEach(t=>svg.addEventListener(t,()=>{drag=false;}));
+  $('#m4a').onclick=()=>set(th-15);$('#m4b').onclick=()=>set(th-5);$('#p4b').onclick=()=>set(th+5);$('#p4a').onclick=()=>set(th+15);
+  function nuevo(){chipsNivel($('#nv4'));done=false;th=0;$('#m4').textContent='';
+    let p=POOLS[nivel],txt;
+    if(p){goal=p[rnd(p.length)];txt=`Abre un ángulo de <b>${goal}°</b>.`;}
+    else if(nivel===3){const k=rnd(3);if(k===0){const a=5*(2+rnd(16));goal=90-a;txt=`Construye el <b>complemento</b> de ${a}° (lo que le falta para 90°).`;}
+      else if(k===1){const a=5*(3+rnd(28));goal=180-a;txt=`Construye el <b>suplemento</b> de ${a}° (lo que le falta para 180°).`;}
+      else{goal=5*(2+rnd(70));txt=`Abre un ángulo de <b>${goal}°</b>.`;}}
+    else{const k=rnd(3);if(k===0){const f=[[1,8],[1,6],[1,3],[3,8],[5,12],[2,3],[3,4],[5,6]][rnd(8)];goal=360*f[0]/f[1];txt=`Abre un ángulo de <b>${f[0]}/${f[1]}</b> de vuelta completa.`;}
+      else if(k===1){const f=[[1,2],[1,3],[2,3],[1,4],[3,4]][rnd(5)];goal=180*f[0]/f[1];txt=`Abre <b>${f[0]}/${f[1]}</b> de media vuelta.`;}
+      else{const a=5*(2+rnd(16));goal=360-a;txt=`Abre el ángulo entrante que, junto con ${a}°, completa una vuelta (360°).`;}}
+    $('#q4').innerHTML=txt;draw();}
+  $('#c4').onclick=()=>{if(th===goal){if(!done){score++;$('#sc4').textContent=score;}done=true;if(window.Snd)Snd.ok();$('#m4').innerHTML=`<span class="ok">¡Exacto!</span> ${goal}° (${tipo(goal)}). Pulsa Siguiente.`;}
+    else{if(window.Snd)Snd.bad();$('#m4').innerHTML=`<span class="bad">Todavía no.</span> ${th<goal?'Abre un poco más.':'Cierra un poco.'}`;}};
+  $('#h4').onclick=()=>{$('#m4').innerHTML=`Pista: ${th<goal?'faltan':'sobran'} <b>${Math.abs(goal-th)}°</b>.`;};
+  $('#n4').onclick=nuevo;listeners.push(nuevo);secs.push({root:$('#s4'),next:nuevo});nuevo();
 })();
 
 let active=secs[0];
@@ -195,4 +275,5 @@ secs.forEach(s=>{s.root.addEventListener('pointerdown',()=>{active=s;},true);s.r
 $('#next').addEventListener('click',()=>active.next());
 </script>
 <script src="taller.js"></script>
+<script src="pantalla.js"></script>
 </body></html>

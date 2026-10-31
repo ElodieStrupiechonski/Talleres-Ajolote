@@ -73,6 +73,7 @@ svg.ch{width:min(100%,420px);height:auto;background:var(--card);border-radius:10
   </section>
 </div>
 <button id="next" hidden aria-hidden="true" tabindex="-1">Siguiente</button>
+<script src="sonido.js"></script>
 <script src="construir.js"></script>
 <script>
 const $=s=>document.querySelector(s);
@@ -127,17 +128,20 @@ const pc=(a,n)=>(Math.round(a/n*1000)/10)+' %';
 (function(){
   const COL=[['roja','#e9806c','rojas'],['azul','#6f9fd3','azules'],['verde','#6fb584','verdes']];
   let score=0,cur,done;
+  const NV=Niveles($('#bag'),['Pocas canicas','Bolsa mediana','Lo contrario (no sale…)','Un color u otro','Bolsa grande, todo mezclado'],()=>q());
   function q(){done=false;$('#m3').textContent='';$('#e3').textContent='';
-    let c,tot;do{c=COL.map(()=>1+rnd(5));tot=c[0]+c[1]+c[2];}while(tot<6||tot>12);
+    const L=NV.get();let c,tot;do{c=COL.map(()=>1+rnd(L===0?3:L===4?7:5));tot=c[0]+c[1]+c[2];}while(tot<(L===0?4:6)||tot>(L===0?6:L===4?18:12));
     const bag=$('#bag');bag.innerHTML='';const balls=[];c.forEach((k,i)=>{for(let j=0;j<k;j++)balls.push(i);});shuffle(balls).forEach(i=>{const b=h('i');b.style.background=COL[i][1];bag.appendChild(b);});
-    const t=rnd(2);let opts,ans;
-    if(t===0){const i=rnd(3);ans=fr(c[i],tot);$('#q3').innerHTML=`Sacamos una canica sin mirar. ¿Qué probabilidad hay de que sea <b>${COL[i][0]}</b>?`;
+    const T=[[0,1],[0,1],[0,1,2],[0,2,3],[2,3,3,0]][L],t=T[rnd(T.length)];let opts,ans;
+    if(t===2){const i=rnd(3);ans=fr(tot-c[i],tot);$('#q3').innerHTML=`Sacamos una canica sin mirar. ¿Qué probabilidad hay de que <b>NO</b> sea ${COL[i][0]}?`;opts=[];cur={ans,i,c,tot,msg:`No ${COL[i][0]}: ${tot} − ${c[i]} = ${tot-c[i]} canicas de ${tot}: ${ans}.`};}
+    else if(t===3){const i=rnd(3),j=(i+1+rnd(2))%3;ans=fr(c[i]+c[j],tot);$('#q3').innerHTML=`¿Qué probabilidad hay de sacar una canica <b>${COL[i][0]} o ${COL[j][0]}</b>?`;opts=[];cur={ans,i,c,tot,msg:`${c[i]} + ${c[j]} = ${c[i]+c[j]} canicas de ${tot}: ${ans}.`};}
+    else if(t===0){const i=rnd(3);ans=fr(c[i],tot);$('#q3').innerHTML=`Sacamos una canica sin mirar. ¿Qué probabilidad hay de que sea <b>${COL[i][0]}</b>?`;
       const set=new Set([ans,fr(tot-c[i],tot),fr(c[i],tot-c[i]),fr(c[i]+1,tot)]);let g=1;while(set.size<4)set.add(fr(c[i],tot+g++));opts=[...set];
       cur={ans,i,c,tot,msg:`Hay ${c[i]} canicas ${COL[i][2]} de ${tot}: ${c[i]}/${tot}${fr(c[i],tot)!==c[i]+'/'+tot?' = '+fr(c[i],tot):''}.`};}
     else{const mx=Math.max(...c);if(c.filter(x=>x===mx).length>1)return q();const i=c.indexOf(mx);ans=COL[i][0];$('#q3').innerHTML='¿De qué color es más probable sacar una canica?';opts=COL.map(x=>x[0]);
       cur={ans,i,c,tot,msg:`Hay más canicas ${COL[i][2]} (${mx} de ${tot}).`};}
     const o=$('#o3');
-    if(t===0)Construir(o,{n:2,sep:'/',labels:['canicas del color','canicas en total'],max:2,submit:v=>res(fr(v[0],v[1]))});
+    if(t!==1)Construir(o,{n:2,sep:'/',labels:['canicas del color','canicas en total'],max:2,submit:v=>res(fr(v[0],v[1]))});
     else{o.classList.remove('cn');o.innerHTML='';shuffle(opts).forEach(x=>o.appendChild(btn('',x,()=>res(x))));}}
   function res(x){if(x===cur.ans){if(!done){score++;$('#sc3').textContent=score;}done=true;$('#m3').innerHTML=`<span class="ok">¡Correcto!</span> ${cur.msg} Pulsa Siguiente.`;}
     else $('#m3').innerHTML='<span class="bad">Casi.</span> La probabilidad es: canicas del color ÷ todas las canicas de la bolsa.';}
@@ -151,4 +155,5 @@ secs.forEach(s=>{s.root.addEventListener('pointerdown',()=>{active=s;},true);s.r
 $('#next').addEventListener('click',()=>active.next());
 </script>
 <script src="taller.js"></script>
+<script src="pantalla.js"></script>
 </body></html>

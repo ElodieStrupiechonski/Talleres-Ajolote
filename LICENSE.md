@@ -1,6 +1,6 @@
 # Licencia
 
-Talleres de Matemáticas © 2026 Elodie Strupiechonski.
+Talleres de Matemáticas © 2026 Elodie Strupiechonski y Andrés de Luna Bugallo.
 
 Esta obra está bajo la licencia Creative Commons Atribución-NoComercial-CompartirIgual 4.0 Internacional (CC BY-NC-SA 4.0).
 

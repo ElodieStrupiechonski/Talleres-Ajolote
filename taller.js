@@ -1,4 +1,4 @@
-/* Talleres de Matemáticas · © 2026 Elodie Strupiechonski · CC BY-NC-SA 4.0 · https://creativecommons.org/licenses/by-nc-sa/4.0/ */
+/* Talleres de Matemáticas · © 2026 Elodie Strupiechonski y Andrés de Luna Bugallo · CC BY-NC-SA 4.0 · https://creativecommons.org/licenses/by-nc-sa/4.0/ */
 // Comportamiento común del quiosco: pasos +/− en lugar de deslizadores,
 // botones arcade (control de juego USB) o teclas, y regreso automático al índice.
 (function(){
@@ -130,7 +130,7 @@
   // 8. Pie con licencia y créditos en cada taller
   if (!isIndex && !/creditos\.html$|probar-botones\.html$/.test(location.pathname)) {
     var pie=document.createElement('p'); pie.className='footer pie-creditos';
-    pie.innerHTML='© 2026 Elodie Strupiechonski · CC BY-NC-SA 4.0 · <a href="creditos.html">Créditos y cómo citar</a>';
+    pie.innerHTML='© 2026 Elodie Strupiechonski y Andrés de Luna Bugallo · CC BY-NC-SA 4.0 · <a href="creditos.html">Créditos y cómo citar</a>';
     var w=document.querySelector('.wrap')||document.body; w.appendChild(pie);
   }
 })();

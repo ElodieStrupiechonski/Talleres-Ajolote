@@ -1,4 +1,4 @@
-/* Talleres de Matemáticas · © 2026 Elodie Strupiechonski · CC BY-NC-SA 4.0 · https://creativecommons.org/licenses/by-nc-sa/4.0/ */
+/* Talleres de Matemáticas · © 2026 Elodie Strupiechonski y Andrés de Luna Bugallo · CC BY-NC-SA 4.0 · https://creativecommons.org/licenses/by-nc-sa/4.0/ */
 // Construir la respuesta: teclado numérico en pantalla (en lugar de elegir entre opciones)
 (function(){
   window.Construir = function(el, sp){

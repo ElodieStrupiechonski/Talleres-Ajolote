@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f0e3c8"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="author" content="Elodie Strupiechonski"><link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+<title>Tablero decimal · Sumas y restas con llevadas, interactivo</title><!--seo--><meta name="description" content="Tablero decimal interactivo: multiplica y divide por 10, forma números con decimales y practica sumas y restas con llevadas y préstamos arrastrando cuentas de colores. Estilo Montessori."><link rel="canonical" href="https://elodiestrupiechonski.github.io/Talleres-Matematicas/decimal.html"><meta property="og:type" content="website"><meta property="og:locale" content="es_MX"><meta property="og:site_name" content="Talleres de Matemáticas"><meta property="og:title" content="Tablero decimal · Sumas y restas con llevadas, interactivo"><meta property="og:description" content="Tablero decimal interactivo: multiplica y divide por 10, forma números con decimales y practica sumas y restas con llevadas y préstamos arrastrando cuentas de colores. Estilo Montessori."><meta property="og:url" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/decimal.html"><meta property="og:image" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/icons/og.png"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Tablero decimal · Sumas y restas con llevadas, interactivo", "description": "Tablero decimal interactivo: multiplica y divide por 10, forma números con decimales y practica sumas y restas con llevadas y préstamos arrastrando cuentas de colores. Estilo Montessori.", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/decimal.html", "inLanguage": "es-MX", "isAccessibleForFree": true, "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/", "author": {"@type": "Person", "name": "Elodie Strupiechonski"}, "learningResourceType": "Recurso interactivo", "typicalAgeRange": "9-11", "educationalLevel": "Primaria", "teaches": "Números decimales, suma y resta", "isPartOf": {"@type": "WebSite", "name": "Talleres de Matemáticas", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/"}}</script><!--/seo-->
+<link rel="stylesheet" href="taller.css">
+<style>
+.lbl{font-family:var(--display);font-weight:600;color:var(--muted);margin-bottom:6px;display:block}
+.ed{flex:1;min-width:min(100%,260px)}
+.bwrap{width:min(100%,470px);flex:none}
+.bd{display:grid;grid-template-columns:clamp(46px,13vw,64px) repeat(7,1fr);grid-template-rows:repeat(7,1fr) 26px;width:100%;box-sizing:border-box;border:3px solid var(--fg);border-radius:6px;background:var(--card);font-family:var(--display);color:var(--fg);font-size:clamp(8px,2.3vw,12px)}
+.bd .a{display:flex;align-items:center;justify-content:center;white-space:nowrap}
+.bd .c{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border:0;padding:0;min-height:0;border-radius:0;font-family:var(--display);font-size:clamp(9px,2.6vw,14px);font-weight:700;cursor:pointer;color:#41362b}
+.bd .c.g{background:#86c496}.bd .c.b{background:#86aedb}.bd .c.r{background:#f09b8a}
+.bd .c.lg{background:#d3e8a6;color:#2b1d12}.bd .c.lb{background:#c3e6f2;color:#2b1d12}.bd .c.pk{background:#f7c8da;color:#2b1d12}
+.bd .c.sel,.bd .c.mk{box-shadow:inset 0 0 0 4px #fff,inset 0 0 0 7px var(--fg)}
+.bd .c.dim{opacity:.3}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+.msg:empty,.note:empty{display:none}
+.diag{font-size:.95rem}
+.nb{display:grid;grid-template-columns:28px repeat(9,minmax(0,1fr));gap:3px;width:100%;max-width:680px}
+.nb>div{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:44px;border-radius:6px;font-family:var(--display)}
+.nb .hd{color:#41362b;font-size:14px;font-weight:700;padding:4px 0;line-height:1.15;text-align:center}
+.nb .hd small{font-weight:400;opacity:.95;font-size:13px}
+.nb .dg{background:var(--card);font-size:clamp(1.1rem,4vw,1.6rem);font-weight:800}
+.nb .op{font-size:1.5rem;font-weight:800}
+.nb .dp{border-left:4px solid var(--fg);border-radius:0 6px 6px 0}
+.nb .ed{background:var(--card);padding:2px;gap:2px}
+.nb .ed button{min-height:48px!important;width:100%;padding:0;font-size:1rem}
+.nb .ed output{font-size:1.5rem;font-weight:800}
+.dots{display:grid;grid-template-columns:repeat(3,8px);gap:2px;min-height:26px;align-content:start}
+.dots i{width:8px;height:8px;border-radius:50%;display:block}
+.mv{display:grid;grid-template-columns:clamp(70px,16vw,110px) repeat(5,minmax(0,1fr));gap:4px;width:100%;max-width:760px;font-family:var(--display);user-select:none;-webkit-user-select:none}
+.mv .mh{display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:6px;min-height:44px;color:#41362b;font-weight:700;font-size:14px;line-height:1.15;text-align:center}
+.mv .mh small{font-weight:400;font-size:13px}
+.mv .ml{display:flex;align-items:center;font-size:.9rem;color:var(--muted);line-height:1.1}
+.mv .mc{background:var(--card);border-radius:8px;min-height:84px;padding:6px;display:flex;flex-wrap:wrap;gap:4px;align-content:flex-start;justify-content:center;outline:2px dashed transparent}
+.mv .mc.dest{outline-color:var(--acc)}
+.mvb{width:44px;height:44px;border-radius:50%;border:2px solid var(--fg);box-sizing:border-box;touch-action:none;cursor:grab;flex:none}
+.mvb.fant{background:transparent!important;border-style:dashed;cursor:default;opacity:.7}
+.mvbar{display:flex;flex-wrap:wrap;gap:2px;width:calc(5*18px + 4*2px + 12px);padding:5px;border:3px solid var(--fg);border-radius:10px;background:#fff8;touch-action:none;cursor:grab;flex:none}
+.mvbar i{width:18px;height:18px;border-radius:50%;border:1px solid var(--fg);display:block;pointer-events:none}
+.mvarr{position:fixed;z-index:80;pointer-events:none;opacity:.9;transform:scale(1.15);box-shadow:0 6px 14px #0005}
+.mvl{opacity:.35}
+.mvp{display:flex;align-items:center;justify-content:center;min-height:52px;border:3px dashed var(--tray-edge);border-radius:10px;color:var(--muted);font-family:var(--display)}
+.mvp.dest{border-color:var(--acc);color:var(--fg)}
+.leg{font-size:.85rem;color:var(--muted)}
+.cambio{font-size:1rem}
+.cambio .cb{display:inline-flex;gap:2px;align-items:center;vertical-align:middle;margin:0 3px}
+.cambio .cb i{width:12px;height:12px;border-radius:50%;border:1px solid var(--fg);display:inline-block}
+.nb .ed.fl{animation:fl .9s ease-out}
+@keyframes fl{0%{background:#ffe9a8;transform:scale(1.06)}100%{background:var(--card);transform:none}}
+.nb .dg .dots{min-height:0;grid-template-columns:repeat(3,7px)}
+.nb .dg .dots i{width:7px;height:7px}
+
+</style></head><body>
+<div class="wrap">
+  <a class="back" href="index.html">← Todos los talleres</a>
+  <header class="col">
+    <h1>Tablero decimal</h1>
+    <p class="lead">Tablero para multiplicar y dividir por 10, 100, 1,000… Cada casilla = fila × columna.</p>
+  </header>
+
+  <section class="tray" id="s1" aria-labelledby="t1">
+    <span class="step">Bandeja 1 · Explorar</span>
+    <h2 id="t1">Fila × columna = casilla</h2>
+    <p>Toca una casilla: multiplicamos el número de su fila por el de su columna.</p>
+    <div class="row">
+      <div class="bwrap"><div class="bd" id="b1"></div></div>
+      <div class="col ed">
+        <div class="btns"><button id="pw" type="button" aria-pressed="false">Mostrar potencias de 10</button></div>
+        <p class="note" id="i1" aria-live="polite"></p>
+        <p class="note q det">Fíjate: las casillas del mismo color se alinean en diagonal. Y los colores se repiten cada tres lugares.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="tray" id="s2" aria-labelledby="t2">
+    <span class="step">Bandeja 2 · × 10 y ÷ 10</span>
+    <h2 id="t2">Subir y bajar de diagonal</h2>
+    <p>Elige una cifra y multiplica o divide por 10. Las casillas marcadas valen lo mismo.</p>
+    <div class="row">
+      <div class="bwrap"><div class="bd" id="b2"></div></div>
+      <div class="col ed">
+        <div><span class="lbl">Cifra</span><div class="chips" id="dg"></div></div>
+        <div class="btns"><button id="dv" type="button">÷ 10</button><button id="mu" type="button">× 10</button><button id="bd" type="button" class="on" aria-pressed="true">Cuentas: sí</button></div>
+        <p class="note" id="v2" aria-live="polite"></p>
+        <p class="note diag" id="d2" aria-live="polite"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="tray" id="s3" aria-labelledby="t3">
+    <span class="step">Bandeja 3 · Ponte a prueba</span>
+    <h2 id="t3">Calcula con el tablero</h2>
+    <div class="row">
+      <div class="bwrap"><div class="bd" id="b3"></div></div>
+      <div class="col ed">
+        <p id="q3" style="font-size:1.25rem"></p>
+        <div class="chips" id="o3"></div>
+        <p class="note" id="m3" aria-live="polite"></p>
+        <p>Aciertos: <b id="sc3">0</b> · <button id="n3" type="button">Siguiente</button></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="tray" id="s4" aria-labelledby="t4">
+    <span class="step">Bandeja 4 · Formar números</span>
+    <h2 id="t4">Formar números</h2>
+    <p>Forma el número con los botones ▲ y ▼ de cada columna.</p>
+    <p class="det">Cada columna vale diez veces la que está a su derecha. El punto separa las unidades de los décimos.</p>
+    <div class="chips" id="m4"></div>
+    <p class="big" id="q4"></p>
+    <div class="nb" id="nb4"></div>
+    <p class="note cambio" id="x4" aria-live="polite"></p>
+    <p class="leg det">DM = decenas de millar · UM = unidades de millar · C = centenas · D = decenas · U = unidades · d = décimos · c = centésimos · m = milésimos · dm = diezmilésimos</p>
+    <p class="note" id="i4" aria-live="polite"></p>
+    <div class="btns"><button id="ck4" type="button">Comprobar</button><button id="h4" type="button">Pista</button><button id="n4" type="button">Siguiente</button></div>
+    <p>Aciertos: <b id="sc4">0</b></p>
+  </section>
+
+  <section class="tray" id="s5" aria-labelledby="t5">
+    <span class="step">Bandeja 5 · Sumar y restar</span>
+    <h2 id="t5">Sumar y restar</h2>
+    <p>Suma o resta alineando el punto decimal, columna por columna.</p>
+    <p class="det">Trabaja de derecha a izquierda. Si una columna pasa de 9, llevamos 1 a la izquierda; si no alcanza, pedimos 1 prestado. El botón Pista lo explica paso a paso.</p>
+    <div class="chips" id="m5"></div>
+    <p class="big" id="q5"></p>
+    <div class="nb" id="nb5"></div>
+    <p class="note cambio" id="x5" aria-live="polite"></p>
+    <p class="leg det">DM = decenas de millar · UM = unidades de millar · C = centenas · D = decenas · U = unidades · d = décimos · c = centésimos · m = milésimos · dm = diezmilésimos</p>
+    <p class="note" id="i5" aria-live="polite"></p>
+    <div class="btns"><button id="ck5" type="button">Comprobar</button><button id="h5" type="button">Pista</button><button id="n5" type="button">Siguiente</button></div>
+    <p>Aciertos: <b id="sc5">0</b></p>
+  </section>
+
+  <section class="tray" id="s6" aria-labelledby="t6">
+    <span class="step">Bandeja 6 · Mover cuentas</span>
+    <h2 id="t6">Arrastra cuentas y practica llevadas</h2>
+    <p>Arrastra las cuentas. 10 cuentas de una columna se cambian por 1 de la columna de la izquierda.</p>
+    <p class="det">Libre: toma cuentas de arriba y arrástralas a su columna. Arrastra un paquete de 10 a la izquierda para cambiarlo por 1; arrastra 1 cuenta a la derecha para cambiarla por 10. Sumar: pasa las cuentas del segundo número al primero, columna por columna, y cambia cada 10 por 1. Restar: quita las cuentas que faltan en cada columna; si no alcanzan, arrastra 1 cuenta de la izquierda a la derecha para que se haga 10. También puedes tocar una cuenta o un paquete en lugar de arrastrarlo.</p>
+    <div class="chips" id="m6"></div>
+    <div class="chips" id="lv6"></div>
+    <p class="big" id="q6"></p>
+    <div class="mv" id="mv6"></div>
+    <p class="note cambio" id="x6" aria-live="polite"></p>
+    <p class="note" id="i6" aria-live="polite"></p>
+    <div class="btns"><button id="r6" type="button">Empezar de nuevo</button><button id="h6" type="button">Pista</button><button id="n6" type="button">Siguiente</button></div>
+    <p>Aciertos: <b id="sc6">0</b></p>
+  </section>
+</div>
+<button id="next" hidden aria-hidden="true" tabindex="-1">Siguiente</button>
+<script>
+const $=s=>document.querySelector(s);
+const h=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;};
+const btn=(cls,txt,fn)=>{const b=h('button',cls,txt);b.type='button';b.addEventListener('click',fn);return b;};
+const rnd=n=>Math.floor(Math.random()*n);
+const NAMES={0:['unidad','unidades'],1:['decena','decenas'],2:['centena','centenas'],3:['unidad de millar','unidades de millar'],4:['decena de millar','decenas de millar'],5:['centena de millar','centenas de millar'],6:['millón','millones'],
+ '-1':['décimo','décimos'],'-2':['centésimo','centésimos'],'-3':['milésimo','milésimos'],'-4':['diezmilésimo','diezmilésimos'],'-5':['cienmilésimo','cienmilésimos'],'-6':['millonésimo','millonésimos']};
+const nameOf=(e,d)=>NAMES[e][d===1?0:1];
+const sup=n=>String(n).replace('-','⁻').replace(/\d/g,x=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[x]);
+const pot=e=>'10'+sup(e);
+const fmt=(d,e)=>e>=0?(String(d)+'0'.repeat(e)).replace(/\B(?=(\d{3})+(?!\d))/g,','):'0.'+'0'.repeat(-e-1)+d;
+const cls=e=>e>=0?['g','b','r'][e%3]:['lg','lb','pk'][(-e)%3];
+const COLN={g:'verde',b:'azul',r:'rojo',lg:'verde claro',lb:'azul claro',pk:'rosa'};
+const MUL='×';
+function Board(el,onTap){
+  el.innerHTML='';const cells=[];
+  for(let r=0;r<7;r++){
+    const re=6-r;el.appendChild(h('div','a',fmt(1,re)));cells[r]=[];
+    for(let c=0;c<7;c++){
+      const e=re-c,b=h('button','c '+cls(e));b.type='button';b.dataset.e=e;b.dataset.r=r;b.dataset.c=c;
+      b.setAttribute('aria-label',fmt(1,re)+' por '+fmt(1,-c));b.addEventListener('click',()=>onTap(r,c,e));el.appendChild(b);cells[r][c]=b;
+    }
+  }
+  el.appendChild(h('div','a'));
+  for(let c=0;c<7;c++)el.appendChild(h('div','a',fmt(1,-c)));
+  const all=()=>cells.flat();
+  return {cells,all,clear(){all().forEach(b=>b.classList.remove('sel','mk','dim'));},
+    pow(on){all().forEach(b=>{b.textContent=on?pot(+b.dataset.e):'';});}};
+}
+const secs=[];
+
+/* Bandeja 1 */
+(function(){
+  let pw=false;const B=Board($('#b1'),tap);
+  function tap(r,c,e){B.clear();B.cells[r][c].classList.add('sel');const re=6-r;
+    $('#i1').innerHTML=`<b>${fmt(1,re)}</b> ${MUL} <b>${fmt(1,-c)}</b> = <span class="big">${fmt(1,e)}</span><br>`+
+      `En potencias de 10: ${pot(re)} ${MUL} ${pot(-c)} = ${pot(e)}. Los exponentes se suman: ${re} + (−${c}) = ${String(e).replace('-','−')}.<br>`+
+      `Es 1 ${nameOf(e,1)}. Color: ${COLN[cls(e)]}.`;}
+  $('#pw').addEventListener('click',()=>{pw=!pw;B.pow(pw);$('#pw').setAttribute('aria-pressed',pw);$('#pw').className=pw?'on':'';});
+  $('#i1').textContent='Toca cualquier casilla del tablero.';
+  secs.push({root:$('#s1'),next(){$('#pw').click();}});
+})();
+
+/* Bandeja 2 */
+(function(){
+  let d=1,E=0,beads=true;const B=Board($('#b2'),()=>{});
+  const BC={g:'#1f6b33',b:'#1b4f8a',r:'#9e241b',lg:'#5f8f22',lb:'#3f93c0',pk:'#d4579a'};
+  function beadsSvg(n,e){
+    const st=84/n,r=Math.min(11,st*1.414/2*.95),c=BC[cls(e)],x0=8+st/2,x1=92-st/2;
+    let g=`<svg viewBox="0 0 100 100" aria-hidden="true" style="width:100%;height:100%;pointer-events:none"><line x1="${x0}" y1="${x0}" x2="${x1}" y2="${x1}" stroke="#fff" stroke-opacity=".9" stroke-width="${2*r+5}" stroke-linecap="round"/>`;
+    for(let i=0;i<n;i++){const x=8+st*(i+.5);g+=`<circle cx="${x}" cy="${x}" r="${r}" fill="${c}" stroke="#fff" stroke-width="1.5"/>`;}
+    return g+'</svg>';
+  }
+  function chips(){const c=$('#dg');c.innerHTML='';for(let k=1;k<=9;k++)c.appendChild(btn(k===d?'on':'',k,()=>{d=k;chips();show();}));}
+  function show(){
+    B.clear();B.all().forEach(b=>{const on=+b.dataset.e===E;b.classList.add(on?'mk':'dim');b.innerHTML=beads&&on?beadsSvg(d,E):'';});
+    $('#dv').disabled=E<=-6;$('#mu').disabled=E>=6;
+    $('#v2').innerHTML=`<span class="big">${fmt(d,E)}</span> = ${d} ${nameOf(E,d)}<br>Es ${d} ${MUL} ${fmt(1,E)}.`+(beads?` Cada barra tiene ${d} cuenta${d>1?'s':''} de ${nameOf(E,1)}.`:'');
+    const L=[];for(let r=0;r<7;r++){const c=6-r-E;if(c>=0&&c<=6)L.push(`${fmt(1,6-r)} ${MUL} ${fmt(1,-c)}`);}
+    $('#d2').innerHTML=`Todas las casillas marcadas valen <b>${fmt(1,E)}</b>:<br>${L.join(' · ')}`;
+  }
+  $('#bd').addEventListener('click',()=>{beads=!beads;$('#bd').textContent='Cuentas: '+(beads?'sí':'no');$('#bd').setAttribute('aria-pressed',beads);$('#bd').className=beads?'on':'';show();});
+  $('#mu').addEventListener('click',()=>{if(E<6){E++;show();}});
+  $('#dv').addEventListener('click',()=>{if(E>-6){E--;show();}});
+  secs.push({root:$('#s2'),next(){E=E>=6?-6:E+1;show();}});
+  chips();show();
+})();
+
+/* Bandeja 3 */
+(function(){
+  let score=0,cur,done=false;const B=Board($('#b3'),tap);
+  function q(){B.clear();done=false;$('#m3').textContent='';
+    const o=$('#o3');o.innerHTML='';
+    if(Math.random()<.5){
+      const a=rnd(7),b=rnd(7),e=a-b;cur={t:0,a,b,e};
+      $('#q3').innerHTML=`¿Cuánto es <b>${fmt(1,a)}</b> ${MUL} <b>${fmt(1,-b)}</b>?`;
+      const set=new Set([e]);while(set.size<4)set.add(e+[-2,-1,1,2][rnd(4)]);
+      [...set].sort(()=>Math.random()-.5).forEach(v=>o.appendChild(btn('',fmt(1,v),()=>ans(v))));
+      $('#m3').textContent='Pista: busca la fila y la columna en el tablero y mira su casilla.';
+    }else{
+      const e=rnd(13)-6;cur={t:1,e};
+      $('#q3').innerHTML=`Toca una casilla donde el producto sea <b>${fmt(1,e)}</b>.`;
+    }}
+  function ans(v){
+    if(cur.t!==0)return;
+    if(v===cur.e){if(!done){score++;$('#sc3').textContent=score;}done=true;B.clear();B.cells[6-cur.a][cur.b].classList.add('sel');
+      $('#m3').innerHTML=`<span class="ok">¡Correcto!</span> ${pot(cur.a)} ${MUL} ${pot(-cur.b)} = ${pot(cur.e)}: sumamos exponentes, ${cur.a} + (−${cur.b}) = ${String(cur.e).replace('-','−')}. Pulsa Siguiente para otra.`;}
+    else $('#m3').innerHTML=`<span class="bad">Casi.</span> Encuentra la fila ${fmt(1,cur.a)} y la columna ${fmt(1,-cur.b)} en el tablero.`;}
+  function tap(r,c,e){
+    if(cur.t!==1)return;B.clear();B.cells[r][c].classList.add('sel');
+    if(e===cur.e){if(!done){score++;$('#sc3').textContent=score;}done=true;
+      B.all().forEach(b=>{if(+b.dataset.e===cur.e)b.classList.add('mk');});
+      $('#m3').innerHTML=`<span class="ok">¡Correcto!</span> ${fmt(1,6-r)} ${MUL} ${fmt(1,-c)} = ${fmt(1,e)}. Las casillas marcadas, en diagonal, valen todas lo mismo. Pulsa Siguiente para otra.`;}
+    else $('#m3').innerHTML=`<span class="bad">Esa casilla vale ${fmt(1,e)}.</span> Busca otra: ${fmt(1,6-r)} ${MUL} ${fmt(1,-c)} no da ${fmt(1,cur.e)}.`;}
+  $('#n3').addEventListener('click',q);
+  secs.push({root:$('#s3'),next(){q();}});
+  q();
+})();
+
+/* Bandejas 4 y 5 */
+function mk(N,MODES){
+  const NC=9,SC=1e4,AB=['DM','UM','C','D','U','d','c','m','dm'];
+  const PAL={g:'#86c496',b:'#86aedb',r:'#f09b8a',lg:'#d3e8a6',lb:'#c3e6f2',pk:'#f7c8da'},DARKTXT=['lg','lb','pk'];
+  const digs=S=>Array.from({length:NC},(_,i)=>Math.floor(S/Math.pow(10,NC-1-i))%10);
+  const val=a=>a.reduce((x,d)=>x*10+d,0);
+  const fmtS=S=>{const ip=Math.floor(S/SC),fp=String(S%SC).padStart(4,'0').replace(/0+$/,'');const I=String(ip).replace(/\B(?=(\d{3})+(?!\d))/g,',');return fp?I+'.'+fp:I;};
+  const rndS=()=>{const ni=1+rnd(5),ip=rnd(Math.pow(10,ni)),k=rnd(4),fp=k?(1+rnd(Math.pow(10,k)-1))*Math.pow(10,4-k):0;return Math.max(ip*SC+fp,SC/10);};
+  const words=a=>a.map((d,i)=>{const e=4-i;return d?`${d} ${nameOf(e,d)}`:'';}).filter(Boolean).join(' + ');
+  const CN={g:'verde',b:'azul',r:'roja',lg:'verde claro',lb:'azul claro',pk:'rosa'};
+  const bd=e=>'<i style="background:'+PAL[cls(e)]+'"></i>';
+  const cb=(n,e)=>'<span class="cb">'+bd(e).repeat(n)+'</span>';
+  let flash=[];
+  let mode=MODES[0][0],cur=Array(NC).fill(0),A=0,B=0,exp=0,score=0,done=false;
+  function headRow(box){box.appendChild(h('div'));for(let i=0;i<NC;i++){const e=4-i,c=cls(e),d=h('div','hd'+(i===5?' dp':''));d.style.background=PAL[c];d.style.color='#41362b';d.innerHTML=`${AB[i]}<small>${pot(e)}</small>`;box.appendChild(d);}}
+  function numRow(box,S,op){box.appendChild(h('div','op',op));const a=digs(S);let first=a.findIndex(x=>x>0);if(first<0||first>4)first=4;let last=a.reduce((m,x,i)=>x?i:m,-1);
+    a.forEach((d,i)=>{const show=i>=first&&(i<=4||i<=last);const c=h('div','dg'+(i===5?' dp':''));c.appendChild(h('span','',show?d:''));const dots=h('div','dots');dots.innerHTML=('<i style="background:'+PAL[cls(4-i)]+';border:1px solid var(--fg)"></i>').repeat(d);c.appendChild(dots);box.appendChild(c);});}
+  function edRow(box,op){box.appendChild(h('div','op',op));
+    cur.forEach((d,i)=>{const c=h('div','ed'+(i===5?' dp':''));const up=btn('','▲',()=>step(i,1)),dn=btn('','▼',()=>step(i,-1));up.disabled=cur.slice(0,i+1).every(x=>x===9);dn.disabled=cur.slice(0,i+1).every(x=>x===0);if(flash.includes(i))c.classList.add('fl');
+      up.setAttribute('aria-label','Más en '+nameOf(4-i,1));dn.setAttribute('aria-label','Menos en '+nameOf(4-i,1));
+      const o=h('output','',d),dots=h('div','dots');dots.innerHTML=('<i style="background:'+PAL[cls(4-i)]+';border:1px solid var(--fg)"></i>').repeat(d);
+      c.append(up,o,dots,dn);box.appendChild(c);});}
+  function draw(){const box=$('#nb'+N);box.innerHTML='';headRow(box);
+    if(mode==='sumar'||mode==='restar'){numRow(box,A,'');numRow(box,B,mode==='sumar'?'+':'−');}
+    edRow(box,mode==='libre'||mode==='formar'?'':'=');
+    const v=val(cur);
+    if(mode==='libre')$('#i'+N).innerHTML=v?`<span class="big">${fmtS(v)}</span><br>${words(cur)}.`:'Sube los dígitos con ▲.';
+    $('#ck'+N).hidden=mode==='libre'||mode==='formar';$('#h'+N).hidden=mode==='libre'||mode==='formar';$('#n'+N).hidden=mode==='libre';
+    if(mode==='formar'&&!done)check(true);
+  }
+  function step(i,d){const X=$('#x'+N);let msg='';flash=[i];
+    if(d>0){if(cur[i]<9)cur[i]++;else{let j=i;while(j>=0&&cur[j]===9){cur[j]=0;flash.push(j);j--;}
+      if(j<0){flash=[];return;}cur[j]++;flash.push(j);
+      msg=`Ya hay 10 cuentas ${CN[cls(4-i)]}s: ${cb(10,4-i)} se cambian por <b>1</b> ${cb(1,4-j)} cuenta ${CN[cls(4-j)]}.`+(j<i-1?' El cambio sigue hacia la izquierda.':'');}}
+    else{if(cur[i]>0)cur[i]--;else{let j=i-1;while(j>=0&&cur[j]===0)j--;if(j<0){flash=[];return;}
+      cur[j]--;flash.push(j);for(let k=j+1;k<=i;k++){cur[k]=9;flash.push(k);}
+      msg=`No hay cuentas ${CN[cls(4-i)]}s para quitar: cambiamos <b>1</b> ${cb(1,4-j)} cuenta ${CN[cls(4-j)]} por 10 ${cb(10,4-i)} cuentas ${CN[cls(4-i)]}s y quitamos una.`+(j<i-1?' El cambio pasa por las columnas intermedias.':'');}}
+    X.innerHTML=msg;if(mode!=='libre')$('#i'+N).innerHTML='';done=done&&false;draw();}
+  function ok(txt){if(!done){score++;$('#sc'+N).textContent=score;}done=true;$('#i'+N).innerHTML=`<span class="ok">¡Correcto!</span> ${txt} Pulsa Siguiente.`;}
+  function check(auto){const v=val(cur);
+    if(v===exp){ok(mode==='formar'?`Formaste <b>${fmtS(exp)}</b>: ${words(cur)}.`:`${fmtS(A)} ${mode==='sumar'?'+':'−'} ${fmtS(B)} = <b>${fmtS(exp)}</b>.`);}
+    else if(!auto)$('#i'+N).innerHTML=`<span class="bad">Casi.</span> Tu número es ${fmtS(v)}. Alinea el punto decimal y revisa columna por columna, de derecha a izquierda.`;}
+  function pista(){const a=digs(A),b=digs(B),L=[];
+    if(mode==='sumar'){let c=0;for(let i=NC-1;i>=0;i--){const t=a[i]+b[i]+c;if(!(a[i]||b[i]||c)){continue;}
+      L.push(`${nameOf(4-i,1)}: ${a[i]} + ${b[i]}${c?' + 1 (llevada)':''} = ${t}${t>=10?` → escribo ${t-10} y llevo 1 (10 cuentas ${CN[cls(4-i)]}s = 1 ${CN[cls(4-i+1)]||''})`:` → escribo ${t}`}`);c=t>=10?1:0;}}
+    else{let br=0;for(let i=NC-1;i>=0;i--){const top=a[i]-br;if(!(a[i]||b[i]||br)){continue;}
+      if(top<b[i]){L.push(`${nameOf(4-i,1)}: ${a[i]}${br?' − 1 (me prestaron)':''} no alcanza para restar ${b[i]}: pido 1 a la columna de la izquierda (1 cuenta ${CN[cls(4-i+1)]||''} = 10 ${CN[cls(4-i)]}s) → ${top+10} − ${b[i]} = ${top+10-b[i]}`);br=1;}
+      else{L.push(`${nameOf(4-i,1)}: ${top}${br?' (ya descontado el 1 prestado)':''} − ${b[i]} = ${top-b[i]}`);br=0;}}}
+    $('#i'+N).innerHTML='<b>Pista:</b> alinea los puntos y trabaja de derecha a izquierda.<br>'+L.join('<br>');}
+  function nuevo(){done=false;flash=[];cur=Array(NC).fill(0);$('#i'+N).innerHTML='';$('#x'+N).innerHTML='';
+    if(mode==='libre'){$('#q'+N).textContent='';}
+    else if(mode==='formar'){exp=rndS();$('#q'+N).innerHTML=`Forma el número <b>${fmtS(exp)}</b>`;}
+    else{let g=0;do{A=rndS();B=rndS();if(mode==='restar'&&A<B){const t=A;A=B;B=t;}g++;}while(g<200&&((mode==='sumar'&&A+B>=1e9)||A===B||(A%SC===0&&B%SC===0)));
+      exp=mode==='sumar'?A+B:A-B;$('#q'+N).innerHTML=`${fmtS(A)} ${mode==='sumar'?'+':'−'} ${fmtS(B)} = ?`;}
+    draw();}
+  function chips(){const c=$('#m'+N);c.innerHTML='';MODES.forEach(([k,t])=>c.appendChild(btn(mode===k?'on':'',t,()=>{mode=k;chips();nuevo();})));}
+  $('#ck'+N).onclick=()=>check(false);$('#h'+N).onclick=pista;$('#n'+N).onclick=nuevo;
+  secs.push({root:$('#s'+N),next(){if(mode==='libre'){cur=digs(rndS());draw();}else nuevo();}});
+  chips();nuevo();
+}
+mk(4,[['libre','Libre'],['formar','Formar un número']]);
+mk(5,[['sumar','Sumar'],['restar','Restar']]);
+
+
+/* Bandeja 6: mover cuentas */
+(function(){
+  const NC=5,PAL={g:'#86c496',b:'#86aedb',r:'#f09b8a'},NM=['decenas de millar','unidades de millar','centenas','decenas','unidades'],AB=['DM','UM','C','D','U'];
+  const CN={g:'verde',b:'azul',r:'roja'};
+  const colr=i=>cls(4-i),dot=i=>'<i style="background:'+PAL[colr(i)]+'"></i>';
+  const cbd=(n,i)=>'<span class="cb">'+dot(i).repeat(n)+'</span>';
+  const fmtN=x=>String(x).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+  const digs=x=>Array.from({length:NC},(_,i)=>Math.floor(x/Math.pow(10,NC-1-i))%10);
+  const val=a=>a.reduce((x,d)=>x*10+d,0);
+  let mode='libre',lvl=0,A=0,B=0,c=Array(NC).fill(0),b=Array(NC).fill(0),r=Array(NC).fill(0),done=false,score=0;
+  const LV=[['Una columna','7 + 6, 13 − 8'],['Varias columnas',''],['Números grandes','']];
+  const carries=(x,y)=>{let k=0,cy=0;for(let i=NC-1;i>=0;i--){const t=digs(x)[i]+digs(y)[i]+cy;cy=t>=10?1:0;k+=cy;}return k;};
+  const borrows=(x,y)=>{let k=0,br=0;for(let i=NC-1;i>=0;i--){const t=digs(x)[i]-br-digs(y)[i];br=t<0?1:0;k+=br;}return k;};
+  function gen(){
+    if(mode==='sumar'){
+      if(lvl===0){const a=4+rnd(6),bb=10-a+rnd(a);A=a;B=Math.min(9,bb);if(A+B<10)B=10-A;}
+      else{const n=lvl===1?3:5,need=lvl===1?1:2;let g=0;do{A=Math.pow(10,n-1)+rnd(9*Math.pow(10,n-1));B=Math.pow(10,n-2)+rnd(9*Math.pow(10,n-2));g++;}while(g<500&&(carries(A,B)<need||A+B>=1e5));}
+    }else{
+      if(lvl===0){const u=rnd(8);A=10+u;B=u+1+rnd(9-u);}
+      else{const n=lvl===1?3:5,need=lvl===1?1:2;let g=0;do{A=Math.pow(10,n-1)+rnd(9*Math.pow(10,n-1));B=Math.pow(10,n-2)+rnd(A-Math.pow(10,n-2));g++;}while(g<800&&(borrows(A,B)<need||B>=A));}
+    }
+  }
+  function reset(){done=false;$('#x6').innerHTML='';$('#i6').innerHTML='';
+    if(mode==='libre'){c=Array(NC).fill(0);b=Array(NC).fill(0);r=Array(NC).fill(0);$('#q6').textContent='';}
+    else if(mode==='sumar'){c=digs(A);b=digs(B);r=Array(NC).fill(0);$('#q6').textContent=fmtN(A)+' + '+fmtN(B)+' = ?';}
+    else{c=digs(A);b=Array(NC).fill(0);r=digs(B);$('#q6').textContent=fmtN(A)+' − '+fmtN(B)+' = ?';}
+    draw();}
+  function nuevo(){if(mode!=='libre')gen();reset();}
+  const bars=i=>(mode==='restar')?0:Math.floor(c[i]/10);
+  const loose=i=>(mode==='restar')?c[i]:c[i]%10;
+  function bead(i,kind,row){const e=h('div','mvb');e.style.background=PAL[colr(i)];e.dataset.kind=kind;e.dataset.row=row;e.dataset.col=i;e.setAttribute('role','button');e.setAttribute('aria-label','Cuenta de '+NM[i]);return e;}
+  function barra(i){const e=h('div','mvbar');e.dataset.kind='bar';e.dataset.row='A';e.dataset.col=i;e.setAttribute('role','button');e.setAttribute('aria-label','Paquete de 10 de '+NM[i]);e.innerHTML=('<i style="background:'+PAL[colr(i)]+'"></i>').repeat(10);return e;}
+  function draw(){const box=$('#mv6');box.innerHTML='';
+    box.appendChild(h('div'));for(let i=0;i<NC;i++){const d=h('div','mh');d.style.background=PAL[colr(i)];d.innerHTML=AB[i]+'<small>'+pot(4-i)+'</small>';box.appendChild(d);}
+    const cell=(row,i)=>{const z=h('div','mc');z.dataset.zone=row;z.dataset.col=i;return z;};
+    if(mode==='libre'){box.appendChild(h('div','ml','Toma de aquí'));for(let i=0;i<NC;i++){const z=cell('S',i);z.appendChild(bead(i,'bead','S'));box.appendChild(z);}}
+    box.appendChild(h('div','ml',mode==='libre'?'Tu tablero':mode==='sumar'?'Primer número':'Número del que quitamos'));
+    for(let i=0;i<NC;i++){const z=cell('A',i);for(let k=0;k<bars(i);k++)z.appendChild(barra(i));for(let k=0;k<loose(i);k++)z.appendChild(bead(i,'bead','A'));box.appendChild(z);}
+    if(mode!=='libre'){box.appendChild(h('div','ml',mode==='sumar'?'Segundo número (pásalo arriba)':'Quita estas'));
+      for(let i=0;i<NC;i++){const z=cell('B',i);
+        if(mode==='sumar')for(let k=0;k<b[i];k++)z.appendChild(bead(i,'bead','B'));
+        else for(let k=0;k<r[i];k++){const f=bead(i,'ghost','B');f.className='mvb fant';f.style.borderColor='var(--fg)';z.appendChild(f);}
+        box.appendChild(z);}}
+    if(mode==='libre'){const p=h('div','mvp','Suelta aquí para quitar');p.style.gridColumn='1 / -1';p.dataset.zone='T';box.appendChild(p);}
+    box.querySelectorAll('.mvb,.mvbar').forEach(e=>{if(e.dataset.kind!=='ghost')e.addEventListener('pointerdown',ev=>drag(ev,e));});
+    if(mode==='libre'){const v=val(c.map((x,i)=>x));$('#i6').innerHTML=v?`<span class="big">${fmtN(v)}</span>`:'Toma cuentas y arrástralas a su columna.';}
+  }
+  function say(t){$('#i6').innerHTML=t;}
+  function apply(info,z){const {kind,row}=info,i=+info.col;let ok=false,msg='';
+    const to=z?{zone:z.dataset.zone,col:+z.dataset.col}:null;
+    $('#x6').innerHTML='';
+    if(!to){return draw();}
+    if(mode==='libre'){
+      if(row==='S'&&to.zone==='A'&&to.col===i){if(c[i]<29){c[i]++;ok=true;}else msg='Esa columna está llena.';}
+      else if(row==='S')msg='Cada cuenta va en su propia columna (del mismo color).';
+      else if(kind==='bead'&&to.zone==='A'&&to.col===i+1&&i+1<NC){c[i]--;c[i+1]+=10;ok=true;$('#x6').innerHTML=`1 cuenta ${CN[colr(i)]} ${cbd(1,i)} se cambia por <b>10</b> cuentas ${CN[colr(i+1)]}s ${cbd(10,i+1)}.`;}
+      else if(kind==='bar'&&to.zone==='A'&&to.col===i-1){c[i]-=10;c[i-1]++;ok=true;$('#x6').innerHTML=`10 cuentas ${CN[colr(i)]}s ${cbd(10,i)} se cambian por <b>1</b> cuenta ${CN[colr(i-1)]} ${cbd(1,i-1)}.`;}
+      else if(to.zone==='T'){c[i]-=(kind==='bar'?10:1);ok=true;}
+      else msg='Paquete de 10: arrástralo a la columna de la izquierda. Una cuenta: a la columna de la derecha (se hace 10) o a "Quitar".';
+    }else if(mode==='sumar'){
+      if(row==='B'&&to.zone==='A'&&to.col===i){b[i]--;c[i]++;ok=true;}
+      else if(row==='B')msg='Cada cuenta se queda en su columna: unidades con unidades, decenas con decenas…';
+      else if(kind==='bar'&&to.zone==='A'&&to.col===i-1){c[i]-=10;c[i-1]++;ok=true;$('#x6').innerHTML=`10 cuentas ${CN[colr(i)]}s ${cbd(10,i)} se cambian por <b>1</b> cuenta ${CN[colr(i-1)]} ${cbd(1,i-1)}.`;}
+      else if(kind==='bar'&&i===0)msg='Ya no hay columna a la izquierda.';
+      else msg='Arrastra el paquete de 10 a la columna de la izquierda.';
+    }else{
+      if(kind==='bead'&&to.zone==='B'&&to.col===i){if(r[i]>0){c[i]--;r[i]--;ok=true;}else msg='En esta columna ya quitaste todas las que pide.';}
+      else if(kind==='bead'&&to.zone==='A'&&to.col===i+1&&i+1<NC){c[i]--;c[i+1]+=10;ok=true;$('#x6').innerHTML=`1 cuenta ${CN[colr(i)]} ${cbd(1,i)} se cambia por <b>10</b> cuentas ${CN[colr(i+1)]}s ${cbd(10,i+1)}.`;}
+      else msg='Quita la cuenta en su misma columna (suéltala en "Quita estas"), o arrástrala a la derecha para cambiarla por 10.';
+    }
+    draw();if(msg)say(msg);else if(ok)revisa();}
+  function revisa(){
+    if(mode==='sumar'){if(b.every(x=>x===0)){if(c.every(x=>x<=9)){fin(`${fmtN(A)} + ${fmtN(B)} = <b>${fmtN(A+B)}</b>.`);}
+      else say('Ya pasaste todas las cuentas. En una columna hay 10 o más: arrastra el paquete de 10 a la izquierda.');}}
+    else if(mode==='restar'){if(r.every(x=>x===0))fin(`${fmtN(A)} − ${fmtN(B)} = <b>${fmtN(A-B)}</b>.`);}
+  }
+  function fin(t){if(!done){score++;$('#sc6').textContent=score;}done=true;$('#i6').innerHTML=`<span class="ok">¡Correcto!</span> ${t} Pulsa Siguiente.`;}
+  function tapAccion(info){const i=+info.col,{kind,row}=info;
+    if(mode==='libre'&&row==='S')return apply(info,{dataset:{zone:'A',col:i}});
+    if(kind==='bar')return apply(info,{dataset:{zone:'A',col:i-1}});
+    if(mode==='sumar'&&row==='B')return apply(info,{dataset:{zone:'A',col:i}});
+    if(mode==='restar'&&kind==='bead'&&r[i]>0)return apply(info,{dataset:{zone:'B',col:i}});
+    if(mode==='restar')return say('Arrastra la cuenta a la derecha (se cambia por 10) o suéltala en "Quita estas" si todavía faltan por quitar en su columna.');
+  }
+  function drag(ev,src){ev.preventDefault();const info={kind:src.dataset.kind,row:src.dataset.row,col:src.dataset.col};
+    const rc=src.getBoundingClientRect(),g=src.cloneNode(true);g.classList.add('mvarr');g.style.width=rc.width+'px';g.style.height=rc.height+'px';
+    const x0=ev.clientX,y0=ev.clientY;let moved=false;
+    const place=e=>{g.style.left=(e.clientX-rc.width/2)+'px';g.style.top=(e.clientY-rc.height/2)+'px';};
+    const over=e=>{g.style.display='none';const t=document.elementFromPoint(e.clientX,e.clientY);g.style.display='';return t&&t.closest&&t.closest('#mv6 [data-zone]');};
+    const mv=e=>{if(!moved&&Math.hypot(e.clientX-x0,e.clientY-y0)>8){moved=true;document.body.appendChild(g);src.classList.add('mvl');}
+      if(moved){place(e);document.querySelectorAll('#mv6 .dest').forEach(d=>d.classList.remove('dest'));const z=over(e);if(z)z.classList.add('dest');}};
+    const up=e=>{window.removeEventListener('pointermove',mv);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',up);
+      if(moved){const z=over(e);g.remove();src.classList.remove('mvl');document.querySelectorAll('#mv6 .dest').forEach(d=>d.classList.remove('dest'));apply(info,z);}
+      else tapAccion(info);};
+    window.addEventListener('pointermove',mv);window.addEventListener('pointerup',up);window.addEventListener('pointercancel',up);}
+  function pista(){
+    if(mode==='libre')return say('Prueba: toma 10 cuentas de la misma columna, agrúpalas en un paquete y arrástralo a la izquierda.');
+    if(mode==='sumar'){for(let i=NC-1;i>=0;i--)if(b[i]>0)return say(`Empieza por las ${NM[i]}: pasa las ${b[i]} cuentas ${CN[colr(i)]}s de abajo hacia arriba.`);
+      for(let i=NC-1;i>0;i--)if(c[i]>=10)return say(`En las ${NM[i]} hay 10 o más: arrastra el paquete de 10 a las ${NM[i-1]}.`);return say('Ya está: revisa que cada columna tenga 9 o menos.');}
+    for(let i=NC-1;i>=0;i--)if(r[i]>0){
+      if(c[i]>=r[i])return say(`En las ${NM[i]} quita ${r[i]} cuentas: suéltalas en "Quita estas".`);
+      let j=i-1;while(j>=0&&c[j]===0)j--;
+      if(j<0)return say('No se puede restar: el primer número debe ser mayor.');
+      return say(`En las ${NM[i]} no alcanzan (${c[i]} y hay que quitar ${r[i]}). Pide a las ${NM[i-1]}: arrastra 1 cuenta de ahí a las ${NM[i]} y se hacen 10.${c[i-1]===0?' Si ahí no hay, pide primero más a la izquierda.':''}`);}
+    say('Ya quitaste todo lo que se pedía.');}
+  function chips(){const m=$('#m6');m.innerHTML='';[['libre','Libre'],['sumar','Sumar'],['restar','Restar']].forEach(([k,t])=>m.appendChild(btn(mode===k?'on':'',t,()=>{mode=k;chips();nuevo();})));
+    const l=$('#lv6');l.innerHTML='';if(mode!=='libre')LV.forEach(([t],k)=>l.appendChild(btn(lvl===k?'on':'',t,()=>{lvl=k;chips();nuevo();})));}
+  $('#r6').onclick=reset;$('#h6').onclick=pista;$('#n6').onclick=nuevo;
+  secs.push({root:$('#s6'),next(){nuevo();}});
+  chips();nuevo();
+})();
+
+let active=secs[0];
+secs.forEach(s=>{s.root.addEventListener('pointerdown',()=>{active=s;},true);s.root.addEventListener('focusin',()=>{active=s;});});
+$('#next').addEventListener('click',()=>active.next());
+</script>
+<script src="taller.js"></script>
+</body></html>

@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f0e3c8"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="author" content="Elodie Strupiechonski"><link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+<title>Ritmo y fracciones · Figuras musicales interactivas</title><!--seo--><meta name="description" content="Descubre que las figuras musicales son fracciones: arma compases, completa lo que falta y escúchalos. Taller interactivo que une música y matemáticas, gratis y sin internet."><link rel="canonical" href="https://elodiestrupiechonski.github.io/Talleres-Matematicas/ritmo.html"><meta property="og:type" content="website"><meta property="og:locale" content="es_MX"><meta property="og:site_name" content="Talleres de Matemáticas"><meta property="og:title" content="Ritmo y fracciones · Figuras musicales interactivas"><meta property="og:description" content="Descubre que las figuras musicales son fracciones: arma compases, completa lo que falta y escúchalos. Taller interactivo que une música y matemáticas, gratis y sin internet."><meta property="og:url" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/ritmo.html"><meta property="og:image" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/icons/og.png"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Ritmo y fracciones · Figuras musicales interactivas", "description": "Descubre que las figuras musicales son fracciones: arma compases, completa lo que falta y escúchalos. Taller interactivo que une música y matemáticas, gratis y sin internet.", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/ritmo.html", "inLanguage": "es-MX", "isAccessibleForFree": true, "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/", "author": {"@type": "Person", "name": "Elodie Strupiechonski"}, "learningResourceType": "Recurso interactivo", "typicalAgeRange": "9-11", "educationalLevel": "Primaria", "teaches": "Fracciones y ritmo musical", "isPartOf": {"@type": "WebSite", "name": "Talleres de Matemáticas", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/"}}</script><!--/seo-->
+<link rel="stylesheet" href="taller.css">
+<style>
+.lbl{font-family:var(--display);font-weight:600;color:var(--muted);margin-bottom:6px;display:block}
+.ed{flex:1;min-width:min(100%,260px)}
+.bwrap{width:min(100%,470px);flex:none}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+.msg:empty,.note:empty{display:none}
+button:disabled{opacity:.4}
+
+.bar{display:flex;width:100%;min-height:64px;border:3px solid var(--fg);border-radius:8px;overflow:hidden;background:repeating-linear-gradient(90deg,var(--card) 0 calc(25% - 1px),var(--tray-edge) calc(25% - 1px) 25%)}
+.bar .fg{display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;color:#41362b;border-right:2px solid var(--fg);overflow:hidden;font-size:.9rem;line-height:1.1;transition:filter .1s}
+.bar .fg small{font-weight:400;font-size:.8rem}
+.bar .fg.lock{opacity:.9;outline:3px dashed var(--fg);outline-offset:-5px}
+.bar .fg.play{filter:brightness(1.4) saturate(1.2)}
+.pad{display:flex;flex-wrap:wrap;gap:8px}
+.pad button{color:#41362b;font-weight:800;min-width:92px;border:2px solid var(--fg)}
+.sum{font-family:var(--display);font-size:1.2rem}
+</style></head><body>
+<div class="wrap">
+  <a class="back" href="index.html">← Todos los talleres</a>
+  <header class="col">
+    <h1>Ritmo y fracciones</h1>
+    <p class="lead">Las figuras musicales son fracciones de un compás entero. Armamos y escuchamos.</p>
+  </header>
+  <section class="tray" id="s1" aria-labelledby="t1">
+    <span class="step">Bandeja 1 · Figuras como fracciones</span>
+    <h2 id="t1">Un compás es un entero</h2>
+    <p>Agrega figuras hasta llenar el compás (suma 1).</p>
+    <p class="det">Un compás de 4 tiempos vale <b>1</b> entero. La redonda llena todo el compás, la blanca es ½, la negra ¼, la corchea ⅛ y la semicorchea 1⁄16. Agrega figuras hasta llenar el compás.</p>
+    <div class="bar" id="bar1" aria-label="Compás"></div>
+    <p class="sum" id="s1t" aria-live="polite"></p>
+    <div class="pad" id="pad1"></div>
+    <div class="btns"><button id="u1" type="button">Quitar la última</button><button id="c1" type="button">Borrar</button><button id="p1" type="button">▶ Escuchar</button></div>
+  </section>
+  <section class="tray" id="s2" aria-labelledby="t2">
+    <span class="step">Bandeja 2 · Completa el compás</span>
+    <h2 id="t2">¿Qué falta para llegar a 1?</h2>
+    <p>Agrega las figuras que faltan para sumar 1.</p>
+    <p class="det">Las figuras con borde punteado ya están puestas. Agrega las que falten para que el compás sume exactamente 1.</p>
+    <div class="bar" id="bar2" aria-label="Compás por completar"></div>
+    <p class="sum" id="s2t" aria-live="polite"></p>
+    <div class="pad" id="pad2"></div>
+    <div class="btns"><button id="u2" type="button">Quitar la última</button><button id="h2" type="button">Pista</button><button id="p2" type="button">▶ Escuchar</button><button id="n2" type="button">Siguiente</button></div>
+    <p class="note" id="m2" aria-live="polite"></p>
+  </section>
+  <section class="tray" id="s3" aria-labelledby="t3">
+    <span class="step">Bandeja 3 · Ponte a prueba</span>
+    <h2 id="t3">Suma las figuras</h2>
+    
+    <p id="q3" style="font-size:1.25rem"></p>
+    <div id="v3" style="display:flex;flex-direction:column;gap:8px"></div>
+    <div class="chips" id="o3"></div>
+    <p class="note" id="m3" aria-live="polite"></p>
+    <p>Aciertos: <b id="sc3">0</b> · <button id="n3" type="button">Siguiente</button></p>
+  </section>
+</div>
+<button id="next" hidden aria-hidden="true" tabindex="-1">Siguiente</button>
+<script src="construir.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const h=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;};
+const btn=(cls,txt,fn)=>{const b=h('button',cls,txt);b.type='button';b.addEventListener('click',fn);return b;};
+const rnd=n=>Math.floor(Math.random()*n);
+const gcd=(a,b)=>b?gcd(b,a%b):a;
+const shuffle=a=>a.sort(()=>Math.random()-.5);
+const fr=(n,d)=>{if(n===0)return '0';const g=gcd(n,d);n/=g;d/=g;return d===1?String(n):n+'/'+d;};
+const secs=[];
+const FIG=[{k:'redonda',u:16,c:'#86aedb'},{k:'blanca',u:8,c:'#86c496'},{k:'negra',u:4,c:'#f09b8a'},{k:'corchea',u:2,c:'#c4a6e0'},{k:'semicorchea',u:1,c:'#f2c77a'}];
+const tx=u=>fr(u,16);
+let AC=null;
+function tone(t,d){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();
+  const o=AC.createOscillator(),g=AC.createGain();o.type='triangle';o.frequency.value=523;o.connect(g);g.connect(AC.destination);
+  const s=AC.currentTime+t;g.gain.setValueAtTime(0,s);g.gain.linearRampToValueAtTime(.35,s+.01);g.gain.exponentialRampToValueAtTime(.001,s+d);o.start(s);o.stop(s+d+.02);}catch(e){}}
+function play(list,barEl){const U=0.125;let t=0;
+  list.forEach((f,i)=>{tone(t*U,Math.min(.35,f.u*U*.9));
+    setTimeout(()=>{const k=barEl.children[i];if(k){k.classList.add('play');setTimeout(()=>k.classList.remove('play'),Math.max(120,f.u*U*900));}},t*U*1000);t+=f.u;});}
+function barView(el,items){el.innerHTML='';items.forEach(f=>{const d=h('div','fg'+(f.lock?' lock':''));d.style.width=(f.u/16*100)+'%';d.style.background=f.c;
+  d.innerHTML=f.u>=2?`${f.k}<small>${tx(f.u)}</small>`:`<small>${tx(f.u)}</small>`;el.appendChild(d);});}
+const sum=a=>a.reduce((s,f)=>s+f.u,0);
+function pad(el,list,onAdd){el.innerHTML='';FIG.forEach(f=>{const b=btn('',f.k[0].toUpperCase()+f.k.slice(1)+' '+tx(f.u),()=>onAdd(f));b.style.background=f.c;b.disabled=sum(list)+f.u>16;el.appendChild(b);});}
+
+/* Bandeja 1 */
+(function(){
+  let L=[];
+  function draw(){barView($('#bar1'),L);pad($('#pad1'),L,f=>{L.push(f);draw();});
+    const s=sum(L);$('#s1t').innerHTML=`Suma: <b>${s?tx(s):'0'}</b>`+(s===16?' · <span class="ok">¡Compás completo!</span>':s?` · falta ${tx(16-s)}`:'');}
+  $('#u1').onclick=()=>{L.pop();draw();};$('#c1').onclick=()=>{L=[];draw();};$('#p1').onclick=()=>play(L,$('#bar1'));
+  secs.push({root:$('#s1'),next(){if(sum(L)===16)L=[];else{const f=FIG[2+rnd(3)];if(sum(L)+f.u<=16)L.push(f);}draw();}});
+  draw();
+})();
+
+/* Bandeja 2 */
+(function(){
+  let L,fixedN;
+  function nuevo(){L=[];let tot=0,n=1+rnd(3);const need=4+rnd(9);
+    while(n--&&tot<need){const opts=FIG.filter(f=>tot+f.u<=12);const f=opts[rnd(opts.length)];L.push({...f,lock:true});tot+=f.u;}
+    if(tot===16||tot===0){L=[{...FIG[1],lock:true}];}fixedN=L.length;$('#m2').textContent='';draw();}
+  function draw(){barView($('#bar2'),L);pad($('#pad2'),L,f=>{L.push(f);draw();});
+    const s=sum(L);$('#s2t').innerHTML=`Suma: <b>${s?tx(s):'0'}</b>`+(s===16?' · <span class="ok">¡Compás completo!</span>':'');
+    if(s===16)$('#m2').innerHTML='Muy bien: las figuras suman 1. Pulsa ▶ para escucharlo o Siguiente.';}
+  $('#u2').onclick=()=>{if(L.length>fixedN){L.pop();draw();}};
+  $('#h2').onclick=()=>{$('#m2').innerHTML=`Pista: ya hay ${tx(sum(L))||'0'}. Para llegar a 1 falta <b>${tx(16-sum(L))}</b>.`;};
+  $('#p2').onclick=()=>play(L,$('#bar2'));$('#n2').onclick=nuevo;
+  secs.push({root:$('#s2'),next:nuevo});nuevo();
+})();
+
+/* Bandeja 3 */
+(function(){
+  let score=0,cur,done;
+  function q(){done=false;$('#m3').textContent='';let ans,txt,opts;
+    if(Math.random()<.6){const n=2+rnd(2);let a;do{a=[];for(let i=0;i<n;i++)a.push(FIG[1+rnd(4)]);}while(sum(a)>16||sum(a)===0);
+      const s=sum(a);ans=tx(s);txt=`${a.map(f=>`una ${f.k} (${tx(f.u)})`).join(' + ')} = ?`;
+      const set=new Set([ans]);let g=0;while(set.size<4&&g++<40){const v=s+[-3,-2,-1,1,2,3][rnd(6)];if(v>0&&v<=16)set.add(tx(v));}opts=[...set];
+      cur={ans,items:a,msg:`${a.map(f=>tx(f.u)).join(' + ')} = ${a.map(f=>f.u).join('+')}/16 = ${ans}.`};}
+    else{const i=rnd(4),j=i+1+rnd(4-i);const big=FIG[i],sm=FIG[j];const r=big.u/sm.u;
+      ans=String(r);txt=`¿Cuántas ${sm.k}s caben en una ${big.k}?`;const set=new Set([ans]);[r*2,Math.max(1,r/2),r+2,r+1,r-1].forEach(v=>{if(set.size<4&&v>0&&Number.isInteger(v))set.add(String(v));});opts=[...set];
+      cur={ans,big,sm,r,msg:`${tx(big.u)} ÷ ${tx(sm.u)} = ${r}.`};}
+    $('#q3').textContent=txt;const v=$('#v3');v.innerHTML='';const mk=L=>{const d=h('div','bar');barView(d,L);v.appendChild(d);};if(cur.items){mk(cur.items);}else{mk([cur.big]);mk(Array.from({length:cur.r},()=>cur.sm));}const o=$('#o3');
+    if(cur.items)Construir(o,{n:2,sep:'/',labels:['arriba','abajo'],max:2,submit:v=>res(fr(v[0],v[1]))});
+    else Construir(o,{max:2,submit:v=>res(String(v[0]))});}
+  function res(x){if(x===cur.ans){if(!done){score++;$('#sc3').textContent=score;}done=true;$('#m3').innerHTML=`<span class="ok">¡Correcto!</span> ${cur.msg} Pulsa Siguiente.`;}
+    else $('#m3').innerHTML='<span class="bad">Casi.</span> Piensa en dieciseisavos: la redonda son 16, la blanca 8, la negra 4, la corchea 2 y la semicorchea 1.';}
+  $('#n3').addEventListener('click',q);secs.push({root:$('#s3'),next:q});q();
+})();
+
+let active=secs[0];
+secs.forEach(s=>{s.root.addEventListener('pointerdown',()=>{active=s;},true);s.root.addEventListener('focusin',()=>{active=s;});});
+$('#next').addEventListener('click',()=>active.next());
+</script>
+<script src="taller.js"></script>
+</body></html>

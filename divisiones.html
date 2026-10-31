@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f0e3c8"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="author" content="Elodie Strupiechonski"><link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+<title>Divisiones · Repartir y residuo, taller interactivo</title><!--seo--><meta name="description" content="Taller interactivo de divisiones: reparte cuentas en platos, forma grupos iguales y entiende el residuo. Para niñas y niños de unos 10 años, gratis y sin internet."><link rel="canonical" href="https://elodiestrupiechonski.github.io/Talleres-Matematicas/divisiones.html"><meta property="og:type" content="website"><meta property="og:locale" content="es_MX"><meta property="og:site_name" content="Talleres de Matemáticas"><meta property="og:title" content="Divisiones · Repartir y residuo, taller interactivo"><meta property="og:description" content="Taller interactivo de divisiones: reparte cuentas en platos, forma grupos iguales y entiende el residuo. Para niñas y niños de unos 10 años, gratis y sin internet."><meta property="og:url" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/divisiones.html"><meta property="og:image" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/icons/og.png"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Divisiones · Repartir y residuo, taller interactivo", "description": "Taller interactivo de divisiones: reparte cuentas en platos, forma grupos iguales y entiende el residuo. Para niñas y niños de unos 10 años, gratis y sin internet.", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/divisiones.html", "inLanguage": "es-MX", "isAccessibleForFree": true, "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/", "author": {"@type": "Person", "name": "Elodie Strupiechonski"}, "learningResourceType": "Recurso interactivo", "typicalAgeRange": "9-11", "educationalLevel": "Primaria", "teaches": "División", "isPartOf": {"@type": "WebSite", "name": "Talleres de Matemáticas", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/"}}</script><!--/seo-->
+<link rel="stylesheet" href="taller.css">
+<style>
+.bead{width:22px;height:22px;border-radius:50%;background:var(--green);border:2px solid var(--fg);flex:none}
+.bead.left{background:var(--gold)}
+.pile{display:flex;flex-wrap:wrap;gap:6px;min-height:30px;background:var(--card);border-radius:12px;padding:10px;width:100%}
+.plates{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;width:100%}
+.plate{background:var(--card);border:3px solid var(--fg);border-radius:50%/40%;min-height:90px;display:flex;flex-wrap:wrap;gap:4px;align-content:center;justify-content:center;padding:14px;position:relative}
+.plate span{position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);background:var(--tray);font-family:var(--display);font-size:.85rem;padding:0 8px;border-radius:8px}
+.groups{display:flex;flex-direction:column;gap:6px}
+.grp{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.grp b{font-family:var(--display);width:2.2em;color:var(--muted)}
+input[type=range]{width:min(320px,100%);accent-color:var(--red)}
+</style></head><body>
+<div class="wrap">
+  <a class="back" href="index.html">← Todos los talleres</a>
+  <header class="col">
+    <h1>Taller de Divisiones</h1>
+    <p class="lead">Dividir es repartir en partes iguales; lo que sobra es el residuo.</p>
+  </header>
+
+  <section class="tray" aria-labelledby="t1">
+    <span class="step">Bandeja 1 · Repartir en platos</span>
+    <h2 id="t1">¿Cuántas cuentas le tocan a cada plato?</h2>
+    <div class="row">
+      <label for="dv">Cuentas: <b id="dvv"></b></label><input id="dv" type="range" min="4" max="40" value="17">
+      <label for="ds">Platos: <b id="dsv"></b></label><input id="ds" type="range" min="2" max="6" value="3">
+    </div>
+    <div class="pile" id="pile" aria-label="Montón de cuentas"></div>
+    <div class="row"><button id="uno">Repartir una vuelta</button><button id="todo">Repartir todo</button><button id="reset">Empezar de nuevo</button></div>
+    <div class="plates" id="plates"></div>
+    <p class="note q" id="m1"></p>
+  </section>
+
+  <section class="tray" aria-labelledby="t2">
+    <span class="step">Bandeja 2 · Hacer grupos</span>
+    <h2 id="t2">¿Cuántos grupos caben?</h2>
+    <p>Formamos grupos del mismo tamaño.</p>
+    <p class="det">Otra forma de ver la división: formar grupos del mismo tamaño. Ordenamos las cuentas en filas; cada fila completa es un grupo.</p>
+    <div class="row">
+      <label for="gd">Cuentas: <b id="gdv"></b></label><input id="gd" type="range" min="4" max="40" value="23">
+      <label for="gs">Tamaño del grupo: <b id="gsv"></b></label><input id="gs" type="range" min="2" max="9" value="5">
+    </div>
+    <div class="groups note" id="groups"></div>
+    <p class="note q" id="m2"></p>
+  </section>
+
+  <section class="tray" aria-labelledby="t3">
+    <span class="step">Bandeja 3 · Ponte a prueba</span>
+    <h2 id="t3">Resuelve la división</h2>
+    <p class="big" id="qq"></p>
+    <div class="col">
+      <div class="chips" id="opts"></div>
+      <div id="mat3" aria-label="Cuentas para repartir" style="display:grid;gap:4px;width:max-content;max-width:100%"></div>
+      <p class="note" id="qmsg">Elige el cociente y el residuo correctos.</p>
+      <p>Aciertos: <b id="score">0</b> · <button id="next">Siguiente</button></p>
+    </div>
+  </section>
+</div>
+<script src="construir.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const bead=c=>{const b=document.createElement("div");b.className="bead"+(c?" "+c:"");return b};
+
+// Bandeja 1
+let D,K,pile,plates;
+function reset1(){D=+$("dv").value;K=+$("ds").value;pile=D;plates=Array(K).fill(0);r1();}
+function vuelta(){if(pile>=K){pile-=K;plates=plates.map(x=>x+1);}r1();}
+function r1(){
+  $("dvv").textContent=D;$("dsv").textContent=K;
+  const p=$("pile");p.innerHTML="";const done=pile<K;
+  for(let i=0;i<pile;i++)p.appendChild(bead(done?"left":""));
+  if(!pile)p.innerHTML='<span style="color:var(--muted)">El montón está vacío.</span>';
+  const pl=$("plates");pl.innerHTML="";
+  plates.forEach((c,i)=>{const d=document.createElement("div");d.className="plate";for(let j=0;j<c;j++)d.appendChild(bead());const s=document.createElement("span");s.textContent="Plato "+(i+1);d.appendChild(s);pl.appendChild(d);});
+  $("uno").disabled=$("todo").disabled=done;
+  const q=plates[0];
+  $("m1").innerHTML=done
+    ? `<span class="big"><span class="g">${D}</span> ÷ <span class="d">${K}</span> = <span class="n">${q}</span>${pile?` <small>residuo</small> <span class="o">${pile}</span>`:""}</span><br>Cada plato tiene <b>${q}</b> cuentas${pile?` y sobran <b class="o">${pile}</b>, que no alcanzan para dar una más a cada plato`:" y no sobra ninguna"}. Comprobamos: ${K} × ${q}${pile?" + "+pile:""} = ${D}.`
+    : `Quedan ${pile} cuentas en el montón. ¡Alcanza para otra vuelta!`;
+}
+["dv","ds"].forEach(i=>$(i).addEventListener("input",reset1));
+$("uno").onclick=vuelta;$("todo").onclick=()=>{while(pile>=K)vuelta();};$("reset").onclick=reset1;
+reset1();
+
+// Bandeja 2
+function r2(){
+  const d=+$("gd").value,s=+$("gs").value;$("gdv").textContent=d;$("gsv").textContent=s;
+  const g=$("groups");g.innerHTML="";const q=Math.floor(d/s),r=d%s;
+  for(let i=0;i<Math.ceil(d/s);i++){
+    const row=document.createElement("div");row.className="grp";
+    const n=Math.min(s,d-i*s),full=n===s;
+    const l=document.createElement("b");l.textContent=full?(i+1)+".":"";row.appendChild(l);
+    for(let j=0;j<n;j++)row.appendChild(bead(full?"":"left"));g.appendChild(row);
+  }
+  $("m2").innerHTML=`Caben <b class="n">${q}</b> grupos de ${s}${r?` y sobran <b class="o">${r}</b>`:" exactos"}. Por eso <b>${d} ÷ ${s} = ${q}</b>${r?` residuo ${r}`:""}.`;
+}
+["gd","gs"].forEach(i=>$(i).addEventListener("input",r2));r2();
+
+// Bandeja 3
+let score=0;
+function q(){
+  const k=2+Math.floor(Math.random()*8),c=2+Math.floor(Math.random()*9),r=Math.floor(Math.random()*k),d=k*c+r;
+  $("qq").innerHTML=`${d} ÷ ${k} = ?`;{const m=$("mat3");m.innerHTML="";m.style.gridTemplateColumns=`repeat(${k},22px)`;for(let i=0;i<d;i++){const b=document.createElement("div");b.className="bead";m.appendChild(b);}}
+  const right=`${c} residuo ${r}`;
+  const chk=t=>{
+    if(t===right){score++;$("score").textContent=score;$("qmsg").innerHTML=`<span class="ok">¡Correcto!</span> ${k} × ${c} + ${r} = ${d}.`;setTimeout(q,1600);}
+    else $("qmsg").innerHTML=`<span class="bad">Casi.</span> Busca el número que multiplicado por ${k} se acerque más a ${d} sin pasarse. El residuo siempre es menor que ${k}.`;
+  };
+  Construir($("opts"),{n:2,sep:"residuo",labels:["cociente","residuo"],max:3,submit:v=>chk(v[0]+" residuo "+v[1])});
+  $("qmsg").textContent="Escribe el cociente y el residuo.";
+}
+$("next").onclick=q;q();
+</script>
+<script src="taller.js"></script>
+</body></html>

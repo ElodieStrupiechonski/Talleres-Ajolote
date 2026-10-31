@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /probar-botones.html
+Sitemap: https://elodiestrupiechonski.github.io/Talleres-Matematicas/sitemap.xml

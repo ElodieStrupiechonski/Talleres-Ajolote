@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f0e3c8"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="author" content="Elodie Strupiechonski"><link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+<title>Probar botones · Talleres</title><meta name="robots" content="noindex">
+<link rel="stylesheet" href="taller.css">
+<style>.b{display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:50%;border:3px solid var(--fg);background:var(--card);font-family:var(--display);font-weight:800;font-size:1.3rem}
+.b.on{background:var(--red);color:#fff}.grid{display:flex;flex-wrap:wrap;gap:12px}</style></head><body>
+<div class="wrap">
+  <a class="back" href="index.html">← Todos los talleres</a>
+  <header class="col"><h1>Probar botones</h1>
+  <p class="lead">Pulsa cada botón físico. Se enciende el número que le corresponde. Anota cuál es Inicio, Siguiente y Atrás.</p></header>
+  <section class="tray">
+    <h2>Control detectado</h2>
+    <p class="note" id="estado">Ninguno todavía. Pulsa cualquier botón.</p>
+    <div class="grid" id="botones"></div>
+    <p class="note">Si los números no son 0, 1 y 2 para Inicio, Siguiente y Atrás, cambia la línea <b>MAPA</b> al inicio de <b>taller.js</b> y ejecuta <b>actualizar.sh</b>.</p>
+  </section>
+</div>
+<script>
+var cont=document.getElementById('botones'),est=document.getElementById('estado'),els=[];
+setInterval(function(){
+  var ps=navigator.getGamepads?navigator.getGamepads():[],p=null;
+  for(var i=0;i<ps.length;i++) if(ps[i]){p=ps[i];break;}
+  if(!p) return;
+  est.textContent=p.id+' · '+p.buttons.length+' botones';
+  while(els.length<p.buttons.length){var d=document.createElement('div');d.className='b';d.textContent=els.length;cont.appendChild(d);els.push(d);}
+  p.buttons.forEach(function(b,i){els[i].classList.toggle('on',b.pressed);});
+},40);
+</script></body></html>

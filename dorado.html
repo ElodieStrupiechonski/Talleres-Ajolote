@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f0e3c8"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="author" content="Elodie Strupiechonski"><link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+<title>Cuentas doradas · Taller de matemáticas interactivo</title><!--seo--><meta name="description" content="Taller interactivo de cuentas doradas: unidades, decenas, centenas y millares. Forma números, suma con cambio de 10 por 1 y lee cantidades. Estilo Montessori, gratis y sin internet."><link rel="canonical" href="https://elodiestrupiechonski.github.io/Talleres-Matematicas/dorado.html"><meta property="og:type" content="website"><meta property="og:locale" content="es_MX"><meta property="og:site_name" content="Talleres de Matemáticas"><meta property="og:title" content="Cuentas doradas · Taller de matemáticas interactivo"><meta property="og:description" content="Taller interactivo de cuentas doradas: unidades, decenas, centenas y millares. Forma números, suma con cambio de 10 por 1 y lee cantidades. Estilo Montessori, gratis y sin internet."><meta property="og:url" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/dorado.html"><meta property="og:image" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/icons/og.png"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Cuentas doradas · Taller de matemáticas interactivo", "description": "Taller interactivo de cuentas doradas: unidades, decenas, centenas y millares. Forma números, suma con cambio de 10 por 1 y lee cantidades. Estilo Montessori, gratis y sin internet.", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/dorado.html", "inLanguage": "es-MX", "isAccessibleForFree": true, "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/", "author": {"@type": "Person", "name": "Elodie Strupiechonski"}, "learningResourceType": "Recurso interactivo", "typicalAgeRange": "9-11", "educationalLevel": "Primaria", "teaches": "Sistema decimal", "isPartOf": {"@type": "WebSite", "name": "Talleres de Matemáticas", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/"}}</script><!--/seo-->
+<link rel="stylesheet" href="taller.css">
+<style>
+.lbl{font-family:var(--display);font-weight:600;color:var(--muted);margin-bottom:6px;display:block}
+.ed{flex:1;min-width:min(100%,260px)}
+.bwrap{width:min(100%,470px);flex:none}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+.msg:empty,.note:empty{display:none}
+button:disabled{opacity:.4}
+
+.cols{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;width:100%}
+.c4{background:var(--card);border-radius:10px;padding:8px 4px;min-height:150px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.c4 h3{font-family:var(--display);font-size:clamp(.75rem,2.4vw,.95rem);color:#41362b;border-radius:6px;padding:2px 8px;margin:0}
+.toks{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;align-content:flex-start;min-height:80px;width:100%}
+.ctl{display:flex;gap:6px;align-items:center;margin-top:auto}
+.ctl output{font-family:var(--display);font-weight:800;font-size:1.3rem;min-width:1.4ch;text-align:center}
+.ctl button{min-width:44px;padding:0 10px}
+.cvt{font-size:.9rem;padding:4px 8px;min-height:40px}
+</style></head><body>
+<div class="wrap">
+  <a class="back" href="index.html">← Todos los talleres</a>
+  <header class="col">
+    <h1>Cuentas doradas</h1>
+    <p class="lead">Cuentas, barras, placas y cubos: cada pieza vale diez veces la anterior.</p>
+  </header>
+  <section class="tray" id="s1" aria-labelledby="t1">
+    <span class="step">Bandeja 1 · Construir un número</span>
+    <h2 id="t1">Cuentas, barras, placas y cubos</h2>
+    <p>Agrega piezas (hasta 9 de cada una) y mira el número.</p>
+    <p class="det">Una cuenta es 1 unidad. Una barra tiene 10 cuentas, una placa tiene 100 y un cubo tiene 1,000. Agrega las piezas que quieras (hasta 9 de cada una) y mira el número.</p>
+    <div class="cols" id="b1"></div>
+    <p class="note" id="i1" aria-live="polite"></p>
+  </section>
+  <section class="tray" id="s2" aria-labelledby="t2">
+    <span class="step">Bandeja 2 · Sumar y cambiar 10 por 1</span>
+    <h2 id="t2">Cuando hay 10 piezas, se cambian por una más grande</h2>
+    <p>Junta las cuentas. Si una columna llega a 10, cámbiala por 1 de la izquierda.</p>
+    <p class="det">Juntamos las cuentas de los dos números. Si una columna llega a 10 o más, tocamos <b>Cambiar 10 por 1</b> para pasar a la columna de la izquierda.</p>
+    <div class="btns"><button id="juntar" type="button">Juntar todas las cuentas</button><button id="nueva" type="button">Nueva suma</button></div>
+    <p class="big" id="op"></p>
+    <div class="cols" id="b2"></div>
+    <p class="note" id="i2" aria-live="polite"></p>
+  </section>
+  <section class="tray" id="s3" aria-labelledby="t3">
+    <span class="step">Bandeja 3 · Ponte a prueba</span>
+    <h2 id="t3">¿Qué número representan las cuentas?</h2>
+    
+    <div class="cols" id="b3"></div>
+    <div class="chips" id="o3"></div>
+    <p class="note" id="m3" aria-live="polite"></p>
+    <p>Aciertos: <b id="sc3">0</b> · <button id="n3" type="button">Siguiente</button></p>
+  </section>
+</div>
+<button id="next" hidden aria-hidden="true" tabindex="-1">Siguiente</button>
+<script src="construir.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const h=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;};
+const btn=(cls,txt,fn)=>{const b=h('button',cls,txt);b.type='button';b.addEventListener('click',fn);return b;};
+const rnd=n=>Math.floor(Math.random()*n);
+const gcd=(a,b)=>b?gcd(b,a%b):a;
+const shuffle=a=>a.sort(()=>Math.random()-.5);
+const fr=(n,d)=>{if(n===0)return '0';const g=gcd(n,d);n/=g;d/=g;return d===1?String(n):n+'/'+d;};
+const secs=[];
+
+const PL=[{n:['millar','millares'],c:'#86c496',t:'Millares'},{n:['centena','centenas'],c:'#f09b8a',t:'Centenas'},{n:['decena','decenas'],c:'#86aedb',t:'Decenas'},{n:['unidad','unidades'],c:'#86c496',t:'Unidades'}];
+const GOLD='#d9a521',DK='#7a5a0e';
+const comma=n=>String(n).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+function tok(i){
+  if(i===3)return `<svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5" fill="${GOLD}" stroke="${DK}"/></svg>`;
+  if(i===2){let s='<svg width="14" height="70" viewBox="0 0 14 70"><rect x="6" y="2" width="2" height="66" fill="'+DK+'"/>';for(let k=0;k<10;k++)s+=`<circle cx="7" cy="${5+k*6.7}" r="3.1" fill="${GOLD}" stroke="${DK}" stroke-width=".7"/>`;return s+'</svg>';}
+  if(i===1){let s='<svg width="64" height="64" viewBox="0 0 64 64"><rect x="1" y="1" width="62" height="62" rx="3" fill="#f3d27a" stroke="'+DK+'"/>';for(let a=0;a<10;a++)for(let b=0;b<10;b++)s+=`<circle cx="${6+b*5.8}" cy="${6+a*5.8}" r="2.2" fill="${GOLD}" stroke="${DK}" stroke-width=".5"/>`;return s+'</svg>';}
+  return '<svg width="76" height="76" viewBox="0 0 76 76"><polygon points="4,16 16,4 72,4 72,60 60,72 4,72" fill="#f3d27a" stroke="'+DK+'"/><polygon points="4,16 60,16 72,4 16,4" fill="#fbe9b4" stroke="'+DK+'"/><polygon points="60,16 60,72 72,60 72,4" fill="#b88a14" stroke="'+DK+'"/><rect x="4" y="16" width="56" height="56" fill="'+GOLD+'" stroke="'+DK+'"/><text x="32" y="50" text-anchor="middle" font-size="15" font-weight="700" fill="#fff" font-family="sans-serif">1,000</text></svg>';
+}
+function colsView(box,counts,opts){
+  box.innerHTML='';
+  counts.forEach((n,i)=>{
+    const c=h('div','c4'),hd=h('h3','',PL[i].t);hd.style.background=PL[i].c;c.appendChild(hd);
+    const t=h('div','toks');t.innerHTML=tok(i).repeat(n);c.appendChild(t);
+    const ctl=h('div','ctl');
+    if(opts.step){ctl.appendChild(btn('','−',()=>opts.step(i,-1)));ctl.lastChild.disabled=n<=0;ctl.lastChild.setAttribute('aria-label','Quitar '+PL[i].n[0]);
+      ctl.appendChild(h('output','',n));ctl.appendChild(btn('','+',()=>opts.step(i,1)));ctl.lastChild.disabled=n>=9;ctl.lastChild.setAttribute('aria-label','Agregar '+PL[i].n[0]);}
+    else{ctl.appendChild(h('output','',n));
+      if(opts.cambiar&&n>=10&&i>0){const b=btn('cvt','Cambiar 10 por 1',()=>opts.cambiar(i));b.setAttribute('aria-label','Cambiar 10 '+PL[i].n[1]+' por 1 '+PL[i-1].n[0]);ctl.appendChild(b);}}
+    c.appendChild(ctl);box.appendChild(c);
+  });
+}
+const val=a=>a[0]*1000+a[1]*100+a[2]*10+a[3];
+const digs=n=>[Math.floor(n/1000)%10,Math.floor(n/100)%10,Math.floor(n/10)%10,n%10];
+const words=a=>a.map((n,i)=>n?`${n} ${PL[i].n[n===1?0:1]}`:'').filter(Boolean).join(', ');
+
+/* Bandeja 1 */
+(function(){
+  const a=[0,0,0,0];
+  function draw(){colsView($('#b1'),a,{step:(i,d)=>{a[i]=Math.max(0,Math.min(9,a[i]+d));draw();}});
+    const v=val(a);$('#i1').innerHTML=v?`<span class="big">${comma(v)}</span><br>${words(a)}.`:'Agrega piezas con los botones +.';}
+  secs.push({root:$('#s1'),next(){const r=rnd(10000),d=digs(r);for(let i=0;i<4;i++)a[i]=d[i];draw();}});
+  draw();
+})();
+
+/* Bandeja 2 */
+(function(){
+  let A,B,cols,joined;
+  function nuevo(){let a,b,ok=false;
+    while(!ok){a=100+rnd(4900);b=100+rnd(4900);const x=digs(a),y=digs(b);ok=a+b<10000&&x.some((v,i)=>v+y[i]>=10);}
+    A=a;B=b;joined=false;cols=[0,0,0,0];draw();}
+  function draw(){
+    $('#op').textContent=`${comma(A)} + ${comma(B)}`;
+    colsView($('#b2'),cols,{cambiar:i=>{cols[i]-=10;cols[i-1]+=1;draw();}});
+    $('#juntar').disabled=joined;
+    if(!joined){$('#i2').textContent='Toca "Juntar todas las cuentas".';return;}
+    if(cols.some(n=>n>=10)){$('#i2').textContent='Hay columnas con 10 o más piezas: cámbialas de a 10 por 1.';return;}
+    const r=val(cols);$('#i2').innerHTML=`<span class="ok">¡Listo!</span> ${comma(A)} + ${comma(B)} = <b>${comma(r)}</b>${r===A+B?'':' (revisa)'}. Pulsa Siguiente para otra suma.`;}
+  $('#juntar').addEventListener('click',()=>{const x=digs(A),y=digs(B);cols=x.map((v,i)=>v+y[i]);joined=true;draw();});
+  $('#nueva').addEventListener('click',nuevo);
+  secs.push({root:$('#s2'),next(){if(!joined)$('#juntar').click();else nuevo();}});
+  nuevo();
+})();
+
+/* Bandeja 3 */
+(function(){
+  let score=0,cur,done;
+  function q(){done=false;$('#m3').textContent='';
+    let d;do{d=digs(1+rnd(9999));}while(d.every(x=>x===0));const v=val(d);cur=v;
+    colsView($('#b3'),d,{});
+    const set=new Set([v]);let g=0;
+    while(set.size<4&&g++<80){const e=d.slice();const k=rnd(4);
+      if(Math.random()<.5){const j=rnd(4);[e[k],e[j]]=[e[j],e[k]];}else e[k]=(e[k]+(Math.random()<.5?1:9))%10;
+      const w=val(e);if(w>0)set.add(w);}
+    Construir($('#o3'),{max:4,submit:v=>ans(v[0])});}
+  function ans(x){if(x===cur){if(!done){score++;$('#sc3').textContent=score;}done=true;$('#m3').innerHTML=`<span class="ok">¡Correcto!</span> ${comma(cur)} es ${words(digs(cur))}. Pulsa Siguiente.`;}
+    else $('#m3').innerHTML='<span class="bad">Casi.</span> Cuenta cada tipo de pieza: cuántos cubos, placas, barras y cuentas hay.';}
+  $('#n3').addEventListener('click',q);
+  secs.push({root:$('#s3'),next:q});q();
+})();
+
+let active=secs[0];
+secs.forEach(s=>{s.root.addEventListener('pointerdown',()=>{active=s;},true);s.root.addEventListener('focusin',()=>{active=s;});});
+$('#next').addEventListener('click',()=>active.next());
+</script>
+<script src="taller.js"></script>
+</body></html>

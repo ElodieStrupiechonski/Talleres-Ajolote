@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f0e3c8"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="author" content="Elodie Strupiechonski"><link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+<title>Programación con bloques · Robot y tortuga, interactivo</title><!--seo--><meta name="description" content="Taller de programación con bloques para niñas y niños: lleva al robot a la estrella, dibuja con la tortuga y resuelve retos con paredes y fracciones. Gratis y sin internet."><link rel="canonical" href="https://elodiestrupiechonski.github.io/Talleres-Matematicas/programacion.html"><meta property="og:type" content="website"><meta property="og:locale" content="es_MX"><meta property="og:site_name" content="Talleres de Matemáticas"><meta property="og:title" content="Programación con bloques · Robot y tortuga, interactivo"><meta property="og:description" content="Taller de programación con bloques para niñas y niños: lleva al robot a la estrella, dibuja con la tortuga y resuelve retos con paredes y fracciones. Gratis y sin internet."><meta property="og:url" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/programacion.html"><meta property="og:image" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/icons/og.png"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Programación con bloques · Robot y tortuga, interactivo", "description": "Taller de programación con bloques para niñas y niños: lleva al robot a la estrella, dibuja con la tortuga y resuelve retos con paredes y fracciones. Gratis y sin internet.", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/programacion.html", "inLanguage": "es-MX", "isAccessibleForFree": true, "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/", "author": {"@type": "Person", "name": "Elodie Strupiechonski"}, "learningResourceType": "Recurso interactivo", "typicalAgeRange": "9-11", "educationalLevel": "Primaria", "teaches": "Programación", "isPartOf": {"@type": "WebSite", "name": "Talleres de Matemáticas", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/"}}</script><!--/seo-->
+<link rel="stylesheet" href="taller.css">
+<style>
+:root{--on:#fff;--ong:#3a2a1a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--on:#1f1912;--ong:#1f1912}}
+:root[data-theme="dark"]{--on:#1f1912;--ong:#1f1912}
+svg.board{width:min(100%,380px);flex:none;background:var(--card);border-radius:12px}
+.robot{transition:transform .3s ease}
+.ed{flex:1;min-width:min(100%,280px)}
+.pal,.btns{display:flex;flex-wrap:wrap;gap:8px}
+.prog{min-height:76px;background:var(--card);border-radius:12px;padding:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start;align-content:flex-start}
+.empty{color:var(--muted);align-self:center}
+button.p,button.chip{border:2px solid var(--fg);color:var(--on)}
+button.f{background:var(--blue)} button.l,button.r{background:var(--gold);color:var(--ong)}
+button.ifw{background:var(--red)} button.rep{background:var(--green)}
+button.end{background:var(--card);color:var(--fg)}
+button.p:disabled{opacity:.4;cursor:default}
+button.chip{min-height:40px;padding:4px 12px;font-size:1rem}
+.blk.rep{border:3px dashed var(--green);border-radius:12px;padding:8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;flex-basis:100%}
+.blk.rep.open{border-style:solid}
+.blk .hd{display:flex;flex-wrap:wrap;gap:6px;align-items:center;flex-basis:100%;font-family:var(--display);font-weight:600}
+.blk .num{font-family:var(--display);font-size:1.3rem;min-width:1.5ch;text-align:center}
+button.mini{min-height:40px;min-width:40px;padding:2px 10px;font-size:1.1rem}
+.goal{font-size:1.1rem}
+.msg:empty{display:none}
+</style></head><body>
+<div class="wrap">
+  <a class="back" href="index.html">← Todos los talleres</a>
+  <header class="col">
+    <h1>Taller de Programación</h1>
+    <p class="lead">Programar es dar instrucciones en orden. Armamos, ejecutamos y corregimos.</p>
+  </header>
+
+  <section class="tray" id="b1" aria-labelledby="t1">
+    <span class="step">Bandeja 1 · Secuencias</span>
+    <h2 id="t1">Lleva al robot a la estrella</h2>
+    <p class="goal"></p>
+    <div class="chips lv"></div>
+    <div class="row">
+      <svg class="board" role="img" aria-label="Tablero con el robot, las paredes y la estrella"></svg>
+      <div class="col ed">
+        <div class="pal"></div>
+        <div class="prog" aria-label="Programa"></div>
+        <div class="btns"><button class="run">▶ Ejecutar</button><button class="clr">Borrar todo</button><button class="pista">Pista</button><button class="nxt" hidden>Siguiente reto →</button></div>
+      </div>
+    </div>
+    <p class="note msg" aria-live="polite"></p>
+  </section>
+
+  <section class="tray" id="b2" aria-labelledby="t2">
+    <span class="step">Bandeja 2 · Repetir</span>
+    <h2 id="t2">Dibuja con la tortuga</h2>
+    <p class="goal"></p>
+    <div class="chips lv"></div>
+    <div class="row">
+      <svg class="board" role="img" aria-label="Cuadrícula de puntos donde la tortuga dibuja"></svg>
+      <div class="col ed">
+        <div class="pal"></div>
+        <div class="prog" aria-label="Programa"></div>
+        <div class="btns"><button class="run">▶ Ejecutar</button><button class="clr">Borrar todo</button><button class="pista">Pista</button><button class="nxt" hidden>Siguiente reto →</button></div>
+      </div>
+    </div>
+    <p class="note msg" aria-live="polite"></p>
+  </section>
+
+  <section class="tray" id="b3" aria-labelledby="t3">
+    <span class="step">Bandeja 3 · Decidir y fracciones</span>
+    <h2 id="t3">Retos con paredes y fracciones</h2>
+    <p class="goal"></p>
+    <div class="chips lv"></div>
+    <div class="row">
+      <svg class="board" role="img" aria-label="Tablero del robot"></svg>
+      <div class="col ed">
+        <div class="pal"></div>
+        <div class="prog" aria-label="Programa"></div>
+        <div class="btns"><button class="run">▶ Ejecutar</button><button class="clr">Borrar todo</button><button class="pista">Pista</button><button class="nxt" hidden>Siguiente reto →</button></div>
+      </div>
+    </div>
+    <p class="note msg" aria-live="polite"></p>
+  </section>
+</div>
+<button id="next" hidden aria-hidden="true" tabindex="-1">Siguiente</button>
+
+<script>
+const $=(s,r=document)=>r.querySelector(s);
+const NS='http://www.w3.org/2000/svg';
+const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in (a||{}))e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;};
+const h=(t,c,txt)=>{const e=document.createElement(t);if(c)e.className=c;if(txt!=null)e.textContent=txt;return e;};
+const btn=(cls,txt,fn,dis,aria)=>{const b=h('button',cls,txt);b.type='button';if(dis)b.disabled=true;if(aria)b.setAttribute('aria-label',aria);b.addEventListener('click',fn);return b;};
+const DX=[0,1,0,-1],DY=[-1,0,1,0];
+const LABEL={f:'Avanzar',l:'Girar ↺',r:'Girar ↻',ifw:'Si hay pared: girar ↻',rep:'Repetir'};
+const NAME={f:'Avanzar',l:'Girar a la izquierda',r:'Girar a la derecha',ifw:'Si hay pared, girar a la derecha'};
+
+const LEVELS={
+ b1:{kind:'robot',items:[
+  {txt:'Avanza hasta la estrella. Cada bloque Avanzar mueve al robot una casilla.',hint:'La estrella está 3 casillas a la derecha del robot.',w:5,h:5,start:[0,2,1],star:[3,2],walls:[],allow:['f','l','r']},
+  {txt:'Ahora hay que girar. Girar no mueve al robot: solo cambia hacia dónde mira.',hint:'Sube 3 casillas, gira a la derecha y avanza 3.',w:5,h:5,start:[0,4,0],star:[3,1],walls:[[1,3],[1,4],[3,3]],allow:['f','l','r']},
+  {txt:'Llega a la estrella rodeando las paredes.',hint:'Gira a la derecha y baja 2, gira a la izquierda y avanza 5, gira a la derecha y baja 2. Es largo: en la bandeja 2 aprendemos a repetir.',w:6,h:5,start:[0,0,1],star:[5,4],walls:[[1,1],[2,1],[3,1],[4,1],[5,1],[0,3],[1,3],[2,3],[3,3],[4,3]],allow:['f','l','r']}
+ ]},
+ b2:{kind:'draw',items:[
+  {txt:'Dibuja un cuadrado de lado 3. Cada Avanzar dibuja una unidad.',hint:'Repite 4 veces: avanzar 3 y girar a la derecha.',allow:['f','l','r','rep'],ok:(w,hh)=>w===3&&hh===3},
+  {txt:'Dibuja un rectángulo de 4 por 2.',hint:'Repite 2 veces: avanzar 4, girar, avanzar 2, girar.',allow:['f','l','r','rep'],ok:(w,hh)=>(w===4&&hh===2)||(w===2&&hh===4)},
+  {txt:'Dibuja un rectángulo de área 12 u². Hay varias soluciones.',hint:'12 = 3 × 4 = 2 × 6. Cabe en el tablero cualquiera de las dos.',allow:['f','l','r','rep'],ok:(w,hh)=>w*hh===12}
+ ]},
+ b3:{kind:'robot',items:[
+  {txt:'Bloque nuevo: Si hay pared, girar. Recorre el borde del tablero hasta la estrella usando Repetir con Avanzar y el bloque nuevo.',hint:'Del inicio a la estrella son 4 + 4 + 4 + 3 = 15 pasos.',w:5,h:5,start:[0,0,1],star:[0,1],walls:[],allow:['f','ifw','rep']},
+  {txt:'El camino mide 8 pasos. Lleva al robot a 3/4 del camino.',hint:'1/4 de 8 pasos son 2 pasos. ¿Cuántos pasos son 3/4?',w:9,h:1,start:[0,0,1],star:[6,0],flag:[8,0],allow:['f','rep'],extra:'Comprobamos: 3/4 de 8 = 3 × 8 ÷ 4 = 6 pasos.'}
+ ]}
+};
+
+function countBlocks(p){return p.reduce((s,n)=>s+1+(n.body?n.body.length:0),0);}
+function compile(p){const out=[];(function ex(list){list.forEach(n=>{if(n.t==='rep'){for(let i=0;i<n.n&&out.length<500;i++)ex(n.body);}else out.push(n.t);});})(p);return out;}
+
+function Editor(root){
+  const pal=$('.pal',root),view=$('.prog',root);
+  let prog=[],open=null,allow=[];
+  const api={get prog(){return prog},onchange:null,
+    reset(a){allow=a;prog=[];open=null;drawPal();draw();},
+    clear(){prog=[];open=null;drawPal();draw();api.onchange&&api.onchange();}};
+  function chg(){drawPal();draw();api.onchange&&api.onchange();}
+  function add(t){
+    if(t==='rep'){if(open)return;const n={t:'rep',n:2,body:[]};prog.push(n);open=n;}
+    else if(t==='end'){open=null;}
+    else if(open){open.body.push({t});}
+    else prog.push({t});
+    chg();
+  }
+  function drawPal(){
+    pal.innerHTML='';
+    allow.forEach(t=>pal.appendChild(btn('p '+t,LABEL[t],()=>add(t),t==='rep'&&!!open,t==='rep'?'Repetir':NAME[t])));
+    if(allow.includes('rep'))pal.appendChild(btn('p end','Terminar de repetir ✓',()=>add('end'),!open));
+  }
+  function chip(t,fn){return btn('chip '+t,LABEL[t],fn,false,'Quitar: '+NAME[t]);}
+  function draw(){
+    view.innerHTML='';
+    if(!prog.length){view.appendChild(h('span','empty','Toca los bloques de arriba para armar el programa.'));return;}
+    prog.forEach((n,i)=>{
+      if(n.t==='rep'){
+        const b=h('div','blk rep'+(n===open?' open':'')),hd=h('div','hd');
+        hd.append('Repetir ',btn('mini','−',()=>{n.n=Math.max(2,n.n-1);chg();},false,'Menos veces'),h('b','num',n.n),btn('mini','+',()=>{n.n=Math.min(20,n.n+1);chg();},false,'Más veces'),' veces ',btn('mini','✕',()=>{prog.splice(i,1);if(open===n)open=null;chg();},false,'Quitar la repetición'));
+        b.appendChild(hd);
+        n.body.forEach((c,j)=>b.appendChild(chip(c.t,()=>{n.body.splice(j,1);chg();})));
+        if(n===open&&!n.body.length)b.appendChild(h('span','empty','Agrega aquí lo que se repite.'));
+        view.appendChild(b);
+      }else view.appendChild(chip(n.t,()=>{prog.splice(i,1);chg();}));
+    });
+  }
+  return api;
+}
+
+function Section(id){
+  const root=$('#'+id),cfg=LEVELS[id],S={root,kind:cfg.kind,levels:cfg.items,idx:0,done:cfg.items.map(()=>false),solved:false,timer:null,L:null};
+  S.ed=Editor(root);
+  const svg=$('svg',root),msg=$('.msg',root),nxt=$('.nxt',root),lv=$('.lv',root);
+  const say=(t,c)=>{msg.className='note msg'+(c?' '+c:'');msg.innerHTML=t;};
+  const C=52,M=6,SP=40,O=20;
+  function chips(){lv.innerHTML='';S.levels.forEach((_,i)=>{const b=btn(i===S.idx?'on':'','Reto '+(i+1)+(S.done[i]?' ✓':''),()=>S.load(i));lv.appendChild(b);});}
+  function stop(){clearInterval(S.timer);S.timer=null;}
+  S.load=function(i){
+    stop();S.idx=i;S.L=S.levels[i];S.solved=false;nxt.hidden=true;
+    $('.goal',root).textContent=S.L.txt;say('');S.ed.reset(S.L.allow);chips();
+    S.kind==='robot'?buildRobot():buildDraw();
+  };
+  // ---- robot
+  function buildRobot(){
+    const L=S.L;svg.setAttribute('viewBox',`0 0 ${L.w*C+2*M} ${L.h*C+2*M}`);svg.innerHTML='';
+    for(let y=0;y<L.h;y++)for(let x=0;x<L.w;x++){
+      const wall=L.walls&&L.walls.some(w=>w[0]===x&&w[1]===y);
+      el('rect',{x:M+x*C,y:M+y*C,width:C,height:C,style:wall?'fill:var(--fg);opacity:.85;stroke:var(--tray-edge);stroke-width:2':'fill:var(--card);stroke:var(--tray-edge);stroke-width:2'},svg);
+    }
+    if(L.flag){const t=el('text',{x:M+L.flag[0]*C+C/2,y:M+L.flag[1]*C+C/2+5,'text-anchor':'middle','font-size':14,'font-weight':700,style:'fill:var(--muted)'},svg);t.textContent='fin';}
+    const st=el('text',{x:M+L.star[0]*C+C/2,y:M+L.star[1]*C+C/2+11,'text-anchor':'middle','font-size':32,style:'fill:var(--gold);stroke:var(--fg);stroke-width:1'},svg);st.textContent='★';
+    const g=el('g',{class:'robot'},svg);S.rg=g;
+    el('rect',{x:-17,y:-17,width:34,height:34,rx:9,style:'fill:var(--blue);stroke:var(--fg);stroke-width:2'},g);
+    el('circle',{cx:-7,cy:-4,r:4.5,style:'fill:#fff;stroke:var(--fg);stroke-width:1'},g);
+    el('circle',{cx:7,cy:-4,r:4.5,style:'fill:#fff;stroke:var(--fg);stroke-width:1'},g);
+    el('polygon',{points:'-7,-17 7,-17 0,-28',style:'fill:var(--gold);stroke:var(--fg);stroke-width:2'},g);
+    resetRobot();
+  }
+  function resetRobot(){const s=S.L.start;S.rob={x:s[0],y:s[1],d:s[2],a:s[2]*90};placeRobot();}
+  function placeRobot(){const r=S.rob;S.rg.style.transform=`translate(${M+r.x*C+C/2}px,${M+r.y*C+C/2}px) rotate(${r.a}deg)`;}
+  const blocked=(L,x,y)=>x<0||y<0||x>=L.w||y>=L.h||(L.walls&&L.walls.some(w=>w[0]===x&&w[1]===y));
+  function runRobot(steps){
+    const L=S.L;let i=0;
+    S.timer=setInterval(()=>{
+      if(i>=steps.length){stop();return finishRobot();}
+      const s=steps[i++],r=S.rob;
+      if(s==='l'){r.d=(r.d+3)%4;r.a-=90;}
+      else if(s==='r'){r.d=(r.d+1)%4;r.a+=90;}
+      else if(s==='ifw'){if(blocked(L,r.x+DX[r.d],r.y+DY[r.d])){r.d=(r.d+1)%4;r.a+=90;}}
+      else if(s==='f'){const nx=r.x+DX[r.d],ny=r.y+DY[r.d];
+        if(blocked(L,nx,ny)){stop();placeRobot();return say('<span class="bad">El robot chocó con una pared.</span> Revisa en qué paso se gira. Puedes tocar un bloque para quitarlo.','');}
+        r.x=nx;r.y=ny;}
+      placeRobot();
+    },380);
+  }
+  function finishRobot(){
+    const r=S.rob,L=S.L;
+    if(r.x===L.star[0]&&r.y===L.star[1]){win(`<span class="ok">¡Llegó a la estrella!</span> Tu programa usa ${countBlocks(S.ed.prog)} bloques.`+(L.extra?'<br>'+L.extra:''));}
+    else{const d=Math.abs(r.x-L.star[0])+Math.abs(r.y-L.star[1]);say(`<span class="bad">Todavía no llega.</span> Terminó a ${d} casilla${d===1?'':'s'} de la estrella. Cambia el programa y vuelve a ejecutarlo.`);}
+  }
+  // ---- tortuga
+  const px=v=>O+v*SP;
+  function buildDraw(){
+    svg.setAttribute('viewBox','0 0 360 360');svg.innerHTML='';
+    for(let i=0;i<9;i++){el('line',{x1:px(i),y1:px(0),x2:px(i),y2:px(8),style:'stroke:var(--tray-edge);stroke-width:1;opacity:.5'},svg);el('line',{x1:px(0),y1:px(i),x2:px(8),y2:px(i),style:'stroke:var(--tray-edge);stroke-width:1;opacity:.5'},svg);}
+    for(let x=0;x<9;x++)for(let y=0;y<9;y++)el('circle',{cx:px(x),cy:px(y),r:3,style:'fill:var(--muted)'},svg);
+    S.lines=el('g',{},svg);
+    const g=el('g',{class:'robot'},svg);S.rg=g;
+    el('polygon',{points:'0,-13 10,10 -10,10',style:'fill:var(--red);stroke:var(--fg);stroke-width:2'},g);
+    resetTurtle();
+  }
+  function resetTurtle(){S.lines.innerHTML='';S.edges=new Set();S.rob={x:1,y:1,d:1,a:90};placeTurtle();}
+  function placeTurtle(){const r=S.rob;S.rg.style.transform=`translate(${px(r.x)}px,${px(r.y)}px) rotate(${r.a}deg)`;}
+  function runDraw(steps){
+    let i=0;
+    S.timer=setInterval(()=>{
+      if(i>=steps.length){stop();return finishDraw();}
+      const s=steps[i++],r=S.rob;
+      if(s==='l'){r.d=(r.d+3)%4;r.a-=90;}
+      else if(s==='r'){r.d=(r.d+1)%4;r.a+=90;}
+      else if(s==='f'){const nx=r.x+DX[r.d],ny=r.y+DY[r.d];
+        if(nx<0||ny<0||nx>8||ny>8){stop();return say('<span class="bad">La tortuga se salió del tablero.</span> Prueba otro giro o una figura más pequeña.');}
+        el('line',{x1:px(r.x),y1:px(r.y),x2:px(nx),y2:px(ny),'stroke-linecap':'round',style:'stroke:var(--blue);stroke-width:6'},S.lines);
+        S.edges.add(`${Math.min(r.x,nx)},${Math.min(r.y,ny)}-${Math.max(r.x,nx)},${Math.max(r.y,ny)}`);
+        r.x=nx;r.y=ny;}
+      placeTurtle();
+    },260);
+  }
+  function analyze(E){
+    if(!E.size)return null;let x0=99,y0=99,x1=-1,y1=-1;
+    E.forEach(k=>k.split('-').forEach(p=>{const [x,y]=p.split(',').map(Number);x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y);}));
+    const w=x1-x0,hh=y1-y0;if(w<1||hh<1)return null;
+    const need=[];for(let x=x0;x<x1;x++){need.push(`${x},${y0}-${x+1},${y0}`,`${x},${y1}-${x+1},${y1}`);}
+    for(let y=y0;y<y1;y++){need.push(`${x0},${y}-${x0},${y+1}`,`${x1},${y}-${x1},${y+1}`);}
+    return (E.size===need.length&&need.every(k=>E.has(k)))?{w,h:hh}:null;
+  }
+  function finishDraw(){
+    const rc=analyze(S.edges);
+    if(!rc)return say(S.edges.size?`<span class="bad">Todavía no es un rectángulo cerrado.</span> Dibujaste ${S.edges.size} segmentos. Revisa los giros.`:'<span class="bad">No dibujaste nada.</span> Agrega bloques Avanzar.');
+    const P=2*(rc.w+rc.h),A=rc.w*rc.h,name=rc.w===rc.h?'cuadrado':'rectángulo';
+    const info=`Dibujaste un ${name} de ${rc.w} × ${rc.h}.<br>Perímetro = 2 · (${rc.w} + ${rc.h}) = ${P} u. Área = ${rc.w} × ${rc.h} = ${A} u².`;
+    if(S.L.ok(rc.w,rc.h))win(`<span class="ok">¡Lo lograste!</span> ${info}`);
+    else say(`<span class="bad">Es un ${name}, pero no es el que pedimos.</span><br>${info}`);
+  }
+  // ---- común
+  function win(t){S.solved=true;S.done[S.idx]=true;chips();say(t);if(S.idx<S.levels.length-1)nxt.hidden=false;else say(t+'<br><b>¡Terminaste los retos de esta bandeja!</b>');}
+  S.run=function(){
+    stop();const steps=compile(S.ed.prog);
+    if(!steps.length)return say('Agrega bloques al programa y vuelve a ejecutarlo.');
+    S.kind==='robot'?resetRobot():resetTurtle();
+    say('Ejecutando…');S.kind==='robot'?runRobot(steps):runDraw(steps);
+  };
+  $('.run',root).addEventListener('click',S.run);
+  $('.clr',root).addEventListener('click',()=>{stop();S.ed.clear();S.kind==='robot'?resetRobot():resetTurtle();say('');});
+  $('.pista',root).addEventListener('click',()=>say('<b>Pista:</b> '+S.L.hint));
+  nxt.addEventListener('click',()=>S.load(S.idx+1));
+  S.load(0);
+  return S;
+}
+
+const sections=['b1','b2','b3'].map(Section);
+let active=sections[0];
+sections.forEach(S=>{S.root.addEventListener('pointerdown',()=>{active=S;},true);S.root.addEventListener('focusin',()=>{active=S;});});
+document.getElementById('next').addEventListener('click',()=>{
+  if(active.solved&&active.idx<active.levels.length-1)active.load(active.idx+1);else active.run();
+});
+</script>
+<script src="taller.js"></script>
+</body></html>

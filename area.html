@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f0e3c8"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="author" content="Elodie Strupiechonski"><link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+<title>Área · Cuadritos, rectángulos y triángulos interactivos</title><!--seo--><meta name="description" content="Taller interactivo de área: cuenta cuadritos, calcula el área de rectángulos y descubre que un triángulo es la mitad de un rectángulo. Gratis y sin internet."><link rel="canonical" href="https://elodiestrupiechonski.github.io/Talleres-Matematicas/area.html"><meta property="og:type" content="website"><meta property="og:locale" content="es_MX"><meta property="og:site_name" content="Talleres de Matemáticas"><meta property="og:title" content="Área · Cuadritos, rectángulos y triángulos interactivos"><meta property="og:description" content="Taller interactivo de área: cuenta cuadritos, calcula el área de rectángulos y descubre que un triángulo es la mitad de un rectángulo. Gratis y sin internet."><meta property="og:url" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/area.html"><meta property="og:image" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/icons/og.png"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Área · Cuadritos, rectángulos y triángulos interactivos", "description": "Taller interactivo de área: cuenta cuadritos, calcula el área de rectángulos y descubre que un triángulo es la mitad de un rectángulo. Gratis y sin internet.", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/area.html", "inLanguage": "es-MX", "isAccessibleForFree": true, "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/", "author": {"@type": "Person", "name": "Elodie Strupiechonski"}, "learningResourceType": "Recurso interactivo", "typicalAgeRange": "9-11", "educationalLevel": "Primaria", "teaches": "Área de figuras", "isPartOf": {"@type": "WebSite", "name": "Talleres de Matemáticas", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/"}}</script><!--/seo-->
+<link rel="stylesheet" href="taller.css">
+<style>
+input[type=range]{width:min(280px,100%);accent-color:var(--blue)}
+.board{width:100%;max-width:560px}
+.cell{cursor:pointer}
+</style></head><body>
+<div class="wrap">
+  <a class="back" href="index.html">← Todos los talleres</a>
+  <header class="col">
+    <h1>Taller de Área</h1>
+    <p class="lead">El área es cuánto espacio cubre una figura. Se mide en cuadritos (u²).</p>
+  </header>
+
+  <section class="tray" aria-labelledby="t1">
+    <span class="step">Bandeja 1 · Cubrir con cuadritos</span>
+    <h2 id="t1">El rectángulo</h2>
+    <div class="row">
+      <label for="b">Base: <b id="bv"></b></label><input id="b" type="range" min="1" max="10" value="5">
+      <label for="h">Altura: <b id="hv"></b></label><input id="h" type="range" min="1" max="8" value="3">
+    </div>
+    <div class="row">
+      <svg class="board" id="g1" viewBox="0 0 440 360" role="img" aria-label="Cuadrícula con rectángulo"></svg>
+      <div class="col">
+        <p class="note">Toca los cuadritos azules para contarlos uno por uno. Contados: <b id="cnt">0</b></p>
+        <p class="note q" id="m1"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="tray" aria-labelledby="t2">
+    <span class="step">Bandeja 2 · Cortar por la diagonal</span>
+    <h2 id="t2">El triángulo es la mitad</h2>
+    <p>Un triángulo es la mitad de un rectángulo.</p>
+    <p class="det">Si cortamos un rectángulo por su diagonal, obtenemos dos triángulos iguales. Cada uno cubre la mitad del rectángulo.</p>
+    <div class="row">
+      <label for="tb">Base: <b id="tbv"></b></label><input id="tb" type="range" min="2" max="10" value="6">
+      <label for="th">Altura: <b id="thv"></b></label><input id="th" type="range" min="2" max="8" value="4">
+      <button id="cut">Cortar</button>
+    </div>
+    <div class="row">
+      <svg class="board" id="g2" viewBox="0 0 440 360" role="img" aria-label="Rectángulo dividido en dos triángulos"></svg>
+      <p class="note q" id="m2" style="flex:1"></p>
+    </div>
+  </section>
+
+  <section class="tray" aria-labelledby="t3">
+    <span class="step">Bandeja 3 · Ponte a prueba</span>
+    <h2 id="t3">¿Cuál es el área?</h2>
+    <div class="row">
+      <svg class="board" id="g3" viewBox="0 0 440 360" role="img" aria-label="Figura de la pregunta" style="max-width:340px"></svg>
+      <div class="col">
+        <div class="chips" id="opts"></div>
+        <p class="note" id="qmsg">Elige la respuesta correcta.</p>
+        <p>Aciertos: <b id="score">0</b> · <button id="next">Siguiente</button></p>
+      </div>
+    </div>
+  </section>
+</div>
+<script src="construir.js"></script>
+<script>
+const $=id=>document.getElementById(id),NS="http://www.w3.org/2000/svg",U=40,X0=20,Y0=20,W=10,H=8;
+const el=(t,a,st)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(st)e.setAttribute("style",st);return e};
+function grid(svg){svg.innerHTML="";
+  for(let i=0;i<=W;i++)svg.appendChild(el("line",{x1:X0+i*U,y1:Y0,x2:X0+i*U,y2:Y0+H*U,"stroke-width":1},"stroke:var(--muted);opacity:.5"));
+  for(let j=0;j<=H;j++)svg.appendChild(el("line",{x1:X0,y1:Y0+j*U,x2:X0+W*U,y2:Y0+j*U,"stroke-width":1},"stroke:var(--muted);opacity:.5"));
+}
+// rectangle anchored bottom-left
+const rx=b=>X0, ry=h=>Y0+(H-h)*U;
+
+// Bandeja 1
+let counted=new Set();
+function r1(){
+  const b=+$("b").value,h=+$("h").value;$("bv").textContent=b;$("hv").textContent=h;
+  const s=$("g1");grid(s);
+  for(let i=0;i<b;i++)for(let j=0;j<h;j++){
+    const key=i+","+j,c=el("rect",{x:X0+i*U,y:ry(h)+j*U,width:U,height:U,rx:4,class:"cell"},`stroke:var(--tray);stroke-width:3;fill:var(--blue);opacity:${counted.has(key)?1:.45}`);
+    c.addEventListener("click",()=>{counted.has(key)?counted.delete(key):counted.add(key);r1();});s.appendChild(c);
+    if(counted.has(key)){const t=el("text",{x:X0+i*U+U/2,y:ry(h)+j*U+U/2+6,"text-anchor":"middle","font-size":15,"font-weight":700},"fill:#fff;pointer-events:none");t.textContent=[...counted].indexOf(key)+1;s.appendChild(t);}
+  }
+  s.appendChild(el("rect",{x:X0,y:ry(h),width:b*U,height:h*U,"stroke-width":3},"fill:none;stroke:var(--fg)"));
+  $("cnt").textContent=counted.size;
+  $("m1").innerHTML=`<span class="big"><span class="n">${b}</span> × <span class="g">${h}</span> = ${b*h} u²</span><br>Hay ${h} fila${h>1?"s":""} de ${b} cuadritos. Multiplicar es una forma rápida de contarlos todos: <b>Área = base × altura</b>.`;
+}
+["b","h"].forEach(i=>$(i).addEventListener("input",()=>{counted.clear();r1();}));r1();
+
+// Bandeja 2
+let cut=false;
+function r2(){
+  const b=+$("tb").value,h=+$("th").value;$("tbv").textContent=b;$("thv").textContent=h;
+  const s=$("g2");grid(s);const x=X0,y=ry(h),off=cut?14:0;
+  s.appendChild(el("polygon",{points:`${x},${y+h*U} ${x+b*U},${y+h*U} ${x},${y}`,"stroke-width":3},"fill:var(--red);opacity:.75;stroke:var(--fg)"));
+  s.appendChild(el("polygon",{points:`${x+b*U+off},${y+h*U-off} ${x+b*U+off},${y-off} ${x+off},${y-off}`,"stroke-width":3},"fill:var(--gold);opacity:.75;stroke:var(--fg)"));
+  $("cut").textContent=cut?"Unir":"Cortar";
+  $("m2").innerHTML=`Rectángulo: ${b} × ${h} = ${b*h} u²<br><span class="big">Triángulo = <span class="n">${b}</span> × <span class="g">${h}</span> ÷ 2 = ${b*h/2} u²</span><br>Los dos triángulos son iguales, así que cada uno vale la mitad.`;
+}
+["tb","th"].forEach(i=>$(i).addEventListener("input",r2));$("cut").onclick=()=>{cut=!cut;r2();};r2();
+
+// Bandeja 3
+let score=0;
+function q(){
+  const tri=Math.random()<.4;let b=2+Math.floor(Math.random()*8),h=2+Math.floor(Math.random()*6);
+  if(tri&&(b*h)%2)b++;
+  const a=tri?b*h/2:b*h,s=$("g3");grid(s);const x=X0,y=ry(h);
+  if(tri)s.appendChild(el("polygon",{points:`${x},${y+h*U} ${x+b*U},${y+h*U} ${x},${y}`,"stroke-width":3},"fill:var(--red);opacity:.75;stroke:var(--fg)"));
+  else s.appendChild(el("rect",{x,y,width:b*U,height:h*U,"stroke-width":3},"fill:var(--blue);opacity:.6;stroke:var(--fg)"));
+  const chk=v=>{
+    if(v===a){score++;$("score").textContent=score;$("qmsg").innerHTML=`<span class="ok">¡Correcto!</span> ${b} × ${h}${tri?" ÷ 2":""} = ${a} u².`;setTimeout(q,1600);}
+    else $("qmsg").innerHTML=`<span class="bad">Casi.</span> Cuenta la base y la altura en la cuadrícula.${tri?" Recuerda que el triángulo es la mitad del rectángulo.":""} Cuidado: sumar los lados da el perímetro, no el área.`;
+  };
+  Construir($("opts"),{unit:"u²",submit:x=>chk(x[0])});
+  $("qmsg").textContent="Escribe el área y toca Comprobar.";
+}
+$("next").onclick=q;q();
+</script>
+<script src="taller.js"></script>
+</body></html>

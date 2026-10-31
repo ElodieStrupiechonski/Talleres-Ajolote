@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f0e3c8"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="author" content="Elodie Strupiechonski"><link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+<title>Dibujo y matemáticas · Mandala y cuadrícula de fracciones</title><!--seo--><meta name="description" content="Taller interactivo donde dibujar es matemática: crea un mandala con simetría y pinta una cuadrícula para descubrir fracciones. Gratis y sin internet."><link rel="canonical" href="https://elodiestrupiechonski.github.io/Talleres-Matematicas/dibujo.html"><meta property="og:type" content="website"><meta property="og:locale" content="es_MX"><meta property="og:site_name" content="Talleres de Matemáticas"><meta property="og:title" content="Dibujo y matemáticas · Mandala y cuadrícula de fracciones"><meta property="og:description" content="Taller interactivo donde dibujar es matemática: crea un mandala con simetría y pinta una cuadrícula para descubrir fracciones. Gratis y sin internet."><meta property="og:url" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/dibujo.html"><meta property="og:image" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/icons/og.png"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Dibujo y matemáticas · Mandala y cuadrícula de fracciones", "description": "Taller interactivo donde dibujar es matemática: crea un mandala con simetría y pinta una cuadrícula para descubrir fracciones. Gratis y sin internet.", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/dibujo.html", "inLanguage": "es-MX", "isAccessibleForFree": true, "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/", "author": {"@type": "Person", "name": "Elodie Strupiechonski"}, "learningResourceType": "Recurso interactivo", "typicalAgeRange": "9-11", "educationalLevel": "Primaria", "teaches": "Simetría y fracciones", "isPartOf": {"@type": "WebSite", "name": "Talleres de Matemáticas", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/"}}</script><!--/seo-->
+<link rel="stylesheet" href="taller.css">
+<style>
+.ed{flex:1;min-width:min(100%,280px)}
+.lbl{font-family:var(--display);font-weight:600;color:var(--muted);margin-bottom:6px;display:block}
+.pal2{display:flex;flex-wrap:wrap;gap:8px}
+button.sw{width:52px;height:52px;min-width:52px;padding:0;border-radius:50%;border:3px solid var(--fg)}
+button.sw.on{outline:4px solid var(--blue);outline-offset:2px}
+.canvwrap{width:min(100%,380px);flex:none}
+canvas{display:block;width:100%;height:auto;aspect-ratio:1;border-radius:12px;touch-action:none;background:var(--card);cursor:crosshair}
+.grid{display:grid;gap:3px;width:min(100%,380px);aspect-ratio:1;touch-action:none;background:var(--tray-edge);padding:3px;border-radius:10px;flex:none}
+.grid div{background:var(--card);border-radius:3px}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+.read{display:flex;flex-direction:column;gap:6px}
+.read span.k{display:inline-block;width:16px;height:16px;border-radius:50%;border:2px solid var(--fg);vertical-align:-2px;margin-right:6px}
+.msg:empty{display:none}
+.on{outline:none}
+</style></head><body>
+<div class="wrap">
+  <a class="back" href="index.html">← Todos los talleres</a>
+  <header class="col">
+    <h1>Taller de Dibujo</h1>
+    <p class="lead">Dibujar también es matemática: repetir y repartir en fracciones.</p>
+  </header>
+
+  <section class="tray" id="m" aria-labelledby="t1">
+    <span class="step">Bandeja 1 · Mandala</span>
+    <h2 id="t1">Dibuja una vez y se repite alrededor</h2>
+    <p>Dibuja con el dedo: cada sector copia tu dibujo.</p>
+    <p class="det">Dibuja con el dedo. Cada sector del círculo copia tu dibujo. Cambia el número de sectores y mira cómo se transforma.</p>
+    <div class="row">
+      <div class="canvwrap"><canvas id="cv" width="760" height="760" role="img" aria-label="Lienzo del mandala: dibuja con el dedo"></canvas></div>
+      <div class="col ed">
+        <div><span class="lbl">Sectores</span><div class="chips" id="ns"></div></div>
+        <div><span class="lbl">Color</span><div class="pal2" id="cols"></div></div>
+        <div><span class="lbl">Pincel</span><div class="chips" id="brush"></div></div>
+        <div class="btns"><button id="mir" aria-pressed="false">Espejo: no</button><button id="undo">Deshacer</button><button id="clear">Borrar todo</button></div>
+      </div>
+    </div>
+    <p class="note msg" id="mmsg" aria-live="polite"></p>
+  </section>
+
+  <section class="tray" id="g" aria-labelledby="t2">
+    <span class="step">Bandeja 2 · Cuadrícula de colores</span>
+    <h2 id="t2">Pinta y descubre qué fracción es</h2>
+    <p class="goal" id="ggoal"></p>
+    <div class="chips" id="glv"></div>
+    <div class="row">
+      <div class="grid" id="grid" aria-label="Cuadrícula: toca o arrastra para pintar"></div>
+      <div class="col ed">
+        <div id="gsizebox"><span class="lbl">Tamaño</span><div class="chips" id="gsize"></div></div>
+        <div><span class="lbl">Color</span><div class="pal2" id="gcols"></div></div>
+        <div class="btns"><button id="gclr">Borrar todo</button><button id="gpista">Pista</button><button id="gnxt" hidden>Siguiente reto →</button></div>
+        <div class="note read" id="gread" aria-live="polite"></div>
+      </div>
+    </div>
+    <p class="note msg" id="gmsg" aria-live="polite"></p>
+  </section>
+</div>
+<button id="next" hidden aria-hidden="true" tabindex="-1">Siguiente</button>
+
+<script>
+const $=(s,r=document)=>r.querySelector(s);
+const h=(t,c,txt)=>{const e=document.createElement(t);if(c)e.className=c;if(txt!=null)e.textContent=txt;return e;};
+const btn=(cls,txt,fn,aria)=>{const b=h('button',cls,txt);b.type='button';if(aria)b.setAttribute('aria-label',aria);b.addEventListener('click',fn);return b;};
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const gcd=(a,b)=>b?gcd(b,a%b):a;
+const COL=[['Rojo','#e0705a'],['Naranja','#f0a35a'],['Amarillo','#eac35a'],['Verde','#6fb584'],['Azul','#6f9fd3'],['Morado','#a58ad0'],['Rosa','#e68ab0'],['Tinta',null]];
+const GCOL=COL.slice(0,7);
+function swatches(box,list,cur,onPick){
+  box.innerHTML='';
+  list.forEach((c,i)=>{const b=btn('sw'+(i===cur?' on':''),'',()=>onPick(i),c[0]);b.style.background=c[1]||'var(--fg)';b.setAttribute('aria-pressed',i===cur);box.appendChild(b);});
+}
+const sections=[];
+
+/* ---------- Bandeja 1: mandala ---------- */
+(function(){
+  const root=$('#m'),cv=$('#cv'),ctx=cv.getContext('2d'),S=760,C=S/2,R=C-8,TAU=Math.PI*2;
+  const NS=[2,3,4,6,8,12],W=[5,11,22],BN=['Fino','Medio','Grueso'];
+  const st={n:6,mir:false,ci:0,wi:1,strokes:[],cur:null};
+  const res=c=>c||css('--fg');
+  function seg(a,b,color,w){
+    ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=w;ctx.lineCap='round';ctx.lineJoin='round';
+    const dot=a[0]===b[0]&&a[1]===b[1];
+    for(let k=0;k<st.n;k++){
+      const t=TAU*k/st.n,cs=Math.cos(t),sn=Math.sin(t);
+      const rot=p=>{const x=p[0]-C,y=p[1]-C;return [C+x*cs-y*sn,C+x*sn+y*cs];};
+      for(const m of (st.mir?[false,true]:[false])){
+        const A=rot(m?[2*C-a[0],a[1]]:a),B=rot(m?[2*C-b[0],b[1]]:b);
+        ctx.beginPath();ctx.moveTo(A[0],A[1]);ctx.lineTo(B[0],B[1]);ctx.stroke();
+        if(dot){ctx.beginPath();ctx.arc(A[0],A[1],w/2,0,TAU);ctx.fill();}
+      }
+    }
+  }
+  function clipped(fn){ctx.save();ctx.beginPath();ctx.arc(C,C,R,0,TAU);ctx.clip();fn();ctx.restore();}
+  function bg(){
+    ctx.clearRect(0,0,S,S);ctx.fillStyle=css('--card');ctx.fillRect(0,0,S,S);
+    clipped(()=>{
+      ctx.fillStyle=css('--tray');ctx.globalAlpha=.6;ctx.beginPath();ctx.moveTo(C,C);ctx.arc(C,C,R,-Math.PI/2,-Math.PI/2+TAU/st.n);ctx.closePath();ctx.fill();ctx.globalAlpha=1;
+      ctx.strokeStyle=css('--tray-edge');ctx.lineWidth=2;
+      for(let k=0;k<st.n;k++){const t=-Math.PI/2+TAU*k/st.n;ctx.beginPath();ctx.moveTo(C,C);ctx.lineTo(C+R*Math.cos(t),C+R*Math.sin(t));ctx.stroke();}
+    });
+  }
+  function info(){
+    const n=st.n,a=360/n;
+    $('#mmsg').innerHTML=`<b>${n} sectores:</b> cada sector es <b>1/${n}</b> del círculo, es decir 360° ÷ ${n} = <b>${a}°</b>. El sector sombreado es 1 de los ${n}.`+(st.mir?' El espejo también refleja cada sector.':'');
+  }
+  function render(){
+    bg();
+    clipped(()=>st.strokes.forEach(s=>{const c=res(s.c);if(s.p.length===1)seg(s.p[0],s.p[0],c,s.w);for(let i=1;i<s.p.length;i++)seg(s.p[i-1],s.p[i],c,s.w);}));
+    ctx.strokeStyle=css('--tray-edge');ctx.lineWidth=4;ctx.beginPath();ctx.arc(C,C,R,0,TAU);ctx.stroke();
+    info();
+  }
+  function ui(){
+    const ns=$('#ns');ns.innerHTML='';
+    NS.forEach(n=>ns.appendChild(btn(n===st.n?'on':'',n,()=>{st.n=n;ui();render();},n+' sectores')));
+    swatches($('#cols'),COL,st.ci,i=>{st.ci=i;ui();});
+    const br=$('#brush');br.innerHTML='';
+    BN.forEach((t,i)=>br.appendChild(btn(i===st.wi?'on':'',t,()=>{st.wi=i;ui();})));
+    const m=$('#mir');m.textContent='Espejo: '+(st.mir?'sí':'no');m.setAttribute('aria-pressed',st.mir);m.className=st.mir?'on':'';
+  }
+  const pt=e=>{const r=cv.getBoundingClientRect();return [(e.clientX-r.left)/r.width*S,(e.clientY-r.top)/r.height*S];};
+  cv.addEventListener('pointerdown',e=>{
+    cv.setPointerCapture(e.pointerId);e.preventDefault();
+    const p=pt(e);st.cur={c:COL[st.ci][1],w:W[st.wi],p:[p]};st.strokes.push(st.cur);
+    clipped(()=>seg(p,p,res(st.cur.c),st.cur.w));
+  });
+  cv.addEventListener('pointermove',e=>{
+    if(!st.cur)return;const q=pt(e),l=st.cur.p[st.cur.p.length-1];
+    if(Math.hypot(q[0]-l[0],q[1]-l[1])<2)return;
+    st.cur.p.push(q);clipped(()=>seg(l,q,res(st.cur.c),st.cur.w));
+  });
+  ['pointerup','pointercancel'].forEach(t=>cv.addEventListener(t,()=>{st.cur=null;}));
+  $('#mir').addEventListener('click',()=>{st.mir=!st.mir;ui();render();});
+  $('#undo').addEventListener('click',()=>{st.strokes.pop();render();});
+  $('#clear').addEventListener('click',()=>{st.strokes=[];render();});
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change',render);
+  sections.push({root,next(){st.n=NS[(NS.indexOf(st.n)+1)%NS.length];ui();render();}});
+  ui();render();
+})();
+
+/* ---------- Bandeja 2: cuadrícula de colores ---------- */
+(function(){
+  const root=$('#g'),grid=$('#grid');
+  const RETOS=[
+    {n:4,txt:'Pinta ¼ de la cuadrícula de rojo.',t:[[0,1,4]],hint:'La cuadrícula tiene 16 casillas. ¼ de 16 = 4 casillas.'},
+    {n:4,txt:'Pinta ½ de azul y ¼ de amarillo.',t:[[4,1,2],[2,1,4]],hint:'½ de 16 = 8 casillas y ¼ de 16 = 4. ¿Qué fracción queda sin pintar?'},
+    {n:8,txt:'Pinta 3/8 de la cuadrícula de verde.',t:[[3,3,8]],hint:'Hay 64 casillas. 1/8 son 8 casillas, así que 3/8 son 24.'},
+    {n:10,txt:'Pinta el 35 % de rojo. ¿Qué fracción es?',t:[[0,35,100]],hint:'Hay 100 casillas, así que el 35 % son 35 casillas. Simplificado: 35/100 = 7/20.'}
+  ];
+  const S={mode:-1,n:6,ci:0,cells:[],solved:false,done:RETOS.map(()=>false)};
+  const frac=(a,b)=>{const g=gcd(a,b)||1;return g>1?`${a}/${b} = ${a/g}/${b/g}`:`${a}/${b}`;};
+  const pct=(a,b)=>(Math.round(a/b*1000)/10).toString()+' %';
+  const msg=t=>{$('#gmsg').innerHTML=t;};
+  function levels(){
+    const lv=$('#glv');lv.innerHTML='';
+    lv.appendChild(btn(S.mode===-1?'on':'','Libre',()=>load(-1)));
+    RETOS.forEach((r,i)=>lv.appendChild(btn(S.mode===i?'on':'','Reto '+(i+1)+(S.done[i]?' ✓':''),()=>load(i))));
+  }
+  function load(m){
+    S.mode=m;S.solved=false;S.n=m>=0?RETOS[m].n:S.n;S.cells=Array(S.n*S.n).fill(-1);
+    $('#gnxt').hidden=true;msg('');$('#gsizebox').hidden=m>=0;
+    $('#ggoal').textContent=m>=0?RETOS[m].txt:'Pinta como quieras. Debajo verás qué fracción de la cuadrícula ocupa cada color.';
+    build();levels();
+  }
+  function build(){
+    grid.style.gridTemplateColumns=`repeat(${S.n},1fr)`;grid.innerHTML='';
+    S.cells.forEach(()=>grid.appendChild(document.createElement('div')));
+    const sz=$('#gsize');sz.innerHTML='';
+    [4,6,8,10].forEach(n=>sz.appendChild(btn(n===S.n?'on':'',n+' × '+n,()=>{S.n=n;S.cells=Array(n*n).fill(-1);build();update();})));
+    const pick=i=>{S.ci=i;swatches($('#gcols'),GCOL,S.ci,pick);};pick(S.ci);
+    paintAll();update();
+  }
+  function paintAll(){[...grid.children].forEach((d,i)=>{d.style.background=S.cells[i]>=0?GCOL[S.cells[i]][1]:'';});}
+  function counts(){const c=GCOL.map(()=>0);S.cells.forEach(v=>{if(v>=0)c[v]++;});return c;}
+  function update(){
+    const total=S.cells.length,c=counts(),painted=c.reduce((a,b)=>a+b,0),rd=$('#gread');rd.innerHTML='';
+    if(!painted){rd.textContent=`La cuadrícula tiene ${total} casillas. Toca o arrastra para pintar.`;}
+    else{
+      c.forEach((n,i)=>{if(n){const d=h('div');d.innerHTML=`<span class="k" style="background:${GCOL[i][1]}"></span>${GCOL[i][0]}: ${frac(n,total)} ≈ ${pct(n,total)}`;rd.appendChild(d);}});
+      const e=h('div');e.textContent=`Sin pintar: ${frac(total-painted,total)}`;rd.appendChild(e);
+    }
+    if(S.mode>=0)check();
+  }
+  function check(){
+    const R=RETOS[S.mode],total=S.cells.length,c=counts();let ok=true;const prog=[];
+    const used=new Set(c.map((n,i)=>n?i:-1).filter(i=>i>=0));
+    R.t.forEach(([ci,a,b])=>{const need=total*a/b;prog.push(`${GCOL[ci][0]}: ${c[ci]} de ${need} casillas`);if(c[ci]!==need)ok=false;used.delete(ci);});
+    if(used.size)ok=false;
+    if(ok&&!S.solved){
+      S.solved=true;S.done[S.mode]=true;levels();
+      const parts=R.t.map(([ci,a,b])=>`${GCOL[ci][0]}: ${a}/${b} de ${total} = ${total*a/b} casillas (${pct(total*a/b,total)})`);
+      const rest=total-R.t.reduce((s,[,a,b])=>s+total*a/b,0);
+      msg(`<span class="ok">¡Exacto!</span> ${parts.join('<br>')}`+(rest?`<br>Sin pintar queda ${frac(rest,total)}.`:''));
+      if(S.mode<RETOS.length-1)$('#gnxt').hidden=false;else msg($('#gmsg').innerHTML+'<br><b>¡Terminaste los retos de esta bandeja!</b>');
+    }else if(!ok){S.solved=false;$('#gnxt').hidden=true;msg(prog.join(' · ')+(used.size?'<br>Hay otros colores que no piden este reto.':''));}
+  }
+  // pintar tocando o arrastrando
+  let down=false,erase=false;
+  function idx(e){const r=grid.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;if(x<0||y<0||x>=1||y>=1)return -1;return Math.floor(y*S.n)*S.n+Math.floor(x*S.n);}
+  function apply(i){if(i<0)return;const v=erase?-1:S.ci;if(S.cells[i]===v)return;S.cells[i]=v;grid.children[i].style.background=v>=0?GCOL[v][1]:'';}
+  grid.addEventListener('pointerdown',e=>{
+    e.preventDefault();grid.setPointerCapture(e.pointerId);down=true;
+    const i=idx(e);erase=i>=0&&S.cells[i]===S.ci;apply(i);
+  });
+  grid.addEventListener('pointermove',e=>{if(down)apply(idx(e));});
+  ['pointerup','pointercancel'].forEach(t=>grid.addEventListener(t,()=>{if(down){down=false;update();}}));
+  $('#gclr').addEventListener('click',()=>{S.cells=Array(S.n*S.n).fill(-1);S.solved=false;$('#gnxt').hidden=true;msg('');paintAll();update();});
+  $('#gpista').addEventListener('click',()=>msg('<b>Pista:</b> '+(S.mode>=0?RETOS[S.mode].hint:'Prueba pintar la mitad de un color y un cuarto de otro. ¿Qué fracción queda sin pintar?')));
+  $('#gnxt').addEventListener('click',()=>load(S.mode+1));
+  sections.push({root,next(){if(S.mode>=0&&S.solved&&S.mode<RETOS.length-1)load(S.mode+1);else $('#gclr').click();}});
+  load(-1);
+})();
+
+let active=sections[0];
+sections.forEach(s=>{s.root.addEventListener('pointerdown',()=>{active=s;},true);s.root.addEventListener('focusin',()=>{active=s;});});
+document.getElementById('next').addEventListener('click',()=>active.next());
+</script>
+<script src="taller.js"></script>
+</body></html>

@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f0e3c8"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="author" content="Elodie Strupiechonski"><link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+<title>Tablero de ajedrez · Casillas y movimientos, interactivo</title><!--seo--><meta name="description" content="Taller interactivo del tablero de ajedrez como cuadrícula: nombra las casillas (a1 a h8) y cuenta adónde puede ir cada pieza. Para niñas y niños, gratis y sin internet."><link rel="canonical" href="https://elodiestrupiechonski.github.io/Talleres-Matematicas/ajedrez.html"><meta property="og:type" content="website"><meta property="og:locale" content="es_MX"><meta property="og:site_name" content="Talleres de Matemáticas"><meta property="og:title" content="Tablero de ajedrez · Casillas y movimientos, interactivo"><meta property="og:description" content="Taller interactivo del tablero de ajedrez como cuadrícula: nombra las casillas (a1 a h8) y cuenta adónde puede ir cada pieza. Para niñas y niños, gratis y sin internet."><meta property="og:url" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/ajedrez.html"><meta property="og:image" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/icons/og.png"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Tablero de ajedrez · Casillas y movimientos, interactivo", "description": "Taller interactivo del tablero de ajedrez como cuadrícula: nombra las casillas (a1 a h8) y cuenta adónde puede ir cada pieza. Para niñas y niños, gratis y sin internet.", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/ajedrez.html", "inLanguage": "es-MX", "isAccessibleForFree": true, "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/", "author": {"@type": "Person", "name": "Elodie Strupiechonski"}, "learningResourceType": "Recurso interactivo", "typicalAgeRange": "9-11", "educationalLevel": "Primaria", "teaches": "Cuadrícula y coordenadas", "isPartOf": {"@type": "WebSite", "name": "Talleres de Matemáticas", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/"}}</script><!--/seo-->
+<link rel="stylesheet" href="taller.css">
+<style>
+.lbl{font-family:var(--display);font-weight:600;color:var(--muted);margin-bottom:6px;display:block}
+.ed{flex:1;min-width:min(100%,260px)}
+.bwrap{width:min(100%,420px);flex:none}
+.bd{display:grid;grid-template-columns:22px repeat(8,1fr);grid-template-rows:repeat(8,1fr) 22px;width:100%;aspect-ratio:1;gap:0;font-family:var(--display);color:var(--muted);font-size:14px}
+.bd .c{position:relative;display:flex;align-items:center;justify-content:center;font-size:clamp(22px,6vw,40px);line-height:1;cursor:pointer;user-select:none;border:0;padding:0;min-height:0;border-radius:0;font-family:"DejaVu Sans","Segoe UI Symbol",sans-serif;color:#2b1d12;text-shadow:0 0 3px #fff,0 0 3px #fff}
+.bd .c.l{background:var(--card)}.bd .c.d{background:#d4b585}
+.bd .c.sel{box-shadow:inset 0 0 0 4px var(--blue)}
+.bd .c.mv::after{content:"";width:34%;height:34%;border-radius:50%;background:var(--green);opacity:.85;position:absolute}
+.bd .c.mv.has::after{display:none}
+.bd .c.ok{box-shadow:inset 0 0 0 5px var(--green)}
+.bd .c.no{box-shadow:inset 0 0 0 5px var(--red)}
+.bd .a{display:flex;align-items:center;justify-content:center}
+.bd{border:3px solid var(--fg);border-radius:6px;padding:0;box-sizing:border-box}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+.msg:empty{display:none}
+</style></head><body>
+<div class="wrap">
+  <a class="back" href="index.html">← Todos los talleres</a>
+  <header class="col">
+    <h1>Taller de Ajedrez</h1>
+    <p class="lead">El tablero es una cuadrícula de 8 × 8. Aprendemos a nombrar casillas y movimientos.</p>
+  </header>
+
+  <section class="tray" id="s1" aria-labelledby="t1">
+    <span class="step">Bandeja 1 · El tablero</span>
+    <h2 id="t1">Cada casilla tiene nombre</h2>
+    <p>El nombre de una casilla es letra + número, como <b>e4</b>.</p>
+    <p class="det">Las columnas van de <b>a</b> a <b>h</b> y las filas de <b>1</b> a <b>8</b>. El nombre es la letra y el número, por ejemplo <b>e4</b>.</p>
+    <div class="chips" id="m1"></div>
+    <div class="row">
+      <div class="bwrap"><div class="bd" id="b1"></div></div>
+      <div class="col ed"><p class="note" id="i1" aria-live="polite"></p><p class="note q" id="f1" aria-live="polite"></p></div>
+    </div>
+  </section>
+
+  <section class="tray" id="s2" aria-labelledby="t2">
+    <span class="step">Bandeja 2 · Cómo se mueve cada pieza</span>
+    <h2 id="t2">Coloca una pieza y mira adónde puede ir</h2>
+    <p>Elige una pieza y toca una casilla. Los puntos verdes son sus movimientos.</p>
+    <div class="row">
+      <div class="bwrap"><div class="bd" id="b2"></div></div>
+      <div class="col ed">
+        <div><span class="lbl">Pieza</span><div class="chips" id="pc"></div></div>
+        <p class="note" id="r2"></p>
+        <p class="note q" id="i2" aria-live="polite"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="tray" id="s3" aria-labelledby="t3">
+    <span class="step">Bandeja 3 · Ponte a prueba</span>
+    <h2 id="t3">¿A cuántas casillas puede ir?</h2>
+    <div class="row">
+      <div class="bwrap"><div class="bd" id="b3"></div></div>
+      <div class="col ed">
+        <p id="q3" style="font-size:1.25rem"></p>
+        <div class="chips" id="o3"></div>
+        <p class="note" id="m3" aria-live="polite"></p>
+        <p>Aciertos: <b id="sc3">0</b> · <button id="n3" type="button">Siguiente</button></p>
+      </div>
+    </div>
+  </section>
+</div>
+<button id="next" hidden aria-hidden="true" tabindex="-1">Siguiente</button>
+<script src="construir.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const h=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;};
+const btn=(cls,txt,fn)=>{const b=h('button',cls,txt);b.type='button';b.addEventListener('click',fn);return b;};
+const FILES='abcdefgh',nm=(f,r)=>FILES[f]+(r+1),rnd=n=>Math.floor(Math.random()*n);
+const P={torre:{g:'♜',n:'La torre',d:'avanza en línea recta, horizontal o vertical, todas las casillas que quiera.'},
+ alfil:{g:'♝',n:'El alfil',d:'avanza en diagonal, todas las casillas que quiera. Siempre queda en casillas del mismo color.'},
+ dama:{g:'♛',n:'La dama',d:'se mueve como torre y como alfil juntos.'},
+ rey:{g:'♚',n:'El rey',d:'avanza una sola casilla en cualquier dirección.'},
+ caballo:{g:'♞',n:'El caballo',d:'salta en forma de L: dos casillas en una dirección y una al lado. Es el único que puede saltar sobre otras piezas.'},
+ peon:{g:'♟︎',n:'El peón blanco',d:'avanza una casilla hacia adelante, o dos si todavía está en la fila 2.'}};
+function moves(p,f,r){
+  const out=[],add=(a,b)=>{if(a>=0&&a<8&&b>=0&&b<8)out.push([a,b]);};
+  const ray=(df,dr)=>{let a=f+df,b=r+dr;while(a>=0&&a<8&&b>=0&&b<8){out.push([a,b]);a+=df;b+=dr;}};
+  if(p==='torre'||p==='dama')[[1,0],[-1,0],[0,1],[0,-1]].forEach(d=>ray(...d));
+  if(p==='alfil'||p==='dama')[[1,1],[1,-1],[-1,1],[-1,-1]].forEach(d=>ray(...d));
+  if(p==='rey')for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++)if(a||b)add(f+a,r+b);
+  if(p==='caballo')[[1,2],[2,1],[-1,2],[-2,1],[1,-2],[2,-1],[-1,-2],[-2,-1]].forEach(d=>add(f+d[0],r+d[1]));
+  if(p==='peon'&&r<7){add(f,r+1);if(r===1)add(f,r+2);}
+  return out;
+}
+function Board(el,onTap){
+  el.innerHTML='';const cells={};
+  for(let r=7;r>=0;r--){
+    el.appendChild(h('div','a',r+1));
+    for(let f=0;f<8;f++){
+      const c=h('button','c '+((f+r)%2?'l':'d'));c.type='button';c.setAttribute('aria-label',nm(f,r));
+      c.addEventListener('click',()=>onTap(f,r));el.appendChild(c);cells[f+','+r]=c;
+    }
+  }
+  el.appendChild(h('div','a'));
+  for(let f=0;f<8;f++)el.appendChild(h('div','a',FILES[f]));
+  return {cells,clear(){Object.values(cells).forEach(c=>{c.className=c.className.replace(/ ?(sel|mv|has|ok|no)\b/g,'');c.textContent='';});},
+    at(f,r){return cells[f+','+r];},
+    mark(list,cls){list.forEach(([f,r])=>cells[f+','+r].classList.add(cls));}};
+}
+const secs=[];
+
+/* Bandeja 1 */
+(function(){
+  const B=Board($('#b1'),tap);let mode='explorar',target=null,score=0;
+  const f1=$('#f1');
+  function chips(){const m=$('#m1');m.innerHTML='';
+    [['explorar','Explorar'],['reto','Reto: encuentra la casilla']].forEach(([k,t])=>m.appendChild(btn(mode===k?'on':'',t,()=>{mode=k;chips();newT();})));}
+  function newT(){B.clear();
+    if(mode==='reto'){let f,r;do{f=rnd(8);r=rnd(8);}while(target&&target[0]===f&&target[1]===r);target=[f,r];
+      $('#i1').innerHTML=`Toca la casilla <span class="big">${nm(f,r)}</span>`;f1.textContent='Busca la letra en la fila de abajo y el número en la columna de la izquierda.';}
+    else{target=null;$('#i1').textContent='Toca cualquier casilla para ver su nombre.';
+      f1.innerHTML='El tablero tiene 8 × 8 = <b>64</b> casillas: <b>32</b> claras y <b>32</b> oscuras, la mitad (½) de cada color.';}}
+  function tap(f,r){B.clear();const c=B.at(f,r);
+    if(mode==='reto'){
+      if(f===target[0]&&r===target[1]){c.classList.add('ok');score++;
+        f1.innerHTML=`<span class="ok">¡Correcto!</span> ${nm(f,r)}: columna ${FILES[f]} (la ${f+1}.ª) y fila ${r+1}. Aciertos: ${score}. Pulsa Siguiente para otra.`;}
+      else{c.classList.add('no');f1.innerHTML=`<span class="bad">Esa es ${nm(f,r)}.</span> Busca ${nm(...target)}: columna ${FILES[target[0]]}, fila ${target[1]+1}.`;}
+    }else{c.classList.add('sel');
+      $('#i1').innerHTML=`<span class="big">${nm(f,r)}</span>`;
+      f1.innerHTML=`Columna <b>${FILES[f]}</b> (la ${f+1}.ª desde la izquierda), fila <b>${r+1}</b>. Es una casilla ${(f+r)%2?'clara':'oscura'}.`;}}
+  secs.push({root:$('#s1'),next(){if(mode==='reto')newT();else{mode='reto';chips();newT();}}});
+  chips();newT();
+})();
+
+/* Bandeja 2 */
+(function(){
+  let p='torre',pos=null;const B=Board($('#b2'),tap);
+  function chips(){const c=$('#pc');c.innerHTML='';
+    Object.keys(P).forEach(k=>c.appendChild(btn(p===k?'on':'',P[k].g+' '+(k==='peon'?'peón':k)[0].toUpperCase()+(k==='peon'?'peón':k).slice(1),()=>{p=k;chips();show();})));}
+  function show(){B.clear();$('#r2').innerHTML=`<b>${P[p].n}</b> ${P[p].d}`;
+    if(!pos){$('#i2').textContent='Toca una casilla para colocar la pieza.';return;}
+    const [f,r]=pos;if(p==='peon'&&(r===0||r===7)){$('#i2').textContent='El peón no puede estar en la fila 1 ni en la 8. Elige otra casilla.';return;}
+    const mv=moves(p,f,r);B.at(f,r).textContent=P[p].g;B.at(f,r).classList.add('sel');B.mark(mv,'mv');
+    let extra='';
+    if(p==='torre')extra=' La torre siempre llega a 7 + 7 = 14 casillas en un tablero vacío, esté donde esté.';
+    if(p==='alfil')extra=' Cuenta las dos diagonales que se cruzan en su casilla.';
+    $('#i2').innerHTML=`Desde <b>${nm(f,r)}</b>, ${P[p].n.toLowerCase()} puede ir a <span class="big">${mv.length}</span> casillas.${extra}`;}
+  function tap(f,r){pos=[f,r];show();}
+  secs.push({root:$('#s2'),next(){const k=Object.keys(P);p=k[(k.indexOf(p)+1)%k.length];chips();show();}});
+  chips();show();
+})();
+
+/* Bandeja 3 */
+(function(){
+  const B=Board($('#b3'),()=>{});let score=0,cur,done=false;
+  function q(){B.clear();done=false;const ks=Object.keys(P);const k=ks[rnd(ks.length)];let f,r;
+    do{f=rnd(8);r=k==='peon'?1+rnd(6):rnd(8);}while(false);
+    const mv=moves(k,f,r),a=mv.length;cur={k,f,r,mv,a};
+    B.at(f,r).textContent=P[k].g;B.at(f,r).classList.add('sel');
+    $('#q3').innerHTML=`${P[k].n} está en <b>${nm(f,r)}</b>. ¿A cuántas casillas puede ir?`;
+    const set=new Set([a]);let g=0;while(set.size<4&&g++<60){const v=Math.max(0,a+[-3,-2,-1,1,2,3][rnd(6)]);set.add(v);}
+    Construir($('#o3'),{max:2,submit:v=>ans(v[0])});
+    $('#m3').textContent='Pista: cuenta los puntos que verías si la colocaras en el tablero de la bandeja 2.';}
+  function ans(v){
+    if(v===cur.a){if(!done){score++;$('#sc3').textContent=score;}done=true;B.mark(cur.mv,'mv');
+      $('#m3').innerHTML=`<span class="ok">¡Correcto!</span> Son ${cur.a} casillas (puntos verdes). Pulsa Siguiente para otra.`;}
+    else $('#m3').innerHTML=`<span class="bad">Casi.</span> Vuelve a contar. Piensa cómo se mueve ${P[cur.k].n.toLowerCase().replace('el ','').replace('la ','')}: ${P[cur.k].d}`;}
+  $('#n3').addEventListener('click',q);
+  secs.push({root:$('#s3'),next(){q();}});
+  q();
+})();
+
+let active=secs[0];
+secs.forEach(s=>{s.root.addEventListener('pointerdown',()=>{active=s;},true);s.root.addEventListener('focusin',()=>{active=s;});});
+$('#next').addEventListener('click',()=>active.next());
+</script>
+<script src="taller.js"></script>
+</body></html>

@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f0e3c8"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="author" content="Elodie Strupiechonski"><link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+<title>Tablas de multiplicar · Cadenas de cuentas interactivas</title><!--seo--><meta name="description" content="Aprende las tablas de multiplicar con cadenas de cuentas de colores y rectángulos de cuentas. Taller interactivo estilo Montessori para niñas y niños, gratis y sin internet."><link rel="canonical" href="https://elodiestrupiechonski.github.io/Talleres-Matematicas/cadenas.html"><meta property="og:type" content="website"><meta property="og:locale" content="es_MX"><meta property="og:site_name" content="Talleres de Matemáticas"><meta property="og:title" content="Tablas de multiplicar · Cadenas de cuentas interactivas"><meta property="og:description" content="Aprende las tablas de multiplicar con cadenas de cuentas de colores y rectángulos de cuentas. Taller interactivo estilo Montessori para niñas y niños, gratis y sin internet."><meta property="og:url" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/cadenas.html"><meta property="og:image" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/icons/og.png"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Tablas de multiplicar · Cadenas de cuentas interactivas", "description": "Aprende las tablas de multiplicar con cadenas de cuentas de colores y rectángulos de cuentas. Taller interactivo estilo Montessori para niñas y niños, gratis y sin internet.", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/cadenas.html", "inLanguage": "es-MX", "isAccessibleForFree": true, "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/", "author": {"@type": "Person", "name": "Elodie Strupiechonski"}, "learningResourceType": "Recurso interactivo", "typicalAgeRange": "9-11", "educationalLevel": "Primaria", "teaches": "Multiplicación", "isPartOf": {"@type": "WebSite", "name": "Talleres de Matemáticas", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/"}}</script><!--/seo-->
+<link rel="stylesheet" href="taller.css">
+<style>
+.lbl{font-family:var(--display);font-weight:600;color:var(--muted);margin-bottom:6px;display:block}
+.ed{flex:1;min-width:min(100%,260px)}
+.bwrap{width:min(100%,470px);flex:none}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+.msg:empty,.note:empty{display:none}
+button:disabled{opacity:.4}
+
+.chain{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:flex-start;min-height:70px}
+.seg{display:flex;flex-direction:column;align-items:center;gap:3px}
+.seg .beads{display:flex;gap:2px}
+.seg small{font-family:var(--display);font-weight:700;font-size:.85rem}
+.tabla{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));width:min(100%,572px);gap:1px;background:var(--tray-edge);border:3px solid var(--fg);border-radius:6px;font-family:var(--display);flex:none}
+.tabla .t,.tabla .hd{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:clamp(14px,2.2vw,16px);padding:0;min-height:0;min-width:0;border:0;border-radius:0;background:var(--card);color:var(--fg);font-weight:700}
+.tabla .hd{background:var(--tray);color:var(--muted)}
+.tabla .t.rect{background:#f2cf72}.tabla .t.rl{background:#c9e4c0}.tabla .t.sel{background:#e0a21a;color:#fff}.tabla .t.rw{background:#f4e6bf}
+.arr{display:grid;gap:2px;width:max-content;margin-top:8px}
+.arr i{width:13px;height:13px;border-radius:50%;background:#e0a21a;display:block}
+</style></head><body>
+<div class="wrap">
+  <a class="back" href="index.html">← Todos los talleres</a>
+  <header class="col">
+    <h1>Tablas de multiplicar</h1>
+    <p class="lead">Contamos de n en n y descubrimos que la tabla de multiplicar es una tabla de rectángulos.</p>
+  </header>
+  <section class="tray" id="s1" aria-labelledby="t1">
+    <span class="step">Bandeja 1 · Cadenas de cuentas</span>
+    <h2 id="t1">Contar de n en n</h2>
+    <p>Cada tramo tiene las mismas cuentas; abajo va el total: los múltiplos.</p>
+    <p class="det">Cada tramo de la cadena tiene las mismas cuentas. Debajo de cada tramo está el total que llevamos: son los múltiplos.</p>
+    <div class="row">
+      <div class="col ed">
+        <div><span class="lbl">Cada tramo tiene</span><div class="chips" id="nn"></div></div>
+        <div class="btns"><button id="rm" type="button">− Quitar tramo</button><button id="ad" type="button">+ Agregar tramo</button></div>
+        <p class="note" id="i1" aria-live="polite"></p>
+      </div>
+    </div>
+    <div class="chain" id="b1"></div>
+  </section>
+  <section class="tray" id="s2" aria-labelledby="t2">
+    <span class="step">Bandeja 2 · La tabla de multiplicar</span>
+    <h2 id="t2">Rectángulos de cuentas</h2>
+    <p>Toca una casilla: el rectángulo tiene filas × columnas.</p>
+    <p class="det">Toca una casilla: el rectángulo de cuentas tiene tantas filas como el primer número y tantas columnas como el segundo.</p>
+    <div class="row">
+      <div class="tabla" id="tb" role="grid"></div>
+      <div class="col ed">
+        <div><span class="lbl">Resaltar la tabla del</span><div class="chips" id="rs"></div></div>
+        <p class="note" id="i2" aria-live="polite"></p>
+        <div class="arr" id="ar"></div>
+      </div>
+    </div>
+  </section>
+  <section class="tray" id="s3" aria-labelledby="t3">
+    <span class="step">Bandeja 3 · Ponte a prueba</span>
+    <h2 id="t3">Multiplica y completa</h2>
+    
+    <p id="q3" style="font-size:1.35rem"></p>
+    <div class="chips" id="o3"></div>
+    <div id="mat3" aria-label="Cuentas de la pregunta" style="display:grid;grid-auto-flow:column;gap:3px;width:max-content;max-width:100%;overflow:hidden"></div>
+    <p class="note" id="m3" aria-live="polite"></p>
+    <p>Aciertos: <b id="sc3">0</b> · <button id="n3" type="button">Siguiente</button></p>
+  </section>
+</div>
+<button id="next" hidden aria-hidden="true" tabindex="-1">Siguiente</button>
+<script src="construir.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const h=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;};
+const btn=(cls,txt,fn)=>{const b=h('button',cls,txt);b.type='button';b.addEventListener('click',fn);return b;};
+const rnd=n=>Math.floor(Math.random()*n);
+const gcd=(a,b)=>b?gcd(b,a%b):a;
+const shuffle=a=>a.sort(()=>Math.random()-.5);
+const fr=(n,d)=>{if(n===0)return '0';const g=gcd(n,d);n/=g;d/=g;return d===1?String(n):n+'/'+d;};
+const secs=[];
+
+const BC={1:'#d2382c',2:'#3f8f4f',3:'#f4a6c9',4:'#e9c32f',5:'#7fc4e6',6:'#9a9a9a',7:'#f2f2f2',8:'#8a5a35',9:'#2f4fa0',10:'#d9a521'};
+const bead=n=>`<svg width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="${BC[n]}" stroke="#4a3a2a" stroke-width="1"/></svg>`;
+
+/* Bandeja 1 */
+(function(){
+  let n=3,k=3;
+  function draw(){
+    const c=$('#nn');c.innerHTML='';for(let v=2;v<=10;v++)c.appendChild(btn(v===n?'on':'',v,()=>{n=v;draw();}));
+    const ch=$('#b1');ch.innerHTML='';
+    for(let i=1;i<=k;i++){const s=h('div','seg');s.innerHTML=`<div class="beads">${bead(n).repeat(n)}</div><small>${i*n}</small>`;ch.appendChild(s);}
+    $('#rm').disabled=k<=1;$('#ad').disabled=k>=10;
+    const L=[];for(let i=1;i<=k;i++)L.push(i*n);
+    $('#i1').innerHTML=`${k} tramos de ${n} cuentas: <span class="big">${k} × ${n} = ${k*n}</span><br>Contamos de ${n} en ${n}: ${L.join(', ')}.`;
+  }
+  $('#rm').addEventListener('click',()=>{if(k>1){k--;draw();}});
+  $('#ad').addEventListener('click',()=>{if(k<10){k++;draw();}});
+  secs.push({root:$('#s1'),next(){k=k>=10?1:k+1;draw();}});
+  draw();
+})();
+
+/* Bandeja 2 */
+(function(){
+  let A=0,B=0,hl=0;const tb=$('#tb'),cells={};
+  tb.appendChild(h('div','hd','×'));
+  for(let b=1;b<=10;b++)tb.appendChild(h('div','hd',b));
+  for(let a=1;a<=10;a++){tb.appendChild(h('div','hd',a));
+    for(let b=1;b<=10;b++){const c=h('button','t',a*b);c.type='button';c.setAttribute('aria-label',a+' por '+b);c.addEventListener('click',()=>{A=a;B=b;paint();});tb.appendChild(c);cells[a+','+b]=c;}}
+  function paint(){
+    for(const k in cells){const [a,b]=k.split(',').map(Number),c=cells[k];c.className='t';
+      if(A&&a<=A&&b<=B)c.classList.add('rect');
+      if(hl&&(a===hl||b===hl))c.classList.add(A&&a<=A&&b<=B?'rect':'rw');
+      if(a===A&&b===B)c.classList.add('sel');}
+    const ar=$('#ar');ar.innerHTML='';
+    if(!A){$('#i2').textContent='Toca una casilla de la tabla.';return;}
+    ar.style.gridTemplateColumns=`repeat(${B},13px)`;ar.innerHTML='<i></i>'.repeat(A*B);
+    $('#i2').innerHTML=`<span class="big">${A} × ${B} = ${A*B}</span><br>${A} filas de ${B} cuentas. Si giramos el rectángulo, son ${B} filas de ${A}: ${B} × ${A} = ${A*B}.`+(A===B?`<br>Es un cuadrado: ${A} × ${A} = ${A}².`:'');
+  }
+  const rs=$('#rs');function chips(){rs.innerHTML='';rs.appendChild(btn(hl===0?'on':'','Ninguna',()=>{hl=0;chips();paint();}));
+    for(let v=2;v<=10;v++)rs.appendChild(btn(v===hl?'on':'',v,()=>{hl=v;chips();paint();}));}
+  secs.push({root:$('#s2'),next(){hl=hl>=10?2:hl+1;chips();paint();}});
+  chips();paint();
+})();
+
+/* Bandeja 3 */
+(function(){
+  let score=0,cur,done;
+  function q(){done=false;$('#m3').textContent='';const a=2+rnd(9),b=2+rnd(9),p=a*b;let ans,txt,pool;
+    if(Math.random()<.5){ans=p;txt=`¿Cuánto es <b>${a} × ${b}</b>?`;pool=[p-a,p+a,p-b,p+b,p+1,p-1,p+10];}
+    else{ans=b;txt=`<b>${a} × ? = ${p}</b>. ¿Qué número falta?`;pool=[b-1,b+1,b+2,b-2,a,p-a];}
+    cur={ans,a,b,p};$('#q3').innerHTML=txt;{const m=$('#mat3');m.innerHTML='';m.style.gridTemplateRows=`repeat(${a},18px)`;for(let i=0;i<p;i++){const e=document.createElement('i');e.style.cssText=`width:18px;height:18px;border-radius:50%;border:2px solid var(--fg);box-sizing:border-box;background:${BC[a]||'#ccc'}`;m.appendChild(e);}}
+    const set=new Set([ans]);shuffle(pool.slice()).forEach(x=>{if(set.size<4&&x>0&&x!==ans)set.add(x);});let g=1;while(set.size<4)set.add(ans+g++);
+    Construir($('#o3'),{max:3,submit:v=>res(v[0])});}
+  function res(x){if(x===cur.ans){if(!done){score++;$('#sc3').textContent=score;}done=true;$('#m3').innerHTML=`<span class="ok">¡Correcto!</span> ${cur.a} × ${cur.b} = ${cur.p}. Pulsa Siguiente.`;}
+    else $('#m3').innerHTML=`<span class="bad">Casi.</span> Piensa en ${cur.a} tramos de ${cur.b} cuentas, o en ${cur.b} de ${cur.a}.`;}
+  $('#n3').addEventListener('click',q);
+  secs.push({root:$('#s3'),next:q});q();
+})();
+
+let active=secs[0];
+secs.forEach(s=>{s.root.addEventListener('pointerdown',()=>{active=s;},true);s.root.addEventListener('focusin',()=>{active=s;});});
+$('#next').addEventListener('click',()=>active.next());
+</script>
+<script src="taller.js"></script>
+</body></html>

@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f0e3c8"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="author" content="Elodie Strupiechonski"><link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+<title>Ángulos · Taller interactivo con transportador</title><!--seo--><meta name="description" content="Taller interactivo de ángulos: abre un ángulo, aprende a leer el transportador, clasifica ángulos y calcula el tercer ángulo de un triángulo. Gratis y sin internet."><link rel="canonical" href="https://elodiestrupiechonski.github.io/Talleres-Matematicas/angulos.html"><meta property="og:type" content="website"><meta property="og:locale" content="es_MX"><meta property="og:site_name" content="Talleres de Matemáticas"><meta property="og:title" content="Ángulos · Taller interactivo con transportador"><meta property="og:description" content="Taller interactivo de ángulos: abre un ángulo, aprende a leer el transportador, clasifica ángulos y calcula el tercer ángulo de un triángulo. Gratis y sin internet."><meta property="og:url" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/angulos.html"><meta property="og:image" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/icons/og.png"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Ángulos · Taller interactivo con transportador", "description": "Taller interactivo de ángulos: abre un ángulo, aprende a leer el transportador, clasifica ángulos y calcula el tercer ángulo de un triángulo. Gratis y sin internet.", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/angulos.html", "inLanguage": "es-MX", "isAccessibleForFree": true, "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/", "author": {"@type": "Person", "name": "Elodie Strupiechonski"}, "learningResourceType": "Recurso interactivo", "typicalAgeRange": "9-11", "educationalLevel": "Primaria", "teaches": "Ángulos y geometría", "isPartOf": {"@type": "WebSite", "name": "Talleres de Matemáticas", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/"}}</script><!--/seo-->
+<link rel="stylesheet" href="taller.css">
+<style>
+.lbl{font-family:var(--display);font-weight:600;color:var(--muted);margin-bottom:6px;display:block}
+.ed{flex:1;min-width:min(100%,260px)}
+.bwrap{width:min(100%,470px);flex:none}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+.msg:empty,.note:empty{display:none}
+button:disabled{opacity:.4}
+
+svg.ang{width:min(100%,360px);height:auto;touch-action:none;background:var(--card);border-radius:12px;flex:none}
+.ang text{font-family:var(--display);fill:var(--muted);font-size:11px}
+.ang .sec{fill:var(--red);fill-opacity:.35}
+.ang .ray{stroke:var(--red);stroke-width:4;stroke-linecap:round}
+.ang .base{stroke:var(--blue);stroke-width:4;stroke-linecap:round}
+.ang .tk{stroke:var(--muted);stroke-width:1}
+.ang .knob{fill:var(--red);stroke:#fff;stroke-width:3;cursor:grab}
+</style></head><body>
+<div class="wrap">
+  <a class="back" href="index.html">← Todos los talleres</a>
+  <header class="col">
+    <h1>Ángulos</h1>
+    <p class="lead">Un ángulo mide cuánto giramos. Una vuelta completa es 360°.</p>
+  </header>
+  <section class="tray" id="s1" aria-labelledby="t1">
+    <span class="step">Bandeja 1 · Abrir un ángulo</span>
+    <h2 id="t1">Un ángulo es una parte del giro</h2>
+    <p>Arrastra el punto rojo o usa los botones.</p>
+    <p class="det">Arrastra el punto rojo, o usa los botones. El círculo completo mide 360°, igual que en el mandala.</p>
+    <div class="row">
+      <svg class="ang" id="a1" viewBox="0 0 300 300" role="img" aria-label="Ángulo ajustable"></svg>
+      <div class="col ed">
+        <div class="btns"><button id="m15" type="button">−15°</button><button id="m5" type="button">−5°</button><button id="p5" type="button">+5°</button><button id="p15" type="button">+15°</button></div>
+        <div class="chips" id="pre"></div>
+        <p class="note" id="i1" aria-live="polite"></p>
+      </div>
+    </div>
+  </section>
+  <section class="tray" id="s2" aria-labelledby="t2">
+    <span class="step">Bandeja 2 · Medir con el transportador</span>
+    <h2 id="t2">Lee la escala correcta</h2>
+    <p>Mide siempre desde el 0 de la línea azul.</p>
+    <p class="det">El transportador tiene dos escalas. Para medir, empieza siempre desde el 0 de la línea azul.</p>
+    <div class="row">
+      <svg class="ang" id="a2" viewBox="0 0 300 180" role="img" aria-label="Transportador"></svg>
+      <div class="col ed">
+        <p id="q2" style="font-size:1.2rem">Mide el ángulo que empieza en la línea <b style="color:var(--blue)">azul</b> y termina en la línea <b style="color:var(--red)">roja</b>.</p>
+        <div class="chips" id="o2"></div>
+        <p class="note" id="m2" aria-live="polite"></p>
+        <p>Aciertos: <b id="sc2">0</b> · <button id="n2" type="button">Siguiente</button></p>
+      </div>
+    </div>
+  </section>
+  <section class="tray" id="s3" aria-labelledby="t3">
+    <span class="step">Bandeja 3 · Ponte a prueba</span>
+    <h2 id="t3">Tipos, fracciones y triángulos</h2>
+    
+    <div class="row">
+      <svg class="ang" id="a3" viewBox="0 0 300 200" role="img" aria-label="Figura de la pregunta"></svg>
+      <div class="col ed">
+        <p id="q3" style="font-size:1.2rem"></p>
+        <div class="chips" id="o3"></div>
+        <p class="note" id="m3" aria-live="polite"></p>
+        <p>Aciertos: <b id="sc3">0</b> · <button id="n3" type="button">Siguiente</button></p>
+      </div>
+    </div>
+  </section>
+</div>
+<button id="next" hidden aria-hidden="true" tabindex="-1">Siguiente</button>
+<script src="construir.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const h=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;};
+const btn=(cls,txt,fn)=>{const b=h('button',cls,txt);b.type='button';b.addEventListener('click',fn);return b;};
+const rnd=n=>Math.floor(Math.random()*n);
+const gcd=(a,b)=>b?gcd(b,a%b):a;
+const shuffle=a=>a.sort(()=>Math.random()-.5);
+const fr=(n,d)=>{if(n===0)return '0';const g=gcd(n,d);n/=g;d/=g;return d===1?String(n):n+'/'+d;};
+const secs=[];
+
+const NS='http://www.w3.org/2000/svg';
+const rad=d=>d*Math.PI/180;
+const pt=(cx,cy,r,d)=>[cx+r*Math.cos(rad(d)),cy-r*Math.sin(rad(d))];
+const f1=v=>Math.round(v*10)/10;
+function sector(cx,cy,r,from,deg){ // sector counterclockwise from angle 'from'
+  if(deg<=0)return '';
+  if(deg>=360)return `<circle class="sec" cx="${cx}" cy="${cy}" r="${r}"/>`;
+  const a=pt(cx,cy,r,from),b=pt(cx,cy,r,from+deg);
+  return `<path class="sec" d="M${cx},${cy} L${f1(a[0])},${f1(a[1])} A${r},${r} 0 ${deg>180?1:0} 0 ${f1(b[0])},${f1(b[1])} Z"/>`;
+}
+function tipo(a){return a===0?'nulo':a<90?'agudo':a===90?'recto':a<180?'obtuso':a===180?'llano':a<360?'entrante (mayor que 180°)':'completo';}
+
+/* Bandeja 1 */
+(function(){
+  const svg=$('#a1'),cx=150,cy=150,R=120;let th=60;
+  function draw(){
+    let s='<circle cx="150" cy="150" r="120" fill="none" stroke="var(--tray-edge)" stroke-width="2"/>';
+    for(let d=0;d<360;d+=15){const a=pt(cx,cy,R,d),b=pt(cx,cy,R-(d%90===0?14:7),d);s+=`<line class="tk" x1="${f1(a[0])}" y1="${f1(a[1])}" x2="${f1(b[0])}" y2="${f1(b[1])}"/>`;}
+    [[0,'0°/360°'],[90,'90°'],[180,'180°'],[270,'270°']].forEach(([d,t])=>{const p=pt(cx,cy,R+0,d);const q=pt(cx,cy,R-26,d);s+=`<text x="${f1(q[0])}" y="${f1(q[1]+4)}" text-anchor="middle">${t}</text>`;});
+    s+=sector(cx,cy,R,0,th);
+    s+=`<line class="base" x1="150" y1="150" x2="270" y2="150"/>`;
+    const e=pt(cx,cy,R,th);
+    s+=`<line class="ray" x1="150" y1="150" x2="${f1(e[0])}" y2="${f1(e[1])}"/><circle class="knob" id="kn" cx="${f1(e[0])}" cy="${f1(e[1])}" r="11"/>`;
+    svg.innerHTML=s;
+    const g=gcd(th,360);
+    $('#i1').innerHTML=`<span class="big">${th}°</span><br>Es un ángulo <b>${tipo(th)}</b>.<br>${th===360?'Ocupa todo el círculo (360 ÷ 360 = 1).':'Ocupa '+(th?fr(th,360):'0')+' del círculo ('+th+' ÷ 360).'}`;
+  }
+  function set(v){th=Math.max(0,Math.min(360,v));draw();}
+  let drag=false;
+  function fromEvent(e){const r=svg.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*300,y=(e.clientY-r.top)/r.height*300;
+    let d=Math.atan2(cy-y,x-cx)*180/Math.PI;if(d<0)d+=360;d=Math.round(d/5)*5;if(d>=360)d=(th>180?360:0);return d;}
+  svg.addEventListener('pointerdown',e=>{drag=true;svg.setPointerCapture(e.pointerId);e.preventDefault();set(fromEvent(e));});
+  svg.addEventListener('pointermove',e=>{if(drag)set(fromEvent(e));});
+  ['pointerup','pointercancel'].forEach(t=>svg.addEventListener(t,()=>{drag=false;}));
+  $('#m15').onclick=()=>set(th-15);$('#m5').onclick=()=>set(th-5);$('#p5').onclick=()=>set(th+5);$('#p15').onclick=()=>set(th+15);
+  const pre=$('#pre');[30,45,60,90,120,180,270,360].forEach(v=>pre.appendChild(btn('',v+'°',()=>set(v))));
+  const seq=[30,45,60,90,120,135,180,270,360];
+  secs.push({root:$('#s1'),next(){const i=seq.indexOf(th);set(seq[(i+1)%seq.length]||30);}});
+  draw();
+})();
+
+/* Bandeja 2: transportador */
+(function(){
+  const svg=$('#a2'),cx=150,cy=150,R=112;let score=0,cur,done;
+  function proto(phi,flip){
+    let s='';
+    s+=`<path d="M${cx-R},${cy} A${R},${R} 0 0 1 ${cx+R},${cy} Z" fill="var(--tray)" fill-opacity=".6" stroke="var(--fg)" stroke-width="2"/>`;
+    for(let d=0;d<=180;d+=5){const len=d%10===0?(d%90===0?16:11):6;const a=pt(cx,cy,R,d),b=pt(cx,cy,R-len,d);s+=`<line class="tk" x1="${f1(a[0])}" y1="${f1(a[1])}" x2="${f1(b[0])}" y2="${f1(b[1])}"/>`;
+      if(d%10===0){const t=pt(cx,cy,R+13,d),u=pt(cx,cy,R-24,d);
+        s+=`<text x="${f1(t[0])}" y="${f1(t[1]+3)}" text-anchor="middle">${d}</text><text x="${f1(u[0])}" y="${f1(u[1]+3)}" text-anchor="middle" style="fill:var(--blue)">${180-d}</text>`;}}
+    // línea base (azul) y rayo (rojo)
+    const baseDeg=flip?180:0,rayDeg=flip?180-phi:phi;
+    const bs=pt(cx,cy,R+2,baseDeg),re=pt(cx,cy,R+2,rayDeg);
+    s+=`<line class="base" x1="${cx}" y1="${cy}" x2="${f1(bs[0])}" y2="${f1(bs[1])}"/><line class="ray" x1="${cx}" y1="${cy}" x2="${f1(re[0])}" y2="${f1(re[1])}"/><circle cx="${cx}" cy="${cy}" r="3" fill="var(--fg)"/>`;
+    s+=`<text x="8" y="172">negra: 0° a la derecha</text><text x="292" y="172" text-anchor="end" style="fill:var(--blue)">azul: 0° a la izquierda</text>`;
+    svg.innerHTML=s;
+  }
+  function q(){done=false;$('#m2').textContent='';
+    const phi=10+5*rnd(35),flip=Math.random()<.5;cur=phi;proto(phi,flip);
+    const set=new Set([phi,180-phi]);while(set.size<4){const v=phi+[-10,-5,5,10][rnd(4)];if(v>0&&v<180)set.add(v);}
+    Construir($('#o2'),{max:3,unit:'°',submit:v=>ans(v[0])});cur={phi,flip};}
+  function ans(x){if(x===cur.phi){if(!done){score++;$('#sc2').textContent=score;}done=true;$('#m2').innerHTML=`<span class="ok">¡Correcto!</span> Medimos ${cur.phi}° (${tipo(cur.phi)}). Pulsa Siguiente.`;}
+    else if(x===180-cur.phi)$('#m2').innerHTML=`<span class="bad">Leíste la escala del otro lado.</span> La línea azul debe quedar en el 0 de la escala que usas.`;
+    else $('#m2').innerHTML='<span class="bad">Casi.</span> Cuenta las rayitas desde el 0 de la línea azul.';}
+  $('#n2').addEventListener('click',q);secs.push({root:$('#s2'),next:q});q();
+})();
+
+/* Bandeja 3 */
+(function(){
+  const svg=$('#a3');let score=0,cur,done;
+  function showAngle(deg,shade,showBase=true){
+    const cx=120,cy=150,R=100;let s=shade?sector(cx,cy,R,0,deg):'';
+    const e=pt(cx,cy,R,deg);
+    s+=`<line class="base" x1="${cx}" y1="${cy}" x2="${cx+R}" y2="${cy}"/><line class="ray" x1="${cx}" y1="${cy}" x2="${f1(e[0])}" y2="${f1(e[1])}"/>`;
+    if(shade)s+=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="var(--tray-edge)" stroke-dasharray="4 4"/>`;
+    svg.setAttribute('viewBox','0 0 300 200');svg.innerHTML=s;
+  }
+  function triangle(A,B){
+    const C=180-A-B,L=240,t=L*Math.sin(rad(B))/Math.sin(rad(A+B));
+    let P=[[0,0],[L,0],[t*Math.cos(rad(A)),t*Math.sin(rad(A))]];
+    const xs=P.map(p=>p[0]),ys=P.map(p=>p[1]),w=Math.max(...xs)-Math.min(...xs),hh=Math.max(...ys);
+    const k=Math.min(240/w,130/hh),ox=30-Math.min(...xs)*k,oy=175;
+    const Q=P.map(p=>[ox+p[0]*k,oy-p[1]*k]);
+    svg.setAttribute('viewBox','0 0 300 200');
+    svg.innerHTML=`<polygon points="${Q.map(p=>p.map(f1).join(',')).join(' ')}" fill="var(--gold)" fill-opacity=".4" stroke="var(--fg)" stroke-width="3"/>`+
+      `<text x="${f1(Q[0][0]+8)}" y="${f1(Q[0][1]-6)}" style="font-size:14px;fill:var(--fg)">${A}°</text>`+
+      `<text x="${f1(Q[1][0]-56)}" y="${f1(Q[1][1]-6)}" style="font-size:14px;fill:var(--fg)">${B}°</text>`+
+      `<text x="${f1(Q[2][0]-8)}" y="${f1(Math.max(14,Q[2][1]-8))}" style="font-size:18px;fill:var(--red);font-weight:700">?</text>`;
+  }
+  function q(){done=false;$('#m3').textContent='';const t=rnd(3);let opts,ans;
+    if(t===0){const a=[20,30,45,60,90,110,120,135,150,180][rnd(10)];showAngle(a,false);
+      $('#q3').innerHTML='¿Qué tipo de ángulo es este?';opts=['agudo','recto','obtuso','llano'];ans=tipo(a);
+      cur={ans,msg:`${a}° es un ángulo ${ans}.`};}
+    else if(t===1){const a=[30,45,60,90,120,135,180,270][rnd(8)];showAngle(a,true);
+      $('#q3').innerHTML='La parte sombreada es, ¿qué fracción del círculo?';ans=fr(a,360);
+      const set=new Set([ans,fr(a,180),fr(360,a)===ans?'1':fr(360,a),fr(a,90)]);let g=2;while(set.size<4)set.add('1/'+(g++));opts=[...set].slice(0,4);if(!opts.includes(ans))opts[0]=ans;
+      cur={ans,msg:`${a}° ÷ 360° = ${ans} del círculo.`};}
+    else{let A,B;do{A=20+5*rnd(24);B=20+5*rnd(24);}while(A+B>160);triangle(A,B);const C=180-A-B;
+      $('#q3').innerHTML=`Los ángulos de un triángulo suman 180°. ¿Cuánto mide el tercero?`;ans=C+'°';
+      const set=new Set([ans,(A+B)+'°',(C+10)+'°',(C-10>0?C-10:C+20)+'°']);let g=5;while(set.size<4)set.add((C+g++*5)+'°');opts=[...set];
+      cur={ans,msg:`180° − ${A}° − ${B}° = ${C}°.`};}
+    const o=$('#o3');
+    if(t===0){o.classList.remove('cn');o.innerHTML='';shuffle(opts.slice()).forEach(x=>o.appendChild(btn('',x,()=>res(x))));}
+    else if(t===1)Construir(o,{n:2,sep:'/',labels:['arriba','abajo'],max:3,submit:v=>res(fr(v[0],v[1]))});
+    else Construir(o,{max:3,unit:'°',submit:v=>res(v[0]+'°')});}
+  function res(x){if(x===cur.ans){if(!done){score++;$('#sc3').textContent=score;}done=true;$('#m3').innerHTML=`<span class="ok">¡Correcto!</span> ${cur.msg} Pulsa Siguiente.`;}
+    else $('#m3').innerHTML='<span class="bad">Casi.</span> Piensa: 90° es un ángulo recto, 180° es media vuelta y 360° es una vuelta completa.';}
+  $('#n3').addEventListener('click',q);secs.push({root:$('#s3'),next:q});q();
+})();
+
+let active=secs[0];
+secs.forEach(s=>{s.root.addEventListener('pointerdown',()=>{active=s;},true);s.root.addEventListener('focusin',()=>{active=s;});});
+$('#next').addEventListener('click',()=>active.next());
+</script>
+<script src="taller.js"></script>
+</body></html>

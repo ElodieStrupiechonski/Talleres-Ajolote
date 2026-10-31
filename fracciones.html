@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f0e3c8"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="author" content="Elodie Strupiechonski"><link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+<title>Fracciones · Taller interactivo con círculos de fracciones</title><!--seo--><meta name="description" content="Taller interactivo de fracciones: colorea círculos y tiras, compara fracciones equivalentes y practica numerador y denominador. Estilo Montessori, gratis y sin internet."><link rel="canonical" href="https://elodiestrupiechonski.github.io/Talleres-Matematicas/fracciones.html"><meta property="og:type" content="website"><meta property="og:locale" content="es_MX"><meta property="og:site_name" content="Talleres de Matemáticas"><meta property="og:title" content="Fracciones · Taller interactivo con círculos de fracciones"><meta property="og:description" content="Taller interactivo de fracciones: colorea círculos y tiras, compara fracciones equivalentes y practica numerador y denominador. Estilo Montessori, gratis y sin internet."><meta property="og:url" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/fracciones.html"><meta property="og:image" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/icons/og.png"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Fracciones · Taller interactivo con círculos de fracciones", "description": "Taller interactivo de fracciones: colorea círculos y tiras, compara fracciones equivalentes y practica numerador y denominador. Estilo Montessori, gratis y sin internet.", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/fracciones.html", "inLanguage": "es-MX", "isAccessibleForFree": true, "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/", "author": {"@type": "Person", "name": "Elodie Strupiechonski"}, "learningResourceType": "Recurso interactivo", "typicalAgeRange": "9-11", "educationalLevel": "Primaria", "teaches": "Fracciones", "isPartOf": {"@type": "WebSite", "name": "Talleres de Matemáticas", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/"}}</script><!--/seo-->
+<link rel="stylesheet" href="taller.css">
+<style>
+.bars{display:flex;flex-direction:column;gap:12px;width:100%}
+.strip{display:flex;height:52px;border:3px solid var(--fg);border-radius:8px;overflow:hidden;cursor:pointer}
+.strip div{flex:1;border-right:2px solid var(--fg);background:var(--card);transition:background .15s}
+.strip div:last-child{border-right:0}
+.strip div.f{background:var(--red)}
+.strip.b div.f{background:var(--blue)}
+</style></head><body>
+<div class="wrap">
+  <a class="back" href="index.html">← Todos los talleres</a>
+  <header class="col">
+    <h1>Taller de Fracciones</h1>
+    <p class="lead">Una fracción es un entero partido en partes iguales.</p>
+  </header>
+
+  <!-- 1 -->
+  <section class="tray" aria-labelledby="t1">
+    <span class="step">Bandeja 1 · Partir el entero</span>
+    <h2 id="t1">¿En cuántas partes iguales lo partimos?</h2>
+    <div class="chips" id="dens"></div>
+    <div class="row">
+      <svg id="pie" viewBox="0 0 240 240" width="240" height="240" role="img" aria-label="Círculo de fracciones"></svg>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="frac"><span class="n" id="pn">0</span><span class="bar"></span><span class="d" id="pd">4</span></div>
+        <p class="note" id="pmsg">Toca las piezas del círculo para colorearlas.</p>
+      </div>
+    </div>
+    <p class="note det"><b class="n">Numerador</b> (arriba): cuántas piezas tomamos. <b class="d">Denominador</b> (abajo): en cuántas partes iguales se partió el entero.</p>
+  </section>
+
+  <!-- 2 -->
+  <section class="tray" aria-labelledby="t2">
+    <span class="step">Bandeja 2 · Fracciones equivalentes</span>
+    <h2 id="t2">¿Ocupan el mismo espacio?</h2>
+    <p>Colorea piezas en las dos tiras. ¿Llegan al mismo lugar?</p>
+    <p class="det">Colorea piezas en las dos tiras. Si el rojo y el azul llegan al mismo lugar, las fracciones son <b>equivalentes</b>: valen lo mismo aunque se escriban distinto.</p>
+    <div class="row"><span>Tira roja:</span><div class="chips" id="dA"></div></div>
+    <div class="row"><span>Tira azul:</span><div class="chips" id="dB"></div></div>
+    <div class="bars"><div class="strip" id="sA"></div><div class="strip b" id="sB"></div></div>
+    <p class="note q" id="eqmsg"></p>
+  </section>
+
+  <!-- 3 -->
+  <section class="tray" aria-labelledby="t3">
+    <span class="step">Bandeja 3 · Ponte a prueba</span>
+    <h2 id="t3">¿Qué fracción ves?</h2>
+    <div class="row">
+      <svg id="qpie" viewBox="0 0 240 240" width="200" height="200" role="img" aria-label="Pregunta"></svg>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="chips" id="opts"></div>
+        <p id="qmsg" class="note">Elige la respuesta correcta.</p>
+        <p>Aciertos: <b id="score">0</b> · <button id="next">Siguiente</button></p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script src="construir.js"></script>
+<script>
+const NS="http://www.w3.org/2000/svg";
+function slicePath(i,n,r=110,c=120){
+  if(n===1) return `M${c} ${c-r}A${r} ${r} 0 1 1 ${c-0.01} ${c-r}Z`;
+  const a0=2*Math.PI*i/n-Math.PI/2,a1=2*Math.PI*(i+1)/n-Math.PI/2;
+  const x0=c+r*Math.cos(a0),y0=c+r*Math.sin(a0),x1=c+r*Math.cos(a1),y1=c+r*Math.sin(a1);
+  return `M${c} ${c}L${x0} ${y0}A${r} ${r} 0 ${1/n>0.5?1:0} 1 ${x1} ${y1}Z`;
+}
+function drawPie(svg,n,filled,onClick){
+  svg.innerHTML="";
+  for(let i=0;i<n;i++){
+    const p=document.createElementNS(NS,"path");
+    p.setAttribute("d",slicePath(i,n));
+    p.style.fill=filled[i]?"var(--red)":"var(--card)";
+    p.style.stroke="var(--fg)";p.setAttribute("stroke-width","3");
+    if(onClick){p.style.cursor="pointer";p.addEventListener("click",()=>onClick(i));}
+    svg.appendChild(p);
+  }
+}
+function chips(el,list,cur,cb){
+  el.innerHTML="";
+  list.forEach(v=>{const b=document.createElement("button");b.textContent=v;if(v===cur)b.className="on";b.onclick=()=>cb(v);el.appendChild(b);});
+}
+const gcd=(a,b)=>b?gcd(b,a%b):a;
+
+// Bandeja 1
+let d1=4,f1=[];
+const words={1:"entero",2:"medios",3:"tercios",4:"cuartos",5:"quintos",6:"sextos",8:"octavos",10:"décimos"};
+function r1(){
+  chips(document.getElementById("dens"),[1,2,3,4,5,6,8,10],d1,v=>{d1=v;f1=Array(v).fill(false);r1();});
+  drawPie(document.getElementById("pie"),d1,f1,i=>{f1[i]=!f1[i];r1();});
+  const n=f1.filter(Boolean).length;
+  document.getElementById("pn").textContent=n;document.getElementById("pd").textContent=d1;
+  let m=`Tenemos ${n} de ${d1} ${words[d1]}.`;
+  if(n===d1&&d1>1) m+=` ¡${d1}/${d1} = 1 entero completo!`;
+  else if(n>0){const g=gcd(n,d1);if(g>1)m+=` Es lo mismo que ${n/g}/${d1/g}.`;}
+  else m="Toca las piezas del círculo para colorearlas.";
+  document.getElementById("pmsg").textContent=m;
+}
+f1=Array(d1).fill(false);r1();
+
+// Bandeja 2
+let A={d:2,n:1},B={d:4,n:2};
+function strip(el,o){
+  el.innerHTML="";
+  for(let i=0;i<o.d;i++){const c=document.createElement("div");if(i<o.n)c.className="f";
+    c.onclick=()=>{o.n=(o.n===i+1)?i:i+1;r2();};el.appendChild(c);}
+}
+function r2(){
+  chips(document.getElementById("dA"),[2,3,4,6,8,12],A.d,v=>{A.d=v;A.n=Math.min(A.n,v);r2();});
+  chips(document.getElementById("dB"),[2,3,4,6,8,12],B.d,v=>{B.d=v;B.n=Math.min(B.n,v);r2();});
+  strip(document.getElementById("sA"),A);strip(document.getElementById("sB"),B);
+  const e=document.getElementById("eqmsg");
+  const l=A.n*B.d,r=B.n*A.d;
+  if(l===r) e.innerHTML=`<span class="ok">${A.n}/${A.d} = ${B.n}/${B.d}</span> ¡Son equivalentes! Comprueba: ${A.n} × ${B.d} = ${B.n} × ${A.d} = ${l}`;
+  else e.innerHTML=`${A.n}/${A.d} ${l>r?"&gt;":"&lt;"} ${B.n}/${B.d}. La tira ${l>r?"roja":"azul"} llega más lejos.`;
+}
+r2();
+
+// Bandeja 3
+let score=0,ans;
+function q(){
+  const ds=[2,3,4,5,6,8];const d=ds[Math.floor(Math.random()*ds.length)];
+  const n=1+Math.floor(Math.random()*(d-1));ans=`${n}/${d}`;
+  drawPie(document.getElementById("qpie"),d,Array.from({length:d},(_,i)=>i<n));
+  const chk=t=>{
+    const m=document.getElementById("qmsg");
+    if(t===ans){score++;document.getElementById("score").textContent=score;m.innerHTML=`<span class="ok">¡Correcto!</span> ${n} piezas coloreadas de ${d} partes iguales.`;setTimeout(q,1400);}
+    else m.innerHTML=`<span class="bad">Casi.</span> Cuenta primero cuántas partes tiene el círculo (abajo) y luego las rojas (arriba).`;
+  };
+  Construir(document.getElementById("opts"),{n:2,sep:"/",labels:["rojas","partes en total"],submit:v=>chk(v[0]+"/"+v[1])});
+  document.getElementById("qmsg").textContent="Escribe la fracción: piezas rojas arriba, partes totales abajo.";
+}
+document.getElementById("next").onclick=q;q();
+</script>
+
+<script src="taller.js"></script>
+</body></html>

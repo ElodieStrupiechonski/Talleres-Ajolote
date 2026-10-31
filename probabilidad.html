@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f0e3c8"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="author" content="Elodie Strupiechonski"><link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+<title>Probabilidad · Monedas, dados y canicas, interactivo</title><!--seo--><meta name="description" content="Taller interactivo de probabilidad: lanza monedas y dados, saca canicas de una bolsa y compara lo que sale con lo que esperamos. Gratis y sin internet."><link rel="canonical" href="https://elodiestrupiechonski.github.io/Talleres-Matematicas/probabilidad.html"><meta property="og:type" content="website"><meta property="og:locale" content="es_MX"><meta property="og:site_name" content="Talleres de Matemáticas"><meta property="og:title" content="Probabilidad · Monedas, dados y canicas, interactivo"><meta property="og:description" content="Taller interactivo de probabilidad: lanza monedas y dados, saca canicas de una bolsa y compara lo que sale con lo que esperamos. Gratis y sin internet."><meta property="og:url" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/probabilidad.html"><meta property="og:image" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/icons/og.png"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Probabilidad · Monedas, dados y canicas, interactivo", "description": "Taller interactivo de probabilidad: lanza monedas y dados, saca canicas de una bolsa y compara lo que sale con lo que esperamos. Gratis y sin internet.", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/probabilidad.html", "inLanguage": "es-MX", "isAccessibleForFree": true, "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/", "author": {"@type": "Person", "name": "Elodie Strupiechonski"}, "learningResourceType": "Recurso interactivo", "typicalAgeRange": "9-11", "educationalLevel": "Primaria", "teaches": "Probabilidad", "isPartOf": {"@type": "WebSite", "name": "Talleres de Matemáticas", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/"}}</script><!--/seo-->
+<link rel="stylesheet" href="taller.css">
+<style>
+.lbl{font-family:var(--display);font-weight:600;color:var(--muted);margin-bottom:6px;display:block}
+.ed{flex:1;min-width:min(100%,260px)}
+.bwrap{width:min(100%,470px);flex:none}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+.msg:empty,.note:empty{display:none}
+button:disabled{opacity:.4}
+
+svg.ch{width:min(100%,420px);height:auto;background:var(--card);border-radius:10px;flex:none}
+.ch text{font-family:var(--display);fill:var(--muted);font-size:13px}
+.hbar{height:26px;border-radius:6px;background:var(--tray-edge);position:relative;overflow:hidden;margin:4px 0}
+.hbar>i{display:block;height:100%}
+.hbar>u{position:absolute;top:0;bottom:0;left:50%;border-left:3px dashed var(--fg);text-decoration:none}
+.coin{font-family:var(--display);font-weight:800;font-size:1.3rem}
+.bag{display:flex;flex-wrap:wrap;gap:6px;padding:12px;background:var(--card);border-radius:14px;border:3px solid var(--fg);max-width:340px}
+.bag i{width:34px;height:34px;border-radius:50%;border:2px solid var(--fg);display:block}
+</style></head><body>
+<div class="wrap">
+  <a class="back" href="index.html">← Todos los talleres</a>
+  <header class="col">
+    <h1>Probabilidad</h1>
+    <p class="lead">Lanzamos monedas y dados y sacamos canicas para ver qué tan seguido ocurre cada resultado.</p>
+  </header>
+  <section class="tray" id="s1" aria-labelledby="t1">
+    <span class="step">Bandeja 1 · Lanzar la moneda</span>
+    <h2 id="t1">Águila o sol</h2>
+    <p>Lanza muchas veces. ¿Qué pasa con la fracción de águilas?</p>
+    <p class="det">Lanza la moneda muchas veces. La línea punteada marca ½. ¿Qué pasa con la fracción de águilas cuando lanzamos más veces?</p>
+    <div class="row">
+      <div class="col ed">
+        <p class="coin" id="last1"></p>
+        <div class="btns"><button id="l1" type="button">Lanzar 1</button><button id="l10" type="button">Lanzar 10</button><button id="l100" type="button">Lanzar 100</button><button id="r1" type="button">Borrar</button></div>
+        <div id="hb1"></div>
+        <p class="note" id="i1" aria-live="polite"></p>
+      </div>
+      <svg class="ch" id="g1" viewBox="0 0 300 140" role="img" aria-label="Fracción de águilas después de cada lanzamiento"></svg>
+    </div>
+  </section>
+  <section class="tray" id="s2" aria-labelledby="t2">
+    <span class="step">Bandeja 2 · Dados</span>
+    <h2 id="t2">Un dado y dos dados</h2>
+    <p>Barras = lo que sale. Rayitas = lo esperado.</p>
+    <p class="det">Las barras de colores son lo que sale en la práctica. Las rayitas negras son lo que esperamos en teoría.</p>
+    <div class="chips" id="md"></div>
+    <div class="row">
+      <div class="col ed">
+        <p class="coin" id="last2"></p>
+        <div class="btns"><button id="d1" type="button">Lanzar 1</button><button id="d10" type="button">Lanzar 10</button><button id="d100" type="button">Lanzar 100</button><button id="dr" type="button">Borrar</button></div>
+        <p class="note" id="i2" aria-live="polite"></p>
+      </div>
+      <svg class="ch" id="g2" viewBox="0 0 300 160" role="img" aria-label="Resultados de los dados"></svg>
+    </div>
+  </section>
+  <section class="tray" id="s3" aria-labelledby="t3">
+    <span class="step">Bandeja 3 · La bolsa de canicas</span>
+    <h2 id="t3">Sin mirar, ¿qué probabilidad hay?</h2>
+    
+    <div class="row">
+      <div class="bag" id="bag" aria-label="Bolsa de canicas"></div>
+      <div class="col ed">
+        <p id="q3" style="font-size:1.25rem"></p>
+        <div class="chips" id="o3"></div>
+        <p class="note" id="m3" aria-live="polite"></p>
+        <div class="btns"><button id="x20" type="button">Sacar 20 al azar</button></div>
+        <p class="note" id="e3" aria-live="polite"></p>
+        <p>Aciertos: <b id="sc3">0</b> · <button id="n3" type="button">Siguiente</button></p>
+      </div>
+    </div>
+  </section>
+</div>
+<button id="next" hidden aria-hidden="true" tabindex="-1">Siguiente</button>
+<script src="construir.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const h=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;};
+const btn=(cls,txt,fn)=>{const b=h('button',cls,txt);b.type='button';b.addEventListener('click',fn);return b;};
+const rnd=n=>Math.floor(Math.random()*n);
+const gcd=(a,b)=>b?gcd(b,a%b):a;
+const shuffle=a=>a.sort(()=>Math.random()-.5);
+const fr=(n,d)=>{if(n===0)return '0';const g=gcd(n,d);n/=g;d/=g;return d===1?String(n):n+'/'+d;};
+const secs=[];
+
+const pc=(a,n)=>(Math.round(a/n*1000)/10)+' %';
+/* Bandeja 1 */
+(function(){
+  let H=0,T=0,hist=[];
+  function draw(){const n=H+T;
+    $('#hb1').innerHTML=`<div>Águila: ${H} de ${n}</div><div class="hbar"><i style="width:${n?H/n*100:0}%;background:var(--gold)"></i><u></u></div><div>Sol: ${T} de ${n}</div><div class="hbar"><i style="width:${n?T/n*100:0}%;background:var(--blue)"></i><u></u></div>`;
+    $('#i1').innerHTML=n?`Águilas: <b>${H}/${n}</b> = ${pc(H,n)}. Soles: ${T}/${n} = ${pc(T,n)}.`:'Pulsa Lanzar.';
+    let s='<line x1="30" y1="10" x2="30" y2="120" stroke="var(--fg)"/><line x1="30" y1="120" x2="290" y2="120" stroke="var(--fg)"/>';
+    s+=`<line x1="30" y1="65" x2="290" y2="65" stroke="var(--fg)" stroke-dasharray="5 4"/><text x="4" y="14">1</text><text x="4" y="68">½</text><text x="4" y="123">0</text><text x="150" y="136">lanzamientos</text>`;
+    if(hist.length){const m=Math.max(hist.length,10);const pts=hist.map((v,i)=>`${30+(i+1)/m*260},${120-v*110}`).join(' ');s+=`<polyline points="${pts}" fill="none" stroke="var(--red)" stroke-width="2.5"/>`;}
+    $('#g1').innerHTML=s;}
+  function throwN(k,show){let last;for(let i=0;i<k;i++){const a=Math.random()<.5;a?H++:T++;last=a;hist.push(H/(H+T));}
+    $('#last1').textContent=k===1?(last?'Salió águila':'Salió sol'):`Lanzamos ${k} veces`;draw();}
+  $('#l1').onclick=()=>throwN(1);$('#l10').onclick=()=>throwN(10);$('#l100').onclick=()=>throwN(100);
+  $('#r1').onclick=()=>{H=T=0;hist=[];$('#last1').textContent='';draw();};
+  secs.push({root:$('#s1'),next(){throwN(10);}});draw();
+})();
+
+/* Bandeja 2 */
+(function(){
+  let mode=2,cnt={},n=0;
+  const range=()=>mode===1?[1,2,3,4,5,6]:[2,3,4,5,6,7,8,9,10,11,12];
+  const th=v=>mode===1?1/6:(6-Math.abs(v-7))/36;
+  function reset(){cnt={};n=0;range().forEach(v=>cnt[v]=0);$('#last2').textContent='';draw();}
+  function chips(){const c=$('#md');c.innerHTML='';[[1,'1 dado'],[2,'2 dados (suma)']].forEach(([m,t])=>c.appendChild(btn(mode===m?'on':'',t,()=>{mode=m;chips();reset();})));}
+  function draw(){const r=range(),W=260/r.length;let s='<line x1="30" y1="120" x2="290" y2="120" stroke="var(--fg)"/>';
+    const maxT=Math.max(...r.map(th)),top=Math.max(maxT,n?Math.max(...r.map(v=>cnt[v]/n)):0)*1.15;
+    r.forEach((v,i)=>{const x=30+i*W,f=n?cnt[v]/n:0,hh=f/top*105,t=th(v)/top*105;
+      s+=`<rect x="${x+2}" y="${120-hh}" width="${W-4}" height="${hh}" fill="var(--gold)" stroke="var(--fg)" stroke-width="1"/>`;
+      s+=`<line x1="${x}" y1="${120-t}" x2="${x+W}" y2="${120-t}" stroke="var(--fg)" stroke-width="3"/>`;
+      s+=`<text x="${x+W/2}" y="134" text-anchor="middle" style="font-size:13px;fill:var(--fg)">${v}</text>`;});
+    s+='<text x="30" y="150">cada barra: veces que salió ÷ lanzamientos</text>';$('#g2').innerHTML=s;
+    $('#i2').innerHTML=(n?`Lanzamientos: <b>${n}</b>. `:'')+(mode===1?'En teoría cada cara sale 1/6 de las veces.':'En teoría el <b>7</b> sale más (6 formas de 36 = 1/6); el 2 y el 12 salen menos (1 forma de 36).');}
+  function roll(k){let last;for(let i=0;i<k;i++){const a=1+rnd(6),b=1+rnd(6),v=mode===1?a:a+b;cnt[v]++;n++;last=mode===1?`${a}`:`${a} + ${b} = ${v}`;}
+    $('#last2').textContent=k===1?'Salió: '+last:`Lanzamos ${k} veces`;draw();}
+  $('#d1').onclick=()=>roll(1);$('#d10').onclick=()=>roll(10);$('#d100').onclick=()=>roll(100);$('#dr').onclick=reset;
+  secs.push({root:$('#s2'),next(){roll(10);}});chips();reset();
+})();
+
+/* Bandeja 3 */
+(function(){
+  const COL=[['roja','#e9806c','rojas'],['azul','#6f9fd3','azules'],['verde','#6fb584','verdes']];
+  let score=0,cur,done;
+  function q(){done=false;$('#m3').textContent='';$('#e3').textContent='';
+    let c,tot;do{c=COL.map(()=>1+rnd(5));tot=c[0]+c[1]+c[2];}while(tot<6||tot>12);
+    const bag=$('#bag');bag.innerHTML='';const balls=[];c.forEach((k,i)=>{for(let j=0;j<k;j++)balls.push(i);});shuffle(balls).forEach(i=>{const b=h('i');b.style.background=COL[i][1];bag.appendChild(b);});
+    const t=rnd(2);let opts,ans;
+    if(t===0){const i=rnd(3);ans=fr(c[i],tot);$('#q3').innerHTML=`Sacamos una canica sin mirar. ¿Qué probabilidad hay de que sea <b>${COL[i][0]}</b>?`;
+      const set=new Set([ans,fr(tot-c[i],tot),fr(c[i],tot-c[i]),fr(c[i]+1,tot)]);let g=1;while(set.size<4)set.add(fr(c[i],tot+g++));opts=[...set];
+      cur={ans,i,c,tot,msg:`Hay ${c[i]} canicas ${COL[i][2]} de ${tot}: ${c[i]}/${tot}${fr(c[i],tot)!==c[i]+'/'+tot?' = '+fr(c[i],tot):''}.`};}
+    else{const mx=Math.max(...c);if(c.filter(x=>x===mx).length>1)return q();const i=c.indexOf(mx);ans=COL[i][0];$('#q3').innerHTML='¿De qué color es más probable sacar una canica?';opts=COL.map(x=>x[0]);
+      cur={ans,i,c,tot,msg:`Hay más canicas ${COL[i][2]} (${mx} de ${tot}).`};}
+    const o=$('#o3');
+    if(t===0)Construir(o,{n:2,sep:'/',labels:['canicas del color','canicas en total'],max:2,submit:v=>res(fr(v[0],v[1]))});
+    else{o.classList.remove('cn');o.innerHTML='';shuffle(opts).forEach(x=>o.appendChild(btn('',x,()=>res(x))));}}
+  function res(x){if(x===cur.ans){if(!done){score++;$('#sc3').textContent=score;}done=true;$('#m3').innerHTML=`<span class="ok">¡Correcto!</span> ${cur.msg} Pulsa Siguiente.`;}
+    else $('#m3').innerHTML='<span class="bad">Casi.</span> La probabilidad es: canicas del color ÷ todas las canicas de la bolsa.';}
+  $('#x20').onclick=()=>{const r=[0,0,0];for(let k=0;k<20;k++){let u=rnd(cur.tot),i=0;while(u>=cur.c[i]){u-=cur.c[i];i++;}r[i]++;}
+    $('#e3').innerHTML='Sacando 20 veces (devolviendo la canica):<br>'+COL.map((x,i)=>`${x[2]}: salieron ${r[i]}, esperábamos ${Math.round(cur.c[i]/cur.tot*200)/10}`).join('<br>');};
+  $('#n3').addEventListener('click',q);secs.push({root:$('#s3'),next:q});q();
+})();
+
+let active=secs[0];
+secs.forEach(s=>{s.root.addEventListener('pointerdown',()=>{active=s;},true);s.root.addEventListener('focusin',()=>{active=s;});});
+$('#next').addEventListener('click',()=>active.next());
+</script>
+<script src="taller.js"></script>
+</body></html>

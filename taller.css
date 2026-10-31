@@ -1,0 +1,91 @@
+/* Talleres de Matemáticas · © 2026 Elodie Strupiechonski · CC BY-NC-SA 4.0 · https://creativecommons.org/licenses/by-nc-sa/4.0/ */
+@font-face{font-family:"Didact Gothic";src:url("fonts/didactgothic.woff") format("woff");font-weight:400;font-display:swap}
+@font-face{font-family:"Urbanist";src:url("fonts/urbanist.woff") format("woff");font-weight:100 900;font-display:swap}
+@font-face{font-family:"Baloo 2";src:url("fonts/baloo2.woff") format("woff");font-weight:400 800;font-display:swap}
+@font-face{font-family:"Nunito";src:url("fonts/nunito.woff") format("woff");font-weight:200 1000;font-display:swap}
+/* Layout: una bandeja de madera Montessori por actividad, apiladas; material de color sobre madera */
+:root{
+  --bg:#f8f5ef; --tray:#f0e3c8; --tray-edge:#cfb386; --fg:#41362b; --muted:#716049;
+  --red:#c24a33; --blue:#3f6fa3; --green:#2e7d4f; --gold:#d9a63a; --card:#fffdf9;
+  --acc:#3f6fa3; --acc-fg:#fff; --grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='500' height='240'><filter id='n' x='0' y='0' width='100%' height='100%'><feTurbulence type='fractalNoise' baseFrequency='0.01 0.45' numOctaves='2' seed='8' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.667  0 0 0 0 0.510  0 0 0 0 0.275  1.4 0 0 0 -0.55'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  --display:"Urbanist","Baloo 2",system-ui,sans-serif; --body:"Didact Gothic","Nunito",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#1e1b17; --tray:#3a332a; --tray-edge:#5b4e3b; --fg:#f2eadc; --muted:#cdbb9d;
+  --red:#ef8a78; --blue:#8fb3e0; --green:#8fd0a0; --gold:#f0c66a; --card:#27221c;
+  --acc:#8fb3e0; --acc-fg:#1b1712; --grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='500' height='240'><filter id='n' x='0' y='0' width='100%' height='100%'><feTurbulence type='fractalNoise' baseFrequency='0.01 0.45' numOctaves='2' seed='8' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1.000  0 0 0 0 0.922  0 0 0 0 0.784  0.28 0 0 0 -0.1'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1e1b17; --tray:#3a332a; --tray-edge:#5b4e3b; --fg:#f2eadc; --muted:#cdbb9d;
+  --red:#ef8a78; --blue:#8fb3e0; --green:#8fd0a0; --gold:#f0c66a; --card:#27221c;
+  --acc:#8fb3e0; --acc-fg:#1b1712; --grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='500' height='240'><filter id='n' x='0' y='0' width='100%' height='100%'><feTurbulence type='fractalNoise' baseFrequency='0.01 0.45' numOctaves='2' seed='8' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1.000  0 0 0 0 0.922  0 0 0 0 0.784  0.28 0 0 0 -0.1'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); color-scheme:dark}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:20px;line-height:1.5;margin:0;padding-inline:16px;padding-block:24px 48px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+h1,h2,h3{font-family:var(--display);line-height:1.1;text-wrap:balance;margin:0}
+h1{font-size:clamp(2rem,6vw,3rem)} h2{font-size:1.6rem} h3{font-size:1.35rem}
+p{margin:0;max-width:65ch}
+b,strong,.ok,.bad{font-family:var(--display);font-weight:700}
+a{color:var(--blue)}
+.back{font-family:var(--display);font-weight:600;text-decoration:none}
+.lead{color:var(--muted);font-size:1.1rem}
+.tray{background:var(--grain),var(--tray);border:6px solid var(--tray-edge);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:16px;box-shadow:inset 0 2px 4px rgba(255,255,255,.35),inset 0 -3px 6px rgba(0,0,0,.12),0 3px 6px rgba(0,0,0,.14)}
+.step{font-family:var(--display);font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.row{display:flex;flex-wrap:wrap;gap:20px;align-items:center}
+.row>*{min-width:0}
+.col{display:flex;flex-direction:column;gap:12px}
+button{font-family:var(--display);font-weight:600;font-size:1rem;border:2px solid var(--tray-edge);background:var(--card);color:var(--fg);border-radius:10px;padding:6px 14px;cursor:pointer;box-shadow:0 2px 0 var(--tray-edge)}
+button:active{transform:translateY(2px);box-shadow:none}
+button:hover{border-color:var(--acc)}
+button:focus-visible,a:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+button.on{background:var(--acc);color:var(--acc-fg);border-color:var(--acc)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+svg{display:block;max-width:100%;height:auto}
+.big{font-family:var(--display);font-weight:800;font-size:2.4rem;line-height:1.1;font-variant-numeric:tabular-nums}
+.frac{font-family:var(--display);font-weight:800;display:inline-flex;flex-direction:column;align-items:center;line-height:1;font-size:3.2rem}
+.frac .bar{width:100%;height:5px;background:var(--fg);border-radius:3px;margin:6px 0}
+.n{color:var(--red)} .d{color:var(--blue)} .g{color:var(--green)} .o{color:var(--gold)}
+.note{background:var(--card);border-radius:12px;padding:12px 16px}
+.ok{color:var(--green);font-weight:700} .bad{color:var(--red);font-weight:700}
+.q{font-family:var(--display);font-size:1.3rem}
+.footer{color:var(--muted);font-size:.9rem}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* Ajustes para pantalla táctil del quiosco */
+html,body{touch-action:manipulation;-webkit-user-select:none;user-select:none;overscroll-behavior:none}
+button{min-height:48px;min-width:48px;font-size:1.1rem;padding:8px 18px}
+.back{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;min-height:52px;padding:8px 20px;border-radius:12px;background:var(--card);border:3px solid var(--tray-edge);font-size:1.2rem;color:var(--fg)}
+.stepper{display:inline-flex;align-items:center;gap:8px}
+.stepper button{font-size:1.5rem;width:56px;padding:0}
+.stepper output{font-family:var(--display);font-weight:800;font-size:1.6rem;min-width:2ch;text-align:center;font-variant-numeric:tabular-nums}
+.stepper input[type=range]{display:none}
+.keyhint{color:var(--muted);font-size:.9rem}
+
+/* Ayuda y aciertos */
+.det{display:none}
+.det.on{display:block;background:var(--card);border-radius:12px;padding:12px 16px;font-size:.95rem;color:var(--muted)}
+button.ayuda{align-self:flex-start;min-height:44px;font-size:1rem;background:var(--card)}
+.sc{display:none}
+.ver-aciertos .sc{display:inline}
+.sc-solo{display:none}
+.ver-aciertos .sc-solo{display:block}
+.tg-aciertos{display:block;margin:32px auto 0;opacity:.7;font-size:.9rem;min-height:44px}
+
+.note:empty{display:none}
+.res-btn{display:none;position:fixed;right:12px;bottom:12px;z-index:50;opacity:.8}
+.ver-aciertos .res-btn{display:block}
+.res-panel{position:fixed;right:12px;bottom:70px;z-index:51;background:var(--card);border:3px solid var(--tray-edge);border-radius:14px;padding:14px 18px;max-width:min(92vw,460px);box-shadow:0 6px 20px #0004;font-size:.95rem}
+.res-panel[hidden]{display:none}
+.res-panel table{border-collapse:collapse;margin:8px 0;width:100%}
+.res-panel th,.res-panel td{border-bottom:1px solid var(--tray-edge);padding:4px 8px;text-align:left}
+/* Teclado para construir la respuesta */
+.cn{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+.cn-campos{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap}
+.cn-wrap{display:flex;flex-direction:column;align-items:center;gap:2px}
+.cn-wrap small{font-size:.8rem;color:var(--muted)}
+.cn-campo{min-width:84px;height:60px;font-size:1.8rem;font-family:var(--display);font-weight:800;background:var(--card)}
+.cn-campo.vacio{color:var(--muted);font-weight:400}
+.cn-campo.foco{border-color:var(--acc);box-shadow:0 0 0 3px var(--acc)}
+.cn-sep,.cn-unit{font-family:var(--display);font-weight:700;font-size:1.3rem;padding-bottom:14px}
+.cn-pad{display:grid;grid-template-columns:repeat(3,64px);gap:6px}
+.cn-k{min-width:0;height:54px;padding:0;font-size:1.4rem}
+.cn-ok{grid-column:1/-1;height:48px;font-size:1.05rem;background:var(--acc);color:var(--acc-fg)}

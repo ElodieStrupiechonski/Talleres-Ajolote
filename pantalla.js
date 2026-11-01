@@ -36,6 +36,43 @@
   });
   document.body.appendChild(nav);
 
+  // Seguimiento de nivel (siempre visible): lee el selector .niv de la bandeja activa y cuenta aciertos por nivel
+  var META = 5, stats = trays.map(function(){ return { n: {}, flag: false }; });
+  var track = el('aside', 'pf-track'); track.setAttribute('aria-label', 'Seguimiento de nivel'); document.body.appendChild(track);
+  function nivInfo(tr){
+    var nv = tr.querySelector('.niv'); if (!nv || nv.hidden || nv.offsetParent === null) return null;
+    var bs = [].slice.call(nv.querySelectorAll('button')); if (!bs.length) return null;
+    var lv = bs.findIndex(function(b){ return b.classList.contains('on'); }); if (lv < 0) lv = 0;
+    var nm = nv.querySelector('.lbl2:last-child'); return { bs: bs, lv: lv, name: nm ? nm.textContent : '' };
+  }
+  function renderTrack(){
+    var tr = trays[cur], info = nivInfo(tr), st = stats[cur]; track.innerHTML = '';
+    if (!info){ track.appendChild(el('p', 'pt-free', 'Actividad libre: sin niveles aquí.')); return; }
+    var c = st.n[info.lv] || 0, done = Math.min(c, META);
+    track.appendChild(el('p', 'pt-h', 'Nivel ' + (info.lv + 1) + ' de ' + info.bs.length));
+    track.appendChild(el('p', 'pt-n', info.name));
+    var pips = el('div', 'pt-pips'); pips.setAttribute('aria-hidden', 'true');
+    info.bs.forEach(function(b, k){ var p = el('i'); if ((st.n[k] || 0) >= META) p.className = 'dn'; if (k === info.lv) p.className += ' cu'; pips.appendChild(p); });
+    track.appendChild(pips);
+    var stars = el('p', 'pt-s'); for (var k = 0; k < META; k++) stars.appendChild(el('span', k < done ? 'on' : '', k < done ? '★' : '☆'));
+    stars.setAttribute('aria-label', done + ' de ' + META + ' aciertos'); track.appendChild(stars);
+    track.appendChild(el('p', 'pt-c', done + ' de ' + META + ' aciertos en este nivel'));
+    if (c >= META){ track.appendChild(el('p', 'pt-ok', info.lv < info.bs.length - 1 ? '¡Nivel superado!' : '¡Último nivel superado!'));
+      if (info.lv < info.bs.length - 1){ var up = el('button', 'pt-btn', 'Subir de nivel'); up.type = 'button'; up.onclick = function(){ info.bs[info.lv + 1].click(); }; track.appendChild(up); } }
+    var rs = el('button', 'pt-btn', 'Reiniciar'); rs.type = 'button';
+    rs.onclick = function(){ st.n = {}; st.flag = false; var i2 = nivInfo(tr); if (i2 && i2.lv !== 0) i2.bs[0].click(); else renderTrack(); };
+    track.appendChild(rs);
+  }
+  var OKRE = /¡(Correcto|Exacto|Compás completo)/;
+  trays.forEach(function(tr, i){
+    new MutationObserver(function(){
+      var st = stats[i], ok = [].some.call(tr.querySelectorAll('.ok'), function(e){ return OKRE.test(e.textContent); });
+      if (ok && !st.flag){ st.flag = true; var inf = nivInfo(tr); if (inf) st.n[inf.lv] = (st.n[inf.lv] || 0) + 1; }
+      else if (!ok) st.flag = false;
+      if (i === cur) { clearTimeout(tr._rt); tr._rt = setTimeout(renderTrack, 30); }
+    }).observe(tr, { childList: true, subtree: true, characterData: true });
+  });
+
   function box(tr){ var cs = getComputedStyle(tr); return { w: tr.clientWidth, h: tr.clientHeight }; }
   function natural(tr, s){ var inner = tr.firstChild, b = box(tr); inner.style.width = (b.w / s) + 'px'; inner.style.setProperty('--pfh', (b.h / s) + 'px'); inner.style.transform = 'scale(' + s + ')'; return inner.offsetHeight; }
   function fit(i, force){
@@ -61,7 +98,7 @@
     trays.forEach(function(t, k){ t.classList.toggle('pf-on', k === i); });
     [].forEach.call(nav.children, function(b, k){ b.classList.toggle('on', k === i); });
     var e = document.createEvent('Event'); e.initEvent('pointerdown', true, true); trays[i].dispatchEvent(e);
-    fit(i, true); window.scrollTo(0, 0);
+    fit(i, true); window.scrollTo(0, 0); renderTrack();
   }
   function later(force){ clearTimeout(timer); timer = setTimeout(function(){ fit(cur, force); }, 120); }
   new MutationObserver(function(){ if (!fitting) later(false); }).observe(wrap, { childList: true, subtree: true, characterData: true });

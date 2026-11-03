@@ -61,6 +61,7 @@ canvas{display:block;width:100%;height:auto;aspect-ratio:1;border-radius:12px;to
 </div>
 <button id="next" hidden aria-hidden="true" tabindex="-1">Siguiente</button>
 
+<script src="ilustra.js"></script>
 <script src="sonido.js"></script>
 <script>
 const $=(s,r=document)=>r.querySelector(s);
@@ -220,5 +221,5 @@ sections.forEach(s=>{s.root.addEventListener('pointerdown',()=>{active=s;},true)
 document.getElementById('next').addEventListener('click',()=>active.next());
 </script>
 <script src="taller.js"></script>
-<script src="pantalla.js"></script>
+<script src="perfiles.js"></script><script src="perfilui.js"></script><script src="pantalla.js"></script>
 </body></html>

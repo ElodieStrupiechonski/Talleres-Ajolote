@@ -9,6 +9,19 @@
 .strip div:last-child{border-right:0}
 .strip div.f{background:var(--red)}
 .strip.b div.f{background:var(--blue)}
+.fb{width:100%;max-width:460px;height:auto;display:block}
+.fbr{display:flex;align-items:center;gap:14px;margin:6px 0}
+.fbr .frac{min-width:48px;flex:none}
+.ctl{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center}
+.ops button{min-width:64px;min-height:56px;font-size:1.6rem;font-weight:800}
+.dg{width:100%;max-width:340px;height:auto}
+.dg .grp{cursor:pointer}
+svg.rec{width:100%;max-width:560px;height:auto}
+svg.rec .tk{cursor:pointer}
+svg.rec text{font-family:var(--display);font-weight:800;font-size:15px;fill:var(--fg)}
+.sg{font-size:1.8rem;font-weight:800}
+.fbr .frac,#sQ .frac,#qQ .frac,#rQ .frac,.cr .frac{font-size:2.1rem}
+.cr{display:flex;align-items:center;gap:22px;flex-wrap:wrap;margin:6px 0 10px}
 </style></head><body>
 <div class="wrap">
   <a class="back" href="index.html">← Todos los talleres</a>
@@ -44,9 +57,60 @@
     <p class="note q" id="eqmsg"></p>
   </section>
 
+  <!-- 3 Comparar -->
+  <section class="tray" id="sC" aria-labelledby="tC">
+    <span class="step">Bandeja 3 · Comparar</span>
+    <h2 id="tC">¿Cuál es mayor?</h2>
+    <div class="ctl" id="cAnc"></div>
+    <div id="cBars"></div>
+    <p class="note" id="cMsg" aria-live="polite"></p>
+    <p>Aciertos: <b id="cSc">0</b> · <button id="cNx" type="button">Siguiente</button> <button id="cSee" type="button">Ver dibujo</button></p>
+  </section>
+
+  <!-- 4 Sumar y restar -->
+  <section class="tray" id="sS" aria-labelledby="tS">
+    <span class="step">Bandeja 4 · Sumar y restar</span>
+    <h2 id="tS">Suma y resta de fracciones</h2>
+    <div class="ctl" id="sAnc"></div>
+    <div class="row">
+      <div class="col" style="flex:1;min-width:260px">
+        <p id="sQ" style="font-size:1.4rem"></p>
+        <div id="sBars"></div>
+      </div>
+      <div class="col ed"><div class="chips" id="sIn"></div><p class="note" id="sMsg" aria-live="polite"></p>
+        <p>Aciertos: <b id="sSc">0</b> · <button id="sNx" type="button">Siguiente</button></p></div>
+    </div>
+  </section>
+
+  <!-- 5 De una cantidad -->
+  <section class="tray" id="sQ5" aria-labelledby="tQ5">
+    <span class="step">Bandeja 5 · De una cantidad</span>
+    <h2 id="tQ5">Una fracción de un grupo</h2>
+    <p class="det">Toca las filas para marcarlas y contar.</p>
+    <div class="ctl" id="qAnc"></div>
+    <div class="row">
+      <svg class="dg" id="qDg" viewBox="0 0 320 260" role="img" aria-label="Grupos de objetos"></svg>
+      <div class="col ed"><p id="qQ" style="font-size:1.35rem"></p><div class="chips" id="qIn"></div><p class="note" id="qMsg" aria-live="polite"></p>
+        <p>Aciertos: <b id="qSc">0</b> · <button id="qNx" type="button">Siguiente</button> <button id="qSee" type="button">Ver dibujo</button></p></div>
+    </div>
+  </section>
+
+  <!-- 6 Recta numérica -->
+  <section class="tray" id="sR" aria-labelledby="tR">
+    <span class="step">Bandeja 6 · Recta numérica</span>
+    <h2 id="tR">Las fracciones en la recta</h2>
+    <div class="chips" id="rMd"></div>
+    <div class="ctl" id="rAnc"></div>
+    <p id="rQ" style="font-size:1.35rem"></p>
+    <svg class="rec" id="rSv" viewBox="0 0 560 90" role="img" aria-label="Recta numérica"></svg>
+    <div class="chips" id="rIn"></div>
+    <p class="note" id="rMsg" aria-live="polite"></p>
+    <p>Aciertos: <b id="rSc">0</b> · <button id="rNx" type="button">Siguiente</button></p>
+  </section>
+
   <!-- 3 -->
   <section class="tray" aria-labelledby="t3">
-    <span class="step">Bandeja 3 · Ponte a prueba</span>
+    <span class="step">Bandeja 7 · Ponte a prueba</span>
     <h2 id="t3">¿Qué fracción ves?</h2>
     <div class="row">
       <svg id="qpie" viewBox="0 0 240 240" width="200" height="200" role="img" aria-label="Pregunta"></svg>
@@ -59,6 +123,7 @@
   </section>
 </div>
 
+<script src="ilustra.js"></script>
 <script src="sonido.js"></script>
 <script src="construir.js"></script>
 <script>
@@ -120,6 +185,120 @@ function r2(){
 }
 r2();
 
+
+/* ---- utilidades nuevas ---- */
+const rnd=n=>Math.floor(Math.random()*n),R0=(a,b)=>a+rnd(b-a+1),pick=a=>a[rnd(a.length)],shuffle=a=>a.sort(()=>Math.random()-.5);
+const INK='#41362b';
+const fracH=(n,d)=>`<span class="frac" style="display:inline-flex;vertical-align:middle"><span class="n">${n}</span><span class="bar"></span><span class="d">${d}</span></span>`;
+const frS=(n,d)=>{const g=gcd(n,d);return n===0?'0':(d/g===1?String(n/g):(n/g)+'/'+(d/g));};
+function barSVG(n,d,color,w){w=w||300;let s=`<svg class="fb" viewBox="0 0 ${w} 40">`;for(let i=0;i<d;i++)s+=`<rect x="${(i*(w-6)/d+3).toFixed(1)}" y="3" width="${((w-6)/d).toFixed(1)}" height="34" fill="${i<n?color:'#fffdf9'}" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/>`;return s+'</svg>';}
+const same=(a,b,c,d)=>a*d===b*c;
+
+/* ---- Bandeja 3: comparar ---- */
+(function(){
+  let score=0,cur,done,see=true;
+  const NV=Niveles(document.getElementById('cAnc'),['Mismo denominador','Mismo numerador','Contra ½','Un denominador es múltiplo','Denominadores distintos'],()=>q());
+  function q(){const L=NV.get();done=false;let a,b;
+    if(L===0){const d=R0(3,10);let x=R0(1,d-1),y=R0(1,d-1);if(rnd(5)===0)y=x;a=[x,d];b=[y,d];}
+    else if(L===1){const n=R0(1,3);let d1=R0(n+1,10),d2=R0(n+1,10);if(rnd(6)===0)d2=d1;a=[n,d1];b=[n,d2];}
+    else if(L===2){const d=R0(3,10);const x=R0(1,d-1);a=[x,d];b=[1,2];if(rnd(2))[a,b]=[b,a];}
+    else if(L===3){const p=pick([[2,4],[2,6],[3,6],[4,8],[5,10],[2,8],[3,9],[4,12]]);const d1=p[0],d2=p[1];a=[R0(1,d1-1),d1];b=[R0(1,d2-1),d2];if(rnd(3)===0)b=[a[0]*d2/d1,d2];if(rnd(2))[a,b]=[b,a];}
+    else{const p=pick([[3,4],[2,3],[3,5],[4,5],[5,6],[3,8],[4,7],[5,8],[2,5]]);a=[R0(1,p[0]-1),p[0]];b=[R0(1,p[1]-1),p[1]];if(rnd(2))[a,b]=[b,a];}
+    cur={a,b,ans:a[0]*b[1]>b[0]*a[1]?'>':a[0]*b[1]<b[0]*a[1]?'<':'='};
+    see=L<4;draw();document.getElementById('cMsg').textContent='';}
+  function draw(){const B=document.getElementById('cBars');
+    B.innerHTML=`<div class="cr">${fracH(cur.a[0],cur.a[1])}<div class="chips ops" id="cOp"></div>${fracH(cur.b[0],cur.b[1])}</div>`+(see?`<div class="fbr">${barSVG(cur.a[0],cur.a[1],'var(--red)')}</div><div class="fbr">${barSVG(cur.b[0],cur.b[1],'var(--blue)')}</div>`:'');
+    const o=document.getElementById('cOp');['<','=','>'].forEach(t=>{const bt=document.createElement('button');bt.type='button';bt.textContent=t;bt.onclick=()=>res(t);o.appendChild(bt);});
+    document.getElementById('cSee').style.display=NV.get()===4&&!see?'':'none';}
+  function res(t){const m=document.getElementById('cMsg');
+    if(t===cur.ans){if(!done){score++;document.getElementById('cSc').textContent=score;}done=true;see=true;draw();if(window.Snd)Snd.ok();
+      m.innerHTML=`<span class="ok">¡Correcto!</span> ${cur.a[0]}/${cur.a[1]} ${cur.ans} ${cur.b[0]}/${cur.b[1]}. Comprobamos: ${cur.a[0]} × ${cur.b[1]} = ${cur.a[0]*cur.b[1]} y ${cur.b[0]} × ${cur.a[1]} = ${cur.b[0]*cur.a[1]}.`;}
+    else{if(window.Snd)Snd.bad();m.innerHTML=`<span class="bad">Casi.</span> ${NV.get()===1?'Con el mismo numerador, las partes más chicas (denominador mayor) valen menos.':NV.get()===2?'¿Llega a la mitad?':'Mira cuánto ocupa cada tira.'}`;}}
+  document.getElementById('cNx').onclick=q;document.getElementById('cSee').onclick=()=>{see=true;draw();};q();
+})();
+
+/* ---- Bandeja 4: sumar y restar ---- */
+(function(){
+  let score=0,cur,done;
+  const NV=Niveles(document.getElementById('sAnc'),['Sumar, mismo denominador','Restar, mismo denominador','Un denominador múltiplo del otro','Simplifica el resultado','Denominadores distintos'],()=>q());
+  function q(){const L=NV.get();done=false;let a,b,op='+';
+    for(let t=0;t<200;t++){
+      if(L===0){const d=R0(3,10),x=R0(1,d-2),y=R0(1,d-x);a=[x,d];b=[y,d];op='+';}
+      else if(L===1){const d=R0(3,10),x=R0(2,d),y=R0(1,x-1);a=[x,d];b=[y,d];op='-';}
+      else if(L===2||L===3){const p=pick([[2,4],[3,6],[4,8],[5,10],[2,6],[2,8],[3,9],[4,12]]);op=rnd(2)?'+':'-';a=[R0(1,p[0]-1),p[0]];b=[R0(1,p[1]-1),p[1]];if(op==='-'&&a[0]*b[1]<b[0]*a[1])[a,b]=[b,a];}
+      else{const p=pick([[2,3],[3,4],[2,5],[3,5],[4,5],[3,6],[2,7]]);op=rnd(2)?'+':'-';a=[R0(1,p[0]-1),p[0]];b=[R0(1,p[1]-1),p[1]];if(op==='-'&&a[0]*b[1]<=b[0]*a[1])[a,b]=[b,a];}
+      const N=op==='+'?a[0]*b[1]+b[0]*a[1]:a[0]*b[1]-b[0]*a[1],D=a[1]*b[1];
+      if(N>0&&N<=D&&!(op==='-'&&N===0)){cur={a,b,op,N,D,L};break;}}
+    const g=gcd(cur.N,cur.D);cur.n=cur.N/g;cur.d=cur.D/g;
+    document.getElementById('sQ').innerHTML=`${fracH(a[0],a[1])} <span class="sg">${op==='+'?'+':'−'}</span> ${fracH(b[0],b[1])} <span class="sg">=</span> ?`;
+    document.getElementById('sBars').innerHTML=(L<=2?`<div class="fbr">${barSVG(a[0],a[1],'var(--red)')}</div><div class="fbr">${barSVG(b[0],b[1],'var(--blue)')}</div>`:'');
+    Construir(document.getElementById('sIn'),{n:2,sep:'/',labels:['arriba','abajo'],max:2,submit:v=>res(v[0],v[1])});
+    document.getElementById('sMsg').textContent=L===3?'Escribe la fracción más pequeña posible.':(L===4?'Primero busca un denominador común.':'');}
+  function res(n,d){const m=document.getElementById('sMsg');
+    if(d>0&&n*cur.D===cur.N*d){
+      if(cur.L>=3&&gcd(n,d)>1){m.innerHTML=`<span class="bad">Casi.</span> Está bien, pero se puede simplificar.`;return;}
+      if(!done){score++;document.getElementById('sSc').textContent=score;}done=true;if(window.Snd)Snd.ok();
+      const x=cur;m.innerHTML=`<span class="ok">¡Correcto!</span> ${x.a[0]}/${x.a[1]} ${x.op==='+'?'+':'−'} ${x.b[0]}/${x.b[1]} = ${x.N}/${x.D}${x.D!==x.d?' = '+frS(x.N,x.D):''}.`;
+      document.getElementById('sBars').innerHTML=`<div class="fbr">${barSVG(x.a[0],x.a[1],'var(--red)')}</div><div class="fbr">${barSVG(x.b[0],x.b[1],'var(--blue)')}</div><div class="fbr">${barSVG(x.N,x.D,'var(--gold)')}</div>`;}
+    else{if(window.Snd)Snd.bad();m.innerHTML=`<span class="bad">Casi.</span> ${cur.a[1]===cur.b[1]?'Los denominadores iguales no se suman: solo suma o resta los de arriba.':'Pon las dos fracciones con el mismo denominador.'}`;}}
+  document.getElementById('sNx').onclick=q;q();
+})();
+
+/* ---- Bandeja 5: fracción de una cantidad ---- */
+(function(){
+  let score=0,cur,done,see=true,marked=[];
+  const NV=Niveles(document.getElementById('qAnc'),['La mitad de un grupo','Un tercio, cuarto o quinto','Varias partes (3/4 de 12)','Grupos grandes','¿Cuánto era el entero?'],()=>q());
+  function q(){const L=NV.get();done=false;let d,n,N;
+    if(L===0){d=2;n=1;N=2*R0(2,10);}
+    else if(L===1){d=pick([3,4,5]);n=1;N=d*R0(2,Math.floor(24/d));}
+    else if(L===2){d=pick([3,4,5,6]);n=R0(2,d-1);N=d*R0(2,Math.floor(24/d));}
+    else if(L===3){d=pick([5,6,8,10]);n=R0(1,d-1);N=d*R0(3,Math.floor(60/d));}
+    else{d=pick([2,3,4,5]);n=R0(1,d-1);const u=R0(2,8);N=d*u;}
+    const part=N/d*n;cur={d,n,N,part,rev:L===4};
+    see=L<3;marked=Array(d).fill(false);
+    document.getElementById('qQ').innerHTML=cur.rev?`${part} es ${fracH(n,d)} de un número. ¿Cuál es el número?`:`¿Cuánto es ${fracH(n,d)} de ${N}?`;
+    Construir(document.getElementById('qIn'),{n:1,max:2,submit:v=>res(v[0])});
+    document.getElementById('qMsg').textContent='';draw();}
+  function draw(){const sv=document.getElementById('qDg'),d=cur.d,per=cur.N/d;sv.parentNode&&(document.getElementById('qSee').style.display=see?'none':'');
+    if(!see){sv.innerHTML='';sv.style.minHeight='0';return;}
+    const rowH=Math.min(46,250/d),r=Math.min(11,rowH/2-4,(300/per-4)/2),gap=Math.min(28,296/per);let s='';
+    for(let i=0;i<d;i++){const y=6+i*rowH;s+=`<g class="grp" data-i="${i}"><rect x="4" y="${y}" width="312" height="${rowH-4}" rx="10" fill="${marked[i]?'#f6d98a':'#fffdf9'}" stroke="${INK}" stroke-width="3"/>`;
+      for(let k=0;k<per;k++)s+=`<circle cx="${(18+k*gap).toFixed(1)}" cy="${(y+rowH/2-2).toFixed(1)}" r="${r.toFixed(1)}" fill="${cur.rev&&i<cur.n?'#e8b84a':'#d9b98a'}" stroke="${INK}" stroke-width="2.5"/>`;s+='</g>';}
+    sv.innerHTML=s;sv.querySelectorAll('.grp').forEach(g=>g.addEventListener('click',()=>{const i=+g.dataset.i;marked[i]=!marked[i];draw();}));}
+  function res(v){const m=document.getElementById('qMsg'),ans=cur.rev?cur.N:cur.part;
+    if(v===ans){if(!done){score++;document.getElementById('qSc').textContent=score;}done=true;see=true;marked=marked.map((_,i)=>i<cur.n);draw();if(window.Snd)Snd.ok();
+      m.innerHTML=cur.rev?`<span class="ok">¡Correcto!</span> ${cur.part} ÷ ${cur.n} = ${cur.part/cur.n} es 1/${cur.d}. Entonces ${cur.part/cur.n} × ${cur.d} = ${cur.N}.`:`<span class="ok">¡Correcto!</span> ${cur.N} ÷ ${cur.d} = ${cur.N/cur.d}${cur.n>1?` y ${cur.N/cur.d} × ${cur.n} = ${cur.part}`:''}.`;}
+    else{if(window.Snd)Snd.bad();m.innerHTML=`<span class="bad">Casi.</span> ${cur.rev?`Si ${cur.part} son ${cur.n} partes, ¿cuánto vale 1 parte?`:`Reparte ${cur.N} en ${cur.d} grupos iguales.`}`;}}
+  document.getElementById('qNx').onclick=q;document.getElementById('qSee').onclick=()=>{see=true;draw();};q();
+})();
+
+/* ---- Bandeja 6: recta numérica ---- */
+(function(){
+  let mode='ubica',score=0,cur,done;
+  const NV=Niveles(document.getElementById('rAnc'),['De 0 a 1: mitades y cuartos','De 0 a 1: tercios, quintos, sextos','De 0 a 1: octavos y décimos','De 0 a 2','De 0 a 2: más partes'],()=>q());
+  function chips(){const c=document.getElementById('rMd');c.innerHTML='';[['ubica','Ubica'],['lee','Lee']].forEach(([k,t])=>{const b=document.createElement('button');b.type='button';b.textContent=t;if(mode===k)b.className='on';b.onclick=()=>{mode=k;q();};c.appendChild(b);});}
+  function q(){chips();const L=NV.get();done=false;let d,mx=1;
+    if(L===0)d=pick([2,4]);else if(L===1)d=pick([3,5,6]);else if(L===2)d=pick([8,10]);else if(L===3){d=pick([2,3,4]);mx=2;}else{d=pick([5,6,8]);mx=2;}
+    const n=R0(1,mx*d-1);cur={d,mx,n};
+    document.getElementById('rQ').innerHTML=mode==='ubica'?`Toca el lugar de ${fracH(n,d)}.`:'¿Qué fracción marca el punto rojo?';
+    draw();const inp=document.getElementById('rIn');inp.innerHTML='';
+    if(mode==='lee')Construir(inp,{n:2,sep:'/',labels:['arriba','abajo'],max:2,submit:v=>res(v[0],v[1])});
+    document.getElementById('rMsg').textContent='';}
+  function X(i){return 30+i*(500/(cur.d*cur.mx));}
+  function draw(){const sv=document.getElementById('rSv'),T=cur.d*cur.mx;let s=`<line x1="30" y1="45" x2="530" y2="45" stroke="${INK}" stroke-width="5" stroke-linecap="round"/>`;
+    for(let i=0;i<=T;i++){const big=i%cur.d===0;s+=`<line x1="${X(i)}" y1="${big?28:34}" x2="${X(i)}" y2="${big?62:56}" stroke="${INK}" stroke-width="${big?5:3.5}" stroke-linecap="round"/>`;if(big)s+=`<text x="${X(i)}" y="84" text-anchor="middle">${i/cur.d}</text>`;}
+    if(mode==='lee')s+=`<circle cx="${X(cur.n)}" cy="45" r="11" fill="#e9806c" stroke="${INK}" stroke-width="4"/>`;
+    else for(let i=0;i<=T;i++)s+=`<circle class="tk" data-i="${i}" cx="${X(i)}" cy="45" r="14" fill="transparent"/>`;
+    sv.innerHTML=s;
+    if(mode==='ubica')sv.querySelectorAll('.tk').forEach(c=>c.addEventListener('click',()=>pos(+c.dataset.i)));}
+  function ok(txt){if(!done){score++;document.getElementById('rSc').textContent=score;}done=true;if(window.Snd)Snd.ok();document.getElementById('rMsg').innerHTML=`<span class="ok">¡Correcto!</span> ${txt}`;}
+  function bad(t){if(window.Snd)Snd.bad();document.getElementById('rMsg').innerHTML=`<span class="bad">Casi.</span> ${t}`;}
+  function pos(i){if(i===cur.n){draw();document.getElementById('rSv').insertAdjacentHTML('beforeend',`<circle cx="${X(i)}" cy="45" r="11" fill="#e9806c" stroke="${INK}" stroke-width="4"/>`);ok(`${cur.n}/${cur.d} está en la marca ${cur.n} (cada espacio vale 1/${cur.d}).`);}
+    else bad(`Cada espacio vale 1/${cur.d}. Cuenta ${cur.n} espacios desde el 0.`);}
+  function res(n,d){if(d>0&&n*cur.d===cur.n*d)ok(`Contamos ${cur.n} espacios de 1/${cur.d}: ${cur.n}/${cur.d}${cur.n>cur.d?' (más de 1 entero)':''}.`);else bad(`Cuenta los espacios desde el 0. Cada uno vale 1 entre ${cur.d}.`);}
+  document.getElementById('rNx').onclick=q;q();
+})();
+
 // Bandeja 3
 let score=0,ans;
 const NV=Niveles(document.getElementById("qpie"),['Mitades, tercios y cuartos','Hasta octavos','Quintos, décimos y doceavos','Doceavos y dieciseisavos','Simplificar la fracción'],()=>q());
@@ -131,14 +310,14 @@ function q(){
   const chk=t=>{
     const m=document.getElementById("qmsg");
     if(t===ans){score++;document.getElementById("score").textContent=score;m.innerHTML=`<span class="ok">¡Correcto!</span> ${n} piezas coloreadas de ${d} partes iguales${L===4?`, es decir ${n}/${d} = ${ans}`:''}.`;setTimeout(q,1400);}
-    else m.innerHTML=`<span class="bad">Casi.</span> Cuenta primero cuántas partes tiene el círculo (abajo) y luego las rojas (arriba).`;
+    else m.innerHTML=`<span class="bad">Casi.</span> Cuenta todas las partes (abajo) y las rojas (arriba).`;
   };
   Construir(document.getElementById("opts"),{n:2,sep:"/",labels:["rojas","partes en total"],submit:v=>chk(v[0]+"/"+v[1])});
-  document.getElementById("qmsg").textContent=L===4?"Escribe la fracción simplificada (la más pequeña equivalente).":"Escribe la fracción: piezas rojas arriba, partes totales abajo.";
+  document.getElementById("qmsg").textContent=L===4?"Escribe la fracción más pequeña posible.":"Rojas arriba, todas abajo.";
 }
 document.getElementById("next").onclick=q;q();
 </script>
 
 <script src="taller.js"></script>
-<script src="pantalla.js"></script>
+<script src="perfiles.js"></script><script src="perfilui.js"></script><script src="pantalla.js"></script>
 </body></html>

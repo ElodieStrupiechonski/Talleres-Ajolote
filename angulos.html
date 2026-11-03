@@ -88,6 +88,7 @@ svg.ang{width:min(100%,360px);height:auto;touch-action:none;background:var(--car
   </section>
 </div>
 <button id="next" hidden aria-hidden="true" tabindex="-1">Siguiente</button>
+<script src="ilustra.js"></script>
 <script src="sonido.js"></script>
 <script src="construir.js"></script>
 <script>
@@ -236,7 +237,7 @@ function tipo(a){return a===0?'nulo':a<90?'agudo':a===90?'recto':a<180?'obtuso':
     else if(r.num==='frac')Construir(o,{n:2,sep:'/',labels:['arriba','abajo'],max:3,submit:v=>res(fr(v[0],v[1]))});
     else Construir(o,{max:3,unit:r.num==='deg'?'°':'',submit:v=>res(v[0]+'°')});}
   function res(x){if(x===cur.ans){if(!done){score++;$('#sc3').textContent=score;}done=true;if(window.Snd)Snd.angulo(120);$('#m3').innerHTML=`<span class="ok">¡Correcto!</span> ${cur.msg} Pulsa Siguiente.`;}
-    else $('#m3').innerHTML='<span class="bad">Casi.</span> Piensa: 90° es un ángulo recto, 180° es media vuelta y 360° es una vuelta completa.';}
+    else $('#m3').innerHTML='<span class="bad">Casi.</span> Recuerda: 90° es esquina, 180° es media vuelta, 360° es vuelta completa.';}
   $('#n3').addEventListener('click',q);listeners.push(q);secs.push({root:$('#s3'),next:q});q();
 })();
 
@@ -275,5 +276,5 @@ secs.forEach(s=>{s.root.addEventListener('pointerdown',()=>{active=s;},true);s.r
 $('#next').addEventListener('click',()=>active.next());
 </script>
 <script src="taller.js"></script>
-<script src="pantalla.js"></script>
+<script src="perfiles.js"></script><script src="perfilui.js"></script><script src="pantalla.js"></script>
 </body></html>

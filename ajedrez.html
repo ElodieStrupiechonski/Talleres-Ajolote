@@ -16,6 +16,16 @@
 .bd .c.no{box-shadow:inset 0 0 0 5px var(--red)}
 .bd .a{display:flex;align-items:center;justify-content:center}
 .bd{border:3px solid var(--fg);border-radius:6px;padding:0;box-sizing:border-box}
+.bd .c.en{color:#a3281c}
+.bd .c.tr{background:#f2e08a}
+.bd .c.pk{box-shadow:inset 0 0 0 5px var(--blue)}
+.bd .c.mis{box-shadow:inset 0 0 0 5px #e0a21a}
+.pcs{display:flex;flex-wrap:wrap;gap:2px 6px;align-items:center;font-family:"DejaVu Sans","Segoe UI Symbol",sans-serif;font-size:2.1rem;line-height:1.15}
+.pcs.red{color:#a3281c}
+.vt{display:flex;flex-wrap:wrap;gap:6px 14px;font-family:var(--display);font-weight:800;font-size:1.15rem;margin:4px 0}
+.vt span{background:var(--card);border:3px solid var(--tray-edge);border-radius:12px;padding:2px 10px}
+.vt b{font-family:"DejaVu Sans","Segoe UI Symbol",sans-serif;font-size:1.5rem;font-weight:400;margin-right:4px}
+.ctl{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center}
 .btns{display:flex;flex-wrap:wrap;gap:8px}
 .msg:empty{display:none}
 </style></head><body>
@@ -52,8 +62,62 @@
     </div>
   </section>
 
+  <section class="tray" id="sL" aria-labelledby="tL">
+    <span class="step">Bandeja 3 · Llegar a la casilla</span>
+    <h2 id="tL">Lleva la pieza al destino</h2>
+    <div class="row">
+      <div class="bwrap"><div class="bd" id="bL"></div></div>
+      <div class="col ed">
+        <p id="lQ" style="font-size:1.25rem"></p>
+        <p>Movimientos: <b id="lN">0</b></p>
+        <p class="note" id="lM" aria-live="polite"></p>
+        <div class="btns"><button id="lRs" type="button">Volver al inicio</button><button id="lNx" type="button">Siguiente</button></div>
+        <p>Aciertos: <b id="lSc">0</b></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="tray" id="sK" aria-labelledby="tK">
+    <span class="step">Bandeja 4 · Capturar</span>
+    <h2 id="tK">¿Qué piezas rojas puede capturar?</h2>
+    <div class="row">
+      <div class="bwrap"><div class="bd" id="bK"></div></div>
+      <div class="col ed">
+        <p id="kQ" style="font-size:1.25rem"></p>
+        <p class="note" id="kM" aria-live="polite"></p>
+        <div class="btns"><button id="kOk" type="button">✓ Comprobar</button><button id="kNx" type="button">Siguiente</button></div>
+        <p>Aciertos: <b id="kSc">0</b></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="tray" id="sV" aria-labelledby="tV">
+    <span class="step">Bandeja 5 · Puntos de las piezas</span>
+    <h2 id="tV">¿Cuántos puntos hay?</h2>
+    <div class="ctl" id="vAnc"></div>
+    <div class="vt" id="vT"></div>
+    <div id="vP"></div>
+    <div class="chips" id="vIn"></div>
+    <p class="note" id="vM" aria-live="polite"></p>
+    <p>Aciertos: <b id="vSc">0</b> · <button id="vNx" type="button">Siguiente</button></p>
+  </section>
+
+  <section class="tray" id="sJ" aria-labelledby="tJ">
+    <span class="step">Bandeja 6 · Jaque</span>
+    <h2 id="tJ">¿El rey rojo está en jaque?</h2>
+    <div class="row">
+      <div class="bwrap"><div class="bd" id="bJ"></div></div>
+      <div class="col ed">
+        <p id="jQ" style="font-size:1.25rem"></p>
+        <div class="chips" id="jIn"></div>
+        <p class="note" id="jM" aria-live="polite"></p>
+        <p>Aciertos: <b id="jSc">0</b> · <button id="jNx" type="button">Siguiente</button></p>
+      </div>
+    </div>
+  </section>
+
   <section class="tray" id="s3" aria-labelledby="t3">
-    <span class="step">Bandeja 3 · Ponte a prueba</span>
+    <span class="step">Bandeja 7 · Ponte a prueba</span>
     <h2 id="t3">¿A cuántas casillas puede ir?</h2>
     <div class="row">
       <div class="bwrap"><div class="bd" id="b3"></div></div>
@@ -67,6 +131,7 @@
   </section>
 </div>
 <button id="next" hidden aria-hidden="true" tabindex="-1">Siguiente</button>
+<script src="ilustra.js"></script>
 <script src="sonido.js"></script>
 <script src="construir.js"></script>
 <script>
@@ -101,8 +166,9 @@ function Board(el,onTap){
   }
   el.appendChild(h('div','a'));
   for(let f=0;f<8;f++)el.appendChild(h('div','a',FILES[f]));
-  return {cells,clear(){Object.values(cells).forEach(c=>{c.className=c.className.replace(/ ?(sel|mv|has|ok|no)\b/g,'');c.textContent='';});},
+  return {cells,clear(){Object.values(cells).forEach(c=>{c.className=c.className.replace(/ ?(sel|mv|has|ok|no|en|tr|pk|tg|mis)\b/g,'');c.textContent='';});},
     at(f,r){return cells[f+','+r];},
+    put(f,r,k,c){const e=cells[f+','+r];e.textContent=P[k].g;if(c==='b')e.classList.add('en');},
     mark(list,cls){list.forEach(([f,r])=>cells[f+','+r].classList.add(cls));}};
 }
 const secs=[];
@@ -148,6 +214,128 @@ const secs=[];
   chips();show();
 })();
 
+
+const PK=a=>a[rnd(a.length)],RR=(a,b)=>a+rnd(b-a+1);
+const on8=(a,b)=>a>=0&&a<8&&b>=0&&b<8;
+/* casillas que una pieza "ve": los rayos se detienen en la primera pieza que encuentran (ya sea amiga o enemiga) */
+function cover(k,f,r,occ,c){const out=[];
+  const ray=(df,dr)=>{let a=f+df,b=r+dr;while(on8(a,b)){out.push([a,b]);if(occ[a+','+b])break;a+=df;b+=dr;}};
+  if(k==='torre'||k==='dama')[[1,0],[-1,0],[0,1],[0,-1]].forEach(d=>ray(...d));
+  if(k==='alfil'||k==='dama')[[1,1],[1,-1],[-1,1],[-1,-1]].forEach(d=>ray(...d));
+  if(k==='rey')for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++)if((a||b)&&on8(f+a,r+b))out.push([f+a,r+b]);
+  if(k==='caballo')[[1,2],[2,1],[-1,2],[-2,1],[1,-2],[2,-1],[-1,-2],[-2,-1]].forEach(d=>{if(on8(f+d[0],r+d[1]))out.push([f+d[0],r+d[1]]);});
+  if(k==='peon'){const dr=c==='b'?-1:1;[[f-1,r+dr],[f+1,r+dr]].forEach(q=>{if(on8(q[0],q[1]))out.push(q);});}
+  return out;}
+/* mínimo de movimientos en un tablero vacío (búsqueda en anchura) */
+function minMov(k,s,t){const dist={};dist[s[0]+','+s[1]]=0;const q=[s];
+  while(q.length){const [f,r]=q.shift(),d=dist[f+','+r];if(f===t[0]&&r===t[1])return d;
+    moves(k,f,r).forEach(m=>{const key=m[0]+','+m[1];if(dist[key]==null){dist[key]=d+1;q.push(m);}});}
+  return Infinity;}
+const VAL={peon:1,caballo:3,alfil:3,torre:5,dama:9};
+const BL={peon:'♙',caballo:'♘',alfil:'♗',torre:'♖',dama:'♕'},NG={peon:'♟︎',caballo:'♞',alfil:'♝',torre:'♜',dama:'♛'};
+const nomP=k=>P[k].n.toLowerCase();
+
+/* Bandeja 3: llegar a la casilla */
+(function(){
+  const B=Board($('#bL'),tap);let score=0,cur,done,hist;
+  const NV=Niveles($('#bL'),['La torre','El alfil','El rey','El caballo','Todas las piezas mezcladas'],()=>q());
+  function q(){const L=NV.get();done=false;const k=['torre','alfil','rey','caballo',PK(['dama','torre','alfil','rey','caballo'])][L];
+    const want=L===2?[2,5]:L===3?[2,3]:[1,2];let s,t,d=Infinity;
+    for(let n=0;n<400;n++){s=[rnd(8),rnd(8)];t=[rnd(8),rnd(8)];d=minMov(k,s,t);if(isFinite(d)&&d>=want[0]&&d<=want[1])break;}
+    cur={k,s,t,min:d,pos:s.slice(),n:0};hist=[s.slice()];$('#lQ').innerHTML=`Lleva ${nomP(k)} de <b>${nm(...s)}</b> a <b>${nm(...t)}</b> con los menos movimientos posibles.`;
+    $('#lM').textContent='';$('#lN').textContent=0;draw();}
+  function draw(){B.clear();hist.forEach(p=>B.at(p[0],p[1]).classList.add('tr'));B.at(cur.t[0],cur.t[1]).classList.add('ok');const c=B.at(cur.pos[0],cur.pos[1]);c.textContent=P[cur.k].g;c.classList.add('sel');}
+  function tap(f,r){if(done)return;const m=$('#lM');
+    if(!moves(cur.k,cur.pos[0],cur.pos[1]).some(x=>x[0]===f&&x[1]===r)){if(window.Snd)Snd.bad();m.innerHTML=`<span class="bad">Ahí no llega.</span> ${P[cur.k].n} ${P[cur.k].d}`;return;}
+    cur.pos=[f,r];cur.n++;hist.push([f,r]);$('#lN').textContent=cur.n;if(window.Snd)Snd.pop();draw();m.textContent='';
+    if(f===cur.t[0]&&r===cur.t[1]){done=true;
+      if(cur.n===cur.min){score++;$('#lSc').textContent=score;if(window.Snd)Snd.ok();m.innerHTML=`<span class="ok">¡Correcto!</span> Llegaste en ${cur.n} movimiento${cur.n>1?'s':''}: es lo mínimo.`;}
+      else m.innerHTML=`¡Llegaste en ${cur.n}! Se puede en ${cur.min}. Prueba otra vez.`;}}
+  $('#lRs').onclick=()=>{cur.pos=cur.s.slice();cur.n=0;hist=[cur.s.slice()];done=false;$('#lN').textContent=0;$('#lM').textContent='';draw();};
+  $('#lNx').onclick=q;secs.push({root:$('#sL'),next:q});q();
+})();
+
+/* Bandeja 4: capturar */
+(function(){
+  const B=Board($('#bK'),tap);let score=0,cur,done,sel=new Set();
+  function q(){done=false;sel=new Set();const L=2;let k,ne,ok=false;
+    const lv=window.__kLevel||0;
+    for(let n=0;n<500&&!ok;n++){
+      k=PK([['rey','caballo'],['torre'],['alfil'],['dama'],['peon','torre','alfil','dama','caballo']][NV.get()]);
+      const us=[k==='peon'?RR(1,5):rnd(8)];us[0]=rnd(8);const f=us[0],r=k==='peon'?RR(1,5):rnd(8);
+      ne=NV.get()===4?RR(4,6):RR(3,5);const en=[],occ={};occ[f+','+r]='w';
+      while(en.length<ne){const a=rnd(8),b=rnd(8);if(occ[a+','+b])continue;occ[a+','+b]='b';en.push({k:PK(['peon','caballo','alfil','torre']),f:a,r:b});}
+      const cov=cover(k,f,r,occ,'w');const exp=en.filter(e=>cov.some(c=>c[0]===e.f&&c[1]===e.r));
+      if(exp.length>=1&&exp.length<=3){cur={k,f,r,en,exp,occ};ok=true;}}
+    $('#kQ').innerHTML=`Toca las piezas rojas que ${nomP(k)} puede capturar.`;$('#kM').textContent='';draw();}
+  function draw(res){B.clear();B.put(cur.f,cur.r,cur.k,'w');B.at(cur.f,cur.r).classList.add('sel');
+    cur.en.forEach(e=>{B.put(e.f,e.r,e.k,'b');const c=B.at(e.f,e.r);if(sel.has(e.f+','+e.r))c.classList.add('pk');
+      if(res){const should=cur.exp.includes(e),has=sel.has(e.f+','+e.r);c.classList.remove('pk');if(should&&has)c.classList.add('ok');else if(should)c.classList.add('mis');else if(has)c.classList.add('no');}});}
+  function tap(f,r){if(done)return;const k=f+','+r;if(!cur.en.some(e=>e.f===f&&e.r===r))return;sel.has(k)?sel.delete(k):sel.add(k);if(window.Snd)Snd.tick();draw();}
+  $('#kOk').onclick=()=>{const m=$('#kM');const exp=new Set(cur.exp.map(e=>e.f+','+e.r));let falta=0,sobra=0;exp.forEach(x=>{if(!sel.has(x))falta++;});sel.forEach(x=>{if(!exp.has(x))sobra++;});
+    if(!falta&&!sobra){if(!done){score++;$('#kSc').textContent=score;}done=true;draw(true);if(window.Snd)Snd.ok();m.innerHTML=`<span class="ok">¡Correcto!</span> Puede capturar ${exp.size}: ${cur.exp.map(e=>nm(e.f,e.r)).join(', ')}.`;}
+    else{if(window.Snd)Snd.bad();draw(true);m.innerHTML=`<span class="bad">Casi.</span> ${falta?'Naranja: faltan. ':''}${sobra?'Rojo: no las alcanza. ':''}Recuerda que ${nomP(cur.k).replace(/^el |^la /,'')} ${P[cur.k].d}${['torre','alfil','dama'].includes(cur.k)?' No salta sobre otras piezas.':''}`;}};
+  $('#kNx').onclick=q;secs.push({root:$('#sK'),next:q});
+  var NV={get:()=>0};
+  NV=Niveles($('#bK'),['Rey y caballo','La torre','El alfil','La dama','Todas, con peones'],()=>q());
+  q();
+})();
+
+/* Bandeja 5: puntos de las piezas */
+(function(){
+  let score=0,cur,done;
+  const NV=Niveles($('#vAnc'),['Valor de una pieza','Sumar 2 o 3 piezas','Sumar hasta 6 piezas','¿Quién tiene más?','¿Cuántos puntos de ventaja?'],()=>q());
+  const ks=['peon','caballo','alfil','torre','dama'];
+  const fila=(list,red)=>`<div class="pcs${red?' red':''}">${list.map(k=>(red?NG:BL)[k]).join(' ')}</div>`;
+  function lista(n,maxK){const a=[];for(let i=0;i<n;i++)a.push(PK(ks.slice(0,maxK)));return a;}
+  const sum=a=>a.reduce((t,k)=>t+VAL[k],0);
+  function q(){const L=NV.get();done=false;let txt='',ans,msg,chips=null;
+    $('#vT').innerHTML=L<4?ks.map(k=>`<span><b>${NG[k]}</b>${VAL[k]}</span>`).join(''):'<span>Recuerda: ♟ 1 · ♞ 3 · ♝ 3 · ♜ 5 · ♛ 9</span>';
+    if(L===0){const k=PK(ks);ans=VAL[k];$('#vP').innerHTML=`<div class="pcs">${NG[k]}</div>`;txt='¿Cuántos puntos vale esta pieza?';msg=`${nomP(k)} vale ${ans}.`;if(0)0;}
+    else if(L===1){const a=lista(RR(2,3),4);ans=sum(a);$('#vP').innerHTML=fila(a,true);txt='¿Cuántos puntos suman?';msg=a.map(k=>VAL[k]).join(' + ')+` = ${ans}`;}
+    else if(L===2){const a=lista(RR(4,6),5);ans=sum(a);$('#vP').innerHTML=fila(a,true);txt='¿Cuántos puntos suman?';msg=a.map(k=>VAL[k]).join(' + ')+` = ${ans}`;}
+    else{let a,b;do{a=lista(RR(3,5),5);b=lista(RR(3,5),5);}while(L===3?false:sum(a)===sum(b));
+      const sa=sum(a),sb=sum(b);$('#vP').innerHTML=`<p class="lbl">Blancas</p>${fila(a,false)}<p class="lbl">Negras</p>${fila(b,true)}`;
+      if(L===3){txt='¿Qué bando tiene más puntos?';ans=sa>sb?'Blancas':sa<sb?'Negras':'Empate';chips=['Blancas','Negras','Empate'];msg=`Blancas ${sa}, negras ${sb}.`;}
+      else{txt='¿Cuántos puntos de ventaja tiene el bando que va ganando?';ans=Math.abs(sa-sb);msg=`${sa} y ${sb}: la diferencia es ${ans}.`;}}
+    cur={ans,msg};$('#vM').textContent='';$('#vIn').innerHTML='';
+    const p=document.createElement('p');p.style.fontSize='1.25rem';p.textContent=txt;$('#vIn').appendChild(p);
+    const box=document.createElement('div');$('#vIn').appendChild(box);
+    if(chips){box.className='chips';chips.forEach(c=>box.appendChild(btn('',c,()=>res(c))));}else Construir(box,{max:2,submit:v=>res(v[0])});}
+  function res(v){const m=$('#vM');if(v===cur.ans){if(!done){score++;$('#vSc').textContent=score;}done=true;if(window.Snd)Snd.ok();m.innerHTML=`<span class="ok">¡Correcto!</span> ${cur.msg}`;}
+    else{if(window.Snd)Snd.bad();m.innerHTML=`<span class="bad">Casi.</span> Suma el valor de cada pieza.`;}}
+  $('#vNx').onclick=q;secs.push({root:$('#sV'),next:q});q();
+})();
+
+/* Bandeja 6: jaque */
+(function(){
+  const B=Board($('#bJ'),tap);let score=0,cur,done;
+  const NV=Niveles($('#bJ'),['Torre o alfil, sin estorbos','Torre o dama, con una pieza en medio','Alfil o dama','Caballo y otras piezas','Toca la pieza que da jaque'],()=>q());
+  function build(L){const occ={},ws=[];const king=[rnd(8),rnd(8)];occ[king.join(',')]='b';
+    const place=(k)=>{for(let n=0;n<80;n++){const f=rnd(8),r=k==='peon'?RR(1,5):rnd(8);if(!occ[f+','+r]){occ[f+','+r]='w';ws.push({k,f,r});return true;}}return false;};
+    const sets=[['torre','alfil'],['torre','dama'],['alfil','dama'],['caballo','torre','alfil'],['torre','alfil','caballo','dama']];
+    const nP=L<=1?1:L===4?RR(3,4):2;for(let i=0;i<nP;i++)place(PK(sets[L]));
+    if(L===1||L===2){place('peon');}
+    return {king,ws,occ};}
+  const att=(S)=>S.ws.filter(w=>cover(w.k,w.f,w.r,S.occ,'w').some(c=>c[0]===S.king[0]&&c[1]===S.king[1]));
+  function q(){const L=NV.get();done=false;let S,a=0;
+    for(let n=0;n<600;n++){S=build(L);a=att(S).length;if(L===4?a===1:(n%2===0?a>=1:a===0))break;}
+    cur={S,a,L};draw();$('#jM').textContent='';const o=$('#jIn');o.innerHTML='';
+    if(L<4){$('#jQ').textContent='¿El rey rojo está en jaque?';['Sí','No'].forEach(t=>o.appendChild(btn('',t,()=>res(t==='Sí'))));}
+    else $('#jQ').textContent='Toca la pieza blanca que da jaque.';}
+  function draw(){B.clear();cur.S.ws.forEach(w=>B.put(w.f,w.r,w.k,'w'));B.put(cur.S.king[0],cur.S.king[1],'rey','b');}
+  function why(){const S=cur.S,A=att(S);if(A.length)return `${A.map(w=>P[w.k].n+' en '+nm(w.f,w.r)).join(' y ')} ataca${A.length>1?'n':''} al rey.`;
+    const blocked=S.ws.filter(w=>['torre','alfil','dama'].includes(w.k)&&cover(w.k,w.f,w.r,{},'w').some(c=>c[0]===S.king[0]&&c[1]===S.king[1]));
+    return blocked.length?`${P[blocked[0].k].n} en ${nm(blocked[0].f,blocked[0].r)} tiene otra pieza en medio.`:'Ninguna pieza llega al rey.';}
+  function res(v){if(done)return;const m=$('#jM');
+    if(v===(cur.a>0)){if(!done){score++;$('#jSc').textContent=score;}done=true;if(window.Snd)Snd.ok();m.innerHTML=`<span class="ok">¡Correcto!</span> ${why()}`;}
+    else{if(window.Snd)Snd.bad();m.innerHTML=`<span class="bad">Casi.</span> Mira si hay camino libre entre la pieza y el rey.`;}}
+  function tap(f,r){if(cur.L<4||done)return;const w=cur.S.ws.find(x=>x.f===f&&x.r===r);if(!w)return;const m=$('#jM');
+    if(att(cur.S).includes(w)){done=true;score++;$('#jSc').textContent=score;B.at(f,r).classList.add('ok');if(window.Snd)Snd.ok();m.innerHTML=`<span class="ok">¡Correcto!</span> ${why()}`;}
+    else{B.at(f,r).classList.add('no');if(window.Snd)Snd.bad();m.innerHTML=`<span class="bad">Casi.</span> Esa pieza no llega al rey.`;}}
+  $('#jNx').onclick=q;secs.push({root:$('#sJ'),next:q});q();
+})();
+
 /* Bandeja 3 */
 (function(){
   const B=Board($('#b3'),()=>{});let score=0,cur,done=false;
@@ -159,11 +347,11 @@ const secs=[];
     $('#q3').innerHTML=`${P[k].n} está en <b>${nm(f,r)}</b>. ¿A cuántas casillas puede ir?`;
     const set=new Set([a]);let g=0;while(set.size<4&&g++<60){const v=Math.max(0,a+[-3,-2,-1,1,2,3][rnd(6)]);set.add(v);}
     Construir($('#o3'),{max:2,submit:v=>ans(v[0])});
-    $('#m3').textContent='Pista: cuenta los puntos que verías si la colocaras en el tablero de la bandeja 2.';}
+    $('#m3').textContent='Pista: pon la pieza en la bandeja 2 y cuenta los puntos.';}
   function ans(v){
     if(v===cur.a){if(!done){score++;$('#sc3').textContent=score;}done=true;B.mark(cur.mv,'mv');
       $('#m3').innerHTML=`<span class="ok">¡Correcto!</span> Son ${cur.a} casillas (puntos verdes). Pulsa Siguiente para otra.`;}
-    else $('#m3').innerHTML=`<span class="bad">Casi.</span> Vuelve a contar. Piensa cómo se mueve ${P[cur.k].n.toLowerCase().replace('el ','').replace('la ','')}: ${P[cur.k].d}`;}
+    else $('#m3').innerHTML=`<span class="bad">Casi.</span> Cuenta otra vez. Recuerda:  ${P[cur.k].n.toLowerCase().replace('el ','').replace('la ','')}: ${P[cur.k].d}`;}
   $('#n3').addEventListener('click',q);
   secs.push({root:$('#s3'),next(){q();}});
   q();
@@ -174,5 +362,5 @@ secs.forEach(s=>{s.root.addEventListener('pointerdown',()=>{active=s;},true);s.r
 $('#next').addEventListener('click',()=>active.next());
 </script>
 <script src="taller.js"></script>
-<script src="pantalla.js"></script>
+<script src="perfiles.js"></script><script src="perfilui.js"></script><script src="pantalla.js"></script>
 </body></html>

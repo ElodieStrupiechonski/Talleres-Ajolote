@@ -18,20 +18,41 @@ svg.ch{width:min(100%,420px);height:auto;background:var(--card);border-radius:10
 .coin{font-family:var(--display);font-weight:800;font-size:1.3rem}
 .bag{display:flex;flex-wrap:wrap;gap:6px;padding:12px;background:var(--card);border-radius:14px;border:3px solid var(--fg);max-width:340px}
 .bag i{width:34px;height:34px;border-radius:50%;border:2px solid var(--fg);display:block}
+
+.ctl{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center}
+.cfig{display:flex;gap:10px;align-items:center;min-height:100px}
+.cfig svg{width:96px;height:96px;display:block}
+.zs{display:flex;gap:8px;flex-wrap:wrap}
+.zs button{min-height:56px;font-weight:800;border-width:3px}
+.z0{background:#d9d3c7}.z1{background:#c3e6f2}.z2{background:#f2e08a}.z3{background:#f5b87a}.z4{background:#9fd3ab}
+.escala{height:16px;border-radius:8px;border:3px solid var(--fg);background:linear-gradient(90deg,#d9d3c7,#c3e6f2 25%,#f2e08a 50%,#f5b87a 75%,#9fd3ab);max-width:560px;position:relative}
+.escala i{position:absolute;top:-10px;width:6px;height:32px;background:var(--fg);border-radius:3px;transform:translateX(-3px)}
+.escala-l{display:flex;justify-content:space-between;max-width:560px;font-size:.9rem;color:var(--muted)}
+.story2{display:flex;align-items:center;gap:16px}.story2 svg{width:110px;height:110px;flex:none}.story2 p{font-size:1.3rem;margin:0}
+svg.rul{width:min(100%,300px);height:auto;flex:none}
+svg.rul path.sec{cursor:pointer}
+.rul-g{transition:transform 2.2s cubic-bezier(.15,.7,.2,1)}
+.tally{display:flex;flex-direction:column;gap:6px;min-width:220px}
+.tally .rw{display:flex;align-items:center;gap:8px}.tally .rw i{width:22px;height:22px;border-radius:50%;border:3px solid var(--fg);flex:none}
+.tally .bb{flex:1;height:20px;background:var(--tray-edge);border-radius:6px;position:relative;overflow:hidden}.tally .bb b{display:block;height:100%}
+.tally .bb u{position:absolute;top:0;bottom:0;border-left:3px solid var(--fg);text-decoration:none}
+.tree{width:min(100%,420px);background:var(--card);border-radius:10px}
+.tree text{font-family:var(--display);font-weight:800;font-size:15px;fill:var(--fg)}
+.tree .hit{fill:#9fd3ab}
 </style></head><body>
 <div class="wrap">
   <a class="back" href="index.html">← Todos los talleres</a>
   <header class="col">
     <h1>Probabilidad</h1>
-    <p class="lead">Lanzamos monedas y dados y sacamos canicas para ver qué tan seguido ocurre cada resultado.</p>
+    <p class="lead">Lanzamos monedas y dados, giramos ruletas y sacamos canicas para ver qué tan seguido ocurre cada resultado.</p>
   </header>
   <section class="tray" id="s1" aria-labelledby="t1">
-    <span class="step">Bandeja 1 · Lanzar la moneda</span>
+    <span class="step">Bandeja 1 · Moneda</span>
     <h2 id="t1">Águila o sol</h2>
-    <p>Lanza muchas veces. ¿Qué pasa con la fracción de águilas?</p>
-    <p class="det">Lanza la moneda muchas veces. La línea punteada marca ½. ¿Qué pasa con la fracción de águilas cuando lanzamos más veces?</p>
+    <p class="det">Lanza muchas veces y mira la fracción de águilas. La línea punteada marca ½.</p>
     <div class="row">
       <div class="col ed">
+        <div class="cfig" id="coin1"></div>
         <p class="coin" id="last1"></p>
         <div class="btns"><button id="l1" type="button">Lanzar 1</button><button id="l10" type="button">Lanzar 10</button><button id="l100" type="button">Lanzar 100</button><button id="r1" type="button">Borrar</button></div>
         <div id="hb1"></div>
@@ -43,11 +64,11 @@ svg.ch{width:min(100%,420px);height:auto;background:var(--card);border-radius:10
   <section class="tray" id="s2" aria-labelledby="t2">
     <span class="step">Bandeja 2 · Dados</span>
     <h2 id="t2">Un dado y dos dados</h2>
-    <p>Barras = lo que sale. Rayitas = lo esperado.</p>
-    <p class="det">Las barras de colores son lo que sale en la práctica. Las rayitas negras son lo que esperamos en teoría.</p>
+    <p class="det">Las barras son lo que sale. Las rayitas negras son lo que esperamos.</p>
     <div class="chips" id="md"></div>
     <div class="row">
       <div class="col ed">
+        <div class="cfig" id="dc2"></div>
         <p class="coin" id="last2"></p>
         <div class="btns"><button id="d1" type="button">Lanzar 1</button><button id="d10" type="button">Lanzar 10</button><button id="d100" type="button">Lanzar 100</button><button id="dr" type="button">Borrar</button></div>
         <p class="note" id="i2" aria-live="polite"></p>
@@ -56,23 +77,76 @@ svg.ch{width:min(100%,420px);height:auto;background:var(--card);border-radius:10
     </div>
   </section>
   <section class="tray" id="s3" aria-labelledby="t3">
-    <span class="step">Bandeja 3 · La bolsa de canicas</span>
-    <h2 id="t3">Sin mirar, ¿qué probabilidad hay?</h2>
-    
+    <span class="step">Bandeja 3 · Qué tan probable</span>
+    <h2 id="t3">De imposible a seguro</h2>
+    <div class="ctl" id="lv3"></div>
+    <div class="story2" id="st3"></div>
+    <div class="escala" aria-hidden="true"><i id="mk3" style="left:50%;display:none"></i></div>
+    <div class="escala-l"><span>0</span><span>½</span><span>1</span></div>
+    <div class="zs" id="z3"></div>
+    <div class="chips" id="o3"></div>
+    <p class="note" id="m3" aria-live="polite"></p>
+    <p>Aciertos: <b id="sc3">0</b> · <button id="n3" type="button">Siguiente</button></p>
+  </section>
+  <section class="tray" id="s4" aria-labelledby="t4">
+    <span class="step">Bandeja 4 · Ruleta</span>
+    <h2 id="t4">El área manda</h2>
+    <p class="det">Cuanto más grande es la parte de un color, más seguido sale. En «Diseña», toca las partes para pintarlas.</p>
+    <div class="chips" id="md4"></div>
+    <div class="ctl" id="lv4"></div>
+    <div class="row">
+      <svg class="rul" id="ru4" viewBox="0 0 200 210" role="img" aria-label="Ruleta"></svg>
+      <div class="col ed">
+        <p id="q4" style="font-size:1.25rem"></p>
+        <div class="tally" id="ta4"></div>
+        <div class="btns" id="bt4"></div>
+        <p class="note" id="m4" aria-live="polite"></p>
+        <p id="sw4">Aciertos: <b id="sc4">0</b></p>
+      </div>
+    </div>
+  </section>
+  <section class="tray" id="s5" aria-labelledby="t5">
+    <span class="step">Bandeja 5 · Dos monedas</span>
+    <h2 id="t5">Lanzamos dos monedas</h2>
+    <p class="det">Cada moneda puede salir águila (A) o sol (S). Hay 4 resultados: AA, AS, SA, SS.</p>
+    <div class="row">
+      <div class="col ed">
+        <div class="cfig" id="coin5"></div>
+        <div class="btns"><button id="e1" type="button">Lanzar 1</button><button id="e10" type="button">Lanzar 10</button><button id="e100" type="button">Lanzar 100</button><button id="er" type="button">Borrar</button></div>
+        <p class="note" id="i5" aria-live="polite"></p>
+      </div>
+      <svg class="ch" id="g5" viewBox="0 0 300 170" role="img" aria-label="Resultados de dos monedas"></svg>
+    </div>
+  </section>
+  <section class="tray" id="s6" aria-labelledby="t6">
+    <span class="step">Bandeja 6 · Todos los resultados</span>
+    <h2 id="t6">Cuenta las formas</h2>
+    <div class="ctl" id="lv6"></div>
+    <div class="row">
+      <svg class="tree" id="tr6" viewBox="0 0 320 200" role="img" aria-label="Árbol de resultados"></svg>
+      <div class="col ed"><p id="q6" style="font-size:1.25rem"></p><div class="chips" id="o6"></div><p class="note" id="m6" aria-live="polite"></p>
+        <p>Aciertos: <b id="sc6">0</b> · <button id="n6" type="button">Siguiente</button></p></div>
+    </div>
+  </section>
+  <section class="tray" id="s7" aria-labelledby="t7">
+    <span class="step">Bandeja 7 · La bolsa de canicas</span>
+    <h2 id="t7">Sin mirar, ¿qué probabilidad hay?</h2>
+    <div class="ctl" id="lv7"></div>
     <div class="row">
       <div class="bag" id="bag" aria-label="Bolsa de canicas"></div>
       <div class="col ed">
-        <p id="q3" style="font-size:1.25rem"></p>
-        <div class="chips" id="o3"></div>
-        <p class="note" id="m3" aria-live="polite"></p>
+        <p id="q7" style="font-size:1.25rem"></p>
+        <div class="chips" id="o7"></div>
+        <p class="note" id="m7" aria-live="polite"></p>
         <div class="btns"><button id="x20" type="button">Sacar 20 al azar</button></div>
-        <p class="note" id="e3" aria-live="polite"></p>
-        <p>Aciertos: <b id="sc3">0</b> · <button id="n3" type="button">Siguiente</button></p>
+        <p class="note" id="e7" aria-live="polite"></p>
+        <p>Aciertos: <b id="sc7">0</b> · <button id="n7" type="button">Siguiente</button></p>
       </div>
     </div>
   </section>
 </div>
 <button id="next" hidden aria-hidden="true" tabindex="-1">Siguiente</button>
+<script src="ilustra.js"></script>
 <script src="sonido.js"></script>
 <script src="construir.js"></script>
 <script>
@@ -80,15 +154,20 @@ const $=s=>document.querySelector(s);
 const h=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;};
 const btn=(cls,txt,fn)=>{const b=h('button',cls,txt);b.type='button';b.addEventListener('click',fn);return b;};
 const rnd=n=>Math.floor(Math.random()*n);
+const R0=(a,b)=>a+rnd(b-a+1);
 const gcd=(a,b)=>b?gcd(b,a%b):a;
 const shuffle=a=>a.sort(()=>Math.random()-.5);
 const fr=(n,d)=>{if(n===0)return '0';const g=gcd(n,d);n/=g;d/=g;return d===1?String(n):n+'/'+d;};
 const secs=[];
-
 const pc=(a,n)=>(Math.round(a/n*1000)/10)+' %';
-/* Bandeja 1 */
+const NS='http://www.w3.org/2000/svg';
+const INK='#41362b',COL={cream:'#fffdf9',blue:'#86aedb',red:'#e9806c',yel:'#f2c77a',green:'#86c496'};
+
+/* Bandeja 1: moneda */
 (function(){
-  let H=0,T=0,hist=[];
+  let H=0,T=0,hist=[],anim=null;
+  const face=a=>Ilu.html(a?'moneda_aguila':'moneda_sol');
+  $('#coin1').innerHTML=face(true);
   function draw(){const n=H+T;
     $('#hb1').innerHTML=`<div>Águila: ${H} de ${n}</div><div class="hbar"><i style="width:${n?H/n*100:0}%;background:var(--gold)"></i><u></u></div><div>Sol: ${T} de ${n}</div><div class="hbar"><i style="width:${n?T/n*100:0}%;background:var(--blue)"></i><u></u></div>`;
     $('#i1').innerHTML=n?`Águilas: <b>${H}/${n}</b> = ${pc(H,n)}. Soles: ${T}/${n} = ${pc(T,n)}.`:'Pulsa Lanzar.';
@@ -96,19 +175,20 @@ const pc=(a,n)=>(Math.round(a/n*1000)/10)+' %';
     s+=`<line x1="30" y1="65" x2="290" y2="65" stroke="var(--fg)" stroke-dasharray="5 4"/><text x="4" y="14">1</text><text x="4" y="68">½</text><text x="4" y="123">0</text><text x="150" y="136">lanzamientos</text>`;
     if(hist.length){const m=Math.max(hist.length,10);const pts=hist.map((v,i)=>`${30+(i+1)/m*260},${120-v*110}`).join(' ');s+=`<polyline points="${pts}" fill="none" stroke="var(--red)" stroke-width="2.5"/>`;}
     $('#g1').innerHTML=s;}
-  function throwN(k,show){let last;for(let i=0;i<k;i++){const a=Math.random()<.5;a?H++:T++;last=a;hist.push(H/(H+T));}
-    $('#last1').textContent=k===1?(last?'Salió águila':'Salió sol'):`Lanzamos ${k} veces`;draw();}
+  function throwN(k){let last;for(let i=0;i<k;i++){const a=Math.random()<.5;a?H++:T++;last=a;hist.push(H/(H+T));}
+    $('#coin1').innerHTML=Ilu.html('moneda_gira');clearTimeout(anim);if(window.Snd)Snd.pop();
+    anim=setTimeout(()=>{$('#coin1').innerHTML=face(last);$('#last1').textContent=k===1?(last?'Salió águila':'Salió sol'):`Lanzamos ${k} veces`;draw();},650);}
   $('#l1').onclick=()=>throwN(1);$('#l10').onclick=()=>throwN(10);$('#l100').onclick=()=>throwN(100);
-  $('#r1').onclick=()=>{H=T=0;hist=[];$('#last1').textContent='';draw();};
+  $('#r1').onclick=()=>{H=T=0;hist=[];$('#last1').textContent='';$('#coin1').innerHTML=face(true);draw();};
   secs.push({root:$('#s1'),next(){throwN(10);}});draw();
 })();
 
-/* Bandeja 2 */
+/* Bandeja 2: dados */
 (function(){
-  let mode=2,cnt={},n=0;
+  let mode=2,cnt={},n=0,anim=null;
   const range=()=>mode===1?[1,2,3,4,5,6]:[2,3,4,5,6,7,8,9,10,11,12];
   const th=v=>mode===1?1/6:(6-Math.abs(v-7))/36;
-  function reset(){cnt={};n=0;range().forEach(v=>cnt[v]=0);$('#last2').textContent='';draw();}
+  function reset(){cnt={};n=0;range().forEach(v=>cnt[v]=0);$('#last2').textContent='';$('#dc2').innerHTML=Ilu.html('dado_5')+(mode===2?Ilu.html('dado_2'):'');draw();}
   function chips(){const c=$('#md');c.innerHTML='';[[1,'1 dado'],[2,'2 dados (suma)']].forEach(([m,t])=>c.appendChild(btn(mode===m?'on':'',t,()=>{mode=m;chips();reset();})));}
   function draw(){const r=range(),W=260/r.length;let s='<line x1="30" y1="120" x2="290" y2="120" stroke="var(--fg)"/>';
     const maxT=Math.max(...r.map(th)),top=Math.max(maxT,n?Math.max(...r.map(v=>cnt[v]/n)):0)*1.15;
@@ -117,37 +197,158 @@ const pc=(a,n)=>(Math.round(a/n*1000)/10)+' %';
       s+=`<line x1="${x}" y1="${120-t}" x2="${x+W}" y2="${120-t}" stroke="var(--fg)" stroke-width="3"/>`;
       s+=`<text x="${x+W/2}" y="134" text-anchor="middle" style="font-size:13px;fill:var(--fg)">${v}</text>`;});
     s+='<text x="30" y="150">cada barra: veces que salió ÷ lanzamientos</text>';$('#g2').innerHTML=s;
-    $('#i2').innerHTML=(n?`Lanzamientos: <b>${n}</b>. `:'')+(mode===1?'En teoría cada cara sale 1/6 de las veces.':'En teoría el <b>7</b> sale más (6 formas de 36 = 1/6); el 2 y el 12 salen menos (1 forma de 36).');}
-  function roll(k){let last;for(let i=0;i<k;i++){const a=1+rnd(6),b=1+rnd(6),v=mode===1?a:a+b;cnt[v]++;n++;last=mode===1?`${a}`:`${a} + ${b} = ${v}`;}
-    $('#last2').textContent=k===1?'Salió: '+last:`Lanzamos ${k} veces`;draw();}
+    $('#i2').innerHTML=(n?`Lanzamientos: <b>${n}</b>. `:'')+(mode===1?'Cada cara sale 1/6 de las veces.':'El <b>7</b> sale más (6 formas de 36 = 1/6). El 2 y el 12 salen menos (1 forma de 36).');}
+  function roll(k){let A,B,v;for(let i=0;i<k;i++){A=1+rnd(6);B=1+rnd(6);v=mode===1?A:A+B;cnt[v]++;n++;}
+    $('#dc2').innerHTML=Ilu.html('dado_rueda')+(mode===2?Ilu.html('dado_rueda'):'');clearTimeout(anim);if(window.Snd)Snd.pop();
+    anim=setTimeout(()=>{$('#dc2').innerHTML=Ilu.html('dado_'+A)+(mode===2?Ilu.html('dado_'+B):'');$('#last2').textContent=k===1?(mode===1?'Salió '+A:`${A} + ${B} = ${v}`):`Lanzamos ${k} veces`;draw();},650);}
   $('#d1').onclick=()=>roll(1);$('#d10').onclick=()=>roll(10);$('#d100').onclick=()=>roll(100);$('#dr').onclick=reset;
   secs.push({root:$('#s2'),next(){roll(10);}});chips();reset();
 })();
 
-/* Bandeja 3 */
+/* Bandeja 3: qué tan probable */
 (function(){
-  const COL=[['roja','#e9806c','rojas'],['azul','#6f9fd3','azules'],['verde','#6fb584','verdes']];
+  let score=0,cur,done;
+  const NV=Niveles($('#st3'),['Imposible, posible o seguro','Cinco niveles','La bolsa de canicas','Un número de 0 a 1','¿Cuál es más probable?'],()=>q());
+  const ZN=['Imposible','Poco probable','A medias','Muy probable','Seguro'];
+  const zone=p=>p===0?0:p<.4?1:p<=.6?2:p<1?3:4;
+  const EV=[['Sale un 7 en un dado normal',0,'dado_6'],['Sale un número del 1 al 6 en un dado',1,'dado_6'],['Sale águila o sol en una moneda',1,'moneda_gira'],['Sale águila en una moneda',.5,'moneda_aguila'],['Sale un 6 en un dado',1/6,'dado_6'],['Sale un número menor que 6 en un dado',5/6,'dado_3'],['Sale un número par en un dado',.5,'dado_2'],['Sacamos una canica roja de una bolsa con solo canicas azules',0,'canica_azul'],['Sacamos una canica azul de una bolsa con solo canicas azules',1,'canica_azul'],['Sacamos una canica verde de 1 verde y 9 rojas',.1,'canica_verde'],['Sacamos una canica roja de 9 rojas y 1 verde',.9,'canica_roja'],['Sale un número mayor que 6 en un dado',0,'dado_6']];
+  const frs=[[0,1],[1,6],[1,4],[1,3],[1,2],[2,3],[3,4],[5,6],[1,1]];
+  function q(){done=false;$('#m3').textContent='';$('#mk3').style.display='none';const L=NV.get(),z=$('#z3'),o=$('#o3');z.innerHTML='';o.innerHTML='';
+    if(L<=1){const pool=L===0?EV.filter(e=>e[1]===0||e[1]===1||e[1]===.5):EV;const e=pool[rnd(pool.length)];
+      $('#st3').innerHTML=Ilu.html(e[2])+`<p>${e[0]}.</p>`;
+      const labels=L===0?[['Imposible',0,'z0'],['Posible',1,'z2'],['Seguro',2,'z4']]:ZN.map((t,i)=>[t,i,'z'+i]);
+      const a=L===0?(e[1]===0?0:e[1]===1?2:1):zone(e[1]);cur={ans:a,p:e[1],msg:`${e[0]}: ${L===0?labels[a][0]:ZN[zone(e[1])]}`};
+      labels.forEach(([t,i,c])=>{const b=btn(c,t,()=>res(i));z.appendChild(b);});}
+    else if(L===2){const c=[R0(0,6),R0(0,6)];if(c[0]+c[1]===0)c[0]=3;const tot=c[0]+c[1],p=c[0]/tot;
+      $('#st3').innerHTML=Ilu.html('bolsa_canicas')+`<p>${c[0]} rojas y ${c[1]} azules. Sacamos una <b>roja</b> sin mirar.</p>`;
+      cur={ans:zone(p),p,msg:`${c[0]} de ${tot}: ${fr(c[0],tot)}. ${ZN[zone(p)]}.`};ZN.forEach((t,i)=>z.appendChild(btn('z'+i,t,()=>res(i))));}
+    else if(L===3){const e=EV.filter(x=>frs.some(f=>Math.abs(f[0]/f[1]-x[1])<1e-9))[0];const ev=EV.filter(x=>frs.some(f=>Math.abs(f[0]/f[1]-x[1])<1e-9)&&x[1]!==undefined);const E=ev[rnd(ev.length)];
+      $('#st3').innerHTML=Ilu.html(E[2])+`<p>${E[0]}. ¿Qué fracción describe qué tan probable es?</p>`;const f=frs.find(f=>Math.abs(f[0]/f[1]-E[1])<1e-9);
+      cur={ans:fr(f[0],f[1]),p:E[1],msg:`${fr(f[0],f[1])}`};Construir(o,{n:2,sep:'/',labels:['arriba','abajo'],max:2,submit:v=>res(fr(v[0],v[1]))});}
+    else{const a=[R0(1,6),R0(1,6)],b=[R0(1,6),R0(1,6)];const pa=a[0]/(a[0]+a[1]),pb=b[0]/(b[0]+b[1]);if(Math.abs(pa-pb)<.01)return q();
+      $('#st3').innerHTML='<div style="display:flex;gap:18px;align-items:center">'+['A','B'].map((t,i)=>{const c=i?b:a;return `<div style="text-align:center"><b>Bolsa ${t}</b><br>${Ilu.html('bolsa_canicas')}<br>${c[0]} rojas, ${c[1]} azules</div>`;}).join('')+'</div>';
+      $('#st3').querySelectorAll('svg').forEach(s=>{s.style.width='90px';s.style.height='90px';});
+      cur={ans:pa>pb?'A':'B',msg:`A: ${fr(a[0],a[0]+a[1])}. B: ${fr(b[0],b[0]+b[1])}.`};$('#st3').insertAdjacentHTML('beforeend','<p style="margin-left:12px">¿En qué bolsa es más probable sacar <b>roja</b>?</p>');
+      ['A','B'].forEach(t=>z.appendChild(btn('',t==='A'?'Bolsa A':'Bolsa B',()=>res(t))));}}
+  function res(x){if(String(x)===String(cur.ans)){if(!done){score++;$('#sc3').textContent=score;}done=true;if(cur.p!=null){$('#mk3').style.display='block';$('#mk3').style.left=(cur.p*100)+'%';}$('#m3').innerHTML=`<span class="ok">¡Correcto!</span> ${cur.msg}`;}
+    else $('#m3').innerHTML='<span class="bad">Casi.</span> 0 es imposible y 1 es seguro. ¿Dónde cae?';}
+  $('#n3').onclick=q;secs.push({root:$('#s3'),next:q});q();
+})();
+
+/* Bandeja 4: ruleta */
+(function(){
+  let mode='girar',score=0,rot=0,spinning=false,tal={},n=0,inj=false,sec=[],goal=null,done=false;
+  const NV=Niveles($('#lv4'),['4 partes','6 partes','8 partes','12 partes','Dos colores'],()=>{if(mode==='disena')nuevo();});
+  const CY=['cream','blue','red'];
+  function pie(cols,ws,g){const tot=ws.reduce((a,b)=>a+b,0);let a0=-Math.PI/2,o='';const cx=100,cy=100,R=84;
+    cols.forEach((c,i)=>{const a1=a0+ws[i]/tot*2*Math.PI,x0=cx+R*Math.cos(a0),y0=cy+R*Math.sin(a0),x1=cx+R*Math.cos(a1),y1=cy+R*Math.sin(a1);
+      o+=ws[i]===tot?`<circle class="sec" data-i="${i}" cx="${cx}" cy="${cy}" r="${R}" fill="${COL[c]}" stroke="${INK}" stroke-width="4"/>`:`<path class="sec" data-i="${i}" d="M${cx} ${cy} L${x0.toFixed(1)} ${y0.toFixed(1)} A${R} ${R} 0 ${ws[i]/tot>.5?1:0} 1 ${x1.toFixed(1)} ${y1.toFixed(1)} Z" fill="${COL[c]}" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/>`;a0=a1;});return o;}
+  function draw(){const svg=$('#ru4');let s='';
+    if(mode==='girar'){const cols=['red','blue','yel','green'],ws=inj?[4,2,1,1]:[1,1,1,1];sec={cols,ws};
+      s+=`<g class="rul-g" style="transform-origin:100px 100px;transform:rotate(${rot}deg)">${pie(cols,ws)}</g>`;}
+    else{s+=pie(sec.cols,sec.cols.map(()=>1));}
+    s+=`<circle cx="100" cy="100" r="9" fill="${COL.cream}" stroke="${INK}" stroke-width="4"/><path d="M100 14 L90 -2 L110 -2 Z" transform="translate(0,8)" fill="${INK}" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/>`;
+    svg.innerHTML=s;
+    if(mode==='disena')svg.querySelectorAll('.sec').forEach(p=>p.addEventListener('click',()=>{const i=+p.dataset.i;const set=goal.two?['cream','blue','red']:['cream','blue'];sec.cols[i]=set[(set.indexOf(sec.cols[i])+1)%set.length];done=false;$('#m4').textContent='';draw();if(window.Snd)Snd.pop();}));}
+  function tally(){const t=$('#ta4');t.innerHTML='';if(mode!=='girar')return;const tot=sec.ws.reduce((a,b)=>a+b,0);
+    sec.cols.forEach((c,i)=>{const f=n?(tal[c]||0)/n:0,th=sec.ws[i]/tot;t.insertAdjacentHTML('beforeend',`<div class="rw"><i style="background:${COL[c]}"></i><div class="bb"><b style="width:${f*100}%;background:${COL[c]}"></b><u style="left:${th*100}%"></u></div><span>${tal[c]||0}</span></div>`);});
+    t.insertAdjacentHTML('beforeend',`<small>${n?'Giros: '+n+'. ':''}La rayita negra marca lo esperado.</small>`);}
+  function spin(k){if(spinning)return;const tot=sec.ws.reduce((a,b)=>a+b,0);
+    if(k===1){spinning=true;const target=Math.random()*360;rot=Math.ceil(rot/360)*360+720+target;draw();
+      // el puntero está arriba: la parte bajo el puntero está en el ángulo (360 - rot) mod 360
+      const ang=((360-(rot%360))%360)/360*tot;let acc=0,idx=0;for(let i=0;i<sec.ws.length;i++){acc+=sec.ws[i];if(ang<acc){idx=i;break;}}
+      requestAnimationFrame(()=>{$('#ru4').querySelector('.rul-g').style.transform=`rotate(${rot}deg)`;});
+      if(window.Snd)for(let i=0;i<8;i++)setTimeout(()=>Snd.tick(),i*220);
+      setTimeout(()=>{tal[sec.cols[idx]]=(tal[sec.cols[idx]]||0)+1;n++;spinning=false;tally();$('#m4').textContent='Salió '+({red:'rojo',blue:'azul',yel:'amarillo',green:'verde'})[sec.cols[idx]]+'.';},2300);}
+    else{for(let j=0;j<k;j++){let u=Math.random()*tot,i=0;while(u>=sec.ws[i]){u-=sec.ws[i];i++;}tal[sec.cols[i]]=(tal[sec.cols[i]]||0)+1;n++;}tally();$('#m4').textContent=`Giramos ${k} veces.`;}}
+  function chipsM(){chips();}
+  function chips(){const c=$('#md4');c.innerHTML='';[['girar','Girar'],['disena','Diseña']].forEach(([k,t])=>c.appendChild(btn(mode===k?'on':'',t,()=>{mode=k;nuevo();})));
+    const nv=$('#s4 .niv');if(nv)nv.style.display=mode==='disena'?'':'none';$('#sw4').style.display=mode==='disena'?'':'none';}
+  function nuevo(){chips();$('#m4').textContent='';const B=$('#bt4');B.innerHTML='';done=false;
+    if(mode==='girar'){tal={};n=0;rot=0;$('#q4').textContent=inj?'Ruleta injusta: unas partes son más grandes.':'Ruleta justa: todas las partes son iguales.';
+      B.appendChild(btn('','Girar',()=>spin(1)));B.appendChild(btn('','Girar 20',()=>spin(20)));B.appendChild(btn('','Girar 100',()=>spin(100)));B.appendChild(btn(inj?'on':'',inj?'Cambiar a justa':'Cambiar a injusta',()=>{inj=!inj;nuevo();}));
+      draw();tally();}
+    else{const L=NV.get(),N=[4,6,8,12,8][L];sec={cols:Array(N).fill('cream'),ws:Array(N).fill(1)};
+      let opts=[[1,2],[1,4],[3,4],[1,3],[2,3],[1,6],[5,6],[1,8],[3,8],[5,12],[1,12],[7,12]].filter(f=>N%f[1]===0);
+      if(L===4){goal={two:true,b:[1,4],r:[1,2]};$('#q4').innerHTML='Pinta <b>azul</b> 1/4 y <b>rojo</b> 1/2. Lo demás queda en blanco.';}
+      else{const f=opts[rnd(opts.length)];goal={two:false,b:f};$('#q4').innerHTML=`Pinta de <b>azul</b> la parte para que la probabilidad de azul sea <b>${f[0]}/${f[1]}</b>.`;}
+      B.appendChild(btn('','✓ Comprobar',()=>{const nb=sec.cols.filter(c=>c==='blue').length,nr=sec.cols.filter(c=>c==='red').length;
+        const okb=nb*goal.b[1]===N*goal.b[0],okr=!goal.two||nr*goal.r[1]===N*goal.r[0];
+        if(okb&&okr){if(!done){score++;$('#sc4').textContent=score;}done=true;if(window.Snd)Snd.ok();$('#m4').innerHTML=`<span class="ok">¡Correcto!</span> ${nb} de ${N} azules = ${fr(nb,N)}.`;}
+        else{if(window.Snd)Snd.bad();$('#m4').innerHTML=`<span class="bad">Casi.</span> Tienes ${nb} azules de ${N} partes.`;}}));
+      B.appendChild(btn('','Siguiente',nuevo));draw();$('#ta4').innerHTML='';}}
+  secs.push({root:$('#s4'),next(){if(mode==='girar')spin(1);else nuevo();}});nuevo();
+})();
+
+/* Bandeja 5: dos monedas */
+(function(){
+  let cnt={AA:0,AS:0,SA:0,SS:0},n=0,anim=null;
+  const K=['AA','AS','SA','SS'];
+  const f=a=>Ilu.html(a==='A'?'moneda_aguila':'moneda_sol');
+  $('#coin5').innerHTML=f('A')+f('S');
+  function draw(){let s='<line x1="20" y1="130" x2="290" y2="130" stroke="var(--fg)"/>';const W=270/4;const top=Math.max(.25,n?Math.max(...K.map(k=>cnt[k]/n)):0)*1.2;
+    K.forEach((k,i)=>{const x=20+i*W,fr_=n?cnt[k]/n:0,hh=fr_/top*110,t=.25/top*110;
+      s+=`<rect x="${x+6}" y="${130-hh}" width="${W-12}" height="${hh}" fill="var(--gold)" stroke="var(--fg)"/><line x1="${x+2}" y1="${130-t}" x2="${x+W-2}" y2="${130-t}" stroke="var(--fg)" stroke-width="3"/><text x="${x+W/2}" y="148" text-anchor="middle" style="font-size:15px;fill:var(--fg);font-weight:800">${k}</text>`;});
+    s+='<text x="20" y="165">Rayita = ¼ de las veces</text>';$('#g5').innerHTML=s;
+    $('#i5').innerHTML=n?`Lanzamientos: <b>${n}</b>. 0 águilas: ${cnt.SS}. 1 águila: ${cnt.AS+cnt.SA}. 2 águilas: ${cnt.AA}.`:'1 águila sale en AS y en SA: es el doble de común.';}
+  function go(k){let a,b;for(let i=0;i<k;i++){a=rnd(2)?'A':'S';b=rnd(2)?'A':'S';cnt[a+b]++;n++;}
+    $('#coin5').innerHTML=Ilu.html('moneda_gira')+Ilu.html('moneda_gira');clearTimeout(anim);if(window.Snd)Snd.pop();anim=setTimeout(()=>{$('#coin5').innerHTML=f(a)+f(b);draw();},650);}
+  $('#e1').onclick=()=>go(1);$('#e10').onclick=()=>go(10);$('#e100').onclick=()=>go(100);
+  $('#er').onclick=()=>{cnt={AA:0,AS:0,SA:0,SS:0};n=0;$('#coin5').innerHTML=f('A')+f('S');draw();};
+  secs.push({root:$('#s5'),next(){go(10);}});draw();
+})();
+
+/* Bandeja 6: árbol de resultados */
+(function(){
+  let score=0,cur,done;
+  const NV=Niveles($('#tr6'),['¿Cuántos resultados?','Formas de un resultado','Probabilidad exacta','Al menos uno','Tres monedas'],()=>q());
+  function arbol(m,hit){let leaves=[];const f=(pre)=>pre.length===m?leaves.push(pre):(f(pre+'A'),f(pre+'S'));f('');
+    const W=320,H=m===2?200:230,x0=22,dx=(W-60)/m,yL=i=>14+(i+.5)*(H-24)/leaves.length;let s='';
+    const nodos=(pre,y0,x)=>{};
+    // líneas y etiquetas
+    const pos=pre=>{const cover=leaves.map((l,i)=>l.startsWith(pre)?i:-1).filter(i=>i>=0);return yL((cover[0]+cover[cover.length-1])/2);};
+    const px=d=>x0+d*dx;
+    const rec=(pre)=>{const d=pre.length,y=pos(pre);if(d===m)return;['A','S'].forEach(c=>{const q=pre+c,yq=pos(q);s+=`<line x1="${px(d)}" y1="${y}" x2="${px(d+1)}" y2="${yq}" stroke="${INK}" stroke-width="3"/><text x="${(px(d)+px(d+1))/2-(c==="A"?4:-4)}" y="${(y+yq)/2+(c==="A"?-4:12)}" style="font-size:13px">${c}</text>`;rec(q);});};
+    s+=`<circle cx="${px(0)}" cy="${pos('')}" r="6" fill="${INK}"/>`;rec('');
+    leaves.forEach((l,i)=>{const y=yL(i),on=hit&&hit(l);s+=`<rect class="${on?'hit':''}" x="${px(m)+6}" y="${y-11}" width="${m*14+14}" height="22" rx="6" fill="${on?'#9fd3ab':COL.cream}" stroke="${INK}" stroke-width="2.5"/><text x="${px(m)+13}" y="${y+5}" style="font-size:14px">${l}</text>`;});
+    $('#tr6').setAttribute('viewBox',`0 0 ${W+20} ${H}`);$('#tr6').innerHTML=s;return leaves;}
+  const na=l=>(l.match(/A/g)||[]).length;
+  function q(){done=false;$('#m6').textContent='';const L=NV.get(),o=$('#o6');const m=L===4?3:2;const all=arbol(m);const N=all.length;let t,ans,msg,hit=null;
+    if(L===0){t=`Lanzamos ${m} monedas. ¿Cuántos resultados posibles hay?`;ans=String(N);msg=`2 × 2${m===3?' × 2':''} = ${N}`;hit=()=>true;Construir(o,{max:2,submit:v=>res(String(v[0]))});}
+    else if(L===1){const k=rnd(m+1);t=`Lanzamos 2 monedas. ¿De cuántas formas salen exactamente ${k} águilas?`;hit=l=>na(l)===k;ans=String(all.filter(hit).length);msg=`${ans} de ${N}`;Construir(o,{max:2,submit:v=>res(String(v[0]))});}
+    else if(L===2){const k=rnd(3);t=`Lanzamos 2 monedas. ¿Qué probabilidad hay de ${k} águilas?`;hit=l=>na(l)===k;const c=all.filter(hit).length;ans=fr(c,N);msg=`${c} de ${N} = ${ans}`;Construir(o,{n:2,sep:'/',labels:['arriba','abajo'],max:2,submit:v=>res(fr(v[0],v[1]))});}
+    else if(L===3){const k=1+rnd(2);t=`Lanzamos 2 monedas. ¿Qué probabilidad hay de al menos ${k} ${k===1?'águila':'águilas'}?`;hit=l=>na(l)>=k;const c=all.filter(hit).length;ans=fr(c,N);msg=`${c} de ${N} = ${ans}`;Construir(o,{n:2,sep:'/',labels:['arriba','abajo'],max:2,submit:v=>res(fr(v[0],v[1]))});}
+    else{const k=rnd(4);const kind=rnd(2);hit=l=>na(l)===k;const c=all.filter(hit).length;if(kind===0){t=`Lanzamos 3 monedas. ¿Cuántos resultados posibles hay?`;hit=()=>true;ans='8';msg='2 × 2 × 2 = 8';Construir(o,{max:2,submit:v=>res(String(v[0]))});}
+      else{t=`Lanzamos 3 monedas. ¿Qué probabilidad hay de ${k} águilas?`;ans=fr(c,8);msg=`${c} de 8 = ${ans}`;Construir(o,{n:2,sep:'/',labels:['arriba','abajo'],max:2,submit:v=>res(fr(v[0],v[1]))});}}
+    cur={ans,msg,hit,m};$('#q6').textContent=t;}
+  function res(x){if(String(x)===cur.ans){if(!done){score++;$('#sc6').textContent=score;}done=true;arbol(cur.m,cur.hit);$('#m6').innerHTML=`<span class="ok">¡Correcto!</span> ${cur.msg}`;}
+    else $('#m6').innerHTML='<span class="bad">Casi.</span> Cuenta las ramas del árbol.';}
+  $('#n6').onclick=q;secs.push({root:$('#s6'),next:q});q();
+})();
+
+/* Bandeja 7: bolsa de canicas */
+(function(){
+  const COLS=[['roja','#e9806c','rojas'],['azul','#6f9fd3','azules'],['verde','#6fb584','verdes']];
   let score=0,cur,done;
   const NV=Niveles($('#bag'),['Pocas canicas','Bolsa mediana','Lo contrario (no sale…)','Un color u otro','Bolsa grande, todo mezclado'],()=>q());
-  function q(){done=false;$('#m3').textContent='';$('#e3').textContent='';
-    const L=NV.get();let c,tot;do{c=COL.map(()=>1+rnd(L===0?3:L===4?7:5));tot=c[0]+c[1]+c[2];}while(tot<(L===0?4:6)||tot>(L===0?6:L===4?18:12));
-    const bag=$('#bag');bag.innerHTML='';const balls=[];c.forEach((k,i)=>{for(let j=0;j<k;j++)balls.push(i);});shuffle(balls).forEach(i=>{const b=h('i');b.style.background=COL[i][1];bag.appendChild(b);});
+  function q(){done=false;$('#m7').textContent='';$('#e7').textContent='';
+    const L=NV.get();let c,tot;do{c=COLS.map(()=>1+rnd(L===0?3:L===4?7:5));tot=c[0]+c[1]+c[2];}while(tot<(L===0?4:6)||tot>(L===0?6:L===4?18:12));
+    const bag=$('#bag');bag.innerHTML='';const balls=[];c.forEach((k,i)=>{for(let j=0;j<k;j++)balls.push(i);});shuffle(balls).forEach(i=>{const b=h('i');b.style.background=COLS[i][1];bag.appendChild(b);});
     const T=[[0,1],[0,1],[0,1,2],[0,2,3],[2,3,3,0]][L],t=T[rnd(T.length)];let opts,ans;
-    if(t===2){const i=rnd(3);ans=fr(tot-c[i],tot);$('#q3').innerHTML=`Sacamos una canica sin mirar. ¿Qué probabilidad hay de que <b>NO</b> sea ${COL[i][0]}?`;opts=[];cur={ans,i,c,tot,msg:`No ${COL[i][0]}: ${tot} − ${c[i]} = ${tot-c[i]} canicas de ${tot}: ${ans}.`};}
-    else if(t===3){const i=rnd(3),j=(i+1+rnd(2))%3;ans=fr(c[i]+c[j],tot);$('#q3').innerHTML=`¿Qué probabilidad hay de sacar una canica <b>${COL[i][0]} o ${COL[j][0]}</b>?`;opts=[];cur={ans,i,c,tot,msg:`${c[i]} + ${c[j]} = ${c[i]+c[j]} canicas de ${tot}: ${ans}.`};}
-    else if(t===0){const i=rnd(3);ans=fr(c[i],tot);$('#q3').innerHTML=`Sacamos una canica sin mirar. ¿Qué probabilidad hay de que sea <b>${COL[i][0]}</b>?`;
-      const set=new Set([ans,fr(tot-c[i],tot),fr(c[i],tot-c[i]),fr(c[i]+1,tot)]);let g=1;while(set.size<4)set.add(fr(c[i],tot+g++));opts=[...set];
-      cur={ans,i,c,tot,msg:`Hay ${c[i]} canicas ${COL[i][2]} de ${tot}: ${c[i]}/${tot}${fr(c[i],tot)!==c[i]+'/'+tot?' = '+fr(c[i],tot):''}.`};}
-    else{const mx=Math.max(...c);if(c.filter(x=>x===mx).length>1)return q();const i=c.indexOf(mx);ans=COL[i][0];$('#q3').innerHTML='¿De qué color es más probable sacar una canica?';opts=COL.map(x=>x[0]);
-      cur={ans,i,c,tot,msg:`Hay más canicas ${COL[i][2]} (${mx} de ${tot}).`};}
-    const o=$('#o3');
+    if(t===2){const i=rnd(3);ans=fr(tot-c[i],tot);$('#q7').innerHTML=`Sacamos una canica sin mirar. ¿Qué probabilidad hay de que <b>NO</b> sea ${COLS[i][0]}?`;opts=[];cur={ans,i,c,tot,msg:`No ${COLS[i][0]}: ${tot} − ${c[i]} = ${tot-c[i]} de ${tot}: ${ans}.`};}
+    else if(t===3){const i=rnd(3),j=(i+1+rnd(2))%3;ans=fr(c[i]+c[j],tot);$('#q7').innerHTML=`¿Qué probabilidad hay de sacar una canica <b>${COLS[i][0]} o ${COLS[j][0]}</b>?`;opts=[];cur={ans,i,c,tot,msg:`${c[i]} + ${c[j]} = ${c[i]+c[j]} de ${tot}: ${ans}.`};}
+    else if(t===0){const i=rnd(3);ans=fr(c[i],tot);$('#q7').innerHTML=`Sacamos una canica sin mirar. ¿Qué probabilidad hay de que sea <b>${COLS[i][0]}</b>?`;opts=[];
+      cur={ans,i,c,tot,msg:`Hay ${c[i]} ${COLS[i][2]} de ${tot}: ${c[i]}/${tot}${fr(c[i],tot)!==c[i]+'/'+tot?' = '+fr(c[i],tot):''}.`};}
+    else{const mx=Math.max(...c);if(c.filter(x=>x===mx).length>1)return q();const i=c.indexOf(mx);ans=COLS[i][0];$('#q7').innerHTML='¿De qué color es más probable sacar una canica?';opts=COLS.map(x=>x[0]);
+      cur={ans,i,c,tot,msg:`Hay más ${COLS[i][2]} (${mx} de ${tot}).`};}
+    const o=$('#o7');
     if(t!==1)Construir(o,{n:2,sep:'/',labels:['canicas del color','canicas en total'],max:2,submit:v=>res(fr(v[0],v[1]))});
     else{o.classList.remove('cn');o.innerHTML='';shuffle(opts).forEach(x=>o.appendChild(btn('',x,()=>res(x))));}}
-  function res(x){if(x===cur.ans){if(!done){score++;$('#sc3').textContent=score;}done=true;$('#m3').innerHTML=`<span class="ok">¡Correcto!</span> ${cur.msg} Pulsa Siguiente.`;}
-    else $('#m3').innerHTML='<span class="bad">Casi.</span> La probabilidad es: canicas del color ÷ todas las canicas de la bolsa.';}
+  function res(x){if(x===cur.ans){if(!done){score++;$('#sc7').textContent=score;}done=true;$('#m7').innerHTML=`<span class="ok">¡Correcto!</span> ${cur.msg}`;}
+    else $('#m7').innerHTML='<span class="bad">Casi.</span> Canicas del color ÷ todas las canicas.';}
   $('#x20').onclick=()=>{const r=[0,0,0];for(let k=0;k<20;k++){let u=rnd(cur.tot),i=0;while(u>=cur.c[i]){u-=cur.c[i];i++;}r[i]++;}
-    $('#e3').innerHTML='Sacando 20 veces (devolviendo la canica):<br>'+COL.map((x,i)=>`${x[2]}: salieron ${r[i]}, esperábamos ${Math.round(cur.c[i]/cur.tot*200)/10}`).join('<br>');};
-  $('#n3').addEventListener('click',q);secs.push({root:$('#s3'),next:q});q();
+    $('#e7').innerHTML='Sacando 20 veces (devolviendo la canica):<br>'+COLS.map((x,i)=>`${x[2]}: salieron ${r[i]}, esperábamos ${Math.round(cur.c[i]/cur.tot*200)/10}`).join('<br>');};
+  $('#n7').onclick=q;secs.push({root:$('#s7'),next:q});q();
 })();
 
 let active=secs[0];
@@ -155,5 +356,5 @@ secs.forEach(s=>{s.root.addEventListener('pointerdown',()=>{active=s;},true);s.r
 $('#next').addEventListener('click',()=>active.next());
 </script>
 <script src="taller.js"></script>
-<script src="pantalla.js"></script>
+<script src="perfiles.js"></script><script src="perfilui.js"></script><script src="pantalla.js"></script>
 </body></html>

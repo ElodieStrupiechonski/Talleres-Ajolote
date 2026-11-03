@@ -27,7 +27,7 @@
 .nb .ed button{min-height:48px!important;width:100%;padding:0;font-size:1rem}
 .nb .ed output{font-size:1.5rem;font-weight:800}
 .dots{min-height:40px}
-.dots i{width:8px;height:8px;border-radius:50%;display:block}
+.dots i{width:clamp(9px,1.15vw,13px);height:clamp(9px,1.15vw,13px);border-radius:50%;display:block}
 .mv{display:grid;grid-template-columns:clamp(70px,16vw,110px) repeat(5,minmax(0,1fr));gap:4px;width:100%;max-width:760px;font-family:var(--display);user-select:none;-webkit-user-select:none}
 .mv .mh{display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:6px;min-height:44px;color:#41362b;font-weight:700;font-size:14px;line-height:1.15;text-align:center}
 .mv .mh small{font-weight:400;font-size:13px}
@@ -51,14 +51,14 @@
 .nb .ed.fl{animation:fl .9s ease-out}
 @keyframes fl{0%{background:#ffe9a8;transform:scale(1.06)}100%{background:var(--card);transform:none}}
 .nb .dg .dots{min-height:0}
-.nb .dg .dots i{width:7px;height:7px}
+.nb .dg .dots i{width:clamp(9px,1.15vw,13px);height:clamp(9px,1.15vw,13px)}
 
 </style></head><body>
 <div class="wrap">
   <a class="back" href="index.html">← Todos los talleres</a>
   <header class="col">
     <h1>Tablero decimal</h1>
-    <p class="lead">Tablero para multiplicar y dividir por 10, 100, 1,000… Cada casilla = fila × columna.</p>
+    <p class="lead">Tablero para multiplicar y dividir por 10, 100, 1 000… Cada casilla = fila × columna.</p>
   </header>
 
   <section class="tray" id="s1" aria-labelledby="t1">
@@ -113,7 +113,7 @@
     <p class="big" id="q4"></p>
     <div class="nb" id="nb4"></div>
     <p class="note cambio" id="x4" aria-live="polite"></p>
-    <p class="leg det">DM = decenas de millar · UM = unidades de millar · C = centenas · D = decenas · U = unidades · d = décimos · c = centésimos · m = milésimos · dm = diezmilésimos</p>
+    <p class="leg det">DM = decenas de millar · UM = millares · C = centenas · D = decenas · U = unidades · d = décimos · c = centésimos · m = milésimos · dm = diezmilésimos</p>
     <p class="note" id="i4" aria-live="polite"></p>
     <div class="btns"><button id="ck4" type="button">Comprobar</button><button id="h4" type="button">Pista</button><button id="n4" type="button">Siguiente</button></div>
     <p>Aciertos: <b id="sc4">0</b></p>
@@ -128,7 +128,7 @@
     <p class="big" id="q5"></p>
     <div class="nb" id="nb5"></div>
     <p class="note cambio" id="x5" aria-live="polite"></p>
-    <p class="leg det">DM = decenas de millar · UM = unidades de millar · C = centenas · D = decenas · U = unidades · d = décimos · c = centésimos · m = milésimos · dm = diezmilésimos</p>
+    <p class="leg det">DM = decenas de millar · UM = millares · C = centenas · D = decenas · U = unidades · d = décimos · c = centésimos · m = milésimos · dm = diezmilésimos</p>
     <p class="note" id="i5" aria-live="polite"></p>
     <div class="btns"><button id="ck5" type="button">Comprobar</button><button id="h5" type="button">Pista</button><button id="n5" type="button">Siguiente</button></div>
     <p>Aciertos: <b id="sc5">0</b></p>
@@ -150,18 +150,19 @@
   </section>
 </div>
 <button id="next" hidden aria-hidden="true" tabindex="-1">Siguiente</button>
+<script src="ilustra.js"></script>
 <script src="sonido.js"></script>
 <script>
 const $=s=>document.querySelector(s);
 const h=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;};
 const btn=(cls,txt,fn)=>{const b=h('button',cls,txt);b.type='button';b.addEventListener('click',fn);return b;};
 const rnd=n=>Math.floor(Math.random()*n);
-const NAMES={0:['unidad','unidades'],1:['decena','decenas'],2:['centena','centenas'],3:['unidad de millar','unidades de millar'],4:['decena de millar','decenas de millar'],5:['centena de millar','centenas de millar'],6:['millón','millones'],
+const NAMES={0:['unidad','unidades'],1:['decena','decenas'],2:['centena','centenas'],3:['millar','millares'],4:['decena de millar','decenas de millar'],5:['centena de millar','centenas de millar'],6:['millón','millones'],
  '-1':['décimo','décimos'],'-2':['centésimo','centésimos'],'-3':['milésimo','milésimos'],'-4':['diezmilésimo','diezmilésimos'],'-5':['cienmilésimo','cienmilésimos'],'-6':['millonésimo','millonésimos']};
 const nameOf=(e,d)=>NAMES[e][d===1?0:1];
 const sup=n=>String(n).replace('-','⁻').replace(/\d/g,x=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[x]);
 const pot=e=>'10'+sup(e);
-const fmt=(d,e)=>e>=0?(String(d)+'0'.repeat(e)).replace(/\B(?=(\d{3})+(?!\d))/g,'\u202f'):'0.'+'0'.repeat(-e-1)+d;
+const fmt=(d,e)=>e>=0?(String(d)+'0'.repeat(e)).replace(/\B(?=(\d{3})+(?!\d))/g,'\u00a0'):'0.'+'0'.repeat(-e-1)+d;
 const cls=e=>e>=0?['g','b','r'][e%3]:['lg','lb','pk'][(-e)%3];
 const COLN={g:'verde',b:'azul',r:'rojo',lg:'verde claro',lb:'azul claro',pk:'rosa'};
 const MUL='×';
@@ -229,7 +230,7 @@ const secs=[];
       $('#q3').innerHTML=`¿Cuánto es <b>${fmt(1,a)}</b> ${MUL} <b>${fmt(1,-b)}</b>?`;
       const set=new Set([e]);while(set.size<4)set.add(e+[-2,-1,1,2][rnd(4)]);
       [...set].sort(()=>Math.random()-.5).forEach(v=>o.appendChild(btn('',fmt(1,v),()=>ans(v))));
-      $('#m3').textContent='Pista: busca la fila y la columna en el tablero y mira su casilla.';
+      $('#m3').textContent='Pista: busca la fila y la columna.';
     }else{
       const e=rnd(13)-6;cur={t:1,e};
       $('#q3').innerHTML=`Toca una casilla donde el producto sea <b>${fmt(1,e)}</b>.`;
@@ -238,7 +239,7 @@ const secs=[];
     if(cur.t!==0)return;
     if(v===cur.e){if(!done){score++;$('#sc3').textContent=score;}done=true;B.clear();B.cells[6-cur.a][cur.b].classList.add('sel');
       $('#m3').innerHTML=`<span class="ok">¡Correcto!</span> ${pot(cur.a)} ${MUL} ${pot(-cur.b)} = ${pot(cur.e)}: sumamos exponentes, ${cur.a} + (−${cur.b}) = ${String(cur.e).replace('-','−')}. Pulsa Siguiente para otra.`;}
-    else $('#m3').innerHTML=`<span class="bad">Casi.</span> Encuentra la fila ${fmt(1,cur.a)} y la columna ${fmt(1,-cur.b)} en el tablero.`;}
+    else $('#m3').innerHTML=`<span class="bad">Casi.</span> Busca la fila ${fmt(1,cur.a)} y la columna ${fmt(1,-cur.b)}.`;}
   function tap(r,c,e){
     if(cur.t!==1)return;B.clear();B.cells[r][c].classList.add('sel');
     if(e===cur.e){if(!done){score++;$('#sc3').textContent=score;}done=true;
@@ -256,7 +257,7 @@ function mk(N,MODES){
   const PAL={g:'#86c496',b:'#86aedb',r:'#f09b8a',lg:'#d3e8a6',lb:'#c3e6f2',pk:'#f7c8da'},DARKTXT=['lg','lb','pk'];
   const digs=S=>Array.from({length:NC},(_,i)=>Math.floor(S/Math.pow(10,NC-1-i))%10);
   const val=a=>a.reduce((x,d)=>x*10+d,0);
-  const fmtS=S=>{const ip=Math.floor(S/SC),fp=String(S%SC).padStart(4,'0').replace(/0+$/,'');const I=String(ip).replace(/\B(?=(\d{3})+(?!\d))/g,'\u202f');return fp?I+'.'+fp:I;};
+  const fmtS=S=>{const ip=Math.floor(S/SC),fp=String(S%SC).padStart(4,'0').replace(/0+$/,'');const I=String(ip).replace(/\B(?=(\d{3})+(?!\d))/g,'\u00a0');return fp?I+'.'+fp:I;};
   const NIVD=['Números de 2 cifras','Hasta 4 cifras','Números grandes','Un decimal','Dos o tres decimales','Grandes con decimales'];
   let lv=0;
   const R=(a,b)=>a+rnd(b-a+1);
@@ -270,9 +271,9 @@ function mk(N,MODES){
   const cb=(n,e)=>n===10?'<span class="g10">'+grp(10,e)+'</span>':'<span class="cb">'+grp(n,e)+'</span>';
   let flash=[];
   let mode=MODES[0][0],cur=Array(NC).fill(0),A=0,B=0,exp=0,score=0,done=false;
-  function headRow(box){box.appendChild(h('div'));for(let i=0;i<NC;i++){const e=4-i,c=cls(e),d=h('div','hd'+(i===5?' dp':''));d.style.background=PAL[c];d.style.color='#41362b';d.innerHTML=`${AB[i]}<small>${pot(e)}</small>`;box.appendChild(d);}}
+  function headRow(box){box.appendChild(h('div'));for(let i=0;i<NC;i++){const e=4-i,c=cls(e),d=h('div','hd'+(i===5?' dp':''));d.style.background=PAL[c];d.style.color='#41362b';d.innerHTML=`${fmt(1,e)}<small>${nameOf(e,1)}</small>`;box.appendChild(d);}}
   function numRow(box,S,op){box.appendChild(h('div','op',op));const a=digs(S);let first=a.findIndex(x=>x>0);if(first<0||first>4)first=4;let last=a.reduce((m,x,i)=>x?i:m,-1);
-    a.forEach((d,i)=>{const show=i>=first&&(i<=4||i<=last);const c=h('div','dg'+(i===5?' dp':''));c.appendChild(h('span','',show?d:''));const dots=h('div','dots');dots.innerHTML=grp(d,4-i);c.appendChild(dots);box.appendChild(c);});}
+    a.forEach((d,i)=>{const show=i>=first&&(i<=4||i<=last);const c=h('div','dg'+(i===5?' dp':''));c.appendChild(h('span','sr',show?d:''));const dots=h('div','dots');dots.innerHTML=grp(d,4-i);c.appendChild(dots);box.appendChild(c);});}
   function edRow(box,op){box.appendChild(h('div','op',op));
     cur.forEach((d,i)=>{const c=h('div','ed'+(i===5?' dp':''));const up=btn('','▲',()=>step(i,1)),dn=btn('','▼',()=>step(i,-1));up.disabled=cur.slice(0,i+1).every(x=>x===9);dn.disabled=cur.slice(0,i+1).every(x=>x===0);if(flash.includes(i))c.classList.add('fl');
       up.setAttribute('aria-label','Más en '+nameOf(4-i,1));dn.setAttribute('aria-label','Menos en '+nameOf(4-i,1));
@@ -297,14 +298,14 @@ function mk(N,MODES){
   function ok(txt){if(!done){score++;$('#sc'+N).textContent=score;}done=true;$('#i'+N).innerHTML=`<span class="ok">¡Correcto!</span> ${txt} Pulsa Siguiente.`;}
   function check(auto){const v=val(cur);
     if(v===exp){ok(mode==='formar'?`Formaste <b>${fmtS(exp)}</b>: ${words(cur)}.`:`${fmtS(A)} ${mode==='sumar'?'+':'−'} ${fmtS(B)} = <b>${fmtS(exp)}</b>.`);}
-    else if(!auto)$('#i'+N).innerHTML=`<span class="bad">Casi.</span> Tu número es ${fmtS(v)}. Alinea el punto decimal y revisa columna por columna, de derecha a izquierda.`;}
+    else if(!auto)$('#i'+N).innerHTML=`<span class="bad">Casi.</span> Tu número es ${fmtS(v)}. Revisa columna por columna, de derecha a izquierda.`;}
   function pista(){const a=digs(A),b=digs(B),L=[];
     if(mode==='sumar'){let c=0;for(let i=NC-1;i>=0;i--){const t=a[i]+b[i]+c;if(!(a[i]||b[i]||c)){continue;}
       L.push(`${nameOf(4-i,1)}: ${a[i]} + ${b[i]}${c?' + 1 (llevada)':''} = ${t}${t>=10?` → escribo ${t-10} y llevo 1 (10 cuentas ${CN[cls(4-i)]}s = 1 ${CN[cls(4-i+1)]||''})`:` → escribo ${t}`}`);c=t>=10?1:0;}}
     else{let br=0;for(let i=NC-1;i>=0;i--){const top=a[i]-br;if(!(a[i]||b[i]||br)){continue;}
       if(top<b[i]){L.push(`${nameOf(4-i,1)}: ${a[i]}${br?' − 1 (me prestaron)':''} no alcanza para restar ${b[i]}: pido 1 a la columna de la izquierda (1 cuenta ${CN[cls(4-i+1)]||''} = 10 ${CN[cls(4-i)]}s) → ${top+10} − ${b[i]} = ${top+10-b[i]}`);br=1;}
       else{L.push(`${nameOf(4-i,1)}: ${top}${br?' (ya descontado el 1 prestado)':''} − ${b[i]} = ${top-b[i]}`);br=0;}}}
-    $('#i'+N).innerHTML='<b>Pista:</b> alinea los puntos y trabaja de derecha a izquierda.<br>'+L.join('<br>');}
+    $('#i'+N).innerHTML='<b>Pista:</b> empieza por la derecha.<br>'+L.join('<br>');}
   function nuevo(){done=false;flash=[];cur=Array(NC).fill(0);$('#i'+N).innerHTML='';$('#x'+N).innerHTML='';
     if(mode==='libre'){$('#q'+N).textContent='';}
     else if(mode==='formar'){exp=rndL();$('#q'+N).innerHTML=`Forma el número <b>${fmtS(exp)}</b>`;}
@@ -328,7 +329,7 @@ mk(5,[['sumar','Sumar'],['restar','Restar']]);
   const CN={g:'verde',b:'azul',r:'roja'};
   const colr=i=>cls(4-i),dot=i=>'<i style="background:'+PAL[colr(i)]+'"></i>';
   const cbd=(n,i)=>'<span class="cb">'+dot(i).repeat(n)+'</span>';
-  const fmtN=x=>String(x).replace(/\B(?=(\d{3})+(?!\d))/g,'\u202f');
+  const fmtN=x=>String(x).replace(/\B(?=(\d{3})+(?!\d))/g,'\u00a0');
   const digs=x=>Array.from({length:NC},(_,i)=>Math.floor(x/Math.pow(10,NC-1-i))%10);
   const val=a=>a.reduce((x,d)=>x*10+d,0);
   let mode='libre',lvl=0,A=0,B=0,c=Array(NC).fill(0),b=Array(NC).fill(0),r=Array(NC).fill(0),done=false,score=0;
@@ -355,7 +356,7 @@ mk(5,[['sumar','Sumar'],['restar','Restar']]);
   function bead(i,kind,row){const e=h('div','mvb');e.style.background=PAL[colr(i)];e.dataset.kind=kind;e.dataset.row=row;e.dataset.col=i;e.setAttribute('role','button');e.setAttribute('aria-label','Cuenta de '+NM[i]);return e;}
   function barra(i){const e=h('div','mvbar');e.dataset.kind='bar';e.dataset.row='A';e.dataset.col=i;e.setAttribute('role','button');e.setAttribute('aria-label','Paquete de 10 de '+NM[i]);e.innerHTML=('<i style="background:'+PAL[colr(i)]+'"></i>').repeat(10);return e;}
   function draw(){const box=$('#mv6');box.innerHTML='';
-    box.appendChild(h('div'));for(let i=0;i<NC;i++){const d=h('div','mh');d.style.background=PAL[colr(i)];d.innerHTML=AB[i]+'<small>'+pot(4-i)+'</small>';box.appendChild(d);}
+    box.appendChild(h('div'));for(let i=0;i<NC;i++){const d=h('div','mh');d.style.background=PAL[colr(i)];d.innerHTML=fmt(1,4-i)+'<small>'+nameOf(4-i,1)+'</small>';box.appendChild(d);}
     const cell=(row,i)=>{const z=h('div','mc');z.dataset.zone=row;z.dataset.col=i;return z;};
     if(mode==='libre'){box.appendChild(h('div','ml','Toma de aquí'));for(let i=0;i<NC;i++){const z=cell('S',i);z.appendChild(bead(i,'bead','S'));box.appendChild(z);}}
     box.appendChild(h('div','ml',mode==='libre'?'Tu tablero':mode==='sumar'?'Primer número':'Número del que quitamos'));
@@ -439,5 +440,5 @@ secs.forEach(s=>{s.root.addEventListener('pointerdown',()=>{active=s;},true);s.r
 $('#next').addEventListener('click',()=>active.next());
 </script>
 <script src="taller.js"></script>
-<script src="pantalla.js"></script>
+<script src="perfiles.js"></script><script src="perfilui.js"></script><script src="pantalla.js"></script>
 </body></html>

@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f0e3c8"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="author" content="Elodie Strupiechonski"><meta name="author" content="Andrés de Luna Bugallo"><link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+<title>Diario para adultos · Talleres de Matemáticas</title><meta name="robots" content="noindex"><meta name="description" content="Diario del avance y las emociones de los niños.">
+<link rel="stylesheet" href="taller.css">
+<style>.box{background:var(--card);border:4px solid var(--tray-edge);border-radius:18px;padding:14px 18px;margin:12px 0;max-width:860px}
+.box h2{margin:0 0 8px;font-size:1.25rem}.nota{color:var(--muted);font-size:.92rem;max-width:70ch}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.tabs button,.b{min-height:44px;padding:4px 16px;font:inherit;font-family:var(--display);font-weight:800;border:3px solid var(--tray-edge);border-radius:14px;background:var(--card);color:var(--fg);cursor:pointer}
+.tabs button.on,.b.p{background:var(--acc,#f2b8c6);border-color:var(--fg)}.b.d{border-color:#b3392a;color:#b3392a}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0}
+.pin input,.row input,.row select{min-height:44px;padding:4px 10px;font:inherit;font-family:var(--display);font-weight:800;font-size:1.1rem;border:3px solid var(--tray-edge);border-radius:12px;background:var(--card);color:var(--fg)}
+.pin input{width:7em;text-align:center;letter-spacing:.3em}.err{color:#b3392a;min-height:1.2em}
+table.t{border-collapse:collapse;width:100%;font-size:.95rem}.t th,.t td{text-align:left;padding:6px 8px;border-bottom:2px solid #e6dccb}.t th{font-family:var(--display)}
+.bar{display:inline-block;width:110px;height:10px;background:#eee6d6;border-radius:6px;overflow:hidden;vertical-align:middle}.bar i{display:block;height:100%;background:#6fae7e}
+.emos{display:flex;gap:14px;flex-wrap:wrap}.emos div{text-align:center;font-size:.85rem;width:74px}.emos svg{width:56px;height:auto;display:block;margin:auto}</style>
+</head><body>
+<div class="wrap">
+  <a class="back" href="index.html">← Todos los talleres</a>
+  <header><h1>Diario para adultos</h1><p class="lead">Aquí se ven los perfiles, el avance y cómo se sintieron los niños. Se guarda solo en este dispositivo.</p></header>
+  <div id="app"></div>
+</div>
+<script src="ilustra.js"></script><script src="perfiles.js"></script><script src="rutas.js"></script><script src="pdf.js"></script><script src="informes.js"></script><script src="perfilui.js"></script>
+<script>
+(function(){
+  var app=document.getElementById('app'),sec='res',sel='*';
+  function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;}
+  function btn(txt,cls,fn){var b=el('button','b '+(cls||''),txt);b.type='button';b.onclick=fn;return b;}
+  function bajar(nom,datos,tipo){PDF.descarga(nom,datos,tipo);}
+  function slug(s){return s.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Za-z0-9]+/g,'_').toLowerCase()||'perfil';}
+  var hoy=function(){return new Date().toISOString().slice(0,10);};
+  function render(){
+    app.innerHTML='';
+    if(!Perf.tienePin()) return crearPin();
+    if(!Perf.abierto()) return pedirPin();
+    panel();
+  }
+  function crearPin(){
+    var b=el('div','box pin'); b.appendChild(el('h2',null,'Crea tu candado de 4 números'));
+    b.appendChild(el('p','nota','Sirve para que los niños no entren al diario por curiosidad. No es una seguridad fuerte: es un candado sencillo. Anótalo en un lugar seguro.'));
+    var r=el('div','row'),a=el('input'),c=el('input'); [a,c].forEach(function(i){i.type='password';i.inputMode='numeric';i.maxLength=4;i.autocomplete='off';}); a.setAttribute('aria-label','Número secreto'); c.setAttribute('aria-label','Repite el número');
+    r.appendChild(a);r.appendChild(c);b.appendChild(r); var er=el('p','err'); er.setAttribute('role','alert'); b.appendChild(er);
+    b.appendChild(btn('Guardar candado','p',function(){ if(!/^\d{4}$/.test(a.value)){er.textContent='Escribe 4 números.';return;} if(a.value!==c.value){er.textContent='Los dos números no coinciden.';return;} Perf.setPin(a.value);Perf.abre();render();}));
+    app.appendChild(b);
+  }
+  function pedirPin(){
+    var b=el('div','box pin'); b.appendChild(el('h2',null,'Escribe el número del candado'));
+    var r=el('div','row'),a=el('input'); a.type='password';a.inputMode='numeric';a.maxLength=4;a.autocomplete='off';a.setAttribute('aria-label','Número secreto'); r.appendChild(a);
+    var er=el('p','err'); er.setAttribute('role','alert');
+    function ok(){ if(Perf.revisaPin(a.value)){Perf.abre();render();} else {er.textContent='No es ese número.';a.value='';} }
+    r.appendChild(btn('Entrar','p',ok)); a.addEventListener('keydown',function(e){e.stopPropagation(); if(e.key==='Enter')ok();}); b.appendChild(r);b.appendChild(er);
+    var f=el('details'); f.appendChild(el('summary',null,'Olvidé el número')); f.appendChild(el('p','nota','Por privacidad no hay forma de recuperarlo. Para empezar de nuevo hay que borrar todos los perfiles y su progreso de este dispositivo. Si antes descargaste una copia (JSON), podrás volver a cargarla.'));
+    var bd=btn('Borrar todo y empezar de nuevo','d',function(){ if(bd.dataset.s!=='1'){bd.dataset.s='1';bd.textContent='Toca otra vez para confirmar';return;} Perf.borrarTodo();render(); }); f.appendChild(bd); b.appendChild(f);
+    app.appendChild(b); setTimeout(function(){a.focus();},50);
+  }
+  function panel(){
+    var t=el('div','tabs'); t.setAttribute('role','group');
+    [['res','Resumen'],['per','Perfiles'],['dat','Datos y descargas']].forEach(function(x){var b=el('button',x[0]===sec?'on':'',x[1]);b.type='button';b.onclick=function(){sec=x[0];render();};t.appendChild(b);});
+    var cl=el('button',null,'Cerrar diario'); cl.type='button'; cl.onclick=function(){Perf.cierra();render();}; t.appendChild(cl);
+    app.appendChild(t); ({res:resumen,per:perfiles,dat:datos})[sec]();
+  }
+  function lista(){return sel==='*'?Perf.lista():Perf.lista().filter(function(p){return p.id===sel;});}
+  function resumen(){
+    var ps=Perf.lista(); if(!ps.length){app.appendChild(el('p','nota','Todavía no hay perfiles. Los niños los crean al entrar a un taller, o se crean en la pestaña Perfiles.'));return;}
+    var r=el('div','row'),s=el('select'); s.setAttribute('aria-label','Perfil');
+    var o=el('option',null,'Todo el grupo');o.value='*';s.appendChild(o); ps.forEach(function(p){var o2=el('option',null,p.nombre);o2.value=p.id;s.appendChild(o2);}); if(!Perf.porId(sel))sel='*'; s.value=sel; s.onchange=function(){sel=s.value;render();}; r.appendChild(s); app.appendChild(r);
+    if(sel==='*') grupo(ps); else indiv(Perf.porId(sel));
+  }
+  function barra(f){var b=el('span','bar'),i=el('i');i.style.width=Math.round(100*f)+'%';b.appendChild(i);return b;}
+  function grupo(ps){
+    var b=el('div','box'); b.appendChild(el('h2',null,'Grupo · '+ps.length+' perfiles'));
+    var tb=el('table','t'),th=el('tr'); ['Nombre','Taller-año','Avance del camino','Niveles','Emoción frecuente','Última actividad'].forEach(function(x){th.appendChild(el('th',null,x));}); tb.appendChild(th);
+    ps.forEach(function(p){var s=Inf.resumen(p),tr=el('tr'),top=null,m=0; Perf.EMO.forEach(function(e){if(s.cuenta[e]>m){m=s.cuenta[e];top=e;}});
+      tr.appendChild(el('td',null,p.nombre)); tr.appendChild(el('td',null,p.taller+'-'+p.anio)); var c=el('td'); c.appendChild(barra(s.est.total?s.est.hechos/s.est.total:0)); c.appendChild(document.createTextNode(' '+s.est.hechos+'/'+s.est.total)); tr.appendChild(c);
+      tr.appendChild(el('td',null,s.sup)); tr.appendChild(el('td',null,top?Perf.EMOL[top]:'—')); tr.appendChild(el('td',null,p.ult?new Date(p.ult).toLocaleDateString('es-MX'):'—')); tb.appendChild(tr);});
+    b.appendChild(tb); var r=el('div','row'); r.appendChild(btn('Descargar PDF del grupo','p',function(){bajar('resumen_grupo_'+hoy()+'.pdf',Inf.pdfGrupo(ps,'Resumen del grupo'));})); b.appendChild(r);
+    b.appendChild(el('p','nota','Las emociones las elige el propio niño; sirven para conversar, no para calificar.')); app.appendChild(b);
+  }
+  function indiv(p){
+    var s=Inf.resumen(p),b=el('div','box'); b.appendChild(el('h2',null,p.nombre+' · Taller '+p.taller+', año '+p.anio));
+    b.appendChild(el('p',null,s.est.hechos+' de '+s.est.total+' pasos del camino · '+s.sup+' niveles superados · '+s.vis+' bandejas visitadas')); b.appendChild(barra(s.est.total?s.est.hechos/s.est.total:0));
+    if(s.est.sig)b.appendChild(el('p',null,'Siguiente paso sugerido: '+Rutas.etiqueta(s.est.sig)+({repaso:' (repaso, por sus últimas emociones)',reto:' (un poco más difícil, por sus últimas emociones)'}[s.est.motivo]||'')));
+    var e=el('div','emos'); Perf.EMO.forEach(function(k){var d=el('div'),f=el('span'); f.innerHTML=Ilu.html('emo_'+k); d.appendChild(f); d.appendChild(el('div',null,Perf.EMOL[k]+': '+s.cuenta[k])); e.appendChild(d);}); b.appendChild(el('h2',null,'Cómo se sintió')); b.appendChild(e);
+    var r=el('div','row'); r.appendChild(btn('Descargar informe PDF','p',function(){bajar('informe_'+slug(p.nombre)+'_'+hoy()+'.pdf',Inf.pdfPerfil(p));}));
+    r.appendChild(btn('CSV de avance','',function(){bajar('avance_'+slug(p.nombre)+'.csv',Inf.csvProgreso([p]),'text/csv;charset=utf-8');}));
+    r.appendChild(btn('CSV de emociones','',function(){bajar('emociones_'+slug(p.nombre)+'.csv',Inf.csvEmociones([p]),'text/csv;charset=utf-8');})); b.appendChild(r); app.appendChild(b);
+  }
+  function selT(v,l){var s=el('select');s.setAttribute('aria-label',l);Object.keys(PerfUI.TALL).forEach(function(k){var o=el('option',null,PerfUI.TALL[k]);o.value=k;s.appendChild(o);});s.value=v;return s;}
+  function selA(v){var s=el('select');s.setAttribute('aria-label','Año');[1,2,3].forEach(function(k){var o=el('option',null,'Año '+k);o.value=k;s.appendChild(o);});s.value=v;return s;}
+  function perfiles(){
+    var b=el('div','box'); b.appendChild(el('h2',null,'Tipo de uso'));
+    var r=el('div','row'); [['hogar','Hogar (hasta 5 perfiles)'],['salon','Salón (hasta 25 perfiles)']].forEach(function(m){var x=btn(m[1],Perf.modo()===m[0]?'p':'',function(){var q=Perf.setModo(m[0]); if(q.err)er.textContent='Hay más de 5 perfiles: borra algunos antes de cambiar a «hogar».'; else render();}); r.appendChild(x);}); b.appendChild(r);
+    var er=el('p','err'); er.setAttribute('role','alert'); b.appendChild(er); b.appendChild(el('p','nota',Perf.lista().length+' de '+Perf.max()+' perfiles usados.')); app.appendChild(b);
+    var c=el('div','box'); c.appendChild(el('h2',null,'Perfiles'));
+    Perf.lista().forEach(function(p){var row=el('div','row'),n=el('input'); n.value=p.nombre; n.maxLength=14; n.setAttribute('aria-label','Nombre'); var t=selT(p.taller,'Taller'),a=selA(p.anio);
+      function guarda(){var q=Perf.editar(p.id,{nombre:n.value,taller:t.value,anio:a.value}); er2.textContent=q.err?({nombre:'Escribe un nombre.',repetido:'Ese nombre ya existe.'}[q.err]||''):'';}
+      [n,t,a].forEach(function(x){x.onchange=guarda;x.addEventListener('keydown',function(e){e.stopPropagation();});}); row.appendChild(n);row.appendChild(t);row.appendChild(a);
+      var d=btn('Borrar','d',function(){ if(d.dataset.s!=='1'){d.dataset.s='1';d.textContent='¿Seguro? Toca otra vez';return;} Perf.borrar(p.id);render(); }); row.appendChild(d); c.appendChild(row);});
+    var er2=el('p','err'); er2.setAttribute('role','alert'); c.appendChild(er2);
+    if(Perf.lista().length<Perf.max()){var nr=el('div','row'),ni=el('input'); ni.placeholder='Nombre nuevo'; ni.maxLength=14; ni.setAttribute('aria-label','Nombre nuevo'); ni.addEventListener('keydown',function(e){e.stopPropagation();}); var nt=selT(2,'Taller'),na=selA(1);
+      nr.appendChild(ni);nr.appendChild(nt);nr.appendChild(na); nr.appendChild(btn('Agregar','p',function(){var q=Perf.crear(ni.value,nt.value,na.value); if(q.err)er2.textContent={nombre:'Escribe un nombre.',repetido:'Ese nombre ya existe.',lleno:'Ya no caben más.'}[q.err]; else render();})); c.appendChild(nr);}
+    c.appendChild(el('p','nota','El Taller y el año definen el camino que se le propone (ver «Mi camino»). Un taller Montessori dura tres años: si el niño avanza o necesita otro ritmo, se puede cambiar aquí cuando la guía lo decida.')); app.appendChild(c);
+  }
+  function datos(){
+    var b=el('div','box'); b.appendChild(el('h2',null,'Descargar'));
+    b.appendChild(el('p','nota','PDF: para leer o imprimir. CSV: para abrir en Excel, Numbers o Google Sheets.'));
+    var ps=Perf.lista(),r=el('div','row');
+    r.appendChild(btn('PDF del grupo','p',function(){bajar('resumen_grupo_'+hoy()+'.pdf',Inf.pdfGrupo(ps,'Resumen del grupo'));}));
+    r.appendChild(btn('CSV de avance (todos)','',function(){bajar('avance_'+hoy()+'.csv',Inf.csvProgreso(ps),'text/csv;charset=utf-8');}));
+    r.appendChild(btn('CSV de emociones (todos)','',function(){bajar('emociones_'+hoy()+'.csv',Inf.csvEmociones(ps),'text/csv;charset=utf-8');})); b.appendChild(r);
+    b.appendChild(el('p','nota','El informe individual en PDF está en Resumen, al elegir un perfil.')); app.appendChild(b);
+    var c=el('div','box'); c.appendChild(el('h2',null,'Copia de seguridad y cambio de dispositivo'));
+    c.appendChild(el('p','nota','Como los datos viven solo en este dispositivo, descarga una copia para guardarla o llevarla a otro (tableta, otra Raspberry). Al cargarla se combinan los perfiles: si el nombre ya existe, se reemplaza su avance.'));
+    var r2=el('div','row'); r2.appendChild(btn('Descargar copia (JSON)','',function(){bajar('talleres_copia_'+hoy()+'.json',Perf.exportar(),'application/json');}));
+    var f=el('input'); f.type='file'; f.accept='.json,application/json'; f.setAttribute('aria-label','Cargar copia'); var msg=el('p','nota'); msg.setAttribute('role','status');
+    f.onchange=function(){var fl=f.files[0]; if(!fl)return; var rd=new FileReader(); rd.onload=function(){var q=Perf.importar(String(rd.result)); msg.textContent=q.err?'Ese archivo no es una copia de los talleres.':'Listo: '+q.ok+' perfiles cargados'+(q.omitidos?' ('+q.omitidos+' no cupieron).':'.');}; rd.readAsText(fl);};
+    r2.appendChild(f); c.appendChild(r2); c.appendChild(msg); app.appendChild(c);
+    var d=el('div','box'); d.appendChild(el('h2',null,'Candado y borrado')); var r3=el('div','row');
+    r3.appendChild(btn("Cambiar el candado","",function(){Perf.setPin("");Perf.cierra();render();}));
+    var bd=btn('Borrar todos los perfiles y su avance','d',function(){ if(bd.dataset.s!=='1'){bd.dataset.s='1';bd.textContent='Esto no se puede deshacer. Toca otra vez';return;} Perf.borrarTodo();render(); }); r3.appendChild(bd); d.appendChild(r3);
+    d.appendChild(el('p','nota','Privacidad: nada se envía a internet. Si algún día se usa una nube, habrá que informar a las familias y cumplir la normativa de datos personales de menores (en México, la LFPDPPP); esto no es asesoría legal.')); app.appendChild(d);
+  }
+  render();
+})();
+</script>
+<script src="taller.js"></script>
+</body></html>

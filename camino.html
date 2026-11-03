@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f0e3c8"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="author" content="Elodie Strupiechonski"><meta name="author" content="Andrés de Luna Bugallo"><link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+<title>Mi camino · Talleres de Matemáticas</title><meta name="robots" content="noindex"><meta name="description" content="Mi camino por los talleres de matemáticas.">
+<link rel="stylesheet" href="taller.css">
+<style>.who{display:flex;align-items:center;gap:14px;flex-wrap:wrap}.who .pu-av{width:84px}.who h1{margin:0}
+.big{height:18px;background:#eee6d6;border:3px solid var(--tray-edge);border-radius:12px;overflow:hidden;max-width:560px}.big i{display:block;height:100%;background:#6fae7e}
+.sig{display:flex;align-items:center;gap:14px;background:var(--card);border:4px solid var(--fg);border-radius:18px;padding:14px 18px;text-decoration:none;color:var(--fg);font-family:var(--display);font-weight:800;font-size:1.25rem;max-width:640px;min-height:56px}
+.sig small{display:block;font-weight:600;font-size:.9rem;color:var(--muted)}.sig b{margin-left:auto;color:var(--red)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}.tabs button{min-height:44px;padding:4px 16px;font:inherit;font-family:var(--display);font-weight:800;border:3px solid var(--tray-edge);border-radius:14px;background:var(--card);color:var(--fg);cursor:pointer}.tabs button.on{background:var(--acc,#f2b8c6);border-color:var(--fg)}
+.pasos{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px}.pasos li a{display:flex;align-items:center;gap:10px;min-height:44px;padding:6px 12px;border-radius:12px;background:var(--card);border:3px solid var(--tray-edge);text-decoration:none;color:var(--fg);font-weight:600}
+.pasos li.ok a{border-color:#6fae7e}.pasos .m{font-family:var(--display);font-weight:800;width:1.6em;text-align:center;color:#3f7a50}.pasos .m.no{color:var(--muted)}
+h2.tm{margin:14px 0 6px;font-size:1.2rem}.nota{color:var(--muted);font-size:.95rem;max-width:70ch}</style>
+</head><body>
+<div class="wrap">
+  <a class="back" href="index.html">← Todos los talleres</a>
+  <header class="who" id="who"></header>
+  <div id="cont"></div>
+</div>
+<script src="ilustra.js"></script><script src="perfiles.js"></script><script src="rutas.js"></script><script src="perfilui.js"></script>
+<script>
+(function(){
+  var cont=document.getElementById('cont'),who=document.getElementById('who'),anio=null;
+  function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;}
+  function pinta(){
+    var p=Perf.activo(); who.innerHTML=''; cont.innerHTML='';
+    if(!p){who.appendChild(el('h1',null,'Mi camino')); var b=el('button','pu-go','Elegir quién soy'); b.type='button'; b.onclick=function(){PerfUI.elegir(pinta);}; cont.appendChild(el('p','lead','Elige tu perfil para ver tus pasos.')); cont.appendChild(b); return;}
+    who.appendChild(PerfUI.avatar(p)); var h=el('div'); h.appendChild(el('h1',null,'Mi camino, '+p.nombre)); h.appendChild(el('p','nota','Taller '+p.taller+' · año '+p.anio)); who.appendChild(h);
+    var cam=el('button','pu-sec','Cambiar de perfil'); cam.type='button'; cam.onclick=function(){PerfUI.elegir(function(){anio=null;pinta();});}; who.appendChild(cam);
+    var est=Rutas.estado(p);
+    if(anio==null)anio=p.anio;
+    cont.appendChild(el('h2',null,est.hechos+' de '+est.total+' pasos de mi año '+p.anio));
+    var bg=el('div','big'),fl=el('i'); fl.style.width=(est.total?100*est.hechos/est.total:0)+'%'; bg.appendChild(fl); cont.appendChild(bg);
+    var sec=el('section'); sec.style.margin='16px 0';
+    if(est.sig){var a=el('a','sig'); a.href=Rutas.url(est.sig); var t=el('span'); t.appendChild(document.createTextNode(Rutas.etiqueta(est.sig))); var sm=el('small',null,{sigue:'Tu siguiente paso',repaso:'Un repaso para ir con calma',reto:'Un reto para ti','año':''}[est.motivo]); t.appendChild(sm); a.appendChild(t); a.appendChild(el('b',null,'Ir →')); sec.appendChild(a);}
+    else sec.appendChild(el('p','lead','¡Terminaste todos los pasos de este año! Pregunta a tu guía por el siguiente.'));
+    cont.appendChild(sec);
+    var tabs=el('div','tabs'); tabs.setAttribute('role','group'); tabs.setAttribute('aria-label','Año');
+    [1,2,3].forEach(function(n){var b=el('button',n===anio?'on':'','Año '+n); b.type='button'; b.onclick=function(){anio=n;pinta();}; tabs.appendChild(b);}); cont.appendChild(tabs);
+    var T=Rutas.TALLER[p.taller]; if(T.nota)cont.appendChild(el('p','nota',T.nota));
+    var ps=Rutas.pasos(p.taller,anio),ul=null,ult=null;
+    ps.forEach(function(s){ if(s.p!==ult){cont.appendChild(el('h2','tm',Rutas.TEMA[s.p])); ul=el('ul','pasos'); cont.appendChild(ul); ult=s.p;}
+      var ok=Perf.hecho(p,s.p,s.b,s.l),li=el('li',ok?'ok':''),a=el('a'); a.href=Rutas.url(s);
+      a.appendChild(el('span','m'+(ok?'':' no'),ok?'★':'○')); a.appendChild(el('span',null,(Rutas.EST[s.p][s.b-1][0])+(s.l?' · nivel '+s.l:''))); li.appendChild(a); ul.appendChild(li);});
+    if(!ps.length)cont.appendChild(el('p','nota','Todavía no hay pasos para este año.'));
+  }
+  pinta();
+})();
+</script>
+<script src="taller.js"></script>
+</body></html>

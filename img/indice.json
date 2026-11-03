@@ -1,0 +1,297 @@
+[
+ {
+  "n": "axo_feliz",
+  "t": "Ajolote feliz",
+  "anim": true
+ },
+ {
+  "n": "axo_piensa",
+  "t": "Ajolote piensa",
+  "anim": true
+ },
+ {
+  "n": "axo_celebra",
+  "t": "Ajolote celebra",
+  "anim": true
+ },
+ {
+  "n": "axo_casi",
+  "t": "Ajolote casi",
+  "anim": true
+ },
+ {
+  "n": "axo_azul_feliz",
+  "t": "Ajolote azul feliz",
+  "anim": true
+ },
+ {
+  "n": "axo_azul_piensa",
+  "t": "Ajolote azul piensa",
+  "anim": true
+ },
+ {
+  "n": "axo_azul_celebra",
+  "t": "Ajolote azul celebra",
+  "anim": true
+ },
+ {
+  "n": "axo_azul_casi",
+  "t": "Ajolote azul casi",
+  "anim": true
+ },
+ {
+  "n": "axo_amarillo_feliz",
+  "t": "Ajolote amarillo feliz",
+  "anim": true
+ },
+ {
+  "n": "axo_amarillo_piensa",
+  "t": "Ajolote amarillo piensa",
+  "anim": true
+ },
+ {
+  "n": "axo_amarillo_celebra",
+  "t": "Ajolote amarillo celebra",
+  "anim": true
+ },
+ {
+  "n": "axo_amarillo_casi",
+  "t": "Ajolote amarillo casi",
+  "anim": true
+ },
+ {
+  "n": "axo_menta_feliz",
+  "t": "Ajolote menta feliz",
+  "anim": true
+ },
+ {
+  "n": "axo_menta_piensa",
+  "t": "Ajolote menta piensa",
+  "anim": true
+ },
+ {
+  "n": "axo_menta_celebra",
+  "t": "Ajolote menta celebra",
+  "anim": true
+ },
+ {
+  "n": "axo_menta_casi",
+  "t": "Ajolote menta casi",
+  "anim": true
+ },
+ {
+  "n": "axo_lila_feliz",
+  "t": "Ajolote lila feliz",
+  "anim": true
+ },
+ {
+  "n": "axo_lila_piensa",
+  "t": "Ajolote lila piensa",
+  "anim": true
+ },
+ {
+  "n": "axo_lila_celebra",
+  "t": "Ajolote lila celebra",
+  "anim": true
+ },
+ {
+  "n": "axo_lila_casi",
+  "t": "Ajolote lila casi",
+  "anim": true
+ },
+ {
+  "n": "axo_durazno_feliz",
+  "t": "Ajolote durazno feliz",
+  "anim": true
+ },
+ {
+  "n": "axo_durazno_piensa",
+  "t": "Ajolote durazno piensa",
+  "anim": true
+ },
+ {
+  "n": "axo_durazno_celebra",
+  "t": "Ajolote durazno celebra",
+  "anim": true
+ },
+ {
+  "n": "axo_durazno_casi",
+  "t": "Ajolote durazno casi",
+  "anim": true
+ },
+ {
+  "n": "moneda_aguila",
+  "t": "Moneda: águila",
+  "anim": false
+ },
+ {
+  "n": "moneda_sol",
+  "t": "Moneda: sol",
+  "anim": false
+ },
+ {
+  "n": "moneda_gira",
+  "t": "Moneda girando",
+  "anim": true
+ },
+ {
+  "n": "dado_1",
+  "t": "Dado: 1",
+  "anim": false
+ },
+ {
+  "n": "dado_2",
+  "t": "Dado: 2",
+  "anim": false
+ },
+ {
+  "n": "dado_3",
+  "t": "Dado: 3",
+  "anim": false
+ },
+ {
+  "n": "dado_4",
+  "t": "Dado: 4",
+  "anim": false
+ },
+ {
+  "n": "dado_5",
+  "t": "Dado: 5",
+  "anim": false
+ },
+ {
+  "n": "dado_6",
+  "t": "Dado: 6",
+  "anim": false
+ },
+ {
+  "n": "dado_rueda",
+  "t": "Dado rodando",
+  "anim": true
+ },
+ {
+  "n": "canica_roja",
+  "t": "Canica roja",
+  "anim": false
+ },
+ {
+  "n": "canica_azul",
+  "t": "Canica azul",
+  "anim": false
+ },
+ {
+  "n": "canica_verde",
+  "t": "Canica verde",
+  "anim": false
+ },
+ {
+  "n": "bolsa_canicas",
+  "t": "Bolsa de canicas",
+  "anim": false
+ },
+ {
+  "n": "bolsa_saca",
+  "t": "Sacando una canica",
+  "anim": true
+ },
+ {
+  "n": "ruleta",
+  "t": "Ruleta de 4 colores",
+  "anim": false
+ },
+ {
+  "n": "ruleta_gira",
+  "t": "Ruleta girando",
+  "anim": true
+ },
+ {
+  "n": "galleta",
+  "t": "Galleta",
+  "anim": false
+ },
+ {
+  "n": "plato",
+  "t": "Plato",
+  "anim": false
+ },
+ {
+  "n": "reparto",
+  "t": "Repartir galletas",
+  "anim": true
+ },
+ {
+  "n": "pizza_3_4",
+  "t": "Tres cuartos",
+  "anim": false
+ },
+ {
+  "n": "pizza_1_2",
+  "t": "Un medio",
+  "anim": false
+ },
+ {
+  "n": "estrella",
+  "t": "Estrella",
+  "anim": false
+ },
+ {
+  "n": "icono_fracciones",
+  "t": "Fracciones",
+  "anim": false
+ },
+ {
+  "n": "icono_divisiones",
+  "t": "Divisiones",
+  "anim": false
+ },
+ {
+  "n": "icono_probabilidad",
+  "t": "Probabilidad",
+  "anim": false
+ },
+ {
+  "n": "icono_dorado",
+  "t": "Cuentas doradas",
+  "anim": false
+ },
+ {
+  "n": "icono_decimal",
+  "t": "Tablero decimal",
+  "anim": false
+ },
+ {
+  "n": "icono_cadenas",
+  "t": "Cadenas de cuentas",
+  "anim": false
+ },
+ {
+  "n": "icono_area",
+  "t": "Área",
+  "anim": false
+ },
+ {
+  "n": "icono_angulos",
+  "t": "Ángulos",
+  "anim": false
+ },
+ {
+  "n": "icono_ritmo",
+  "t": "Ritmo",
+  "anim": false
+ },
+ {
+  "n": "icono_ajedrez",
+  "t": "Ajedrez",
+  "anim": false
+ },
+ {
+  "n": "icono_programacion",
+  "t": "Programación",
+  "anim": false
+ },
+ {
+  "n": "icono_dibujo",
+  "t": "Dibujo",
+  "anim": false
+ }
+]

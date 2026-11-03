@@ -50,6 +50,7 @@
   document.addEventListener('keydown', function(ev){
     var a = ev.key === 'Home' ? 'inicio' : ev.key === 'ArrowRight' ? 'siguiente' : ev.key === 'ArrowLeft' ? 'atras' : null;
     if (!a) return;
+    if (ev.target && /^(INPUT|TEXTAREA)$/.test(ev.target.tagName)) return; // al escribir el nombre, las flechas son del campo
     ev.preventDefault(); accion(a);
   });
 
@@ -135,3 +136,9 @@
     var w=document.querySelector('.wrap')||document.body; w.appendChild(pie);
   }
 })();
+
+/* Contar tocando: al tocar una cuenta se pone gris (sirve para llevar la cuenta sin escribir la cifra) */
+document.addEventListener('click',function(e){
+  var c=e.target.closest&&e.target.closest('.dots i,.g5 i,.cb i,.toks svg,#mat3 i,.bead');
+  if(c&&!c.closest('button')){c.classList.toggle('cnt');if(window.Snd&&Snd.pop)Snd.pop();}
+});

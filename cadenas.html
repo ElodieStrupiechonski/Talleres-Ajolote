@@ -21,6 +21,18 @@ button:disabled{opacity:.4}
 .tabla .hd{background:var(--tray);color:var(--muted)}
 .tabla .t.rect{background:#f2cf72}.tabla .t.rl{background:#c9e4c0}.tabla .t.sel{background:#e0a21a;color:#fff}.tabla .t.rw{background:#f4e6bf}
 .arr{display:grid;gap:2px;width:max-content;margin-top:8px}
+.seqw{display:flex;flex-wrap:wrap;align-items:center;gap:6px 4px;margin:8px 0}
+.seqb{min-width:56px;padding:8px 10px;text-align:center;font-family:var(--display);font-weight:800;font-size:1.5rem;background:var(--card);border:3px solid var(--fg);border-radius:12px}
+.seqb.q{background:#f2e08a;border-style:dashed}
+.seqj{font-family:var(--display);font-weight:700;font-size:.85rem;color:var(--muted);min-width:28px;text-align:center}
+.mult{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px;max-width:470px;margin:8px 0}
+.mult button{min-height:0;aspect-ratio:1;padding:0;font-size:clamp(13px,1.8vw,17px);font-weight:800}
+.mult button.sel{background:#e0a21a;color:#fff}
+.mult button.miss{outline:4px solid var(--red)}
+.mult button.bad2{background:#f3b7ab}
+.rc{width:100%;max-width:300px;height:auto;flex:none}
+.story{display:flex;gap:14px;align-items:center}.story svg{width:84px;height:84px;flex:none}.story p{margin:0;font-size:1.3rem}
+.ctl{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center}
 .arr i{width:13px;height:13px;border-radius:50%;background:#e0a21a;display:block}
 </style></head><body>
 <div class="wrap">
@@ -57,8 +69,49 @@ button:disabled{opacity:.4}
       </div>
     </div>
   </section>
+  <section class="tray" id="sP" aria-labelledby="tP">
+    <span class="step">Bandeja 3 · Patrones</span>
+    <h2 id="tP">¿Qué número sigue?</h2>
+    <div class="ctl" id="pAnc"></div>
+    <div class="seqw" id="pSeq"></div>
+    <div class="chips" id="pIn"></div>
+    <p class="note" id="pMsg" aria-live="polite"></p>
+    <p>Aciertos: <b id="pSc">0</b> · <button id="pNx" type="button">Siguiente</button></p>
+  </section>
+
+  <section class="tray" id="sM" aria-labelledby="tM">
+    <span class="step">Bandeja 4 · Partir rectángulos</span>
+    <h2 id="tM">Multiplicar con trucos</h2>
+    <div class="ctl" id="mAnc"></div>
+    <div class="row">
+      <svg class="rc" id="mSv" viewBox="0 0 380 300" role="img" aria-label="Rectángulo de cuentas"></svg>
+      <div class="col ed"><p id="mQ" style="font-size:1.3rem"></p><div class="chips" id="mIn"></div><p class="note" id="mMsg" aria-live="polite"></p>
+        <p>Aciertos: <b id="mSc">0</b> · <button id="mNx" type="button">Siguiente</button> <button id="mSee" type="button">Ver dibujo</button></p></div>
+    </div>
+  </section>
+
+  <section class="tray" id="sC" aria-labelledby="tC">
+    <span class="step">Bandeja 5 · Múltiplos</span>
+    <h2 id="tC">Marca los múltiplos</h2>
+    <div class="ctl" id="cAnc"></div>
+    <p id="cQ" style="font-size:1.3rem"></p>
+    <div class="mult" id="cG"></div>
+    <div class="btns"><button id="cOk" type="button">✓ Comprobar</button><button id="cNx" type="button">Siguiente</button></div>
+    <p class="note" id="cMsg" aria-live="polite"></p><p>Aciertos: <b id="cSc">0</b></p>
+  </section>
+
+  <section class="tray" id="sQ" aria-labelledby="tQ">
+    <span class="step">Bandeja 6 · Problemas</span>
+    <h2 id="tQ">Cuentas con historia</h2>
+    <div class="ctl" id="qAnc"></div>
+    <div class="story" id="qSt"></div>
+    <div class="chips" id="qIn"></div>
+    <p class="note" id="qMsg" aria-live="polite"></p>
+    <p>Aciertos: <b id="qSc">0</b> · <button id="qNx" type="button">Siguiente</button></p>
+  </section>
+
   <section class="tray" id="s3" aria-labelledby="t3">
-    <span class="step">Bandeja 3 · Ponte a prueba</span>
+    <span class="step">Bandeja 7 · Ponte a prueba</span>
     <h2 id="t3">Multiplica y completa</h2>
     
     <p id="q3" style="font-size:1.35rem"></p>
@@ -69,6 +122,7 @@ button:disabled{opacity:.4}
   </section>
 </div>
 <button id="next" hidden aria-hidden="true" tabindex="-1">Siguiente</button>
+<script src="ilustra.js"></script>
 <script src="sonido.js"></script>
 <script src="construir.js"></script>
 <script>
@@ -124,6 +178,100 @@ const bead=n=>`<svg width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy
   chips();paint();
 })();
 
+
+const RR=(a,b)=>a+rnd(b-a+1),PK=a=>a[rnd(a.length)];
+const INK='#41362b';
+
+/* Bandeja 3: patrones */
+(function(){
+  let score=0,cur,done;
+  const NV=Niveles($('#pAnc'),['Contar de 2 a 5 en 5','Falta un número en medio','Contar hacia atrás','De 6 en 6, 7, 8 y 9','Empezando en otro número'],()=>q());
+  function q(){const L=NV.get();done=false;let st,a,len=6,miss,dir=1;
+    if(L===0){st=RR(2,5);a=st;miss=RR(3,5);}
+    else if(L===1){st=PK([2,3,4,5,10]);a=st;miss=RR(1,4);}
+    else if(L===2){st=PK([2,3,4,5,6]);a=st*8;dir=-1;miss=RR(2,5);}
+    else if(L===3){st=PK([6,7,8,9]);a=st;miss=RR(1,5);}
+    else{st=RR(2,9);a=RR(1,9);miss=RR(1,5);}
+    const seq=[];for(let i=0;i<len;i++)seq.push(a+dir*st*i);
+    cur={ans:seq[miss],st,dir,seq,miss};
+    let html='';seq.forEach((v,i)=>{if(i)html+=`<span class="seqj">${dir>0?'+':'−'}${st}</span>`;html+=`<span class="seqb${i===miss?' q':''}">${i===miss?'?':v}</span>`;});
+    $('#pSeq').innerHTML=html;$('#pMsg').textContent='';
+    Construir($('#pIn'),{max:3,submit:v=>res(v[0])});}
+  function res(v){const m=$('#pMsg');
+    if(v===cur.ans){if(!done){score++;$('#pSc').textContent=score;}done=true;if(window.Snd)Snd.ok();
+      const q=document.querySelector('#pSeq .seqb.q');if(q){q.classList.remove('q');q.textContent=cur.ans;}
+      m.innerHTML=`<span class="ok">¡Correcto!</span> Cada salto es ${cur.dir>0?'+':'−'}${cur.st}: ${cur.seq.join(', ')}.`;}
+    else{if(window.Snd)Snd.bad();m.innerHTML=`<span class="bad">Casi.</span> Mira cuánto cambia entre un número y el siguiente.`;}}
+  $('#pNx').onclick=q;secs.push({root:$('#sP'),next:q});q();
+})();
+
+/* Bandeja 4: partir rectángulos */
+(function(){
+  let score=0,cur,done,see=true;
+  const NV=Niveles($('#mAnc'),['Girar el rectángulo','El doble','Partir en 5 + algo','Por 9 y por 11','Partir en 10 + algo, sin dibujo'],()=>q());
+  function draw(){const sv=$('#mSv');$('#mSee').style.display=see?'none':'';if(!see||!cur.rows){}
+    if(!see){sv.innerHTML='';return;}
+    const R=cur.draw[0],C=cur.draw[1],cs=Math.min(34,340/C,260/R),x0=(380-cs*C)/2,y0=14;let t='';
+    for(let r=0;r<R;r++)for(let c=0;c<C;c++){let f='#bcd8f0';if(cur.split&&r>=cur.split)f='#f9e0a0';if(cur.faded&&r===R-1)f='#fffdf9';
+      t+=`<rect x="${x0+c*cs}" y="${y0+r*cs}" width="${cs}" height="${cs}" rx="3" fill="${f}" stroke="${INK}" stroke-width="2"/>`;}
+    if(cur.split)t+=`<line x1="${x0-6}" y1="${y0+cur.split*cs}" x2="${x0+C*cs+6}" y2="${y0+cur.split*cs}" stroke="${INK}" stroke-width="5" stroke-dasharray="9 6"/>`;
+    t+=`<text x="${x0-10}" y="${y0+R*cs/2+6}" text-anchor="end" style="font-family:var(--display);font-weight:800;font-size:18px;fill:${INK}">${R}</text><text x="190" y="${y0+R*cs+26}" text-anchor="middle" style="font-family:var(--display);font-weight:800;font-size:18px;fill:${INK}">${C}</text>`;
+    sv.innerHTML=t;}
+  function q(){const L=NV.get();done=false;let a,b,txt,ans,msg,draws=[0,0],split=0,faded=false;
+    if(L===0){a=RR(3,9);b=RR(3,9);if(a===b)b++;ans=a;txt=`${a} × ${b} = ${b} × ?`;msg=`${a} × ${b} = ${b} × ${a} = ${a*b}. El rectángulo girado tiene las mismas cuentas.`;draws=[a,b];}
+    else if(L===1){const h=RR(2,6),b2=RR(3,9);a=h*2;b=b2;ans=a*b;txt=`${h} × ${b} = ${h*b}. ¿Cuánto es ${a} × ${b}?`;msg=`${a} × ${b} es el doble de ${h} × ${b}: ${h*b} + ${h*b} = ${ans}.`;draws=[a,b];split=h;}
+    else if(L===2){const k=RR(2,4);a=5+k;b=RR(3,9);ans=a*b;txt=`¿Cuánto es ${a} × ${b}?`;msg=`${a} × ${b} = 5 × ${b} + ${k} × ${b} = ${5*b} + ${k*b} = ${ans}.`;draws=[a,b];split=5;}
+    else if(L===3){const n=PK([9,11]),b2=RR(3,9);a=n;b=b2;ans=a*b;txt=`¿Cuánto es ${a} × ${b}?`;
+      if(n===9){msg=`9 × ${b} = 10 × ${b} − ${b} = ${10*b} − ${b} = ${ans}.`;draws=[10,b];faded=true;}else{msg=`11 × ${b} = 10 × ${b} + ${b} = ${10*b} + ${b} = ${ans}.`;draws=[11,b];split=10;}}
+    else{const k=RR(2,4);a=10+k;b=RR(3,8);ans=a*b;txt=`¿Cuánto es ${a} × ${b}?`;msg=`${a} × ${b} = 10 × ${b} + ${k} × ${b} = ${10*b} + ${k*b} = ${ans}.`;draws=[a,b];split=10;}
+    cur={a,b,ans,msg,draw:draws,split,faded};see=L<4;
+    $('#mQ').textContent=txt;$('#mMsg').textContent='';draw();
+    Construir($('#mIn'),{max:3,submit:v=>res(v[0])});}
+  function res(v){const m=$('#mMsg');if(v===cur.ans){if(!done){score++;$('#mSc').textContent=score;}done=true;see=true;draw();if(window.Snd)Snd.ok();m.innerHTML=`<span class="ok">¡Correcto!</span> ${cur.msg}`;}
+    else{if(window.Snd)Snd.bad();m.innerHTML=`<span class="bad">Casi.</span> ${NV.get()===0?'Si giras el rectángulo, filas y columnas se cambian.':'Parte el número en dos pedazos fáciles y suma.'}`;}}
+  $('#mNx').onclick=q;$('#mSee').onclick=()=>{see=true;draw();};secs.push({root:$('#sM'),next:q});q();
+})();
+
+/* Bandeja 5: múltiplos */
+(function(){
+  let score=0,cur,done,sel=new Set();
+  const NV=Niveles($('#cAnc'),['Múltiplos de 2, 5 y 10','Múltiplos de 3 y 4','Múltiplos de 6, 7, 8 y 9','Múltiplos de dos números','Hasta 100'],()=>q());
+  function q(){const L=NV.get();done=false;sel=new Set();let N,ns,txt;
+    if(L===0){N=30;ns=[PK([2,5,10])];}else if(L===1){N=40;ns=[PK([3,4])];}else if(L===2){N=60;ns=[PK([6,7,8,9])];}
+    else if(L===3){N=60;ns=PK([[2,3],[2,5],[3,4],[3,5],[4,6]]);}else{N=100;ns=[PK([6,7,8,9,11,12])];}
+    const exp=new Set();for(let i=1;i<=N;i++)if(ns.every(n=>i%n===0))exp.add(i);
+    cur={N,ns,exp};
+    $('#cQ').innerHTML=ns.length===1?`Marca los múltiplos de <b>${ns[0]}</b>.`:`Marca los números que son múltiplos de <b>${ns[0]}</b> y de <b>${ns[1]}</b> a la vez.`;
+    $('#cMsg').textContent='';draw();}
+  function draw(show){const g=$('#cG');g.innerHTML='';
+    for(let i=1;i<=cur.N;i++){const b=document.createElement('button');b.type='button';b.textContent=i;if(sel.has(i))b.className='sel';
+      if(show){if(cur.exp.has(i)&&!sel.has(i))b.classList.add('miss');if(!cur.exp.has(i)&&sel.has(i))b.classList.add('bad2');}
+      b.onclick=()=>{sel.has(i)?sel.delete(i):sel.add(i);done=false;draw();if(window.Snd)Snd.tick();};g.appendChild(b);}}
+  function chk(){const m=$('#cMsg');let falta=0,sobra=0;cur.exp.forEach(i=>{if(!sel.has(i))falta++;});sel.forEach(i=>{if(!cur.exp.has(i))sobra++;});
+    if(!falta&&!sobra){if(!done){score++;$('#cSc').textContent=score;}done=true;if(window.Snd)Snd.ok();draw();
+      const n=cur.ns.length===1?cur.ns[0]:cur.ns[0]*cur.ns[1]/(gcd(cur.ns[0],cur.ns[1]));
+      m.innerHTML=`<span class="ok">¡Correcto!</span> Contando de ${n} en ${n}: ${[...cur.exp].slice(0,6).join(', ')}${cur.exp.size>6?'…':''}.`;}
+    else{if(window.Snd)Snd.bad();draw(true);m.innerHTML=`<span class="bad">Casi.</span> ${falta?`Faltan ${falta} (borde rojo). `:''}${sobra?`Sobran ${sobra} (rosa).`:''}`;}}
+  $('#cOk').onclick=chk;$('#cNx').onclick=q;secs.push({root:$('#sC'),next:q});q();
+})();
+
+/* Bandeja 6: problemas */
+(function(){
+  let score=0,cur,done;
+  const NV=Niveles($('#qAnc'),['Grupos iguales','Filas y columnas','El doble o el triple','Dos pasos','¿Cuántos grupos?'],()=>q());
+  function q(){const L=NV.get();done=false;let txt,ans,msg,ic=PK(['canica_roja','galleta','estrella','canica_azul']),a,b;
+    if(L===0){a=RR(3,9);b=RR(2,8);ans=a*b;txt=`Una bolsa tiene ${a} ${ic.startsWith('canica')?'canicas':ic==='galleta'?'galletas':'estrellas'}. ¿Cuántas hay en ${b} bolsas?`;msg=`${b} × ${a} = ${ans}`;}
+    else if(L===1){a=RR(3,9);b=RR(3,9);ans=a*b;ic='icono_cadenas';txt=`En un salón hay ${a} filas de ${b} sillas. ¿Cuántas sillas hay?`;msg=`${a} × ${b} = ${ans}`;}
+    else if(L===2){a=RR(3,9);b=RR(2,5);const m=PK([2,3]);ans=m*a*b;txt=`Luis compró ${b} cajas con ${a} galletas cada una. Ana compró ${m===2?'el doble':'el triple'}. ¿Cuántas galletas compró Ana?`;msg=`Luis: ${b} × ${a} = ${a*b}. Ana: ${m} × ${a*b} = ${ans}`;ic='galleta';}
+    else if(L===3){a=RR(3,9);b=RR(2,5);const c=RR(3,9),d=RR(2,5);ans=a*b+c*d;txt=`Hay ${b} bolsas con ${a} canicas y ${d} bolsas con ${c} canicas. ¿Cuántas canicas hay en total?`;msg=`${b} × ${a} + ${d} × ${c} = ${a*b} + ${c*d} = ${ans}`;ic='bolsa_canicas';}
+    else{a=RR(3,9);b=RR(3,9);ans=b;txt=`Hay ${a*b} galletas y ponemos ${a} en cada bolsa. ¿Cuántas bolsas llenamos?`;msg=`${a} × ? = ${a*b}. Como ${a} × ${b} = ${a*b}, son ${b} bolsas`;ic='galleta';}
+    cur={ans,msg};$('#qSt').innerHTML=Ilu.html(ic)+`<p>${txt}</p>`;$('#qMsg').textContent='';
+    Construir($('#qIn'),{max:3,submit:v=>res(v[0])});}
+  function res(v){const m=$('#qMsg');if(v===cur.ans){if(!done){score++;$('#qSc').textContent=score;}done=true;if(window.Snd)Snd.ok();m.innerHTML=`<span class="ok">¡Correcto!</span> ${cur.msg}.`;}
+    else{if(window.Snd)Snd.bad();m.innerHTML=`<span class="bad">Casi.</span> ${NV.get()===4?'¿Cuántas veces cabe el grupo?':'¿Cuántos grupos hay y cuántos hay en cada uno?'}`;}}
+  $('#qNx').onclick=q;secs.push({root:$('#sQ'),next:q});q();
+})();
+
 /* Bandeja 3 */
 (function(){
   let score=0,cur,done;
@@ -135,7 +283,7 @@ const bead=n=>`<svg width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy
     const set=new Set([ans]);shuffle(pool.slice()).forEach(x=>{if(set.size<4&&x>0&&x!==ans)set.add(x);});let g=1;while(set.size<4)set.add(ans+g++);
     Construir($('#o3'),{max:3,submit:v=>res(v[0])});}
   function res(x){if(x===cur.ans){if(!done){score++;$('#sc3').textContent=score;}done=true;$('#m3').innerHTML=`<span class="ok">¡Correcto!</span> ${cur.a} × ${cur.b} = ${cur.p}. Pulsa Siguiente.`;}
-    else $('#m3').innerHTML=`<span class="bad">Casi.</span> Piensa en ${cur.a} tramos de ${cur.b} cuentas, o en ${cur.b} de ${cur.a}.`;}
+    else $('#m3').innerHTML=`<span class="bad">Casi.</span> Son ${cur.a} filas de ${cur.b} cuentas.`;}
   $('#n3').addEventListener('click',q);
   secs.push({root:$('#s3'),next:q});q();
 })();
@@ -145,5 +293,5 @@ secs.forEach(s=>{s.root.addEventListener('pointerdown',()=>{active=s;},true);s.r
 $('#next').addEventListener('click',()=>active.next());
 </script>
 <script src="taller.js"></script>
-<script src="pantalla.js"></script>
+<script src="perfiles.js"></script><script src="perfilui.js"></script><script src="pantalla.js"></script>
 </body></html>

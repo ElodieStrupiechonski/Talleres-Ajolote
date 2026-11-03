@@ -3,78 +3,88 @@
 <title>Ritmo y fracciones · Figuras musicales interactivas</title><!--seo--><meta name="description" content="Descubre que las figuras musicales son fracciones: arma compases, completa lo que falta y escúchalos. Taller interactivo que une música y matemáticas, gratis y sin internet."><link rel="canonical" href="https://elodiestrupiechonski.github.io/Talleres-Matematicas/ritmo.html"><meta property="og:type" content="website"><meta property="og:locale" content="es_MX"><meta property="og:site_name" content="Talleres de Matemáticas"><meta property="og:title" content="Ritmo y fracciones · Figuras musicales interactivas"><meta property="og:description" content="Descubre que las figuras musicales son fracciones: arma compases, completa lo que falta y escúchalos. Taller interactivo que une música y matemáticas, gratis y sin internet."><meta property="og:url" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/ritmo.html"><meta property="og:image" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/icons/og.png"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Ritmo y fracciones · Figuras musicales interactivas", "description": "Descubre que las figuras musicales son fracciones: arma compases, completa lo que falta y escúchalos. Taller interactivo que une música y matemáticas, gratis y sin internet.", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/ritmo.html", "inLanguage": "es-MX", "isAccessibleForFree": true, "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/", "author": [{"@type": "Person", "name": "Elodie Strupiechonski"}, {"@type": "Person", "name": "Andrés de Luna Bugallo"}], "learningResourceType": "Recurso interactivo", "typicalAgeRange": "9-11", "educationalLevel": "Primaria", "teaches": "Fracciones y ritmo musical", "isPartOf": {"@type": "WebSite", "name": "Talleres de Matemáticas", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/"}}</script><!--/seo-->
 <link rel="stylesheet" href="taller.css">
 <style>
-.lbl{font-family:var(--display);font-weight:600;color:var(--muted);margin-bottom:6px;display:block}
-.ed{flex:1;min-width:min(100%,260px)}
-.bwrap{width:min(100%,470px);flex:none}
+.ctl{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center}
+.grp{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.grp .lb{font-family:var(--display);font-weight:600;color:var(--muted)}
+.grp button{min-width:46px;min-height:46px;padding:4px 10px}
+.rows{display:flex;flex-direction:column;gap:10px;width:100%}
+.line{display:flex;gap:10px;align-items:center}
+.tag{flex:none;width:100px;display:flex;flex-direction:column;gap:4px}
+.tag button{min-height:40px;padding:2px 6px;font-size:.95rem;font-weight:800;border-width:3px}
+.tag small{font-size:.8rem;color:var(--muted);text-align:center}
+.lane{position:relative;border:3px solid var(--fg);border-radius:8px;background:var(--card);flex:none;overflow:hidden;box-sizing:border-box;touch-action:none}
+.lane.sel{box-shadow:0 0 0 3px var(--acc)}
+.lane.vac{border-style:dashed;opacity:.55;display:flex;align-items:center;justify-content:center}
+.rg{position:absolute;left:0;right:0;font-size:.7rem;color:#41362b99;font-family:var(--display);padding-left:3px;box-sizing:border-box;border-bottom:1px solid #41362b22;pointer-events:none}
+.blk{position:absolute;box-sizing:border-box;border:2px solid var(--fg);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;color:#41362b;font-size:.8rem;overflow:hidden;transition:top .4s ease,filter .1s;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;white-space:nowrap}
+.blk.rest{background-image:repeating-linear-gradient(45deg,#d9d3c7 0 6px,#ece7dc 6px 12px)!important;color:#5a4f40}
+.blk.lock{outline:3px dashed var(--fg);outline-offset:-5px;cursor:default}
+.blk.ghost{background:transparent!important;background-image:none!important;border-style:dashed;opacity:.6;pointer-events:none}
+.blk.play{filter:brightness(1.4) saturate(1.3);z-index:2}
+.blk em{position:absolute;left:0;top:0;bottom:0;width:8px;opacity:.95}
+.blk b{position:absolute;right:2px;top:0;font-size:.7rem}
+.ph{position:absolute;top:0;bottom:0;width:3px;background:var(--red);pointer-events:none;z-index:3;display:none}
+.pal{display:flex;flex-wrap:wrap;gap:14px 18px;align-items:flex-end;padding:4px 0}
+.pal .blk{position:relative;flex:none}
+.pal .blk::after{content:'';position:absolute;inset:-8px -6px}
+.sum{font-family:var(--display);font-size:1.15rem;min-height:1.4em}
+.dragg{position:fixed;pointer-events:none;z-index:999;opacity:.9;box-sizing:border-box;border:2px solid var(--fg);border-radius:6px}
+.shake{animation:sh .3s}
+@keyframes sh{20%{transform:translateX(-5px)}60%{transform:translateX(5px)}}
 .btns{display:flex;flex-wrap:wrap;gap:8px}
 .msg:empty,.note:empty{display:none}
 button:disabled{opacity:.4}
-
-.bar{display:flex;width:100%;min-height:64px;border:3px solid var(--fg);border-radius:8px;overflow:hidden;background:repeating-linear-gradient(90deg,var(--card) 0 calc(25% - 1px),var(--tray-edge) calc(25% - 1px) 25%)}
-.bar .fg{display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;color:#41362b;border-right:2px solid var(--fg);overflow:hidden;font-size:.9rem;line-height:1.1;transition:filter .1s}
-.bar .fg small{font-weight:400;font-size:.8rem}
-.bar .fg.lock{opacity:.9;outline:3px dashed var(--fg);outline-offset:-5px}
-.bar .fg.play{filter:brightness(1.4) saturate(1.2)}
-.pad{display:flex;flex-wrap:wrap;gap:8px}
-.pad button{color:#41362b;font-weight:800;min-width:92px;border:2px solid var(--fg)}
-.sum{font-family:var(--display);font-size:1.2rem}
-
-.lines{display:flex;flex-direction:column;gap:8px;width:100%}
-.line{display:flex;align-items:center;gap:10px}
-.line .tag{flex:none;width:96px;font-family:var(--display);font-weight:700;font-size:.9rem;color:var(--muted)}
-.line .bar{flex:1}
-.line.sel .tag{color:var(--fg)}
-.line.sel .bar{box-shadow:0 0 0 3px var(--acc)}
-.bar .fg.rest{background:repeating-linear-gradient(45deg,#d9d3c7 0 6px,#ece7dc 6px 12px)!important;color:#5a4f40}
-.pad button.rest{background:repeating-linear-gradient(45deg,#d9d3c7 0 6px,#ece7dc 6px 12px)}
-.pad{align-items:stretch}
-.who{display:flex;gap:8px;flex-wrap:wrap}
-.niv{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.niv .lbl2{font-family:var(--display);font-weight:600;color:var(--muted)}
 </style></head><body>
 <div class="wrap">
   <a class="back" href="index.html">← Todos los talleres</a>
   <header class="col">
     <h1>Ritmo y fracciones</h1>
-    <p class="lead">Las figuras musicales son fracciones de un compás entero. Armamos, escuchamos y en los niveles altos tocamos con dos instrumentos.</p>
+    <p class="lead">Las figuras musicales son fracciones de un compás.</p>
   </header>
   <section class="tray" id="s1" aria-labelledby="t1">
-    <span class="step">Bandeja 1 · Figuras como fracciones</span>
-    <h2 id="t1">Un compás es un entero</h2>
-    <p>Agrega figuras y silencios hasta llenar el compás (suma 1).</p>
-    <p class="det">Un compás de 4 tiempos vale <b>1</b> entero. La redonda llena todo el compás, la blanca es ½, la negra ¼, la corchea ⅛ y la semicorchea 1⁄16. Un silencio dura lo mismo que su figura, pero no suena. Con dos instrumentos, cada línea debe sumar 1 y suenan juntas.</p>
-    <div class="niv" id="nv1"></div>
-    <div class="lines" id="bars1"></div>
+    <span class="step">Bandeja 1 · Armar</span>
+    <h2 id="t1">Arma el compás</h2>
+    <p class="det">Arrastra las figuras al compás hasta llenarlo (suma 1). Toca una figura puesta para quitarla. Un silencio dura lo mismo pero no suena. Con dos instrumentos, cada uno suma 1.</p>
+    <div class="ctl" id="c1"></div>
+    <div class="rows" id="r1"></div>
     <p class="sum" id="s1t" aria-live="polite"></p>
-    <div class="who" id="who1"></div>
-    <div class="pad" id="pad1"></div>
-    <div class="btns"><button id="u1" type="button">Quitar la última</button><button id="c1" type="button">Borrar</button><button id="p1" type="button">▶ Escuchar</button></div>
+    <div class="pal" id="p1"></div>
+    <div class="btns"><button id="pl1" type="button">▶ Escuchar</button><button id="u1" type="button">↶ Quitar</button><button id="b1" type="button">Borrar todo</button></div>
   </section>
   <section class="tray" id="s2" aria-labelledby="t2">
-    <span class="step">Bandeja 2 · Completa el compás</span>
-    <h2 id="t2">¿Qué falta para llegar a 1?</h2>
-    <p>Agrega lo que falta para que cada línea sume 1.</p>
-    <p class="det">Las figuras con borde punteado ya están puestas. Agrega las que falten para que el compás sume exactamente 1. Los silencios cuentan igual que las figuras.</p>
-    <div class="niv" id="nv2"></div>
-    <div class="lines" id="bars2"></div>
+    <span class="step">Bandeja 2 · Completar</span>
+    <h2 id="t2">¿Qué falta?</h2>
+    <p class="det">Las figuras con borde punteado ya están. Arrastra las que faltan para llegar a 1.</p>
+    <div class="ctl" id="c2"></div>
+    <div class="rows" id="r2"></div>
     <p class="sum" id="s2t" aria-live="polite"></p>
-    <div class="who" id="who2"></div>
-    <div class="pad" id="pad2"></div>
-    <div class="btns"><button id="u2" type="button">Quitar la última</button><button id="h2" type="button">Pista</button><button id="p2" type="button">▶ Escuchar</button><button id="n2" type="button">Siguiente</button></div>
-    <p class="note" id="m2" aria-live="polite"></p>
+    <div class="pal" id="p2"></div>
+    <div class="btns"><button id="pl2" type="button">▶ Escuchar</button><button id="h2" type="button">Pista</button><button id="n2" type="button">Siguiente</button></div>
   </section>
   <section class="tray" id="s3" aria-labelledby="t3">
     <span class="step">Bandeja 3 · Ponte a prueba</span>
     <h2 id="t3">Suma las figuras</h2>
-    <div class="niv" id="nv3"></div>
-    <p id="q3" style="font-size:1.25rem"></p>
-    <div id="v3" class="lines"></div>
+    <div class="ctl" id="c3"></div>
+    <p id="q3" style="font-size:1.3rem"></p>
+    <div class="rows" id="v3"></div>
     <div class="chips" id="o3"></div>
     <p class="note" id="m3" aria-live="polite"></p>
     <p>Aciertos: <b id="sc3">0</b> · <button id="n3" type="button">Siguiente</button></p>
   </section>
+  <section class="tray" id="s4" aria-labelledby="t4">
+    <span class="step">Bandeja 4 · Melodía</span>
+    <h2 id="t4">Notas altas y bajas</h2>
+    <p class="det">Arrastra cada figura al compás. Arriba suena más agudo, abajo más grave. En «Copiar», haz la misma melodía que el modelo.</p>
+    <div class="ctl" id="c4"></div>
+    <div class="rows" id="r4"></div>
+    <p class="sum" id="s4t" aria-live="polite"></p>
+    <div class="pal" id="p4"></div>
+    <div class="btns"><button id="pl4" type="button">▶ Escuchar</button><button id="mo4" type="button" hidden>🔊 Modelo</button><button id="u4" type="button">↶ Quitar</button><button id="b4" type="button">Borrar todo</button><button id="n4" type="button" hidden>Siguiente</button></div>
+    <p class="note" id="m4" aria-live="polite"></p>
+  </section>
 </div>
 <button id="next" hidden aria-hidden="true" tabindex="-1">Siguiente</button>
+<script src="ilustra.js"></script>
 <script src="sonido.js"></script>
 <script src="construir.js"></script>
 <script>
@@ -89,96 +99,222 @@ const secs=[];
 const NOTAS=[{k:'redonda',u:16,c:'#86aedb'},{k:'blanca',u:8,c:'#86c496'},{k:'negra',u:4,c:'#f09b8a'},{k:'corchea',u:2,c:'#c4a6e0'},{k:'semicorchea',u:1,c:'#f2c77a'}];
 const SILE=NOTAS.map(f=>({k:'silencio de '+f.k,base:f.k,u:f.u,c:'#ddd6c8',r:true}));
 const tx=u=>fr(u,16);
-const sum=a=>a.reduce((s,f)=>s+f.u,0);
-// Niveles: figuras y silencios disponibles y número de líneas (instrumentos)
+const SC=[['Do',523.25,'#e9806c'],['Re',587.33,'#f0a35e'],['Mi',659.25,'#e8c75a'],['Sol',783.99,'#7fbf8a'],['La',880,'#6fa6d6'],['Do',1046.5,'#a98bd0']];
+const INS=[{k:'flauta',n:'Flauta',m:1,c:'#86aedb'},{k:'clarinete',n:'Clarinete',m:.5,c:'#86c496'},{k:'violin',n:'Violín',m:.5,c:'#f09b8a'},{k:'organo',n:'Órgano',m:.5,c:'#c4a6e0'}];
+const MEL=[0,2,4,3,2,1,3,5,4,2,0,1];
 const NIV=[
-  {t:'Figuras grandes',n:[0,1,2],r:[],l:1},
-  {t:'Con corcheas',n:[0,1,2,3],r:[2],l:1},
-  {t:'Todas las figuras y silencios',n:[0,1,2,3,4],r:[0,1,2,3,4],l:1},
-  {t:'Dos instrumentos',n:[0,1,2,3],r:[1,2,3],l:2},
-  {t:'Dos instrumentos, todo',n:[0,1,2,3,4],r:[0,1,2,3,4],l:2}];
-const LIN=['Flauta','Marimba'];
-let nivel=0;const listeners=[];
-function chipsNivel(box){box.innerHTML='';box.appendChild(h('span','lbl2','Nivel'));
-  NIV.forEach((v,i)=>{const b=btn(nivel===i?'on':'',String(i+1),()=>{nivel=i;listeners.forEach(f=>f());});b.title=v.t;b.setAttribute('aria-label','Nivel '+(i+1)+': '+v.t);b.style.minWidth='48px';box.appendChild(b);});
-  box.appendChild(h('span','lbl2',NIV[nivel].t));}
-const disp=()=>{const v=NIV[nivel];return {n:v.n.map(i=>NOTAS[i]),r:v.r.map(i=>SILE[i])};};
-// Sonido: flauta (sostenida toda la figura) y marimba (golpe que decae durante la figura)
-const U=0.125,PEN=[[523.25,587.33,659.25,783.99,880],[261.63,329.63,392,440,293.66]];
-function play(lines,barsEl){
-  const dur=Math.max(...lines.map(sum))*U;
-  lines.forEach((L,ln)=>{let t=0;L.forEach((f,i)=>{
-    if(!f.r&&window.Snd&&Snd.on()){const fq=PEN[ln][(i*2+ln)%5],d=Math.max(0.08,f.u*U-0.03);
-      if(ln===0)Snd.voz(fq,t*U,d,{vol:0.13,sost:true,ataque:0.03,relevo:0.12,armV:0.12});
-      else Snd.voz(fq,t*U,Math.max(0.2,f.u*U),{vol:0.15,tipo:'triangle',armV:0.25,ataque:0.006});}
-    const tt=t;setTimeout(()=>{const k=barsEl[ln]&&barsEl[ln].children[i];if(k){k.classList.add('play');setTimeout(()=>k.classList.remove('play'),Math.max(120,f.u*U*900));}},tt*U*1000);t+=f.u;});});
+  {t:'Figuras grandes',n:[0,1,2],r:[]},
+  {t:'Con corcheas',n:[0,1,2,3],r:[]},
+  {t:'Con semicorcheas',n:[0,1,2,3,4],r:[]},
+  {t:'Con silencios',n:[0,1,2,3,4],r:[1,2,3]},
+  {t:'Reto: dos instrumentos',n:[0,1,2,3,4],r:[0,1,2,3,4]}];
+const G={nivel:0,comp:1,nl:1,tempo:.125,ins:[0,1]};
+const listeners=[];
+const disp=()=>{const v=NIV[G.nivel];return {n:v.n.map(i=>NOTAS[i]),r:v.r.map(i=>SILE[i])};};
+const sum=a=>a.reduce((s,b)=>s+b.f.u,0);
+
+/* Controles compartidos: nivel, compases, tempo */
+function controles(box,opt){box.innerHTML='';opt=opt||{};
+  const g1=h('div','grp niv');g1.appendChild(h('span','lbl2','Nivel'));
+  NIV.forEach((v,i)=>{const b=btn(G.nivel===i?'on':'',String(i+1),()=>{G.nivel=i;if(i===4&&!opt.noLines)G.nl=2;listeners.forEach(f=>f(true));});b.title=v.t;b.setAttribute('aria-label','Nivel '+(i+1)+': '+v.t);g1.appendChild(b);});
+  g1.appendChild(h('span','lbl2',NIV[G.nivel].t));box.appendChild(g1);
+  if(!opt.noComp){const g2=h('div','grp');g2.appendChild(h('span','lb','Compases'));[1,2,3,4].forEach(n=>{const b=btn(G.comp===n?'on':'',String(n),()=>{G.comp=n;listeners.forEach(f=>f(true));});g2.appendChild(b);});box.appendChild(g2);}
+  const g3=h('div','grp');[['🐢',.2,'Lento'],['🚶',.125,'Normal'],['🐇',.075,'Rápido']].forEach(([e,v,t])=>{const b=btn(G.tempo===v?'on':'',e,()=>{G.tempo=v;listeners.forEach(f=>f(false));});b.setAttribute('aria-label',t);b.title=t;g3.appendChild(b);});box.appendChild(g3);}
+
+/* Arrastrar y soltar (o tocar) */
+let DRAG=null;
+function startDrag(ev,src){
+  if(ev.button>0)return;ev.preventDefault();
+  const r=src.el.getBoundingClientRect(),g=h('div','dragg');g.style.width=r.width+'px';g.style.height=r.height+'px';g.style.background=src.f.r?'#e6e0d4':src.f.c;
+  g.style.left=(ev.clientX-r.width/2)+'px';g.style.top=(ev.clientY-r.height/2)+'px';document.body.appendChild(g);
+  DRAG={g,src,x0:ev.clientX,y0:ev.clientY,moved:false,w:r.width,h:r.height};
+  if(window.Snd)Snd.unlock();
 }
-function barView(el,items){el.innerHTML='';items.forEach(f=>{const d=h('div','fg'+(f.lock?' lock':'')+(f.r?' rest':''));d.style.width=(f.u/16*100)+'%';d.style.background=f.c;
-  d.innerHTML=f.u>=4?`${f.r?'silencio':f.k}<small>${tx(f.u)}</small>`:`<small>${tx(f.u)}</small>`;d.title=f.k;el.appendChild(d);});}
-// Muestra una o dos líneas; devuelve los elementos barra
-function mostrar(cont,lines,sel){cont.innerHTML='';const out=[];lines.forEach((L,i)=>{const w=h('div','line'+(sel===i&&lines.length>1?' sel':''));if(lines.length>1)w.appendChild(h('span','tag',LIN[i]));const b=h('div','bar');barView(b,L);w.appendChild(b);cont.appendChild(w);out.push(b);});return out;}
-function pad(el,lists,line,onAdd){el.innerHTML='';const d=disp(),total=sum(lists[line]);
-  [d.n,d.r].forEach(g=>g.forEach(f=>{const b=btn(f.r?'rest':'',(f.r?'Silencio ':f.k[0].toUpperCase()+f.k.slice(1)+' ')+(f.r?f.base+' ':'')+tx(f.u),()=>onAdd(f));if(!f.r)b.style.background=f.c;b.style.color='#41362b';b.style.minWidth='92px';b.disabled=total+f.u>16;el.appendChild(b);}));}
-function quien(el,n,line,set){el.innerHTML='';if(n<2)return;el.appendChild(h('span','lbl2','Agregar a:'));LIN.forEach((t,i)=>el.appendChild(btn(line===i?'on':'',t,()=>set(i))));}
-const resumen=(lists)=>lists.map((L,i)=>{const s=sum(L);return (lists.length>1?LIN[i]+': ':'')+`<b>${s?tx(s):'0'}</b>`+(s===16?' <span class="ok">✓</span>':s?` · falta ${tx(16-s)}`:'');}).join(' &nbsp;·&nbsp; ');
+window.addEventListener('pointermove',e=>{if(!DRAG)return;const d=DRAG;if(Math.abs(e.clientX-d.x0)+Math.abs(e.clientY-d.y0)>8)d.moved=true;d.g.style.left=(e.clientX-d.w/2)+'px';d.g.style.top=(e.clientY-d.h/2)+'px';
+  document.querySelectorAll('.lane.hot').forEach(l=>l.classList.remove('hot'));const L=laneAt(e);if(L&&d.moved)L.el.classList.add('hot');});
+function laneAt(e){if(!DRAG)return null;DRAG.g.style.display='none';const t=document.elementFromPoint(e.clientX,e.clientY);DRAG.g.style.display='';const el=t&&t.closest&&t.closest('.lane');return el&&el._mesa?{el,mesa:el._mesa,li:el._li}:null;}
+window.addEventListener('pointerup',e=>{if(!DRAG)return;const d=DRAG;DRAG=null;d.g.remove();document.querySelectorAll('.lane.hot').forEach(l=>l.classList.remove('hot'));
+  if(!d.moved){d.src.tap&&d.src.tap();return;}
+  DRAG=d;const L=laneAt(e);DRAG=null;
+  if(L&&L.mesa.drop(L.li,d.src,e,L.el))return;
+  if(d.src.blk&&!L){d.src.mesa.quita(d.src.li,d.src.blk);return;}
+  if(d.src.blk)d.src.mesa.render();
+});
+window.addEventListener('pointercancel',()=>{if(DRAG){DRAG.g.remove();DRAG=null;}});
+
+/* Mesa: uno o dos instrumentos, uno o varios compases, de altura fija */
+class Mesa{
+  constructor(box,o){this.box=box;this.o=o||{};this.lanes=[[],[]];this.sel=0;this.ghost=null;this.lock=[0,0];this.timers=[];this.p=16;this.last=0;
+    new ResizeObserver(()=>{const w=this.box.clientWidth;if(w&&Math.abs(w-this.last)>2){this.last=w;this.render();}}).observe(box);}
+  get nl(){return this.o.fixedLanes||G.nl;}
+  clear(){this.lanes=[[],[]];this.lock=[0,0];this.revReset();this.render();}
+  revReset(){if(!this.o.pitch)this.lanes.forEach(L=>L.forEach(b=>{b.pitch=null;}));}
+  cap(){return 16*G.comp;}
+  full(){return this.lanes.slice(0,this.nl).every(L=>sum(L)===this.cap());}
+  changed(){this.revReset();this.render();this.o.onChange&&this.o.onChange();}
+  add(li,f,idx,pitch){const L=this.lanes[li];if(sum(L)+f.u>this.cap())return false;const b={f,pitch:this.o.pitch?(pitch==null?2:pitch):null};if(idx==null||idx>L.length)idx=L.length;L.splice(idx,0,b);this.sel=li;this.changed();if(window.Snd&&b.pitch!=null)this.tono(li,b);else if(window.Snd)Snd.pop();return true;}
+  quita(li,b){const L=this.lanes[li],i=L.indexOf(b);if(i>=0&&!b.lock){L.splice(i,1);this.changed();}}
+  quitaUlt(){const L=this.lanes[this.sel];for(let i=L.length-1;i>=0;i--)if(!L[i].lock){L.splice(i,1);this.changed();return;}}
+  tono(li,b){if(b.f.r||!window.Snd)return;const I=INS[G.ins[li]];Snd.inst(I.k,SC[b.pitch][1]*I.m,0,0.5,0.12);}
+  drop(li,src,e,laneEl){
+    const r=laneEl.getBoundingClientRect(),pad=this.pad(),W=r.width,units=this.cap();
+    const xu=((e.clientX-r.left)/W*(W/(this.p*1))*1);// no usado
+    const t=((e.clientX-r.left)/r.width*(laneEl._w)-pad)/this.p;
+    let pitch=null;if(this.o.pitch&&!src.f.r){const row=Math.floor((e.clientY-r.top)/r.height*6);pitch=5-Math.max(0,Math.min(5,row));}
+    const L=this.lanes[li];let from=-1;if(src.blk){from=L.indexOf(src.blk);}
+    // índice de inserción ignorando el bloque que se mueve
+    let acc=0,idx=0;const rest=L.filter(b=>b!==src.blk);for(const b of rest){if(acc+b.f.u/2<t)idx++;else break;acc+=b.f.u;}
+    const lockN=rest.filter(b=>b.lock).length;if(this.o.lockFirst)idx=Math.max(idx,0);
+    const total=sum(rest)+src.f.u;
+    if(total>this.cap()){laneEl.classList.add('shake');setTimeout(()=>laneEl.classList.remove('shake'),320);if(src.blk)this.render();if(window.Snd)Snd.bad();return true;}
+    if(src.blk){const same=src.mesa===this;if(!same)return false;L.splice(from,1);const b=src.blk;if(this.o.pitch&&!b.f.r)b.pitch=pitch;L.splice(idx,0,b);this.sel=li;this.changed();if(b.pitch!=null)this.tono(li,b);return true;}
+    return this.add(li,src.f,idx,pitch);
+  }
+  pad(){return this.o.pitch?26:0;}
+  laneH(){return this.o.pitch?6*28+6:104;}
+  geom(b,start){const p=this.p,pad=this.pad();let top,hh;
+    if(this.o.pitch){hh=24;top=b.f.r?(this.laneH()-6-hh)/2:(5-b.pitch)*28+2;}
+    else{hh=46;const c=(this.laneH()-6-hh)/2;top=(b.pitch==null||b.f.r)?c:c+(2.5-b.pitch)*10;}
+    return {left:pad+start*p,width:Math.max(3,b.f.u*p-2),top,height:hh};}
+  mkBlk(b,start,li,editable){const g=this.geom(b,start),e=h('div','blk'+(b.f.r?' rest':'')+(b.lock?' lock':''));e.style.cssText=`left:${g.left}px;top:${g.top}px;width:${g.width}px;height:${g.height}px;background:${b.f.r?'':b.f.c}`;
+    if(g.width>=24)e.appendChild(document.createTextNode(tx(b.f.u)));e.title=b.f.k+' '+tx(b.f.u);
+    if(b.pitch!=null&&!b.f.r&&(this.o.pitch||b.rev)){const m=h('em');m.style.background=SC[b.pitch][2];e.appendChild(m);if(g.width>=34){const n=h('b','',SC[b.pitch][0]);e.appendChild(n);}}
+    b.el=e;
+    if(editable&&!b.lock&&!this.o.ro)e.addEventListener('pointerdown',ev=>{startDrag(ev,{el:e,f:b.f,blk:b,mesa:this,li,tap:()=>this.quita(li,b)});});
+    return e;}
+  render(){
+    const box=this.box;box.innerHTML='';this.timers.forEach(clearTimeout);this.timers=[];
+    const W=box.clientWidth||700;this.last=W;const tagW=this.o.ro?0:110;
+    const pad=this.pad(),comp=this.o.ro?1:G.comp;
+    const d0=disp(),rowU=Math.max(d0.n.reduce((x,f)=>x+f.u,0),d0.r.reduce((x,f)=>x+f.u,0)),rowN=Math.max(d0.n.length,d0.r.length);
+    this.p=Math.max(8,Math.min(30,Math.floor((W-tagW-8-pad)/(16*comp)),this.o.ro?99:Math.floor((W-12-(rowN-1)*18)/rowU)));
+    if(this.o.ro)this.p=Math.max(8,Math.min(24,Math.floor((W-8)/16)));
+    const lw=pad+16*comp*this.p+6,nl=this.o.ro?this.lanes.filter(x=>x.length).length:(this.o.fixedLanes||2);
+    this.ph=[];
+    for(let li=0;li<nl;li++){
+      const act=li<this.nl||this.o.ro,line=h('div','line');
+      if(!this.o.ro){const tag=h('div','tag');
+        if(act){const I=INS[G.ins[li]];const b=btn('',I.n,()=>{G.ins[li]=(G.ins[li]+1)%INS.length;this.render();if(!this.o.pitch&&window.Snd)Snd.inst(INS[G.ins[li]].k,SC[2][1]*INS[G.ins[li]].m,0,.5,.12);else this.tono&&0;});b.style.background=I.c;b.title='Toca para cambiar de instrumento';b.setAttribute('aria-label','Instrumento '+(li+1)+': '+I.n+'. Toca para cambiar');tag.appendChild(b);
+          const s=h('small','',tx(sum(this.lanes[li]))+' / '+(G.comp===1?'1':G.comp));tag.appendChild(s);
+          if(li===1&&!this.o.fixedLanes){const q=btn('','Quitar',()=>{G.nl=1;this.lanes[1]=[];this.sel=0;listeners.forEach(f=>f(false));});q.style.minHeight='32px';q.style.fontSize='.8rem';tag.appendChild(q);}}
+        else{const b=btn('','+ Instrumento',()=>{G.nl=2;this.sel=1;listeners.forEach(f=>f(false));});b.style.minHeight='46px';b.style.fontSize='.85rem';tag.appendChild(b);}
+        line.appendChild(tag);}
+      const lane=h('div','lane'+(li===this.sel&&this.nl>1?' sel':'')+(act?'':' vac'));lane._mesa=this;lane._li=li;lane._w=lw-6;lane.style.width=lw+'px';lane.style.height=(this.laneH())+'px';
+      // fondo: tiempos (cada 1/4) y líneas de compás
+      const u=this.p;const beat=4*u,bar=16*u;
+      lane.style.backgroundImage=`repeating-linear-gradient(90deg,transparent 0 ${bar-2}px,#41362b 0 ${bar}px),repeating-linear-gradient(90deg,transparent 0 ${beat-1}px,#41362b33 0 ${beat}px)`;
+      lane.style.backgroundPosition=`${pad}px 0`;
+      if(this.o.pitch){for(let k=0;k<6;k++){const rg=h('div','rg',SC[5-k][0]);rg.style.top=(k*28)+'px';rg.style.height='28px';rg.style.background=SC[5-k][2]+'2b';lane.appendChild(rg);}}
+      if(act){
+        if(this.ghost&&this.ghost[li]&&!this.o.ro){let st=0;this.ghost[li].forEach(b=>{const e=this.mkBlk({...b},st,li,false);e.classList.add('ghost');if(!this.o.pitch)e.style.top='26px';lane.appendChild(e);st+=b.f.u;});}
+        let st=0;this.lanes[li].forEach(b=>{lane.appendChild(this.mkBlk(b,st,li,true));st+=b.f.u;});
+        if(!this.o.ro)lane.addEventListener('pointerdown',ev=>{if(ev.target===lane||ev.target.classList.contains('rg')){this.sel=li;this.render();}});
+        const ph=h('div','ph');lane.appendChild(ph);this.ph[li]=ph;
+      }
+      line.appendChild(lane);box.appendChild(line);
+    }
+    this.o.after&&this.o.after();
+  }
+  total(){return Math.max(...this.lanes.slice(0,this.nl).map(sum),0);}
+  play(done){
+    this.stop();const U=G.tempo,self=this;const nl=this.nl;let tot=0;
+    for(let li=0;li<nl;li++){const L=this.lanes[li],I=INS[G.ins[li]];let t=0;tot=Math.max(tot,sum(L));
+      L.forEach((b,i)=>{const pitch=this.o.pitch?b.pitch:MEL[(i+li*5)%12];const t0=t*U,d=b.f.u*U;
+        if(!b.f.r)Snd.inst(I.k,SC[pitch][1]*I.m,t0,Math.max(.08,d-0.025),li?0.11:0.12);
+        this.timers.push(setTimeout(()=>{if(!b.el)return;b.el.classList.add('play');if(!b.f.r&&!this.o.pitch){b.pitch=pitch;b.rev=true;const g=this.geom(b,L.slice(0,i).reduce((s,x)=>s+x.f.u,0));b.el.style.top=g.top+'px';if(!b.el.querySelector('em')){const m=h('em');m.style.background=SC[pitch][2];b.el.appendChild(m);if(g.width>=34)b.el.appendChild(h('b','',SC[pitch][0]));}}
+          this.timers.push(setTimeout(()=>b.el&&b.el.classList.remove('play'),Math.max(100,d*900)));},t0*1000));
+        t+=b.f.u;});}
+    // cursor
+    const t00=performance.now(),dur=tot*U*1000;this.playing=true;
+    const tick=()=>{if(!this.playing)return;const f=Math.min(1,(performance.now()-t00)/dur);this.ph.forEach((ph,li)=>{if(ph){ph.style.display='block';ph.style.left=(this.pad()+f*tot*this.p)+'px';}});if(f<1)requestAnimationFrame(tick);else{this.playing=false;this.ph.forEach(ph=>ph&&(ph.style.display='none'));done&&done();}};
+    requestAnimationFrame(tick);
+  }
+  stop(){this.timers.forEach(clearTimeout);this.timers=[];this.playing=false;(this.ph||[]).forEach(ph=>ph&&(ph.style.display='none'));}
+}
+
+/* Paleta con tamaños relativos (misma escala que el compás) */
+function paleta(box,mesa,allowRests){box.innerHTML='';const d=disp();
+  const mk=f=>{const p=mesa.p,e=h('div','blk'+(f.r?' rest':''));e.style.width=Math.max(3,f.u*p-2)+'px';e.style.height='48px';e.style.background=f.r?'':f.c;e.style.borderRadius='6px';
+    if(f.u*p>=24)e.appendChild(document.createTextNode(tx(f.u)));e.title=f.k+' '+tx(f.u);
+    e.addEventListener('pointerdown',ev=>startDrag(ev,{el:e,f,tap:()=>mesa.add(mesa.sel,f,null,mesa.o.pitch?2:null)}));return e;};
+  d.n.forEach(f=>box.appendChild(mk(f)));if(allowRests&&d.r.length){const s=h('span');s.style.cssText='flex-basis:100%;height:0';box.appendChild(s);d.r.forEach(f=>box.appendChild(mk(f)));}}
+const estado=(mesa,el)=>{const nl=mesa.nl,L=mesa.lanes.slice(0,nl);el.innerHTML=L.map((x,i)=>{const s=sum(x),c=mesa.cap();return (nl>1?INS[G.ins[i]].n+': ':'')+`<b>${s?tx(s):'0'}</b>`+(s===c?' <span class="ok">✓</span>':'');}).join(' &nbsp;·&nbsp; ')+(mesa.full()?' · <span class="ok">¡Compás completo!</span>':'');};
 
 /* Bandeja 1 */
 (function(){
-  let L=[[],[]],line=0,bars=[];
-  const lines=()=>L.slice(0,NIV[nivel].l);
-  function draw(){chipsNivel($('#nv1'));bars=mostrar($('#bars1'),lines(),line);quien($('#who1'),NIV[nivel].l,line,i=>{line=i;draw();});
-    pad($('#pad1'),L,line,f=>{L[line].push(f);draw();});
-    const ok=lines().every(x=>sum(x)===16);$('#s1t').innerHTML='Suma: '+resumen(lines())+(ok?' · <span class="ok">¡Compás completo!</span>':'');}
-  function reinicia(){L=[[],[]];line=0;draw();}
-  $('#u1').onclick=()=>{L[line].pop();draw();};$('#c1').onclick=reinicia;$('#p1').onclick=()=>play(lines(),bars);
-  listeners.push(reinicia);
-  secs.push({root:$('#s1'),next(){const l=lines();if(l.every(x=>sum(x)===16)){reinicia();return;}const d=disp(),all=[...d.n,...d.r];const f=all[rnd(all.length)];if(sum(L[line])+f.u<=16)L[line].push(f);draw();}});
-  draw();
+  const M=new Mesa($('#r1'),{after(){paleta($('#p1'),M,true);estado(M,$('#s1t'));}});
+  function rer(reset){if(reset)M.clear();else M.render();controles($('#c1'));}
+  listeners.push(rer);
+  $('#pl1').onclick=()=>M.play();$('#u1').onclick=()=>M.quitaUlt();$('#b1').onclick=()=>M.clear();
+  secs.push({root:$('#s1'),next(){M.play();}});
+  controles($("#c1"));M.render();
 })();
-
 /* Bandeja 2 */
 (function(){
-  let L=[[],[]],fixedN=[0,0],line=0,bars=[];
-  const lines=()=>L.slice(0,NIV[nivel].l);
-  function nuevo(){L=[[],[]];const d=disp(),all=[...d.n,...d.r];
-    for(let ln=0;ln<NIV[nivel].l;ln++){let tot=0,n=1+rnd(3);const need=4+rnd(9);
-      while(n--&&tot<need){const opts=all.filter(f=>tot+f.u<=12);if(!opts.length)break;const f=opts[rnd(opts.length)];L[ln].push({...f,lock:true});tot+=f.u;}
-      if(tot===16||tot===0)L[ln]=[{...NOTAS[1],lock:true}];fixedN[ln]=L[ln].length;}
-    line=0;$('#m2').textContent='';draw();}
-  function draw(){chipsNivel($('#nv2'));bars=mostrar($('#bars2'),lines(),line);quien($('#who2'),NIV[nivel].l,line,i=>{line=i;draw();});
-    pad($('#pad2'),L,line,f=>{L[line].push(f);draw();});
-    const ok=lines().every(x=>sum(x)===16);$('#s2t').innerHTML='Suma: '+resumen(lines())+(ok?' · <span class="ok">¡Compás completo!</span>':'');
-    if(ok)$('#m2').innerHTML='Muy bien: todo suma 1. Pulsa ▶ para escucharlo o Siguiente.';}
-  $('#u2').onclick=()=>{if(L[line].length>fixedN[line]){L[line].pop();draw();}};
-  $('#h2').onclick=()=>{$('#m2').innerHTML='Pista: '+lines().map((x,i)=>(lines().length>1?LIN[i]+': ':'')+`ya hay ${tx(sum(x))||'0'}, falta <b>${tx(16-sum(x))}</b>`).join(' · ')+'.';};
-  $('#p2').onclick=()=>play(lines(),bars);$('#n2').onclick=nuevo;
-  listeners.push(nuevo);secs.push({root:$('#s2'),next:nuevo});nuevo();
+  const M=new Mesa($('#r2'),{after(){paleta($('#p2'),M,true);estado(M,$('#s2t'));}});
+  function nuevo(){M.lanes=[[],[]];const d=disp(),all=[...d.n,...d.r];
+    for(let li=0;li<M.nl;li++){let tot=0;const cap=M.cap(),need=Math.floor(cap*(.25+Math.random()*.5));
+      while(tot<need){const op=all.filter(f=>tot+f.u<=need&&tot+f.u<cap);if(!op.length)break;const f=op[rnd(op.length)];M.lanes[li].push({f,lock:true,pitch:null});tot+=f.u;}
+      if(tot===0||tot===cap){M.lanes[li]=[{f:NOTAS[2],lock:true,pitch:null}];}}
+    M.sel=0;M.render();$('#s2t').dataset.n=1;}
+  function rer(reset){if(reset)nuevo();else M.render();controles($('#c2'));}
+  listeners.push(rer);
+  $('#pl2').onclick=()=>M.play();
+  $('#h2').onclick=()=>{$('#s2t').innerHTML='Falta: '+M.lanes.slice(0,M.nl).map((x,i)=>(M.nl>1?INS[G.ins[i]].n+' ':'')+'<b>'+tx(M.cap()-sum(x))+'</b>').join(' · ');};
+  $('#n2').onclick=nuevo;
+  secs.push({root:$('#s2'),next:nuevo});
+  controles($('#c2'));nuevo();
 })();
-
 /* Bandeja 3 */
 (function(){
   let score=0,cur,done;
   const nom=f=>(f.r?'un ':'una ')+f.k;
-  function q(){done=false;$('#m3').textContent='';chipsNivel($('#nv3'));const d=disp(),all=[...d.n,...d.r],v=$('#v3'),o=$('#o3');v.innerHTML='';
-    const tipos=['suma','cuantas'];if(NIV[nivel].l===2)tipos.push('falta2','falta2');
-    const t=tipos[rnd(tipos.length)];
-    if(t==='suma'){const n=2+rnd(2);let a,g=0;do{a=[];for(let i=0;i<n;i++)a.push(all[rnd(all.length)]);g++;}while(g<300&&(sum(a)>16||sum(a)===0||a.every(f=>f.r)));
-      const s=sum(a);cur={ans:tx(s),msg:`${a.map(f=>tx(f.u)).join(' + ')} = ${a.map(f=>f.u).join('+')}/16 = ${tx(s)}.`};
-      $('#q3').textContent=a.map(f=>`${nom(f)} (${tx(f.u)})`).join(' + ')+' = ?';mostrar(v,[a],0);
-      Construir(o,{n:2,sep:'/',labels:['arriba','abajo'],max:2,submit:x=>res(fr(x[0],x[1]))});}
-    else if(t==='cuantas'){const ns=NIV[nivel].n.map(i=>NOTAS[i]);let i=rnd(ns.length-1),j=i+1+rnd(ns.length-1-i);const big=ns[i],sm=ns[j],r=big.u/sm.u;
-      const rest=nivel>=2&&Math.random()<.5;const sm2=rest?SILE[NOTAS.indexOf(sm)]:sm;
-      cur={ans:String(r),msg:`${tx(big.u)} ÷ ${tx(sm.u)} = ${r}.`};$('#q3').textContent=`¿Cuántos ${rest?'silencios de ':''}${sm.k}${rest?'':'s'}${rest?'':''} caben en ${nom(big)}?`.replace('silencios de '+sm.k+'','silencios de '+sm.k);
-      mostrar(v,[[big],Array.from({length:r},()=>sm2)],-1);Construir(o,{max:2,submit:x=>res(String(x[0]))});}
-    else{const l1=[];let tot=0;while(tot<16){const op=all.filter(f=>tot+f.u<=16);const f=op[rnd(op.length)];l1.push(f);tot+=f.u;}
-      const l2=[];let t2=0,need=4+rnd(9);while(t2<need){const op=all.filter(f=>t2+f.u<=12);if(!op.length)break;const f=op[rnd(op.length)];l2.push(f);t2+=f.u;}
-      if(t2===0||t2===16){l2.length=0;l2.push(NOTAS[1]);t2=8;}
-      cur={ans:tx(16-t2),msg:`1 − ${tx(t2)} = ${tx(16-t2)}.`};$('#q3').textContent='La línea de la flauta ya suma 1. ¿Cuánto le falta a la marimba para sumar 1?';
-      mostrar(v,[l1,l2],-1);Construir(o,{n:2,sep:'/',labels:['arriba','abajo'],max:2,submit:x=>res(fr(x[0],x[1]))});}
-  }
-  function res(x){if(x===cur.ans){if(!done){score++;$('#sc3').textContent=score;}done=true;$('#m3').innerHTML=`<span class="ok">¡Correcto!</span> ${cur.msg} Pulsa Siguiente.`;}
-    else $('#m3').innerHTML='<span class="bad">Casi.</span> Piensa en dieciseisavos: la redonda son 16, la blanca 8, la negra 4, la corchea 2 y la semicorchea 1. Un silencio vale lo mismo que su figura.';}
+  const V=new Mesa($('#v3'),{ro:true});
+  const mostrar=(ls)=>{V.lanes=ls.map(a=>a.map(f=>({f,pitch:null})));while(V.lanes.length<2)V.lanes.push([]);V.render();};
+  function q(){done=false;$('#m3').textContent='';controles($('#c3'),{noComp:true,noLines:true});const d=disp(),all=[...d.n,...d.r],o=$('#o3');
+    const t=['suma','cuantas','falta'][rnd(3)];
+    if(t==='suma'){const n=2+rnd(2);let a,g=0;do{a=[];for(let i=0;i<n;i++)a.push(all[rnd(all.length)]);g++;}while(g<300&&(a.reduce((s,f)=>s+f.u,0)>16||a.every(f=>f.r)));
+      const s=a.reduce((x,f)=>x+f.u,0);cur={ans:tx(s),msg:`${a.map(f=>tx(f.u)).join(' + ')} = ${tx(s)}`};
+      $('#q3').textContent='¿Cuánto suman?';mostrar([a]);Construir(o,{n:2,sep:'/',labels:['arriba','abajo'],max:2,submit:x=>res(fr(x[0],x[1]))});}
+    else if(t==='cuantas'){const ns=NIV[G.nivel].n.map(i=>NOTAS[i]);const i=rnd(ns.length-1),j=i+1+rnd(ns.length-1-i),big=ns[i],sm=ns[j],r=big.u/sm.u;
+      cur={ans:String(r),msg:`${tx(big.u)} ÷ ${tx(sm.u)} = ${r}`};$('#q3').textContent='¿Cuántas figuras chicas caben en la grande?';
+      mostrar([[big],Array.from({length:r},()=>sm)]);Construir(o,{max:2,submit:x=>res(String(x[0]))});}
+    else{let l=[],tot=0;const need=4+rnd(9);while(tot<need){const op=all.filter(f=>tot+f.u<=need);if(!op.length)break;const f=op[rnd(op.length)];l.push(f);tot+=f.u;}
+      if(tot===0||tot===16){l=[NOTAS[1]];tot=8;}
+      cur={ans:tx(16-tot),msg:`1 − ${tx(tot)} = ${tx(16-tot)}`};$('#q3').textContent='¿Cuánto falta para llegar a 1?';
+      mostrar([l]);Construir(o,{n:2,sep:'/',labels:['arriba','abajo'],max:2,submit:x=>res(fr(x[0],x[1]))});}}
+  function res(x){if(x===cur.ans){if(!done){score++;$('#sc3').textContent=score;}done=true;$('#m3').innerHTML=`<span class="ok">¡Correcto!</span> ${cur.msg}`;}
+    else $('#m3').innerHTML='<span class="bad">Casi.</span> Redonda = 16, blanca = 8, negra = 4, corchea = 2, semicorchea = 1. Cuenta en dieciseisavos.';}
   $('#n3').addEventListener('click',q);listeners.push(q);secs.push({root:$('#s3'),next:q});q();
+})();
+/* Bandeja 4: melodía */
+(function(){
+  let modo='libre',ver=true,target=null,score=0;
+  const M=new Mesa($('#r4'),{pitch:true,after(){paleta($('#p4'),M,true);estado(M,$('#s4t'));
+    $('#mo4').hidden=modo!=='copiar';$('#n4').hidden=modo!=='copiar';}});
+  M.o.fixedLanes=0;
+  function ctl(){controles($('#c4'),{noLines:true});const b=$('#c4'),g=h('div','grp');
+    [['libre','Libre'],['copiar','Copiar']].forEach(([k,t])=>g.appendChild(btn(modo===k?'on':'',t,()=>{modo=k;nuevo();})));
+    if(modo==='copiar'){[[true,'👁 Ver modelo'],[false,'👂 Solo oír']].forEach(([k,t])=>g.appendChild(btn(ver===k?'on':'',t,()=>{ver=k;M.ghost=ver?[target.map(x=>({...x}))]:null;M.render();ctl();})));}
+    b.appendChild(g);}
+  function nuevo(){M.lanes=[[],[]];M.sel=0;$('#m4').textContent='';
+    if(modo==='copiar'){const d=disp(),all=[...d.n.filter(f=>f.u<=8),...d.r],cap=16*G.comp;let tot=0;target=[];
+      while(tot<cap){const op=all.filter(f=>tot+f.u<=cap);if(!op.length)break;const f=op[rnd(op.length)];target.push({f,pitch:f.r?null:rnd(6)});tot+=f.u;}
+      M.ghost=ver?[target.map(x=>({...x}))]:null;}
+    else{target=null;M.ghost=null;}
+    M.o.fixedLanes=modo==='copiar'?1:0;ctl();M.render();}
+  M.o.onChange=()=>{if(modo!=='copiar'||!target)return;const L=M.lanes[0];
+    if(sum(L)===16*G.comp){const ok=L.length===target.length&&L.every((b,i)=>b.f.k===target[i].f.k&&(b.f.r||b.pitch===target[i].pitch));
+      if(ok){score++;if(window.Snd)Snd.ok();$('#m4').innerHTML='<span class="ok">¡Correcto!</span> Misma melodía.';}
+      else{if(window.Snd)Snd.bad();$('#m4').innerHTML='<span class="bad">Casi.</span> Escucha el modelo y compara.';}}
+    else $('#m4').textContent='';};
+  function rer(reset){if(reset)nuevo();else{M.render();ctl();}}
+  listeners.push(rer);
+  $('#pl4').onclick=()=>M.play();
+  $('#mo4').onclick=()=>{const sv=[M.lanes[0],M.lanes[1]];const ghostPitch=true;M.lanes[0]=target.map(x=>({...x}));M.play(()=>{M.lanes=sv;M.render();});};
+  $('#u4').onclick=()=>M.quitaUlt();$('#b4').onclick=()=>{M.lanes=[[],[]];$('#m4').textContent='';M.render();};$('#n4').onclick=nuevo;
+  secs.push({root:$('#s4'),next(){if(modo==='copiar')nuevo();else M.play();}});
+  nuevo();
 })();
 
 let active=secs[0];
@@ -186,5 +322,5 @@ secs.forEach(s=>{s.root.addEventListener('pointerdown',()=>{active=s;},true);s.r
 $('#next').addEventListener('click',()=>active.next());
 </script>
 <script src="taller.js"></script>
-<script src="pantalla.js"></script>
+<script src="perfiles.js"></script><script src="perfilui.js"></script><script src="pantalla.js"></script>
 </body></html>

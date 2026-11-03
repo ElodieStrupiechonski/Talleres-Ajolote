@@ -15,6 +15,20 @@
 .grp{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .grp b{font-family:var(--display);width:2.2em;color:var(--muted)}
 input[type=range]{width:min(320px,100%);accent-color:var(--red)}
+
+.cook{width:26px;height:26px;flex:none;display:block}
+.cook.left circle:first-child{fill:var(--gold)}
+.ctl{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center}
+.arr{display:grid;gap:4px;width:max-content;max-width:100%}
+.eq{font-family:var(--display);font-weight:800;font-size:2rem}
+.eq .bl{display:inline-block;min-width:1.4em;border-bottom:4px solid var(--acc);text-align:center;color:var(--muted)}
+.lg{font-family:var(--display);font-size:1.5rem;line-height:1.6;background:var(--card);border-radius:12px;padding:10px 16px;min-width:260px}
+.lg .dv{display:inline-flex;border-left:4px solid var(--fg);border-top:4px solid var(--fg);padding:0 10px;margin-left:8px;font-weight:800;letter-spacing:.25em}
+.lg .qq{margin-left:20px;font-weight:800;color:var(--acc);letter-spacing:.25em}
+.lg .st{font-size:1.1rem;color:var(--muted)}
+.hist{display:flex;flex-direction:column;gap:2px;font-size:1.05rem}
+.story{display:flex;align-items:center;gap:16px}.story svg{width:96px;height:96px;flex:none}
+.story p{font-size:1.3rem;margin:0}
 </style></head><body>
 <div class="wrap">
   <a class="back" href="index.html">← Todos los talleres</a>
@@ -23,72 +37,115 @@ input[type=range]{width:min(320px,100%);accent-color:var(--red)}
     <p class="lead">Dividir es repartir en partes iguales; lo que sobra es el residuo.</p>
   </header>
 
-  <section class="tray" aria-labelledby="t1">
-    <span class="step">Bandeja 1 · Repartir en platos</span>
-    <h2 id="t1">¿Cuántas cuentas le tocan a cada plato?</h2>
-    <div class="row">
-      <label for="dv">Cuentas: <b id="dvv"></b></label><input id="dv" type="range" min="4" max="40" value="17">
+  <section class="tray" id="s1" aria-labelledby="t1">
+    <span class="step">Bandeja 1 · Repartir</span>
+    <h2 id="t1">¿Cuántas le tocan a cada plato?</h2>
+    <div class="ctl"><label for="dv">Cuántas: <b id="dvv"></b></label><input id="dv" type="range" min="4" max="40" value="17">
       <label for="ds">Platos: <b id="dsv"></b></label><input id="ds" type="range" min="2" max="6" value="3">
-    </div>
-    <div class="pile" id="pile" aria-label="Montón de cuentas"></div>
-    <div class="row"><button id="uno">Repartir una vuelta</button><button id="todo">Repartir todo</button><button id="reset">Empezar de nuevo</button></div>
+      <span class="chips" id="sk"></span></div>
+    <div class="pile" id="pile" aria-label="Montón"></div>
+    <div class="row"><button id="uno" type="button">Repartir una vuelta</button><button id="todo" type="button">Repartir todo</button><button id="reset" type="button">Empezar de nuevo</button></div>
     <div class="plates" id="plates"></div>
     <p class="note q" id="m1"></p>
   </section>
 
-  <section class="tray" aria-labelledby="t2">
+  <section class="tray" id="s2" aria-labelledby="t2">
     <span class="step">Bandeja 2 · Hacer grupos</span>
     <h2 id="t2">¿Cuántos grupos caben?</h2>
-    <p>Formamos grupos del mismo tamaño.</p>
-    <p class="det">Otra forma de ver la división: formar grupos del mismo tamaño. Ordenamos las cuentas en filas; cada fila completa es un grupo.</p>
-    <div class="row">
-      <label for="gd">Cuentas: <b id="gdv"></b></label><input id="gd" type="range" min="4" max="40" value="23">
-      <label for="gs">Tamaño del grupo: <b id="gsv"></b></label><input id="gs" type="range" min="2" max="9" value="5">
-    </div>
+    <p class="det">Otra forma de ver la división: formar grupos del mismo tamaño. Cada fila completa es un grupo.</p>
+    <div class="ctl"><label for="gd">Cuántas: <b id="gdv"></b></label><input id="gd" type="range" min="4" max="40" value="23">
+      <label for="gs">Tamaño del grupo: <b id="gsv"></b></label><input id="gs" type="range" min="2" max="9" value="5"></div>
     <div class="groups note" id="groups"></div>
     <p class="note q" id="m2"></p>
   </section>
 
-  <section class="tray" aria-labelledby="t3">
-    <span class="step">Bandeja 3 · Ponte a prueba</span>
-    <h2 id="t3">Resuelve la división</h2>
+  <section class="tray" id="s3" aria-labelledby="t3">
+    <span class="step">Bandeja 3 · Multiplicar y dividir</span>
+    <h2 id="t3">Se ayudan entre sí</h2>
+    <p class="det">Si 4 × 6 = 24, entonces 24 ÷ 4 = 6 y 24 ÷ 6 = 4. Con residuo: cociente × divisor + residuo = lo que repartimos.</p>
+    <div class="ctl" id="lv3"></div>
+    <div class="arr" id="ar3" aria-label="Cuentas en filas"></div>
+    <p class="eq" id="eq3"></p>
+    <div class="chips" id="o3"></div>
+    <p class="note" id="m3" aria-live="polite"></p>
+    <p>Aciertos: <b id="sc3">0</b> · <button id="n3" type="button">Siguiente</button></p>
+  </section>
+
+  <section class="tray" id="s4" aria-labelledby="t4">
+    <span class="step">Bandeja 4 · División larga</span>
+    <h2 id="t4">Paso a paso</h2>
+    <p class="det">Tomamos una cifra a la vez. Preguntamos cuántas veces cabe el divisor, restamos y bajamos la siguiente cifra.</p>
+    <div class="ctl" id="lv4"></div>
+    <div class="row">
+      <div class="lg" id="lg4"></div>
+      <div class="col ed"><p id="q4" style="font-size:1.3rem"></p><div class="chips" id="o4"></div><div class="hist" id="h4"></div><p class="note" id="m4" aria-live="polite"></p>
+        <p>Aciertos: <b id="sc4">0</b> · <button id="n4" type="button">Otra</button></p></div>
+    </div>
+  </section>
+
+  <section class="tray" id="s5" aria-labelledby="t5">
+    <span class="step">Bandeja 5 · Problemas</span>
+    <h2 id="t5">¿Qué hacemos con lo que sobra?</h2>
+    <div class="ctl" id="lv5"></div>
+    <div class="story" id="st5"></div>
+    <div class="chips" id="o5"></div>
+    <p class="note" id="m5" aria-live="polite"></p>
+    <p>Aciertos: <b id="sc5">0</b> · <button id="n5" type="button">Siguiente</button></p>
+  </section>
+
+  <section class="tray" id="s6" aria-labelledby="t6">
+    <span class="step">Bandeja 6 · Ponte a prueba</span>
+    <h2 id="t6">Resuelve la división</h2>
+    <div class="ctl" id="lv6"></div>
     <p class="big" id="qq"></p>
     <div class="col q3grid">
       <div class="chips" id="opts"></div>
       <div id="mat3" aria-label="Cuentas para repartir" style="display:grid;gap:4px;width:max-content;max-width:100%"></div>
-      <p class="note" id="qmsg">Elige el cociente y el residuo correctos.</p>
-      <p>Aciertos: <b id="score">0</b> · <button id="next">Siguiente</button></p>
+      <p class="note" id="qmsg">¿Cuántos grupos? ¿Cuántas sobran?</p>
+      <p>Aciertos: <b id="score">0</b> · <button id="next6" type="button">Siguiente</button></p>
     </div>
   </section>
 </div>
+<button id="next" hidden aria-hidden="true" tabindex="-1">Siguiente</button>
+<script src="ilustra.js"></script>
 <script src="sonido.js"></script>
 <script src="construir.js"></script>
 <script>
 const $=id=>document.getElementById(id);
-const bead=c=>{const b=document.createElement("div");b.className="bead"+(c?" "+c:"");return b};
+const h=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;};
+const rnd=n=>Math.floor(Math.random()*n);
+const R0=(a,b)=>a+rnd(b-a+1);
+const secs=[];
+let skin='cuentas';
+const COOK='<svg class="cook" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#d9b98a" stroke="#41362b" stroke-width="3"/><circle cx="14" cy="15" r="2.4" fill="#41362b"/><circle cx="26" cy="14" r="2.4" fill="#41362b"/><circle cx="20" cy="26" r="2.4" fill="#41362b"/><circle cx="12" cy="26" r="2" fill="#41362b"/></svg>';
+function bead(c){if(skin==='galletas'){const d=document.createElement('span');d.innerHTML=COOK;const e=d.firstChild;if(c)e.classList.add(c);return e;}
+  const b=document.createElement("div");b.className="bead"+(c?" "+c:"");return b;}
+function chips(box,list,cur,fn){box.innerHTML='';list.forEach(([k,t])=>{const b=h('button',cur===k?'on':'',t);b.type='button';b.onclick=()=>fn(k);box.appendChild(b);});}
 
-// Bandeja 1
+/* Bandeja 1 */
 let D,K,pile,plates;
 function reset1(){D=+$("dv").value;K=+$("ds").value;pile=D;plates=Array(K).fill(0);r1();}
-function vuelta(){if(pile>=K){pile-=K;plates=plates.map(x=>x+1);}r1();}
+function vuelta(){if(pile>=K){pile-=K;plates=plates.map(x=>x+1);if(window.Snd)Snd.pop();}r1();}
 function r1(){
   $("dvv").textContent=D;$("dsv").textContent=K;
+  chips($("sk"),[['cuentas','Cuentas'],['galletas','Galletas']],skin,k=>{skin=k;r1();r2();});
   const p=$("pile");p.innerHTML="";const done=pile<K;
   for(let i=0;i<pile;i++)p.appendChild(bead(done?"left":""));
-  if(!pile)p.innerHTML='<span style="color:var(--muted)">El montón está vacío.</span>';
+  if(!pile)p.innerHTML='<span style="color:var(--muted)">Ya no queda nada.</span>';
   const pl=$("plates");pl.innerHTML="";
   plates.forEach((c,i)=>{const d=document.createElement("div");d.className="plate";for(let j=0;j<c;j++)d.appendChild(bead());const s=document.createElement("span");s.textContent="Plato "+(i+1);d.appendChild(s);pl.appendChild(d);});
   $("uno").disabled=$("todo").disabled=done;
   const q=plates[0];
   $("m1").innerHTML=done
-    ? `<span class="big"><span class="g">${D}</span> ÷ <span class="d">${K}</span> = <span class="n">${q}</span>${pile?` <small>residuo</small> <span class="o">${pile}</span>`:""}</span><br>Cada plato tiene <b>${q}</b> cuentas${pile?` y sobran <b class="o">${pile}</b>, que no alcanzan para dar una más a cada plato`:" y no sobra ninguna"}. Comprobamos: ${K} × ${q}${pile?" + "+pile:""} = ${D}.`
-    : `Quedan ${pile} cuentas en el montón. ¡Alcanza para otra vuelta!`;
+    ? `<span class="big"><span class="g">${D}</span> ÷ <span class="d">${K}</span> = <span class="n">${q}</span>${pile?` <small>residuo</small> <span class="o">${pile}</span>`:""}</span><br>Cada plato tiene <b>${q}</b>${pile?` y sobran ${pile}`:""}.`
+    : `Quedan ${pile}. ¡Alcanza para otra vuelta!`;
 }
 ["dv","ds"].forEach(i=>$(i).addEventListener("input",reset1));
 $("uno").onclick=vuelta;$("todo").onclick=()=>{while(pile>=K)vuelta();};$("reset").onclick=reset1;
+secs.push({root:$('s1'),next(){if(pile>=K)vuelta();else reset1();}});
 reset1();
 
-// Bandeja 2
+/* Bandeja 2 */
 function r2(){
   const d=+$("gd").value,s=+$("gs").value;$("gdv").textContent=d;$("gsv").textContent=s;
   const g=$("groups");g.innerHTML="";const q=Math.floor(d/s),r=d%s;
@@ -100,25 +157,105 @@ function r2(){
   }
   $("m2").innerHTML=`Caben <b class="n">${q}</b> grupos de ${s}${r?` y sobran <b class="o">${r}</b>`:" exactos"}. Por eso <b>${d} ÷ ${s} = ${q}</b>${r?` residuo ${r}`:""}.`;
 }
-["gd","gs"].forEach(i=>$(i).addEventListener("input",r2));r2();
+["gd","gs"].forEach(i=>$(i).addEventListener("input",r2));
+secs.push({root:$('s2'),next(){$("gd").value=R0(6,40);$("gs").value=R0(2,9);r2();}});r2();
 
-// Bandeja 3
-let score=0;
-const NV=Niveles($("mat3"),['Exactas, pequeñas','Con residuo pequeño','Con residuo','Dividendos de tres cifras','Divisores de dos cifras'],()=>q());
-function q(){
-  const L=NV.get(),R0=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
-  const k=[R0(2,5),R0(2,5),R0(2,9),R0(2,9),R0(11,19)][L],c=[R0(2,5),R0(2,5),R0(2,12),R0(12,99),R0(10,50)][L],r=L<=0?0:Math.floor(Math.random()*k),d=k*c+r;
-  $("qq").innerHTML=`${d} ÷ ${k} = ?`;{const m=$("mat3");m.innerHTML="";m.style.gridTemplateRows=`repeat(${k},22px)`;m.style.gridAutoFlow="column";for(let i=0;i<(d>120?0:d);i++){const b=document.createElement("div");b.className="bead";m.appendChild(b);}}
-  const right=`${c} residuo ${r}`;
-  const chk=t=>{
-    if(t===right){score++;$("score").textContent=score;$("qmsg").innerHTML=`<span class="ok">¡Correcto!</span> ${k} × ${c} + ${r} = ${d}.`;setTimeout(q,1600);}
-    else $("qmsg").innerHTML=`<span class="bad">Casi.</span> Busca el número que multiplicado por ${k} se acerque más a ${d} sin pasarse. El residuo siempre es menor que ${k}.`;
-  };
-  Construir($("opts"),{n:2,sep:"residuo",labels:["cociente","residuo"],max:3,submit:v=>chk(v[0]+" residuo "+v[1])});
-  $("qmsg").textContent="Escribe el cociente y el residuo.";
-}
-$("next").onclick=q;q();
+/* Bandeja 3: se ayudan */
+(function(){
+  let score=0,cur,done;
+  const NV=Niveles($('ar3'),['Tablas 2 a 5','Tablas hasta 9','Con 10, 11 y 12','Falta una pieza','Comprobar'],()=>q());
+  function arr(a,b){const A=$('ar3');A.innerHTML='';if(a*b>80){A.innerHTML='<span class="note">'+a+' filas de '+b+'</span>';return;}
+    A.style.gridTemplateColumns=`repeat(${b},auto)`;for(let i=0;i<a*b;i++)A.appendChild(bead());}
+  function q(){done=false;$('m3').textContent='';const L=NV.get(),o=$('o3');
+    const lim=[[2,5],[2,9],[2,12],[2,9],[2,9]][L],a=R0(...lim),b=R0(...lim),p=a*b;let t;
+    if(L<=2){t=['dv1','dv2','mul'][rnd(3)];arr(a,b);
+      if(t==='dv1'){$('eq3').innerHTML=`${p} ÷ ${a} = <span class="bl">?</span>`;cur={ans:b,msg:`${a} × ${b} = ${p}`};}
+      else if(t==='dv2'){$('eq3').innerHTML=`${p} ÷ ${b} = <span class="bl">?</span>`;cur={ans:a,msg:`${a} × ${b} = ${p}`};}
+      else{$('eq3').innerHTML=`${a} × <span class="bl">?</span> = ${p}`;cur={ans:b,msg:`${p} ÷ ${a} = ${b}`};}
+      Construir(o,{max:2,submit:v=>res(v[0])});}
+    else if(L===3){const k=R0(3,9),c=R0(2,9),r=R0(1,k-1),d=k*c+r;arr(k,c);const g=rnd(3);
+      if(g===0){$('eq3').innerHTML=`${c} × ${k} + ${r} = <span class="bl">?</span>`;cur={ans:d,msg:`${c*k} + ${r} = ${d}`};}
+      else if(g===1){$('eq3').innerHTML=`${d} ÷ ${k} = ${c} sobran <span class="bl">?</span>`;cur={ans:r,msg:`${k} × ${c} = ${k*c}; ${d} − ${k*c} = ${r}`};}
+      else{$('eq3').innerHTML=`${d} ÷ ${k} = <span class="bl">?</span> sobran ${r}`;cur={ans:c,msg:`${c} × ${k} + ${r} = ${d}`};}
+      Construir(o,{max:3,submit:v=>res(v[0])});}
+    else{const k=R0(3,9),c=R0(3,9),r=R0(0,k-1),d=k*c+r,bad=Math.random()<.5;let c2=c,r2=r;if(bad){if(Math.random()<.5)c2=c+(Math.random()<.5?1:-1);else r2=r+1;}
+      const ok=(c2*k+r2===d)&&r2<k;$('ar3').innerHTML='';
+      $('eq3').innerHTML=`${d} ÷ ${k} = ${c2} sobran ${r2}`;cur={ans:ok?'si':'no',msg:`${c2} × ${k} + ${r2} = ${c2*k+r2}${ok?'':' ≠ '+d}`+(r2>=k?'. El residuo debe ser menor que '+k:'')};
+      o.innerHTML='';[['si','✓ Está bien'],['no','✗ Está mal']].forEach(([v,tx])=>{const b=h('button','',tx);b.type='button';b.onclick=()=>res(v);o.appendChild(b);});}}
+  function res(x){if(x===cur.ans){if(!done){score++;$('sc3').textContent=score;}done=true;$('m3').innerHTML=`<span class="ok">¡Correcto!</span> ${cur.msg}`;}
+    else $('m3').innerHTML='<span class="bad">Casi.</span> Prueba multiplicando.';}
+  $('n3').onclick=q;secs.push({root:$('s3'),next:q});q();
+})();
+
+/* Bandeja 4: división larga */
+(function(){
+  let score=0,S,done;
+  const NV=Niveles($('lg4'),['2 cifras, exacta','3 cifras, exacta','Con residuo','4 cifras','Divisor de 2 cifras'],()=>nuevo());
+  function nuevo(){done=false;const L=NV.get();let k,d;
+    if(L===0){k=R0(2,9);d=k*R0(Math.ceil(10/k),Math.floor(99/k));}
+    else if(L===1){k=R0(2,9);d=k*R0(Math.ceil(100/k),Math.floor(999/k));}
+    else if(L===2){k=R0(2,9);d=k*R0(Math.ceil(100/k),Math.floor(900/k))+R0(1,k-1);}
+    else if(L===3){k=R0(2,9);d=k*R0(Math.ceil(1000/k),Math.floor(9000/k))+R0(0,k-1);}
+    else{k=R0(11,19);d=k*R0(Math.ceil(100/k),Math.floor(999/k))+R0(0,k-1);}
+    const dg=String(d).split('').map(Number);let i0=1,pv=dg[0];while(pv<k&&i0<dg.length){pv=pv*10+dg[i0];i0++;}
+    S={k,d,dg,i:i0,part:pv,qd:[],hist:[],rem:0,ini:i0};$('m4').textContent='';$('h4').innerHTML='';draw();}
+  function draw(){const {k,d,dg}=S;const used=S.ini+S.qd.length-1;
+    $('lg4').innerHTML=`<span>${d}</span><span class="dv">${dg.join('')}</span>`.replace(`<span>${d}</span><span class="dv">${dg.join('')}</span>`,`<span class="dv" style="border-left:0;border-top:0;margin:0;padding:0"></span>`)+'';
+    // Presentación clásica: divisor | dividendo, y el cociente arriba
+    $('lg4').innerHTML=`<div class="st">cociente</div><div class="qq">${S.qd.join('')||'·'}</div><div><b>${k}</b><span class="dv">${dg.map((x,j)=>j<S.ini+S.qd.length-0&&j<S.i?'<u>'+x+'</u>':x).join('')}</span></div>`;
+    const o=$('o4');
+    if(S.finished){$('q4').innerHTML='';o.innerHTML='';return;}
+    $('q4').innerHTML=`¿Cuántas veces cabe <b>${k}</b> en <b>${S.part}</b>?`;
+    Construir(o,{max:1,submit:v=>paso(v[0])});$('h4').innerHTML=S.hist.map(t=>`<div>${t}</div>`).join('');}
+  function paso(x){const {k}=S;const qd=Math.floor(S.part/k);
+    if(x!==qd){$('m4').innerHTML=`<span class="bad">Casi.</span> Busca el mayor número que, por ${k}, no pase de ${S.part}.`;return;}
+    const rem=S.part-qd*k;S.qd.push(qd);S.hist.push(`${S.part} − ${k} × ${qd} = ${rem}`);$('m4').textContent='';
+    if(S.i>=S.dg.length){S.finished=true;S.rem=rem;if(!done){score++;$('sc4').textContent=score;}done=true;
+      $('m4').innerHTML=`<span class="ok">¡Correcto!</span> ${S.d} ÷ ${k} = <b>${S.qd.join('').replace(/^0+(?=\d)/,'')}</b>${rem?` sobran <b>${rem}</b>`:''}`;
+      $('lg4').querySelector('.qq').textContent=S.qd.join('');$('h4').innerHTML=S.hist.map(t=>`<div>${t}</div>`).join('');$('q4').innerHTML='';$('o4').innerHTML='';return;}
+    S.part=rem*10+S.dg[S.i];S.i++;draw();$('m4').innerHTML=`Bajamos el <b>${S.dg[S.i-1]}</b>.`;}
+  $('n4').onclick=nuevo;secs.push({root:$('s4'),next:nuevo});nuevo();
+})();
+
+/* Bandeja 5: problemas */
+(function(){
+  let score=0,cur,done;
+  const NV=Niveles($('st5'),['Repartir','Repartir y sobran','¿Cuántas cajas se llenan?','¿Cuántas cajas se necesitan?','Dos pasos'],()=>q());
+  const IT=[['galleta','galletas'],['canica_azul','canicas'],['estrella','estrellas'],['canica_roja','fichas']];
+  function q(){done=false;$('m5').textContent='';const L=NV.get(),it=IT[rnd(IT.length)],k=R0(3,8),c=R0(3,9);let tx,ans,msg,d;
+    if(L===0){d=k*c;tx=`Hay ${d} ${it[1]}. ${k} amigos reciben lo mismo. ¿Cuántas recibe cada uno?`;ans=c;msg=`${d} ÷ ${k} = ${c}`;}
+    else if(L===1){const r=R0(1,k-1);d=k*c+r;tx=`Hay ${d} ${it[1]}. ${k} amigos reciben lo mismo. ¿Cuántas sobran?`;ans=r;msg=`${d} ÷ ${k} = ${c}, sobran ${r}`;}
+    else if(L===2){const r=R0(1,k-1);d=k*c+r;tx=`Hay ${d} ${it[1]}. Cada caja guarda ${k}. ¿Cuántas cajas se llenan?`;ans=c;msg=`${d} ÷ ${k} = ${c}, sobran ${r}`;}
+    else if(L===3){const r=R0(1,k-1);d=k*c+r;tx=`Hay ${d} ${it[1]}. Cada caja guarda ${k}. ¿Cuántas cajas se necesitan para guardar todas?`;ans=c+1;msg=`${d} ÷ ${k} = ${c}, sobran ${r}. Esas ${r} también necesitan caja: ${c+1}`;}
+    else{const a=R0(3,9),n=R0(2,6);d=a*n;const kk=[2,3,4,6].filter(x=>d%x===0&&x<d);const k2=kk[rnd(kk.length)]||2;tx=`Hay ${n} bolsas con ${a} ${it[1]} cada una. Se reparten entre ${k2} amigos. ¿Cuántas recibe cada uno?`;ans=d/k2;msg=`${n} × ${a} = ${d}; ${d} ÷ ${k2} = ${d/k2}`;}
+    cur={ans,msg};$('st5').innerHTML=Ilu.html(it[0])+'<p>'+tx+'</p>';Construir($('o5'),{max:3,submit:v=>res(v[0])});}
+  function res(x){if(x===cur.ans){if(!done){score++;$('sc5').textContent=score;}done=true;$('m5').innerHTML=`<span class="ok">¡Correcto!</span> ${cur.msg}`;}
+    else $('m5').innerHTML='<span class="bad">Casi.</span> Lee otra vez la pregunta: ¿qué nos piden?';}
+  $('n5').onclick=q;secs.push({root:$('s5'),next:q});q();
+})();
+
+/* Bandeja 6: ponte a prueba */
+(function(){
+  let score=0;
+  const NV=Niveles($("qq"),['Exactas, pequeñas','Con residuo pequeño','Con residuo','Dividendos de tres cifras','Divisores de dos cifras'],()=>q());
+  function q(){
+    const L=NV.get();
+    const k=[R0(2,5),R0(2,5),R0(2,9),R0(2,9),R0(11,19)][L],c=[R0(2,5),R0(2,5),R0(2,12),R0(12,99),R0(10,50)][L],r=L<=0?0:rnd(k),d=k*c+r;
+    $("qq").innerHTML=`${d} ÷ ${k} = ?`;{const m=$("mat3");m.innerHTML="";m.style.gridTemplateRows=`repeat(${k},22px)`;m.style.gridAutoFlow="column";for(let i=0;i<(d>120?0:d);i++){const b=document.createElement("div");b.className="bead";m.appendChild(b);}}
+    const chk=t=>{
+      if(t===`${c} residuo ${r}`){score++;$("score").textContent=score;$("qmsg").innerHTML=`<span class="ok">¡Correcto!</span> ${k} × ${c} + ${r} = ${d}.`;}
+      else $("qmsg").innerHTML=`<span class="bad">Casi.</span> ¿Qué número por ${k} se acerca a ${d} sin pasarse? Lo que sobra es menos que ${k}.`;
+    };
+    Construir($("opts"),{n:2,sep:"residuo",labels:["cociente","residuo"],max:3,submit:v=>chk(v[0]+" residuo "+v[1])});
+    $("qmsg").textContent="¿Cuántos grupos? ¿Cuántas sobran?";
+  }
+  $("next6").onclick=q;secs.push({root:$('s6'),next:q});q();
+})();
+
+let active=secs[0];
+secs.forEach(s=>{s.root.addEventListener('pointerdown',()=>{active=s;},true);s.root.addEventListener('focusin',()=>{active=s;});});
+$('next').addEventListener('click',()=>active.next());
 </script>
 <script src="taller.js"></script>
-<script src="pantalla.js"></script>
+<script src="perfiles.js"></script><script src="perfilui.js"></script><script src="pantalla.js"></script>
 </body></html>

@@ -1,0 +1,10 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Biblioteca de ilustraciones</title>
+<link rel="stylesheet" href="taller.css"><style>.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}.gal a{background:var(--card);border-radius:12px;padding:10px;text-align:center;text-decoration:none;color:var(--fg);font-size:.9rem;border:2px solid var(--tray-edge)}.gal svg{width:100%;height:auto;max-width:120px}</style></head><body>
+<div class="wrap"><a class="back" href="index.html">← Todos los talleres</a>
+<header class="col"><h1>Biblioteca de ilustraciones</h1><p class="lead">El ajolote cambia de color en cada taller. Estilo «Abedul»: contorno café grueso, colores pastel planos y sombra suave. Toca una imagen para abrir su archivo SVG.</p></header>
+<h2>Dibujos</h2><div class="gal" id="g"></div>
+<h2>Animaciones (GIF)</h2><div class="gal" id="gf"></div></div>
+<script src="ilustra.js"></script><script>
+Ilu.names().forEach(n=>{const a=document.createElement('a');a.href='img/'+n+'.svg';a.download=n+'.svg';a.innerHTML=Ilu.html(n)+'<br>'+n.replace(/_/g,' ');g.appendChild(a);});
+fetch('img/indice.json').then(r=>r.json()).then(L=>L.filter(x=>x.anim&&!/^axo_(azul|amarillo|menta|lila|durazno)_/.test(x.n)).forEach(x=>{const n=x.n,a=document.createElement('a');a.href='img/gif/'+n+'.gif';a.download=n+'.gif';a.innerHTML='<img alt="" src="img/gif/'+n+'.gif" width="120"><br>'+n.replace(/_/g,' ');gf.appendChild(a);}));
+</script></body></html>

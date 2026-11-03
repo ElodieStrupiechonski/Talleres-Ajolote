@@ -27,6 +27,25 @@
     o1.start(t); o2.start(t); o1.stop(t + dur + 0.05); o2.stop(t + dur + 0.05);
     return { f: f };
   }
+
+  // Instrumentos que SOSTIENEN la nota durante toda su duración (flauta, clarinete, violín, órgano)
+  var ondas = {};
+  function onda(c, k, amps){ if (!ondas[k]) { var re = new Float32Array(amps.length + 1), im = new Float32Array(amps.length + 1); for (var i = 0; i < amps.length; i++) im[i + 1] = amps[i]; ondas[k] = c.createPeriodicWave(re, im); } return ondas[k]; }
+  function inst(nombre, f, t0, dur, vol){
+    var c = ac(); if (!c || !S.on()) return;
+    var t = c.currentTime + (t0 || 0), v = vol || 0.12, g = c.createGain(), flt = c.createBiquadFilter(), osc = [], extra = [];
+    flt.type = 'lowpass'; flt.frequency.value = 3000; g.connect(flt); flt.connect(master);
+    var att = 0.04, rel = Math.min(0.12, dur * 0.4), vib = 0, vibHz = 5;
+    function o(tipo, fr, amp, wave){ var x = c.createOscillator(), a = c.createGain(); if (wave) x.setPeriodicWave(wave); else x.type = tipo; x.frequency.value = fr; a.gain.value = amp; x.connect(a); a.connect(g); osc.push(x); return x; }
+    if (nombre === 'flauta') { o('sine', f, 1); o('sine', f * 2, 0.1); o('sine', f * 3, 0.03); att = 0.07; vib = 0.004; flt.frequency.value = 3500; }
+    else if (nombre === 'clarinete') { o('sine', f, 1, onda(c, 'cl', [1, 0, 0.45, 0, 0.22, 0, 0.1])); att = 0.05; flt.frequency.value = 1800; v *= 0.9; }
+    else if (nombre === 'violin') { o('sawtooth', f, 0.55); o('sawtooth', f * 1.004, 0.4); att = 0.1; vib = 0.009; vibHz = 5.5; flt.frequency.value = 2200; v *= 0.5; }
+    else { o('sine', f, 1); o('sine', f * 2, 0.5); o('sine', f * 3, 0.28); o('sine', f * 4, 0.12); att = 0.015; v *= 0.65; }
+    if (vib) { var l = c.createOscillator(), lg = c.createGain(); l.frequency.value = vibHz; lg.gain.value = f * vib; l.connect(lg); osc.forEach(function(x){ lg.connect(x.frequency); }); extra.push(l); }
+    g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(v, t + att);
+    g.gain.setValueAtTime(v, t + Math.max(att, dur - rel)); g.gain.linearRampToValueAtTime(0.0001, t + dur);
+    osc.concat(extra).forEach(function(x){ x.start(t); x.stop(t + dur + 0.05); });
+  }
   var S = {
     on: function(){ return on; },
     unlock: function(){ ac(); },
@@ -39,7 +58,7 @@
     exchange: function(){ if (!on) return; voz(392, 0, 0.28, { vol: 0.09, desliza: 784 }); voz(1318.5, 0.26, 0.4, { vol: 0.07 }); },
     angulo: function(grados){ if (!on) return; var f = 220 * Math.pow(2, (grados % 360) / 360 * 2); voz(f, 0, 0.11, { vol: 0.06, tipo: 'triangle', armV: 0.08 }); },
     toggle: function(){ on = !on; try { localStorage.setItem(KEY, on ? '1' : '0'); } catch (e) {} if (on) { ac(); S.tick(); } return on; },
-    voz: voz
+    voz: voz, inst: function(n,f,t0,d,v){ inst(n,f,t0,d,v); }
   };
   window.Snd = S;
   document.addEventListener('pointerdown', function(e){ ac(); if (e.target.closest && e.target.closest('button') && !e.target.closest('.cn-k,.pf-tab')) S.tick(); }, true);

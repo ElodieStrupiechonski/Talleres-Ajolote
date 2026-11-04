@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f0e3c8"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="author" content="Elodie Strupiechonski"><meta name="author" content="Andrés de Luna Bugallo"><link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+<title>Álgebra con balanza · Taller interactivo de ecuaciones</title><!--seo--><meta name="description" content="Taller interactivo para adolescentes de 12 a 15 años: ecuaciones como una balanza en equilibrio, quitar lo mismo de los dos lados, repartir en grupos y resolver. Gratis y sin internet."><link rel="canonical" href="https://elodiestrupiechonski.github.io/Talleres-Matematicas/algebra.html"><meta property="og:type" content="website"><meta property="og:locale" content="es_MX"><meta property="og:site_name" content="Talleres de Matemáticas"><meta property="og:title" content="Álgebra con balanza · Taller interactivo de ecuaciones"><meta property="og:description" content="Taller interactivo para adolescentes de 12 a 15 años: ecuaciones como una balanza en equilibrio, quitar lo mismo de los dos lados, repartir en grupos y resolver. Gratis y sin internet."><meta property="og:url" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/algebra.html"><meta property="og:image" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/icons/og.png"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Álgebra con balanza · Taller interactivo de ecuaciones", "description": "Taller interactivo para adolescentes de 12 a 15 años: ecuaciones como una balanza en equilibrio, quitar lo mismo de los dos lados, repartir en grupos y resolver. Gratis y sin internet.", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/algebra.html", "inLanguage": "es-MX", "isAccessibleForFree": true, "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/", "author": [{"@type": "Person", "name": "Elodie Strupiechonski"}, {"@type": "Person", "name": "Andrés de Luna Bugallo"}], "learningResourceType": "Recurso interactivo", "typicalAgeRange": "12-15", "educationalLevel": "Secundaria", "teaches": "Ecuaciones de primer grado", "isPartOf": {"@type": "WebSite", "name": "Talleres de Matemáticas", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/"}}</script><!--/seo-->
+<link rel="stylesheet" href="taller.css">
+<style>
+.bal{width:min(100%,600px);flex:none}
+.bal svg{width:100%;height:auto;display:block;background:var(--card);border-radius:14px}
+.eq{font-family:var(--display);font-weight:800;font-size:1.9rem;margin:2px 0 6px;letter-spacing:.02em}
+.eq small{font-weight:600;font-size:1rem;color:var(--muted);margin-left:8px}
+.ops{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0}
+.ops button{min-height:52px;font-size:1.05rem;padding:8px 16px}
+.side2{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+.side2 .grp{display:flex;gap:8px;align-items:center;background:var(--card);border-radius:12px;padding:6px 10px}
+.side2 .grp b{font-family:var(--display);min-width:5.5em}
+.side2 button{min-width:46px;min-height:46px;font-size:1.3rem;padding:0}
+.opts2{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0}
+.opts2 button{min-height:56px;min-width:140px;font-size:1.35rem;font-family:var(--display);font-weight:700}
+.big{font-family:var(--display);font-weight:800;font-size:1.5rem;margin:4px 0}
+.chips.lv{display:flex;flex-wrap:wrap;gap:8px}
+.msg:empty{display:none}
+.pasos{margin:6px 0 0;padding-left:1.2em}
+</style></head><body>
+<div class="wrap">
+  <a class="back" href="index.html">← Todos los talleres</a>
+  <header class="col">
+    <h1>Álgebra con balanza</h1>
+    <p class="lead">Una ecuación es una balanza en equilibrio. Lo que hacemos de un lado lo hacemos del otro, y así descubrimos cuánto pesa la incógnita <b>x</b>.</p>
+  </header>
+
+  <section class="tray" id="s1" aria-labelledby="t1">
+    <span class="step">Bandeja 1 · Equilibrio</span>
+    <h2 id="t1">Equilibra la balanza</h2>
+    <p>Cada cubito pesa <b>1</b>. Agrega o quita cubitos hasta que los dos lados pesen lo mismo.</p>
+    <p class="det">Una igualdad (=) dice que dos cantidades pesan lo mismo. Si un lado pesa más, la balanza se inclina hacia ese lado.</p>
+    <div class="row">
+      <div class="bal" id="bal1"></div>
+      <div class="col ed">
+        <div class="side2">
+          <div class="grp"><b>Izquierda</b><button type="button" id="l_m" aria-label="Quitar un cubito de la izquierda">−</button><button type="button" id="l_p" aria-label="Poner un cubito a la izquierda">+</button></div>
+          <div class="grp"><b>Derecha</b><button type="button" id="r_m" aria-label="Quitar un cubito de la derecha">−</button><button type="button" id="r_p" aria-label="Poner un cubito a la derecha">+</button></div>
+        </div>
+        <p class="eq" id="eq1" aria-live="polite"></p>
+        <p class="note msg" id="m1" aria-live="polite"></p>
+        <div class="btns"><button type="button" id="n1">Otro reto</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tray" id="s2" aria-labelledby="t2">
+    <span class="step">Bandeja 2 · Quita lo mismo</span>
+    <h2 id="t2">¿Cuánto pesa la bolsa x?</h2>
+    <p class="goal"></p>
+    <div class="chips lv"></div>
+    <div class="row">
+      <div class="bal"></div>
+      <div class="col ed">
+        <p class="eq"></p>
+        <div class="ops"></div>
+        <p class="note msg" aria-live="polite"></p>
+        <div class="btns"><button class="clr" type="button">Empezar de nuevo</button><button class="pista" type="button">Pista</button><button class="nxt" type="button" hidden>Siguiente reto →</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tray" id="s3" aria-labelledby="t3">
+    <span class="step">Bandeja 3 · Reparte en grupos</span>
+    <h2 id="t3">Cuando hay varias bolsas</h2>
+    <p class="goal"></p>
+    <div class="chips lv"></div>
+    <div class="row">
+      <div class="bal"></div>
+      <div class="col ed">
+        <p class="eq"></p>
+        <div class="ops"></div>
+        <p class="note msg" aria-live="polite"></p>
+        <div class="btns"><button class="clr" type="button">Empezar de nuevo</button><button class="pista" type="button">Pista</button><button class="nxt" type="button" hidden>Siguiente reto →</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tray" id="s4" aria-labelledby="t4">
+    <span class="step">Bandeja 4 · Escribe la ecuación</span>
+    <h2 id="t4">De la balanza al álgebra</h2>
+    <p>La balanza está en equilibrio. Cada bolsa pesa lo mismo. ¿Qué ecuación dice lo que vemos?</p>
+    <div class="bal" id="b4"></div>
+    <div class="opts2" id="o4"></div>
+    <p class="note msg" id="m4" aria-live="polite"></p>
+    <p>Aciertos: <b id="sc4">0</b> · <button id="n4" type="button">Siguiente</button></p>
+  </section>
+
+  <section class="tray" id="s5" aria-labelledby="t5">
+    <span class="step">Bandeja 5 · Pensé un número</span>
+    <h2 id="t5">De las palabras a la ecuación</h2>
+    <p class="big" id="q5"></p>
+    <p class="det">Llamamos <b>x</b> al número que pensé. Escribimos lo que se hizo con x y lo igualamos al resultado.</p>
+    <div id="o5"></div>
+    <p class="note msg" id="m5" aria-live="polite"></p>
+    <p>Aciertos: <b id="sc5">0</b> · <button id="n5" type="button">Siguiente</button></p>
+  </section>
+
+  <section class="tray" id="s6" aria-labelledby="t6">
+    <span class="step">Bandeja 6 · Ponte a prueba</span>
+    <h2 id="t6">Resuelve la ecuación</h2>
+    <p class="eq" id="q6"></p>
+    <div class="bal" id="b6"></div>
+    <div id="o6"></div>
+    <p class="note msg" id="m6" aria-live="polite"></p>
+    <p>Aciertos: <b id="sc6">0</b> · <button id="n6" type="button">Siguiente</button></p>
+  </section>
+</div>
+<button id="next" hidden aria-hidden="true" tabindex="-1">Siguiente</button>
+<script src="ilustra.js"></script>
+<script src="sonido.js"></script>
+<script src="construir.js"></script>
+<script>
+const $=(s,r=document)=>r.querySelector(s);
+const h=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;};
+const btn=(cls,txt,fn)=>{const b=h('button',cls,txt);b.type='button';b.addEventListener('click',fn);return b;};
+const rnd=n=>Math.floor(Math.random()*n);
+const ri=(a,b)=>a+rnd(b-a+1);
+const shuf=a=>a.sort(()=>Math.random()-.5);
+const say=(id,t)=>{$(id).innerHTML=t;};
+const secs=[];
+
+/* Texto de una ecuación a·x + b = d (a=1 no lleva coeficiente; b puede ser negativo) */
+function eqTxt(a,b,d){let s=(a===1?'':a)+'x';if(b>0)s+=' + '+b;else if(b<0)s+=' − '+(-b);return s+' = '+d;}
+
+/* ---------- Balanza (SVG) ---------- */
+function Balanza(host){
+  const NS='http://www.w3.org/2000/svg';
+  host.innerHTML='';
+  const svg=document.createElementNS(NS,'svg');svg.setAttribute('viewBox','0 0 640 340');svg.setAttribute('role','img');
+  svg.innerHTML=`<path d="M320 50 L320 300" stroke="#41362b" stroke-width="10" stroke-linecap="round"/><path d="M240 312 Q320 292 400 312 Z" fill="#d9b98a" stroke="#41362b" stroke-width="4" stroke-linejoin="round"/><g id="vb"></g><circle cx="320" cy="50" r="12" fill="#e8b84a" stroke="#41362b" stroke-width="4"/>`;
+  host.appendChild(svg);
+  const vb=svg.querySelector('#vb');
+  let ang=0,tgt=0,raf=0,st={L:{x:0,u:0},R:{x:0,u:0}},xv=1;
+  function items(s){
+    let o='';const bags=s.x,u=s.u;
+    for(let i=0;i<bags;i++){const w=40,g=5,tot=bags*w+(bags-1)*g,x0=-tot/2+i*(w+g);
+      o+=`<g transform="translate(${x0},-42)"><rect width="40" height="40" rx="9" fill="#86aedb" stroke="#41362b" stroke-width="3"/><text x="20" y="29" text-anchor="middle" font-family="Urbanist,sans-serif" font-weight="800" font-size="26" fill="#41362b">x</text></g>`;}
+    const per=6,base=bags?-46:-2;
+    for(let i=0;i<u;i++){const r=(i/per)|0,c=i%per,inRow=Math.min(per,u-r*per),w=24,g=3,tot=inRow*w+(inRow-1)*g,x0=-tot/2+c*(w+g);
+      o+=`<g transform="translate(${x0},${base-24-r*27})"><rect width="24" height="24" rx="5" fill="#f2c77a" stroke="#41362b" stroke-width="2.5"/><text x="12" y="17" text-anchor="middle" font-family="Urbanist,sans-serif" font-weight="800" font-size="13" fill="#41362b">1</text></g>`;}
+    return o;
+  }
+  function draw(){
+    const a=ang*Math.PI/180,half=215,ex=Math.cos(a)*half,ey=Math.sin(a)*half;
+    const lx=320-ex,ly=50-ey,rx=320+ex,ry=50+ey,drop=160,pw=95;
+    const pan=(cx,cy,s)=>`<path d="M${cx} ${cy} L${cx-pw} ${cy+drop} M${cx} ${cy} L${cx+pw} ${cy+drop}" stroke="#41362b" stroke-width="2.5" fill="none"/><g transform="translate(${cx},${cy+drop})">${items(s)}<path d="M${-pw-6} 0 H${pw+6} Q${pw} 22 ${pw-30} 22 H${-pw+30} Q${-pw} 22 ${-pw-6} 0 Z" fill="#f0e3c8" stroke="#41362b" stroke-width="3.5" stroke-linejoin="round"/></g>`;
+    vb.innerHTML=`<line x1="${lx}" y1="${ly}" x2="${rx}" y2="${ry}" stroke="#41362b" stroke-width="12" stroke-linecap="round"/><line x1="${lx}" y1="${ly}" x2="${rx}" y2="${ry}" stroke="#d9b98a" stroke-width="6" stroke-linecap="round"/>`+pan(lx,ly,st.L)+pan(rx,ry,st.R);
+  }
+  function anim(){cancelAnimationFrame(raf);const t0=performance.now(),a0=ang;
+    const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduce){ang=tgt;draw();return;}
+    (function f(t){const k=Math.min(1,(t-t0)/450),e=1-Math.pow(1-k,3);ang=a0+(tgt-a0)*e;draw();if(k<1)raf=requestAnimationFrame(f);})(t0);}
+  return {set(s,x){st=s;xv=x==null?1:x;const wl=s.L.x*xv+s.L.u,wr=s.R.x*xv+s.R.u,d=wr-wl;
+      tgt=d===0?0:Math.sign(d)*Math.min(13,Math.max(3,Math.abs(d)*2.2));
+      const txt=`Balanza: izquierda ${s.L.x?s.L.x+' bolsa'+(s.L.x>1?'s':'')+' x'+(s.L.u?' y ':''):''}${s.L.u?s.L.u+' cubitos':''}${!s.L.x&&!s.L.u?'vacía':''}; derecha ${s.R.x?s.R.x+' bolsas x'+(s.R.u?' y ':''):''}${s.R.u?s.R.u+' cubitos':''}${!s.R.x&&!s.R.u?'vacía':''}.`;
+      svg.setAttribute('aria-label',txt);anim();},
+    equilibrada(){return Math.abs(ang)<0.01;}};
+}
+
+/* ---------- Bandeja 1: equilibrio libre ---------- */
+(function(){
+  const bal=Balanza($('#bal1'));let L,R,done;
+  function draw(){bal.set({L:{x:0,u:L},R:{x:0,u:R}});
+    $('#eq1').innerHTML=`${L} ${L===R?'=':(L>R?'&gt;':'&lt;')} ${R}`;
+    if(L===R&&L>0){if(!done){done=true;if(window.Snd)Snd.ok&&Snd.ok();}say('#m1',`<b>¡Equilibrio!</b> Los dos lados pesan ${L}. Por eso podemos escribir ${L} = ${R}.`);}
+    else{done=false;say('#m1',L===R?'Los dos lados están vacíos. Pon cubitos.':`El lado ${L>R?'izquierdo':'derecho'} pesa más (${Math.max(L,R)} contra ${Math.min(L,R)}). Faltan ${Math.abs(L-R)} del otro lado.`);}}
+  function nuevo(){L=ri(3,12);R=rnd(3);done=false;draw();}
+  const lim=v=>Math.max(0,Math.min(15,v));
+  $('#l_p').onclick=()=>{L=lim(L+1);draw();};$('#l_m').onclick=()=>{L=lim(L-1);draw();};
+  $('#r_p').onclick=()=>{R=lim(R+1);draw();};$('#r_m').onclick=()=>{R=lim(R-1);draw();};
+  $('#n1').onclick=nuevo;secs.push({root:$('#s1'),next:nuevo});nuevo();
+})();
+
+/* ---------- Bandejas 2 y 3: resolver con la balanza ---------- */
+function Solver(root,ITEMS,meta){
+  const lv=$('.chips.lv',root),ops=$('.ops',root),nx=$('.nxt',root),eqEl=$('.eq',root),bal=Balanza($('.bal',root));
+  let idx=0,done=ITEMS.map(()=>false),solved=false,a,b,d,L;
+  const msg=t=>{$('.msg',root).innerHTML=t;};
+  function chipsL(){lv.innerHTML='';ITEMS.forEach((_,i)=>{const c=h('button',i===idx?'on':'','Reto '+(i+1)+(done[i]?' ✓':''));c.type='button';c.onclick=()=>load(i);lv.appendChild(c);});}
+  function load(i){idx=i;L=ITEMS[i];a=L.a;b=L.b;d=L.d;solved=false;nx.hidden=true;msg('');
+    $('.goal',root).innerHTML=meta.goal;chipsL();draw();}
+  function draw(){
+    bal.set({L:{x:a,u:b},R:{x:0,u:d}},L.x);
+    eqEl.innerHTML=`${eqTxt(a,b,d)}<small>${a===1&&b===0?'¡x está sola!':''}</small>`;
+    ops.innerHTML='';
+    if(meta.sub)ops.appendChild(btn('','− 1 de cada lado',()=>{
+      if(solved)return;
+      if(b<=0){msg('No hay cubitos sueltos junto a las bolsas. '+(a>1?'Ahora podemos repartir en grupos iguales.':''));return;}
+      b--;d--;if(window.Snd)Snd.pop&&Snd.pop();draw();}));
+    if(meta.div&&L.a>1)ops.appendChild(btn('',`Repartir en ${L.a} grupos iguales`,()=>{
+      if(solved)return;
+      if(a===1){msg('Ya hay una sola bolsa.');return;}
+      if(b>0){msg('Primero quita los cubitos sueltos de la izquierda (− 1 de cada lado). Así queda solo '+a+' bolsas.');return;}
+      const q=d/a;msg(`Repartimos en ${a} grupos iguales: <b>una</b> bolsa pesa lo que le toca a un grupo, ${q}.`);a=1;d=q;draw();}));
+    check();}
+  function check(){
+    if(a===1&&b===0){if(!solved){solved=true;done[idx]=true;chipsL();
+      const x=d;msg(`<span class="ok">¡Correcto!</span> <b>x = ${x}</b>. Comprobamos en la ecuación del principio: ${L.a===1?'':L.a+' × '}${x}${L.b?' + '+L.b:''} = ${L.d}.`);
+      if(idx<ITEMS.length-1)nx.hidden=false;else msg($('.msg',root).innerHTML+'<br><b>¡Terminaste los retos de esta bandeja!</b>');}}
+    else{solved=false;nx.hidden=true;}}
+  $('.clr',root).onclick=()=>load(idx);$('.pista',root).onclick=()=>msg('<b>Pista:</b> '+L.hint);nx.onclick=()=>load(idx+1);
+  secs.push({root,next(){if(solved&&idx<ITEMS.length-1)load(idx+1);else load(idx);}});
+  load(0);
+}
+Solver($('#s2'),[
+  {a:1,b:2,d:5,x:3,hint:'Hay 2 cubitos sueltos con la bolsa. Quita 2 de cada lado: la balanza sigue en equilibrio.'},
+  {a:1,b:3,d:8,x:5,hint:'Quita cubitos de los dos lados, uno por uno, hasta que la bolsa quede sola.'},
+  {a:1,b:4,d:9,x:5,hint:'Lo que quitamos de un lado lo quitamos del otro.'},
+  {a:1,b:6,d:13,x:7,hint:'Son 6 cubitos sueltos: pulsa seis veces «− 1 de cada lado».'},
+  {a:1,b:5,d:14,x:9,hint:'Cuando x está sola, el lado derecho dice cuánto pesa.'}
+],{goal:'Hay una bolsa <b>x</b> con cubitos sueltos. Quita <b>lo mismo de los dos lados</b> hasta que la bolsa quede sola.',sub:true});
+Solver($('#s3'),[
+  {a:2,b:0,d:8,x:4,hint:'Hay 2 bolsas iguales. Repártelas: cada bolsa pesa la mitad.'},
+  {a:3,b:0,d:12,x:4,hint:'Tres bolsas iguales pesan 12: repartimos en 3 grupos iguales.'},
+  {a:2,b:0,d:14,x:7,hint:'Dividimos los dos lados entre 2.'},
+  {a:2,b:3,d:11,x:4,hint:'Primero quita los 3 cubitos sueltos; después reparte las 2 bolsas.'},
+  {a:3,b:2,d:14,x:4,hint:'Quita 2 de cada lado y luego reparte en 3 grupos.'}
+],{goal:'Hay <b>varias bolsas</b> iguales. Si hay cubitos sueltos, quítalos primero; luego <b>reparte en grupos iguales</b>.',sub:true,div:true});
+
+/* ---------- Bandeja 4: escribir la ecuación ---------- */
+(function(){
+  let score=0,cur,done;
+  const NV=Niveles($('#b4'),['x + a = b','a·x = b','a·x + b = c'],()=>q());
+  const bal=Balanza($('#b4'));
+  function q(){done=false;say('#m4','');const L=NV.get();let a,b,x,bad;
+    if(L===0){a=1;b=ri(1,6);x=ri(2,9);}else if(L===1){a=ri(2,4);b=0;x=ri(2,5);}else{a=ri(2,3);b=ri(1,5);x=ri(2,4);}
+    const d=a*x+b;cur=eqTxt(a,b,d);
+    bal.set({L:{x:a,u:b},R:{x:0,u:d}},x);
+    if(L===0)bad=[`x − ${b} = ${d}`,`x + ${d} = ${b}`,`${b}x = ${d}`];
+    else if(L===1)bad=[`x + ${a} = ${d}`,`${d}x = ${a}`,`x = ${d} + ${a}`];
+    else bad=[`${a}x = ${d}`,`${a}x + ${d} = ${b}`,`x + ${a} + ${b} = ${d}`];
+    const o=$('#o4');o.innerHTML='';shuf([cur,...bad]).forEach(t=>o.appendChild(btn('',t,()=>pick(t))));}
+  function pick(t){if(t===cur){if(!done){score++;$('#sc4').textContent=score;}done=true;say('#m4',`<span class="ok">¡Correcto!</span> <b>${cur}</b>: x es lo que pesa una bolsa${cur.includes('+')?', los cubitos sueltos se suman':''} y el lado derecho es el peso total. Pulsa Siguiente.`);}
+    else say('#m4','<span class="bad">Casi.</span> Cuenta las bolsas y los cubitos de cada lado de la balanza.');}
+  $('#n4').addEventListener('click',q);secs.push({root:$('#s4'),next:q});q();
+})();
+
+/* ---------- Bandeja 5: pensé un número ---------- */
+(function(){
+  let score=0,cur,done;
+  const NV=Niveles($('#o5'),['Sumar','Multiplicar','Multiplicar y sumar'],()=>q());
+  function q(){done=false;say('#m5','');const L=NV.get();let x,a,b,d,tx;
+    if(L===0){x=ri(3,15);b=ri(2,9);d=x+b;tx=`Pensé un número y le sumé ${b}. Obtuve ${d}.`;a=1;}
+    else if(L===1){x=ri(2,9);a=ri(2,6);d=a*x;b=0;tx=`Pensé un número y lo multipliqué por ${a}. Obtuve ${d}.`;}
+    else{x=ri(2,9);a=ri(2,5);b=ri(1,9);d=a*x+b;tx=`Pensé un número, lo multipliqué por ${a} y le sumé ${b}. Obtuve ${d}.`;}
+    cur={x,a,b,d};$('#q5').textContent=tx+' ¿Qué número pensé?';
+    Construir($('#o5'),{max:2,submit:ans});}
+  function ans(v){const r=v[0];if(r===cur.x){if(!done){score++;$('#sc5').textContent=score;}done=true;
+      say('#m5',`<span class="ok">¡Correcto!</span> La ecuación es <b>${eqTxt(cur.a,cur.b,cur.d)}</b> y <b>x = ${cur.x}</b>. Comprobamos: ${cur.a===1?'':cur.a+' × '}${cur.x}${cur.b?' + '+cur.b:''} = ${cur.d}. Pulsa Siguiente.`);}
+    else say('#m5',`<span class="bad">Casi.</span> Escribe la ecuación <b>${eqTxt(cur.a,cur.b,cur.d)}</b> y prueba tu número: ${cur.a===1?'':cur.a+' × '}${r}${cur.b?' + '+cur.b:''} = ${cur.a*r+cur.b}, y debería dar ${cur.d}.`);}
+  $('#n5').addEventListener('click',q);secs.push({root:$('#s5'),next:q});q();
+})();
+
+/* ---------- Bandeja 6: ponte a prueba ---------- */
+(function(){
+  let score=0,cur,done;
+  const NV=Niveles($('#b6'),['x + a = b','x − a = b','a·x = b','a·x + b = c','a·x − b = c'],()=>q());
+  const bal=Balanza($('#b6'));
+  function q(){done=false;say('#m6','');const L=NV.get();let a=1,b=0,x,d,pasos;
+    if(L===0){b=ri(2,12);x=ri(2,15);d=x+b;pasos=`quitamos ${b} de cada lado: x = ${d} − ${b} = ${x}`;}
+    else if(L===1){b=-ri(2,12);x=ri(3,15)-b;d=x+b;pasos=`sumamos ${-b} a cada lado: x = ${d} + ${-b} = ${x}`;}
+    else if(L===2){a=ri(2,9);x=ri(2,12);d=a*x;pasos=`dividimos entre ${a} los dos lados: x = ${d} ÷ ${a} = ${x}`;}
+    else if(L===3){a=ri(2,6);b=ri(1,12);x=ri(2,10);d=a*x+b;pasos=`quitamos ${b}: ${a}x = ${d-b}; dividimos entre ${a}: x = ${x}`;}
+    else{a=ri(2,6);b=-ri(1,12);do{x=ri(2,10);d=a*x+b;}while(d<1);pasos=`sumamos ${-b}: ${a}x = ${d-b}; dividimos entre ${a}: x = ${x}`;}
+    cur={a,b,d,x,pasos};$('#q6').textContent=eqTxt(a,b,d);
+    const useBal=b>=0&&d<=15&&L!==1&&L!==4;
+    $('#b6').style.display=useBal?'':'none';
+    if(useBal)bal.set({L:{x:a,u:b},R:{x:0,u:d}},x);
+    Construir($('#o6'),{max:3,submit:ans});}
+  const sust=(c,v)=>`${c.a===1?'':c.a+' × '}${v}${c.b>0?' + '+c.b:c.b<0?' − '+(-c.b):''}`;
+  function ans(v){const r=v[0];if(r===cur.x){if(!done){score++;$('#sc6').textContent=score;}done=true;
+      say('#m6',`<span class="ok">¡Correcto!</span> ${cur.pasos}. Comprobamos: ${sust(cur,cur.x)} = ${cur.d}. Pulsa Siguiente.`);}
+    else{const val=cur.a*r+cur.b;say('#m6',`<span class="bad">Casi.</span> Prueba tu número en la ecuación: con x = ${r}, ${sust(cur,r)} = ${val}, y debería dar ${cur.d}. ${val<cur.d?'Falta más.':'Te pasaste.'}`);}}
+  $('#n6').addEventListener('click',q);secs.push({root:$('#s6'),next:q});q();
+})();
+
+let active=secs[0];
+secs.forEach(s=>{s.root.addEventListener('pointerdown',()=>{active=s;},true);s.root.addEventListener('focusin',()=>{active=s;});});
+$('#next').addEventListener('click',()=>active.next());
+</script>
+<script src="taller.js"></script>
+<script src="perfiles.js"></script><script src="perfilui.js"></script><script src="pantalla.js"></script>
+</body></html>

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f0e3c8"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f0e3c8"><link rel="icon" href="favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="icons/favicon-64.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="author" content="Elodie Strupiechonski"><meta name="author" content="Andrés de Luna Bugallo"><link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
 <title>Mi camino · Talleres de Matemáticas</title><meta name="robots" content="noindex"><meta name="description" content="Mi camino por los talleres de matemáticas.">
 <link rel="stylesheet" href="taller.css">
@@ -10,7 +10,12 @@
 .tabs{display:flex;gap:8px;flex-wrap:wrap}.tabs button{min-height:44px;padding:4px 16px;font:inherit;font-family:var(--display);font-weight:800;border:3px solid var(--tray-edge);border-radius:14px;background:var(--card);color:var(--fg);cursor:pointer}.tabs button.on{background:var(--acc,#f2b8c6);border-color:var(--fg)}
 .pasos{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px}.pasos li a{display:flex;align-items:center;gap:10px;min-height:44px;padding:6px 12px;border-radius:12px;background:var(--card);border:3px solid var(--tray-edge);text-decoration:none;color:var(--fg);font-weight:600}
 .pasos li.ok a{border-color:#6fae7e}.pasos .m{font-family:var(--display);font-weight:800;width:1.6em;text-align:center;color:#3f7a50}.pasos .m.no{color:var(--muted)}
-h2.tm{margin:14px 0 6px;font-size:1.2rem}.nota{color:var(--muted);font-size:.95rem;max-width:70ch}</style>
+h2.tm{margin:14px 0 6px;font-size:1.2rem}.nota{color:var(--muted);font-size:.95rem;max-width:70ch}.temas{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;max-width:760px}
+.tema{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 8px;min-height:120px;border:3px solid var(--tray-edge);border-radius:18px;background:var(--card);color:var(--fg);font:inherit;cursor:pointer;text-align:center}
+.tema .ic{width:52px;height:52px;display:block}.tema .ic svg{width:100%;height:100%}.tema b{font-family:var(--display);font-size:1rem;line-height:1.15}.tema small{color:var(--muted)}
+.tema.ok{border-color:#6fae7e}.mini{display:block;width:80%;height:8px;border-radius:6px;background:#eee6d6;overflow:hidden}.mini i{display:block;height:100%;background:#6fae7e}
+.elim{margin:22px 0 8px;color:var(--muted)}.elim summary{cursor:pointer;min-height:44px;display:flex;align-items:center}.dng{border-color:#b5483a!important;color:#8a2c20}
+@media (max-width:480px){.sig{font-size:1.1rem}.who .pu-av{width:64px}}</style>
 </head><body>
 <div class="wrap">
   <a class="back" href="index.html">← Todos los talleres</a>
@@ -20,29 +25,59 @@ h2.tm{margin:14px 0 6px;font-size:1.2rem}.nota{color:var(--muted);font-size:.95r
 <script src="ilustra.js"></script><script src="perfiles.js"></script><script src="rutas.js"></script><script src="perfilui.js"></script>
 <script>
 (function(){
-  var cont=document.getElementById('cont'),who=document.getElementById('who'),anio=null;
+  var cont=document.getElementById('cont'),who=document.getElementById('who'),anio=null,tema=null;
   function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;}
   function pinta(){
     var p=Perf.activo(); who.innerHTML=''; cont.innerHTML='';
     if(!p){who.appendChild(el('h1',null,'Mi camino')); var b=el('button','pu-go','Elegir quién soy'); b.type='button'; b.onclick=function(){PerfUI.elegir(pinta);}; cont.appendChild(el('p','lead','Elige tu perfil para ver tus pasos.')); cont.appendChild(b); return;}
-    who.appendChild(PerfUI.avatar(p)); var h=el('div'); h.appendChild(el('h1',null,'Mi camino, '+p.nombre)); h.appendChild(el('p','nota','Taller '+p.taller+' · año '+p.anio)); who.appendChild(h);
-    var cam=el('button','pu-sec','Cambiar de perfil'); cam.type='button'; cam.onclick=function(){PerfUI.elegir(function(){anio=null;pinta();});}; who.appendChild(cam);
-    var est=Rutas.estado(p);
+    who.appendChild(PerfUI.avatar(p)); var h=el('div'); h.appendChild(el('h1',null,p.nombre)); h.appendChild(el('p','nota','Taller '+p.taller+' · año '+p.anio)); who.appendChild(h);
+    var cam=el('button','pu-sec','Cambiar de perfil'); cam.type='button'; cam.onclick=function(){PerfUI.elegir(function(){anio=null;tema=null;pinta();});}; who.appendChild(cam);
     if(anio==null)anio=p.anio;
-    cont.appendChild(el('h2',null,est.hechos+' de '+est.total+' pasos de mi año '+p.anio));
+    var est=Rutas.estado(p);
+    // 1) lo siguiente, grande y solo
+    if(est.sig){var a=el('a','sig'); a.href=Rutas.url(est.sig); var t=el('span'); t.appendChild(document.createTextNode(Rutas.etiqueta(est.sig))); var sm=el('small',null,{sigue:'Tu siguiente paso',repaso:'Un repaso para ir con calma',reto:'Un reto para ti','año':''}[est.motivo]); t.appendChild(sm); a.appendChild(t); a.appendChild(el('b',null,'Ir →')); cont.appendChild(a);}
+    else cont.appendChild(el('p','lead','¡Terminaste todos los pasos de este año! Pregunta a tu guía por el siguiente.'));
     var bg=el('div','big'),fl=el('i'); fl.style.width=(est.total?100*est.hechos/est.total:0)+'%'; bg.appendChild(fl); cont.appendChild(bg);
-    var sec=el('section'); sec.style.margin='16px 0';
-    if(est.sig){var a=el('a','sig'); a.href=Rutas.url(est.sig); var t=el('span'); t.appendChild(document.createTextNode(Rutas.etiqueta(est.sig))); var sm=el('small',null,{sigue:'Tu siguiente paso',repaso:'Un repaso para ir con calma',reto:'Un reto para ti','año':''}[est.motivo]); t.appendChild(sm); a.appendChild(t); a.appendChild(el('b',null,'Ir →')); sec.appendChild(a);}
-    else sec.appendChild(el('p','lead','¡Terminaste todos los pasos de este año! Pregunta a tu guía por el siguiente.'));
-    cont.appendChild(sec);
+    cont.appendChild(el('p','nota',est.hechos+' de '+est.total+' pasos de mi año '+p.anio));
+    // 2) año (chips pequeños)
     var tabs=el('div','tabs'); tabs.setAttribute('role','group'); tabs.setAttribute('aria-label','Año');
-    [1,2,3].forEach(function(n){var b=el('button',n===anio?'on':'','Año '+n); b.type='button'; b.onclick=function(){anio=n;pinta();}; tabs.appendChild(b);}); cont.appendChild(tabs);
+    [1,2,3].forEach(function(n){var b=el('button',n===anio?'on':'','Año '+n); b.type='button'; b.onclick=function(){anio=n;tema=null;pinta();}; tabs.appendChild(b);}); cont.appendChild(tabs);
     var T=Rutas.TALLER[p.taller]; if(T.nota)cont.appendChild(el('p','nota',T.nota));
-    var ps=Rutas.pasos(p.taller,anio),ul=null,ult=null;
-    ps.forEach(function(s){ if(s.p!==ult){cont.appendChild(el('h2','tm',Rutas.TEMA[s.p])); ul=el('ul','pasos'); cont.appendChild(ul); ult=s.p;}
-      var ok=Perf.hecho(p,s.p,s.b,s.l),li=el('li',ok?'ok':''),a=el('a'); a.href=Rutas.url(s);
-      a.appendChild(el('span','m'+(ok?'':' no'),ok?'★':'○')); a.appendChild(el('span',null,(Rutas.EST[s.p][s.b-1][0])+(s.l?' · nivel '+s.l:''))); li.appendChild(a); ul.appendChild(li);});
-    if(!ps.length)cont.appendChild(el('p','nota','Todavía no hay pasos para este año.'));
+    var ps=Rutas.pasos(p.taller,anio);
+    if(!ps.length){cont.appendChild(el('p','nota','Todavía no hay pasos para este año.')); borra(p); return;}
+    // 3) mapa de temas; solo al elegir uno se ven sus pasos
+    var g={},ord=[]; ps.forEach(function(s){ if(!g[s.p]){g[s.p]=[];ord.push(s.p);} g[s.p].push(s); });
+    if(tema&&!g[tema])tema=null;
+    if(!tema){
+      cont.appendChild(el('h2','tm','Mis temas'));
+      var grid=el('div','temas');
+      ord.forEach(function(k){var n=g[k].filter(function(s){return Perf.hecho(p,s.p,s.b,s.l);}).length,tot=g[k].length;
+        var c=el('button','tema'+(n===tot?' ok':'')); c.type='button';
+        var ic=el('span','ic'); if(window.Ilu&&Ilu.titulo('icono_'+k))ic.innerHTML=Ilu.html('icono_'+k); else ic.textContent='★'; c.appendChild(ic);
+        c.appendChild(el('b',null,Rutas.TEMA[k])); c.appendChild(el('small',null,n===tot?'¡Completo!':n+' de '+tot));
+        var m=el('i','mini'),f2=el('i'); f2.style.width=(100*n/tot)+'%'; m.appendChild(f2); c.appendChild(m);
+        c.onclick=function(){tema=k;pinta();window.scrollTo(0,0);}; grid.appendChild(c);});
+      cont.appendChild(grid);
+    } else {
+      var bk=el('button','pu-sec','← Mis temas'); bk.type='button'; bk.onclick=function(){tema=null;pinta();}; cont.appendChild(bk);
+      cont.appendChild(el('h2','tm',Rutas.TEMA[tema]));
+      var ul=el('ul','pasos');
+      g[tema].forEach(function(s){var ok=Perf.hecho(p,s.p,s.b,s.l),li=el('li',ok?'ok':''),a=el('a'); a.href=Rutas.url(s);
+        a.appendChild(el('span','m'+(ok?'':' no'),ok?'★':'○'));
+        a.appendChild(el('span',null,(Rutas.EST[s.p][s.b-1][0])+(s.l?' · nivel '+s.l:'')+(s.pre&&!ok?' · calentamiento':''))); li.appendChild(a); ul.appendChild(li);});
+      cont.appendChild(ul);
+    }
+    borra(p);
+  }
+  // Eliminar el perfil: con confirmación; si el adulto puso un número secreto, se hace desde el Diario
+  function borra(p){
+    var d=el('details','elim'); d.appendChild(el('summary',null,'Eliminar este perfil'));
+    if(Perf.tienePin()&&!Perf.abierto()){ var a=el('a',null,'Pide a una persona adulta que lo elimine desde el Diario'); a.href='diario.html'; d.appendChild(el('p','nota','Este dispositivo tiene un número secreto de adulto.')); d.appendChild(a); }
+    else { d.appendChild(el('p','nota','Se borran el nombre, el ajolote y todo el avance de '+p.nombre+' de este dispositivo. No se puede deshacer.'));
+      var b=el('button','pu-sec dng','Eliminar el perfil de '+p.nombre); b.type='button';
+      b.onclick=function(){ if(b.dataset.s!=='1'){b.dataset.s='1';b.textContent='¿Seguro? Toca otra vez para eliminar';return;} Perf.borrar(p.id); anio=null;tema=null; pinta(); };
+      d.appendChild(b); }
+    cont.appendChild(d);
   }
   pinta();
 })();

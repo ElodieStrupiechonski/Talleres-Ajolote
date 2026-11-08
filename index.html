@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f0e3c8"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="author" content="Elodie Strupiechonski"><meta name="author" content="Andrés de Luna Bugallo"><link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f0e3c8"><link rel="icon" href="favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="icons/favicon-64.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="author" content="Elodie Strupiechonski"><meta name="author" content="Andrés de Luna Bugallo"><link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
 <title>Talleres del Ajolote · Matemáticas para tocar, contar y descubrir</title><!--seo--><meta name="description" content="Talleres interactivos de matemáticas estilo Montessori para niñas y niños de 6 a 15 años: cuentas doradas, fracciones, álgebra con balanza, números enteros, Pitágoras, probabilidad y más. Gratis, sin anuncios y funciona sin internet."><link rel="canonical" href="https://elodiestrupiechonski.github.io/Talleres-Matematicas/"><meta property="og:type" content="website"><meta property="og:locale" content="es_MX"><meta property="og:site_name" content="Talleres del Ajolote"><meta property="og:title" content="Talleres del Ajolote · Matemáticas para tocar, contar y descubrir"><meta property="og:description" content="Talleres interactivos de matemáticas estilo Montessori para niñas y niños de 6 a 15 años: cuentas doradas, fracciones, álgebra con balanza, números enteros, Pitágoras, probabilidad y más. Gratis, sin anuncios y funciona sin internet."><meta property="og:url" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/"><meta property="og:image" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/icons/og.png"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Talleres del Ajolote · Matemáticas para tocar, contar y descubrir", "description": "Talleres interactivos de matemáticas estilo Montessori para niñas y niños de 6 a 15 años: cuentas doradas, fracciones, álgebra con balanza, números enteros, Pitágoras, probabilidad y más. Gratis, sin anuncios y funciona sin internet.", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/", "inLanguage": "es-MX", "isAccessibleForFree": true, "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/", "author": [{"@type": "Person", "name": "Elodie Strupiechonski"}, {"@type": "Person", "name": "Andrés de Luna Bugallo"}]}</script><!--/seo-->
 <link rel="stylesheet" href="taller.css">
 <style>
@@ -43,6 +43,23 @@
  .card .go{display:none}
  .gh h2{font-size:1.4rem}
 }
+
+/* Mapa de temas: la página no se desliza; al elegir un tema se ven solo sus talleres */
+.mapa{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0 8px}
+.mapa a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;min-height:150px;padding:14px 10px;border:5px solid var(--tray-edge);border-top:12px solid var(--ac);border-radius:22px;background:var(--grain),var(--tray);color:var(--fg);text-decoration:none}
+.mapa a:hover,.mapa a:focus-visible{border-color:var(--ac)}
+.mapa .mi{display:block;width:64px;height:64px}.mapa .mi svg{width:100%;height:100%}
+.mapa b{font-family:var(--display);font-size:1.35rem}.mapa small{color:var(--muted);font-size:.92rem;line-height:1.2}.mapa em{font-style:normal;font-weight:700;font-size:.85rem;color:var(--fg);background:var(--card);border-radius:999px;padding:1px 10px}
+.js .grupo{display:none}.js .grupo.on{display:block}.js.en-tema .mapa{display:none}.js.en-tema .hero .kick,.js.en-tema .hero .cta{display:none}.js.en-tema .hero-axo{width:64px}
+.volver{display:inline-flex;align-items:center;min-height:44px;padding:4px 16px;margin:6px 0;border:3px solid var(--tray-edge);border-radius:999px;background:var(--card);color:var(--fg);font:inherit;font-family:var(--display);font-weight:800;cursor:pointer;text-decoration:none}
+.js .grupo .card p,.js .grupo .card .go{display:none}.js .grupo .grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.js .grupo .card{display:flex;flex-direction:column;align-items:center;text-align:center;padding:12px 10px;gap:4px;border-left-width:6px}
+.js .grupo .card svg{width:76px;height:76px}.js .grupo .card h2{font-size:1.05rem;margin:0}
+@media (min-width:900px){.mapa{grid-template-columns:repeat(4,1fr)}.mapa a{min-height:190px}}
+@media (max-width:640px){.js .hero .kick{display:none}.js .hero{padding:10px 12px}.js .hero h1{font-size:1.5rem}.js .hero .cta{align-self:flex-start;padding:8px 16px;min-height:44px}
+ .mapa{gap:10px;margin-top:10px}.mapa a{min-height:132px;padding:10px 8px}.mapa .mi{width:52px;height:52px}.mapa small{display:none}.mapa b{font-size:1.2rem}
+ .js.en-tema .hero{display:none}.js .grupo .gh p{display:none}.js .grupo .card .tag{display:none}.js .grupo .card svg{width:62px;height:62px}.js .grupo .card{padding:10px 8px;min-height:120px;justify-content:center}.js .grupo .grid{grid-template-columns:1fr 1fr;gap:10px}}
+.js.en-tema .hero{display:none}
 </style></head><body>
 <div class="wrap">
   <header class="hero">
@@ -54,14 +71,14 @@
       <a class="cta" id="cta" href="camino.html">Empezar →</a>
     </div>
   </header>
-  <nav class="areas" aria-label="Áreas">
-    <a href="#g1"><i style="background:var(--green)"></i>Números</a>
-    <a href="#g2"><i style="background:var(--red)"></i>Fracciones</a>
-    <a href="#g3"><i style="background:var(--blue)"></i>Geometría</a>
-    <a href="#g4"><i style="background:var(--gold)"></i>Lógica</a>
+  <nav class="mapa" id="mapa" aria-label="Mapa de temas">
+    <a href="#g1" style="--ac:var(--green)"><span class="mi" data-k="num"></span><b>Números</b><small>Contar, decimales, multiplicar y repartir</small><em>7 talleres</em></a>
+    <a href="#g2" style="--ac:var(--red)"><span class="mi" data-k="fra"></span><b>Fracciones</b><small>Partes iguales y música</small><em>3 talleres</em></a>
+    <a href="#g3" style="--ac:var(--blue)"><span class="mi" data-k="geo"></span><b>Geometría</b><small>Ángulos, área, simetría y color</small><em>4 talleres</em></a>
+    <a href="#g4" style="--ac:var(--gold)"><span class="mi" data-k="log"></span><b>Lógica</b><small>Reglas, programar y azar</small><em>3 talleres</em></a>
   </nav>
-  <section class="grupo" id="g1" aria-labelledby="g1" style="--ac:var(--green);scroll-margin-top:64px">
-    <div class="gh"><span class="dot" style="background:var(--green)"></span><div><h2 id="g1">Números y operaciones</h2><p class="gd">Cuentas, decimales, multiplicar y repartir.</p></div></div>
+  <section class="grupo" id="g1" aria-labelledby="g1t" style="--ac:var(--green);scroll-margin-top:64px">
+    <div class="gh"><span class="dot" style="background:var(--green)"></span><div><h2 id="g1t">Números y operaciones</h2><p class="gd">Cuentas, decimales, multiplicar y repartir.</p></div></div>
     <nav class="grid" aria-label="Números y operaciones">
     <a class="card" href="contar.html">
       <svg viewBox="0 0 120 120" aria-hidden="true"><g style="stroke:var(--fg)" stroke-width="3"><rect x="10" y="30" width="100" height="60" rx="6" style="fill:var(--card)"/><path d="M35 30 V90 M60 30 V90 M85 30 V90 M10 60 H110" fill="none"/><circle cx="22" cy="45" r="8" style="fill:var(--red)"/><circle cx="47" cy="45" r="8" style="fill:var(--red)"/><circle cx="72" cy="45" r="8" style="fill:var(--red)"/><circle cx="22" cy="75" r="8" style="fill:var(--blue)"/></g></svg>
@@ -107,8 +124,8 @@
     </a>
     </nav>
   </section>
-  <section class="grupo" id="g2" aria-labelledby="g2" style="--ac:var(--red);scroll-margin-top:64px">
-    <div class="gh"><span class="dot" style="background:var(--red)"></span><div><h2 id="g2">Divisiones y fracciones</h2><p class="gd">Repartir en partes iguales, partir el entero y medir en música.</p></div></div>
+  <section class="grupo" id="g2" aria-labelledby="g2t" style="--ac:var(--red);scroll-margin-top:64px">
+    <div class="gh"><span class="dot" style="background:var(--red)"></span><div><h2 id="g2t">Divisiones y fracciones</h2><p class="gd">Repartir en partes iguales, partir el entero y medir en música.</p></div></div>
     <nav class="grid" aria-label="Divisiones y fracciones">
     <a class="card" href="divisiones.html">
       <svg viewBox="0 0 120 120" aria-hidden="true"><g style="fill:var(--card);stroke:var(--fg)" stroke-width="3"><ellipse cx="30" cy="85" rx="24" ry="12"/><ellipse cx="90" cy="85" rx="24" ry="12"/></g><g style="fill:var(--green)"><circle cx="22" cy="78" r="7"/><circle cx="38" cy="78" r="7"/><circle cx="82" cy="78" r="7"/><circle cx="98" cy="78" r="7"/></g><circle cx="60" cy="30" r="8" style="fill:var(--gold)"/></svg>
@@ -130,8 +147,8 @@
     </a>
     </nav>
   </section>
-  <section class="grupo" id="g3" aria-labelledby="g3" style="--ac:var(--blue);scroll-margin-top:64px">
-    <div class="gh"><span class="dot" style="background:var(--blue)"></span><div><h2 id="g3">Geometría y dibujo</h2><p class="gd">Ángulos, área, simetría y color.</p></div></div>
+  <section class="grupo" id="g3" aria-labelledby="g3t" style="--ac:var(--blue);scroll-margin-top:64px">
+    <div class="gh"><span class="dot" style="background:var(--blue)"></span><div><h2 id="g3t">Geometría y dibujo</h2><p class="gd">Ángulos, área, simetría y color.</p></div></div>
     <nav class="grid" aria-label="Geometría y dibujo">
     <a class="card" href="pitagoras.html">
       <svg viewBox="0 0 120 120" aria-hidden="true"><g style="stroke:var(--fg)" stroke-width="3" stroke-linejoin="round"><rect x="14" y="18" width="34" height="34" style="fill:#86aedb"/><rect x="14" y="52" width="34" height="34" style="fill:#f2c77a"/><path d="M48 52 L48 86 L14 52 Z" style="fill:var(--card)"/><polygon points="48,86 14,52 38,28 72,62" style="fill:#86c496"/></g><text x="31" y="41" text-anchor="middle" font-size="14" font-weight="800" style="fill:var(--fg)">a²</text><text x="31" y="75" text-anchor="middle" font-size="14" font-weight="800" style="fill:var(--fg)">b²</text><text x="86" y="104" text-anchor="middle" font-size="15" font-weight="800" style="fill:var(--fg)">a²+b²=c²</text></svg>
@@ -159,8 +176,8 @@
     </a>
     </nav>
   </section>
-  <section class="grupo" id="g4" aria-labelledby="g4" style="--ac:var(--gold);scroll-margin-top:64px">
-    <div class="gh"><span class="dot" style="background:var(--gold)"></span><div><h2 id="g4">Lógica, datos y azar</h2><p class="gd">Pensar con reglas, programar y contar posibilidades.</p></div></div>
+  <section class="grupo" id="g4" aria-labelledby="g4t" style="--ac:var(--gold);scroll-margin-top:64px">
+    <div class="gh"><span class="dot" style="background:var(--gold)"></span><div><h2 id="g4t">Lógica, datos y azar</h2><p class="gd">Pensar con reglas, programar y contar posibilidades.</p></div></div>
     <nav class="grid" aria-label="Lógica, datos y azar">
     <a class="card" href="ajedrez.html">
       <svg viewBox="0 0 120 120" aria-hidden="true"><g style="stroke:var(--fg)" stroke-width="3"><rect x="12" y="12" width="96" height="96" rx="6" style="fill:var(--card)"/><rect x="12" y="12" width="24" height="24" style="fill:var(--fg)"/><rect x="60" y="12" width="24" height="24" style="fill:var(--fg)"/><rect x="36" y="36" width="24" height="24" style="fill:var(--fg)"/><rect x="84" y="36" width="24" height="24" style="fill:var(--fg)"/><rect x="12" y="60" width="24" height="24" style="fill:var(--fg)"/><rect x="60" y="60" width="24" height="24" style="fill:var(--fg)"/><rect x="36" y="84" width="24" height="24" style="fill:var(--fg)"/><rect x="84" y="84" width="24" height="24" style="fill:var(--fg)"/></g></svg>
@@ -185,6 +202,27 @@
   <p class="footer">Sugerencia: trabajar un taller por sesión y dejar que el niño explore antes de explicar.</p>
   <p class="footer">© 2026 Elodie Strupiechonski y Andrés de Luna Bugallo · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es">CC BY-NC-SA 4.0</a> · <a href="diario.html">Diario para adultos</a> · <a href="privacidad.html">Privacidad</a> · <a href="creditos.html">Créditos, licencia y cómo citar</a></p>
 </div>
+<script>
+(function(){
+  var h=document.documentElement; h.classList.add('js');
+  var G=['g1','g2','g3','g4'];
+  function icono(k){ // iconos sencillos del mapa
+    var st='stroke="var(--fg)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"';
+    return {
+      num:'<svg viewBox="0 0 64 64" aria-hidden="true"><g '+st+'><rect x="8" y="14" width="48" height="36" rx="6" fill="var(--card)"/><path d="M24 14V50M40 14V50M8 32H56" fill="none"/><circle cx="16" cy="23" r="4" fill="var(--red)"/><circle cx="32" cy="23" r="4" fill="var(--red)"/><circle cx="48" cy="41" r="4" fill="var(--blue)"/></g></svg>',
+      fra:'<svg viewBox="0 0 64 64" aria-hidden="true"><g '+st+'><circle cx="32" cy="32" r="22" fill="var(--card)"/><path d="M32 32V10M32 32L51 43" fill="none"/><path d="M32 32V10A22 22 0 0 1 51 43Z" fill="var(--red)"/></g></svg>',
+      geo:'<svg viewBox="0 0 64 64" aria-hidden="true"><g '+st+'><path d="M8 52H56L32 12Z" fill="#86aedb"/><path d="M8 52H26A18 18 0 0 0 22 41" fill="none"/></g></svg>',
+      log:'<svg viewBox="0 0 64 64" aria-hidden="true"><g '+st+'><rect x="8" y="8" width="22" height="22" rx="4" fill="var(--gold)"/><rect x="34" y="8" width="22" height="22" rx="4" fill="var(--card)"/><rect x="8" y="34" width="22" height="22" rx="4" fill="var(--card)"/><rect x="34" y="34" width="22" height="22" rx="4" fill="#6fae7e"/></g></svg>'
+    }[k]; }
+  [].forEach.call(document.querySelectorAll('.mapa .mi'),function(e){e.innerHTML=icono(e.dataset.k);});
+  [].forEach.call(document.querySelectorAll('.grupo'),function(g){
+    var b=document.createElement('a'); b.className='volver'; b.href='#'; b.textContent='← Mapa de temas'; g.insertBefore(b,g.firstChild); });
+  function ruta(){ var id=(location.hash||'').slice(1); var ok=G.indexOf(id)>=0;
+    [].forEach.call(document.querySelectorAll('.grupo'),function(g){g.classList.toggle('on',ok&&g.id===id);});
+    h.classList.toggle('en-tema',ok); window.scrollTo(0,0); }
+  window.addEventListener('hashchange',ruta); ruta();
+})();
+</script>
 <script src="ilustra.js"></script><script src="perfiles.js"></script><script src="rutas.js"></script><script src="perfilui.js"></script>
 <script>
 (function(){

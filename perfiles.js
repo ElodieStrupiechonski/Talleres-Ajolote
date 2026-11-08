@@ -50,7 +50,9 @@
     reset:function(page,b){var p=activo(); if(!p)return; Object.keys(p.prog).forEach(function(x){if(x.indexOf(page+'|'+b+'|')===0)delete p.prog[x];}); save();},
     visita:function(page,b){var p=activo(); if(!p)return; var key=page+'|'+b; if(!p.vis[key]){p.vis[key]=Date.now(); p.ult=Date.now(); save();}},
     emocion:function(page,b,l,e,tipo){var p=activo(); if(!p||EMO.indexOf(e)<0)return; p.emo.push({t:Date.now(),p:page,b:b,l:l||0,e:e,tipo:tipo||'fin'}); if(p.emo.length>600)p.emo=p.emo.slice(-600); p.ult=Date.now(); save();},
-    hecho:function(p,page,b,l){ return l?((p.prog[k(page,b,l)]||0)>=META):!!p.vis[page+'|'+b]; },
+    hecho:function(p,page,b,l){ if(!l)return !!p.vis[page+'|'+b];
+      // superar un nivel cuenta también como superados los niveles inferiores de la misma bandeja
+      var pre=page+'|'+b+'|'; return Object.keys(p.prog).some(function(x){ if(x.indexOf(pre)!==0)return false; var n=+x.slice(pre.length); return n>=l&&(p.prog[x]||0)>=META; }); },
     ultimasEmo:function(p,n){return p.emo.slice(-(n||2));},
     // PIN del adulto (solo evita que los niños entren por curiosidad; no es seguridad real)
     tienePin:function(){return !!D.pin;},

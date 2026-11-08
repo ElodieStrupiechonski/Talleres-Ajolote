@@ -20,7 +20,15 @@
   function expande(spec){var a=spec.split(':'),p=a[0],b=+a[1],out=[],bn=EST[p]&&EST[p][b-1]; if(!bn)return out;
     var niv=bn[1]; if(!niv||!a[2]){out.push({p:p,b:b,l:niv?1:0}); if(niv&&!a[2]){out.length=0; for(var l=1;l<=niv;l++)out.push({p:p,b:b,l:l});} return out;}
     var r=a[2].split('-'),d=+r[0],h=+(r[1]||r[0]); for(var l2=d;l2<=h&&l2<=niv;l2++)out.push({p:p,b:b,l:l2}); return out;}
-  function pasos(taller,anio){var s=R[taller+'-'+anio]; if(!s)return []; var out=[]; s.split(' ').forEach(function(x){expande(x).forEach(function(y){out.push(y);});}); return out;}
+  // Los niveles de una bandeja nunca se saltan: si la ruta de un año empieza en el nivel 4 de una bandeja,
+  // los niveles 1 a 3 se agregan antes como "calentamiento" (pre:true); quien ya los superó los verá como hechos.
+  // Además, haber superado un nivel cuenta como haber superado los inferiores de esa bandeja (ver Perf.hecho).
+  function pasos(taller,anio){var out=[],visto={},s=R[taller+'-'+anio]; if(!s)return out;
+    s.split(' ').forEach(function(x){expande(x).forEach(function(z){
+      var key=z.p+':'+z.b,v=visto[key]||(visto[key]={});
+      if(z.l>1){for(var l=1;l<z.l;l++){ if(!v[l]){v[l]=1; out.push({p:z.p,b:z.b,l:l,pre:true});} }}
+      if(!v[z.l]){v[z.l]=1; out.push(z);} });});
+    return out;}
   function etiqueta(s){var bn=EST[s.p][s.b-1][0]; return TEMA[s.p]+' · '+bn+(s.l?' · nivel '+s.l:'');}
   function url(s){return s.p+'.html#b'+s.b+(s.l?'n'+s.l:'');}
   // siguiente paso recomendado para un perfil (usa Perf.hecho). Ajusta según las dos últimas emociones.

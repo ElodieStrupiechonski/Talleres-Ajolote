@@ -119,18 +119,21 @@
 
   function box(tr){ var cs = getComputedStyle(tr); return { w: tr.clientWidth, h: tr.clientHeight }; }
   function natural(tr, s){ var inner = tr.firstChild, b = box(tr); inner.style.width = (b.w / s) + 'px'; inner.style.setProperty('--pfh', (b.h / s) + 'px'); inner.style.transform = 'scale(' + s + ')'; return inner.offsetHeight; }
+  // Escala estable: se calcula al mostrar la bandeja, al girar la pantalla o al cargar las fuentes, con un margen
+  // (HOLGURA) para que el contenido pueda crecer al iniciar una actividad sin que la pantalla "salte".
+  // Durante el juego solo se reduce si el contenido de verdad ya no cabe (nunca crece sola).
+  var HOLGURA = 1.16;
   function fit(i, force){
     var tr = trays[i]; if (!tr.classList.contains('pf-on')) return;
     fitting = true;
     var b = box(tr), s0 = scale[i], best = null;
-    if (!force){ var h0 = natural(tr, s0); if (h0 * s0 <= b.h + 1){ var ok0 = true; } }
-    if (!force && ok0){
-      // ¿cabe con holgura suficiente para crecer? solo si la ganancia vale la pena
-      var cand = s0; for (var s = MAX; s > s0 + 0.09; s = Math.round((s - 0.05) * 100) / 100){ if (natural(tr, s) * s <= b.h + 1){ cand = s; break; } }
-      best = cand;
-    } else {
-      for (var s2 = MAX; s2 >= MIN - 0.001; s2 = Math.round((s2 - 0.05) * 100) / 100){ if (natural(tr, s2) * s2 <= b.h + 1){ best = s2; break; } }
+    if (force){
+      for (var s2 = MAX; s2 >= MIN - 0.001; s2 = Math.round((s2 - 0.05) * 100) / 100){ if (natural(tr, s2) * s2 <= b.h / HOLGURA + 1){ best = s2; break; } }
+      if (best == null){ for (var s3 = MAX; s3 >= MIN - 0.001; s3 = Math.round((s3 - 0.05) * 100) / 100){ if (natural(tr, s3) * s3 <= b.h + 1){ best = s3; break; } } }
       if (best == null) best = MIN;
+    } else {
+      best = s0;
+      if (natural(tr, s0) * s0 > b.h + 1){ for (var s4 = s0; s4 >= MIN - 0.001; s4 = Math.round((s4 - 0.05) * 100) / 100){ best = s4; if (natural(tr, s4) * s4 <= b.h + 1) break; } }
     }
     scale[i] = best; var h = natural(tr, best);
     tr.style.overflowY = (h * best > b.h + 1) ? 'auto' : 'hidden';

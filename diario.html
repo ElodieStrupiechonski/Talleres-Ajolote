@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f0e3c8"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f0e3c8"><link rel="icon" href="favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="icons/favicon-64.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="author" content="Elodie Strupiechonski"><meta name="author" content="Andrés de Luna Bugallo"><link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
 <title>Diario para adultos · Talleres de Matemáticas</title><meta name="robots" content="noindex"><meta name="description" content="Diario del avance y las emociones de los niños.">
 <link rel="stylesheet" href="taller.css">
@@ -98,7 +98,7 @@ table.t{border-collapse:collapse;width:100%;font-size:.95rem}.t th,.t td{text-al
       function guarda(){var q=Perf.editar(p.id,{nombre:n.value,taller:t.value,anio:a.value,tema:m.value,mas:mn.value}); er2.textContent=q.err?({nombre:'Escribe un nombre.',repetido:'Ese nombre ya existe.'}[q.err]||''):'';}
       m.addEventListener('change',function(){if(Object.keys(Perf.MASC).some(function(k){return Perf.MASC[k].n===mn.value;}))mn.value=Perf.MASC[m.value].n;});
       [n,t,a,m,mn].forEach(function(x){x.addEventListener('change',guarda);x.addEventListener('keydown',function(e){e.stopPropagation();});}); row.appendChild(n);row.appendChild(t);row.appendChild(a);row.appendChild(m);row.appendChild(mn);
-      var d=btn('Borrar','d',function(){ if(d.dataset.s!=='1'){d.dataset.s='1';d.textContent='¿Seguro? Toca otra vez';return;} Perf.borrar(p.id);render(); }); row.appendChild(d); c.appendChild(row);});
+      var d=btn('Eliminar perfil','d',function(){ if(d.dataset.s!=='1'){d.dataset.s='1';d.textContent='¿Seguro? Toca otra vez';return;} Perf.borrar(p.id);render(); }); row.appendChild(d); c.appendChild(row);});
     var er2=el('p','err'); er2.setAttribute('role','alert'); c.appendChild(er2);
     if(Perf.lista().length<Perf.max()){var nr=el('div','row pf'),ni=el('input'); ni.placeholder='Nombre nuevo'; ni.maxLength=14; ni.setAttribute('aria-label','Nombre nuevo'); ni.addEventListener('keydown',function(e){e.stopPropagation();}); var nt=selT(2,'Taller'),na=selA(1);
       var nm=el('select');nm.setAttribute('aria-label','Ajolote del perfil nuevo');Perf.TEMAS.forEach(function(k){var o=el('option',null,Perf.MASC[k].n+' ('+Perf.MASC[k].s+')');o.value=k;nm.appendChild(o);});

@@ -1,0 +1,11 @@
+{
+  "appId": "io.github.elodiestrupiechonski.ajolote",
+  "appName": "Talleres del Ajolote",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "backgroundColor": "#f8f5ef"
+  }
+}

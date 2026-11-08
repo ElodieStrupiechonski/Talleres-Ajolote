@@ -1,0 +1,13 @@
+{
+  "name": "talleres-del-ajolote",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Envoltorio Android (Capacitor) de los Talleres del Ajolote. El contenido va dentro de la app y funciona sin internet.",
+  "dependencies": {
+    "@capacitor/android": "^8.0.0",
+    "@capacitor/core": "^8.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.0.0"
+  }
+}

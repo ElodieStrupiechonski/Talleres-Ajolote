@@ -297,3 +297,11 @@ body.pf{overflow-x:hidden;max-width:100vw}
   body.pf .pf-side .pf-mas-big{top:72px}
 }
 a{overflow-wrap:anywhere}
+
+/* El saludo del ajolote en teléfono vertical: lleva su ajolote adentro para que no quede tapado detrás del globo */
+.pf-ba{display:none}
+@media (max-width:480px) and (max-aspect-ratio:1/1){
+  body.pf .pf-side .pf-bub{display:flex;align-items:center;gap:8px;text-align:left;padding:4px 12px 4px 8px;width:auto;max-width:calc(100vw - 16px)}
+  body.pf .pf-side .pf-bub .pf-ba{display:block;flex:none;width:44px;height:44px}
+  body.pf .pf-side .pf-bub .pf-ba svg{width:44px;height:44px;display:block}
+}

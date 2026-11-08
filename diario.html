@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="taller.css">
 <style>.box{background:var(--card);border:4px solid var(--tray-edge);border-radius:18px;padding:14px 18px;margin:12px 0;max-width:860px}
 .box h2{margin:0 0 8px;font-size:1.25rem}.nota{color:var(--muted);font-size:.92rem;max-width:70ch}
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.tabs button,.b{min-height:44px;padding:4px 16px;font:inherit;font-family:var(--display);font-weight:800;border:3px solid var(--tray-edge);border-radius:14px;background:var(--card);color:var(--fg);cursor:pointer}
+.tabs{display:flex;gap:8px;flex-wrap:nowrap;overflow-x:auto;margin:10px 0}.tabs button{flex:none}.tiles{display:flex;gap:10px;flex-wrap:wrap;margin:4px 0 12px}.tile{flex:1 1 110px;background:var(--bg);border:3px solid var(--tray-edge);border-radius:14px;padding:8px 12px;text-align:center}.tile b{display:block;font-size:1.7rem;line-height:1.1}.tile span{font-size:.85rem;color:var(--muted)}.tw{overflow-x:auto}.pf{padding:10px;border:3px solid var(--tray-edge);border-radius:14px;background:var(--bg);margin:8px 0}@media (max-width:640px){.tabs{gap:6px}.tabs button{padding:4px 10px!important;font-size:.95rem}.row.pf{display:grid;grid-template-columns:1fr 1fr;gap:8px}.pf input,.pf select,.pf button{width:100%!important;box-sizing:border-box;min-width:0}.pf>:first-child{grid-column:1/-1}}.tabs button,.b{min-height:44px;padding:4px 16px;font:inherit;font-family:var(--display);font-weight:800;border:3px solid var(--tray-edge);border-radius:14px;background:var(--card);color:var(--fg);cursor:pointer}
 .tabs button.on,.b.p{background:var(--acc,#f2b8c6);border-color:var(--fg)}.b.d{border-color:#b3392a;color:#b3392a}
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0}
 .pin input,.row input,.row select{min-height:44px;padding:4px 10px;font:inherit;font-family:var(--display);font-weight:800;font-size:1.1rem;border:3px solid var(--tray-edge);border-radius:12px;background:var(--card);color:var(--fg)}
@@ -16,13 +16,13 @@ table.t{border-collapse:collapse;width:100%;font-size:.95rem}.t th,.t td{text-al
 </head><body>
 <div class="wrap">
   <a class="back" href="index.html">← Todos los talleres</a>
-  <header><h1>Diario para adultos</h1><p class="lead">Aquí se ven los perfiles, el avance y cómo se sintieron los niños. Se guarda solo en este dispositivo.</p></header>
+  <header><h1>Diario para adultos</h1><p class="lead">Avance y emociones de las niñas y los niños. Todo se queda en este dispositivo.</p></header>
   <div id="app"></div>
 </div>
 <script src="ilustra.js"></script><script src="perfiles.js"></script><script src="rutas.js"></script><script src="pdf.js"></script><script src="informes.js"></script><script src="perfilui.js"></script>
 <script>
 (function(){
-  var app=document.getElementById('app'),sec='res',sel='*';
+  var app=document.getElementById('app'),sec='res',sel='*',sinPin=false;
   function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;}
   function btn(txt,cls,fn){var b=el('button','b '+(cls||''),txt);b.type='button';b.onclick=fn;return b;}
   function bajar(nom,datos,tipo){PDF.descarga(nom,datos,tipo);}
@@ -30,16 +30,17 @@ table.t{border-collapse:collapse;width:100%;font-size:.95rem}.t th,.t td{text-al
   var hoy=function(){return new Date().toISOString().slice(0,10);};
   function render(){
     app.innerHTML='';
-    if(!Perf.tienePin()) return crearPin();
-    if(!Perf.abierto()) return pedirPin();
+    if(!Perf.tienePin()&&!sinPin) return crearPin();
+    if(Perf.tienePin()&&!Perf.abierto()) return pedirPin();
     panel();
   }
   function crearPin(){
     var b=el('div','box pin'); b.appendChild(el('h2',null,'Crea tu candado de 4 números'));
-    b.appendChild(el('p','nota','Sirve para que los niños no entren al diario por curiosidad. No es una seguridad fuerte: es un candado sencillo. Anótalo en un lugar seguro.'));
+    b.appendChild(el('p','nota','Evita que entren por curiosidad. Es un candado sencillo, no una seguridad fuerte.'));
     var r=el('div','row'),a=el('input'),c=el('input'); [a,c].forEach(function(i){i.type='password';i.inputMode='numeric';i.maxLength=4;i.autocomplete='off';}); a.setAttribute('aria-label','Número secreto'); c.setAttribute('aria-label','Repite el número');
     r.appendChild(a);r.appendChild(c);b.appendChild(r); var er=el('p','err'); er.setAttribute('role','alert'); b.appendChild(er);
     b.appendChild(btn('Guardar candado','p',function(){ if(!/^\d{4}$/.test(a.value)){er.textContent='Escribe 4 números.';return;} if(a.value!==c.value){er.textContent='Los dos números no coinciden.';return;} Perf.setPin(a.value);Perf.abre();render();}));
+    b.appendChild(btn('Ahora no, entrar sin candado','',function(){sinPin=true;render();}));
     app.appendChild(b);
   }
   function pedirPin(){
@@ -54,25 +55,27 @@ table.t{border-collapse:collapse;width:100%;font-size:.95rem}.t th,.t td{text-al
   }
   function panel(){
     var t=el('div','tabs'); t.setAttribute('role','group');
-    [['res','Resumen'],['per','Perfiles'],['dat','Datos y descargas']].forEach(function(x){var b=el('button',x[0]===sec?'on':'',x[1]);b.type='button';b.onclick=function(){sec=x[0];render();};t.appendChild(b);});
-    var cl=el('button',null,'Cerrar diario'); cl.type='button'; cl.onclick=function(){Perf.cierra();render();}; t.appendChild(cl);
+    [['res','Resumen'],['per','Perfiles'],['dat','Datos']].forEach(function(x){var b=el('button',x[0]===sec?'on':'',x[1]);b.type='button';b.onclick=function(){sec=x[0];render();};t.appendChild(b);});
+    var cl=el('button',null,'Salir'); cl.type='button'; cl.onclick=function(){Perf.cierra();sinPin=false;location.href='index.html';}; t.appendChild(cl);
     app.appendChild(t); ({res:resumen,per:perfiles,dat:datos})[sec]();
   }
   function lista(){return sel==='*'?Perf.lista():Perf.lista().filter(function(p){return p.id===sel;});}
   function resumen(){
-    var ps=Perf.lista(); if(!ps.length){app.appendChild(el('p','nota','Todavía no hay perfiles. Los niños los crean al entrar a un taller, o se crean en la pestaña Perfiles.'));return;}
+    var ps=Perf.lista(); if(!ps.length){app.appendChild(el('p','nota','Todavía no hay perfiles. Se crean desde la pantalla de inicio («Empezar») o en la pestaña Perfiles.'));return;}
     var r=el('div','row'),s=el('select'); s.setAttribute('aria-label','Perfil');
-    var o=el('option',null,'Todo el grupo');o.value='*';s.appendChild(o); ps.forEach(function(p){var o2=el('option',null,p.nombre);o2.value=p.id;s.appendChild(o2);}); if(!Perf.porId(sel))sel='*'; s.value=sel; s.onchange=function(){sel=s.value;render();}; r.appendChild(s); app.appendChild(r);
+    var o=el('option',null,'Todo el grupo');o.value='*';s.appendChild(o); ps.forEach(function(p){var o2=el('option',null,p.nombre);o2.value=p.id;s.appendChild(o2);}); if(!Perf.porId(sel))sel=(ps.length===1?ps[0].id:'*'); s.value=sel; s.onchange=function(){sel=s.value;render();}; r.appendChild(s); app.appendChild(r);
     if(sel==='*') grupo(ps); else indiv(Perf.porId(sel));
   }
   function barra(f){var b=el('span','bar'),i=el('i');i.style.width=Math.round(100*f)+'%';b.appendChild(i);return b;}
   function grupo(ps){
     var b=el('div','box'); b.appendChild(el('h2',null,'Grupo · '+ps.length+' perfiles'));
+    var tl=el('div','tiles'),H=0,T=0,S=0; ps.forEach(function(p){var q=Inf.resumen(p);H+=q.est.hechos;T+=q.est.total;S+=q.sup;});
+    [[ps.length,'perfiles'],[H,'pasos logrados'],[S,'niveles superados']].forEach(function(x){var d=el('div','tile');d.appendChild(el('b',null,x[0]));d.appendChild(el('span',null,x[1]));tl.appendChild(d);}); b.appendChild(tl);
     var tb=el('table','t'),th=el('tr'); ['Nombre','Taller-año','Avance del camino','Niveles','Emoción frecuente','Última actividad'].forEach(function(x){th.appendChild(el('th',null,x));}); tb.appendChild(th);
     ps.forEach(function(p){var s=Inf.resumen(p),tr=el('tr'),top=null,m=0; Perf.EMO.forEach(function(e){if(s.cuenta[e]>m){m=s.cuenta[e];top=e;}});
       tr.appendChild(el('td',null,p.nombre)); tr.appendChild(el('td',null,p.taller+'-'+p.anio)); var c=el('td'); c.appendChild(barra(s.est.total?s.est.hechos/s.est.total:0)); c.appendChild(document.createTextNode(' '+s.est.hechos+'/'+s.est.total)); tr.appendChild(c);
       tr.appendChild(el('td',null,s.sup)); tr.appendChild(el('td',null,top?Perf.EMOL[top]:'—')); tr.appendChild(el('td',null,p.ult?new Date(p.ult).toLocaleDateString('es-MX'):'—')); tb.appendChild(tr);});
-    b.appendChild(tb); var r=el('div','row'); r.appendChild(btn('Descargar PDF del grupo','p',function(){bajar('resumen_grupo_'+hoy()+'.pdf',Inf.pdfGrupo(ps,'Resumen del grupo'));})); b.appendChild(r);
+    var tw=el('div','tw'); tw.appendChild(tb); b.appendChild(tw); var r=el('div','row'); r.appendChild(btn('Descargar PDF del grupo','p',function(){bajar('resumen_grupo_'+hoy()+'.pdf',Inf.pdfGrupo(ps,'Resumen del grupo'));})); b.appendChild(r);
     b.appendChild(el('p','nota','Las emociones las elige el propio niño; sirven para conversar, no para calificar.')); app.appendChild(b);
   }
   function indiv(p){
@@ -91,13 +94,17 @@ table.t{border-collapse:collapse;width:100%;font-size:.95rem}.t th,.t td{text-al
     var r=el('div','row'); [['hogar','Hogar (hasta 5 perfiles)'],['salon','Salón (hasta 25 perfiles)']].forEach(function(m){var x=btn(m[1],Perf.modo()===m[0]?'p':'',function(){var q=Perf.setModo(m[0]); if(q.err)er.textContent='Hay más de 5 perfiles: borra algunos antes de cambiar a «hogar».'; else render();}); r.appendChild(x);}); b.appendChild(r);
     var er=el('p','err'); er.setAttribute('role','alert'); b.appendChild(er); b.appendChild(el('p','nota',Perf.lista().length+' de '+Perf.max()+' perfiles usados.')); app.appendChild(b);
     var c=el('div','box'); c.appendChild(el('h2',null,'Perfiles'));
-    Perf.lista().forEach(function(p){var row=el('div','row'),n=el('input'); n.value=p.nombre; n.maxLength=14; n.setAttribute('aria-label','Nombre'); var t=selT(p.taller,'Taller'),a=selA(p.anio);
-      function guarda(){var q=Perf.editar(p.id,{nombre:n.value,taller:t.value,anio:a.value}); er2.textContent=q.err?({nombre:'Escribe un nombre.',repetido:'Ese nombre ya existe.'}[q.err]||''):'';}
-      [n,t,a].forEach(function(x){x.onchange=guarda;x.addEventListener('keydown',function(e){e.stopPropagation();});}); row.appendChild(n);row.appendChild(t);row.appendChild(a);
+    Perf.lista().forEach(function(p){var row=el('div','row pf'),n=el('input'); n.value=p.nombre; n.maxLength=14; n.setAttribute('aria-label','Nombre'); var t=selT(p.taller,'Taller'),a=selA(p.anio),m=el('select');m.setAttribute('aria-label','Ajolote');Perf.TEMAS.forEach(function(k){var o=el('option',null,Perf.MASC[k].n+' ('+Perf.MASC[k].s+')');o.value=k;m.appendChild(o);});m.value=p.tema;var mn=el('input');mn.value=Perf.mascota(p).nombre;mn.maxLength=12;mn.setAttribute('aria-label','Nombre del ajolote de '+p.nombre);mn.style.width='9em';
+      function guarda(){var q=Perf.editar(p.id,{nombre:n.value,taller:t.value,anio:a.value,tema:m.value,mas:mn.value}); er2.textContent=q.err?({nombre:'Escribe un nombre.',repetido:'Ese nombre ya existe.'}[q.err]||''):'';}
+      m.addEventListener('change',function(){if(Object.keys(Perf.MASC).some(function(k){return Perf.MASC[k].n===mn.value;}))mn.value=Perf.MASC[m.value].n;});
+      [n,t,a,m,mn].forEach(function(x){x.addEventListener('change',guarda);x.addEventListener('keydown',function(e){e.stopPropagation();});}); row.appendChild(n);row.appendChild(t);row.appendChild(a);row.appendChild(m);row.appendChild(mn);
       var d=btn('Borrar','d',function(){ if(d.dataset.s!=='1'){d.dataset.s='1';d.textContent='¿Seguro? Toca otra vez';return;} Perf.borrar(p.id);render(); }); row.appendChild(d); c.appendChild(row);});
     var er2=el('p','err'); er2.setAttribute('role','alert'); c.appendChild(er2);
-    if(Perf.lista().length<Perf.max()){var nr=el('div','row'),ni=el('input'); ni.placeholder='Nombre nuevo'; ni.maxLength=14; ni.setAttribute('aria-label','Nombre nuevo'); ni.addEventListener('keydown',function(e){e.stopPropagation();}); var nt=selT(2,'Taller'),na=selA(1);
-      nr.appendChild(ni);nr.appendChild(nt);nr.appendChild(na); nr.appendChild(btn('Agregar','p',function(){var q=Perf.crear(ni.value,nt.value,na.value); if(q.err)er2.textContent={nombre:'Escribe un nombre.',repetido:'Ese nombre ya existe.',lleno:'Ya no caben más.'}[q.err]; else render();})); c.appendChild(nr);}
+    if(Perf.lista().length<Perf.max()){var nr=el('div','row pf'),ni=el('input'); ni.placeholder='Nombre nuevo'; ni.maxLength=14; ni.setAttribute('aria-label','Nombre nuevo'); ni.addEventListener('keydown',function(e){e.stopPropagation();}); var nt=selT(2,'Taller'),na=selA(1);
+      var nm=el('select');nm.setAttribute('aria-label','Ajolote del perfil nuevo');Perf.TEMAS.forEach(function(k){var o=el('option',null,Perf.MASC[k].n+' ('+Perf.MASC[k].s+')');o.value=k;nm.appendChild(o);});
+      var usados=Perf.lista().map(function(p){return p.tema;});var libre=Perf.TEMAS.filter(function(k){return usados.indexOf(k)<0;});nm.value=(libre[0]||Perf.TEMAS[0]);
+      var nn=el('input');nn.placeholder='Nombre del ajolote';nn.maxLength=12;nn.setAttribute('aria-label','Nombre del ajolote nuevo (opcional)');nn.addEventListener('keydown',function(e){e.stopPropagation();});
+      nr.appendChild(ni);nr.appendChild(nt);nr.appendChild(na);nr.appendChild(nm);nr.appendChild(nn); nr.appendChild(btn('Agregar','p',function(){var q=Perf.crear(ni.value,nt.value,na.value,nm.value,nn.value); if(q.err)er2.textContent={nombre:'Escribe un nombre.',repetido:'Ese nombre ya existe.',lleno:'Ya no caben más.'}[q.err]; else render();})); c.appendChild(nr);}
     c.appendChild(el('p','nota','El Taller y el año definen el camino que se le propone (ver «Mi camino»). Un taller Montessori dura tres años: si el niño avanza o necesita otro ritmo, se puede cambiar aquí cuando la guía lo decida.')); app.appendChild(c);
   }
   function datos(){

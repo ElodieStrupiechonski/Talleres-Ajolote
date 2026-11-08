@@ -249,3 +249,51 @@ body.pf{height:100vh;height:100dvh;overflow:hidden;padding:0;display:flex;flex-d
 .pf-emo svg{width:100%;height:auto;display:block;max-width:34px;margin:auto}
 @media (max-aspect-ratio:1/1),(max-width:899px){.pf-who{width:150px;flex:none}.pf-emo,.pf-emo-l{display:none}}
 @media (max-height:700px){.pf-emo-l{display:none}}
+
+/* elegir ajolote */
+.pu-mas{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:10px}
+.pu-mas .pu-card.on{border-color:var(--fg);background:var(--acc,#f2b8c6)}
+.pu-lab{display:flex;flex-direction:column;gap:3px;font-family:var(--display);font-weight:700;max-width:320px;margin:0 auto}
+.pu-lab input{min-height:44px;padding:4px 10px;font:inherit;font-family:var(--display);font-weight:800;font-size:1.1rem;border:3px solid var(--tray-edge);border-radius:12px;background:var(--card);color:var(--fg);text-align:center}
+.pu-info{margin:8px 0;color:var(--muted);font-size:.95rem}
+@media (max-width:700px){.pu-mas{grid-template-columns:repeat(3,1fr)}}
+@media (max-height:520px){.pu-mas .pu-av{width:40px}.pu-mas .pu-sub{display:none}}
+
+/* columna derecha: seguimiento arriba y ajolote entero abajo (nunca se recorta) */
+body.pf{height:100vh;height:100dvh;height:var(--vh,100dvh)}
+.pf-side{display:contents}
+.pf-mas-nom{font-family:var(--display);font-weight:800;font-size:1rem;text-align:center;margin-top:2px;color:var(--fg)}
+@media (min-aspect-ratio:1/1) and (min-width:900px){
+  body.pf .pf-side{grid-column:3;grid-row:1/4;display:flex;flex-direction:column;min-height:0;overflow:hidden;padding:8px 10px 6px 0;gap:6px;box-sizing:border-box}
+  body.pf .pf-side .pf-track{order:0;grid-column:auto;grid-row:auto;margin:0;flex:none;align-self:stretch;max-height:60%;overflow:auto}
+  body.pf .pf-side .pf-mas-big{grid-column:auto;grid-row:auto;padding:0;margin:0;flex:1 1 0;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;pointer-events:none}
+  body.pf .pf-side .pf-mas-sv{flex:1 1 0;min-height:60px;width:100%;position:relative;pointer-events:auto;cursor:pointer}
+  body.pf .pf-side .pf-mas-sv svg{position:absolute;inset:0;width:100%;height:100%;max-width:none}
+  body.pf .pf-side .pf-bub{flex:none;font-size:.95rem;margin-bottom:8px;max-width:100%}
+  body.pf .pf-side .pf-mas-nom{flex:none}
+}
+@media (max-aspect-ratio:1/1),(max-width:899px){
+  body.pf .pf-side .pf-mas-big{display:block;position:fixed;left:0;right:0;top:78px;z-index:30;pointer-events:none}
+  body.pf .pf-side .pf-mas-sv,body.pf .pf-side .pf-mas-nom{display:none}
+  body.pf .pf-side .pf-bub{display:block;position:relative;opacity:0;margin:0 auto;width:max-content;max-width:min(92vw,520px);font-size:1rem}
+  body.pf .pf-side .pf-bub.on{opacity:1}
+}
+.pu-mas .pu-card.on{background:#fff0c2;color:var(--fg);border-color:var(--fg)}
+.pu-mas .pu-card.on .pu-nom,.pu-mas .pu-card.on .pu-sub{color:var(--fg)}
+
+/* contener el marco fijo en pantallas muy angostas */
+body.pf{overflow-x:hidden;max-width:100vw}
+/* Teléfono vertical: barra superior de una sola línea (el botón de regreso queda como flecha) */
+@media (max-width:480px) and (max-aspect-ratio:1/1){
+  .pf .pf-top{flex-wrap:nowrap;gap:8px;min-width:0}
+  .pf .pf-top .back{flex:none;font-size:0;white-space:nowrap;min-width:48px;justify-content:center;padding:4px 10px}
+  .pf .pf-top .back::before{content:"←";font-size:1.5rem;line-height:1}
+  .pf .pf-top h1{min-width:0;flex:1 1 auto;font-size:1.15rem}
+  .pf .pf-cr{display:none}
+}
+/* Teléfono: la burbuja del ajolote también lleva su globo (antes solo en pantallas anchas) */
+@media (max-aspect-ratio:1/1),(max-width:899px){
+  body.pf .pf-side .pf-bub{background:var(--card);border:3px solid var(--fg);border-radius:16px;padding:6px 12px;font-family:var(--display);font-weight:800;font-size:.95rem;line-height:1.25;text-align:center;transition:opacity .25s;box-shadow:0 3px 8px rgba(0,0,0,.2)}
+  body.pf .pf-side .pf-mas-big{top:72px}
+}
+a{overflow-wrap:anywhere}

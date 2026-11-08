@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f0e3c8"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="author" content="Elodie Strupiechonski"><meta name="author" content="Andrés de Luna Bugallo"><link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+<title>Pitágoras y raíces · Taller interactivo del teorema</title><!--seo--><meta name="description" content="Taller interactivo para adolescentes de 12 a 15 años: cuadrados y raíces cuadradas, teorema de Pitágoras con cuadrados sobre los lados, hipotenusa, catetos y problemas. Gratis y sin internet."><link rel="canonical" href="https://elodiestrupiechonski.github.io/Talleres-Matematicas/pitagoras.html"><meta property="og:type" content="website"><meta property="og:locale" content="es_MX"><meta property="og:site_name" content="Talleres del Ajolote"><meta property="og:title" content="Pitágoras y raíces · Taller interactivo del teorema"><meta property="og:description" content="Taller interactivo para adolescentes de 12 a 15 años: cuadrados y raíces cuadradas, teorema de Pitágoras con cuadrados sobre los lados, hipotenusa, catetos y problemas. Gratis y sin internet."><meta property="og:url" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/pitagoras.html"><meta property="og:image" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/icons/og.png"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Pitágoras y raíces · Taller interactivo del teorema", "description": "Taller interactivo para adolescentes de 12 a 15 años: cuadrados y raíces cuadradas, teorema de Pitágoras con cuadrados sobre los lados, hipotenusa, catetos y problemas. Gratis y sin internet.", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/pitagoras.html", "inLanguage": "es-MX", "isAccessibleForFree": true, "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/", "author": [{"@type": "Person", "name": "Elodie Strupiechonski"}, {"@type": "Person", "name": "Andrés de Luna Bugallo"}], "learningResourceType": "Recurso interactivo", "typicalAgeRange": "12-15", "educationalLevel": "Secundaria", "teaches": "Teorema de Pitágoras y raíces", "isPartOf": {"@type": "WebSite", "name": "Talleres del Ajolote", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/"}}</script><!--/seo-->
+<link rel="stylesheet" href="taller.css">
+<style>
+.eq{font-family:var(--display);font-weight:800;font-size:1.6rem;margin:2px 0 8px}
+.big{font-family:var(--display);font-weight:800;font-size:1.5rem;margin:4px 0}
+.ops{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0;align-items:center}
+.ops button{min-height:52px;font-size:1.05rem;padding:8px 16px}
+.ops .grp{display:flex;gap:8px;align-items:center;background:var(--card);border-radius:12px;padding:6px 10px}
+.ops .grp b{font-family:var(--display);min-width:3.2em}
+.ops .grp button{min-width:46px;min-height:46px;font-size:1.3rem;padding:0}
+.msg:empty{display:none}
+.vis{width:min(100%,640px)}
+.vis svg{width:100%;height:auto;display:block;background:var(--card);border-radius:12px}
+.opts2{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0}
+.opts2 button{min-height:56px;min-width:110px;font-size:1.25rem;font-family:var(--display);font-weight:700}
+.rule{background:var(--card);border-radius:12px;padding:8px 12px;margin:6px 0}
+</style></head><body>
+<div class="wrap">
+  <a class="back" href="index.html">← Todos los talleres</a>
+  <header class="col">
+    <h1>Pitágoras y raíces</h1>
+    <p class="lead">Elevar al cuadrado es construir un cuadrado; sacar la raíz es encontrar su lado. Con eso descubrimos cómo se relacionan los tres lados de un triángulo rectángulo.</p>
+  </header>
+
+  <section class="tray" id="s1" aria-labelledby="t1">
+    <span class="step">Bandeja 1 · Cuadrados</span>
+    <h2 id="t1">Un número al cuadrado es un área</h2>
+    <p>Cambia el lado del cuadrado y mira cuántos cuadritos tiene por dentro.</p>
+    <p class="det">n² (se lee «n al cuadrado») es n × n: el área de un cuadrado de lado n. La <b>raíz cuadrada</b> hace el camino contrario: √25 = 5 porque 5² = 25.</p>
+    <div class="vis" id="v1"></div>
+    <div class="ops"><div class="grp"><b>Lado</b><button type="button" id="m1" aria-label="Lado menos uno">−</button><button type="button" id="p1" aria-label="Lado más uno">+</button></div></div>
+    <p class="eq" id="e1" aria-live="polite"></p>
+    <p class="note msg" id="i1" aria-live="polite"></p>
+  </section>
+
+  <section class="tray" id="s2" aria-labelledby="t2">
+    <span class="step">Bandeja 2 · Raíz cuadrada</span>
+    <h2 id="t2">¿Cuál es el lado?</h2>
+    <p class="eq big" id="q2"></p>
+    <div class="vis" id="v2"></div>
+    <div id="o2"></div>
+    <p class="note msg" id="m2" aria-live="polite"></p>
+    <p>Aciertos: <b id="sc2">0</b> · <button id="n2" type="button">Siguiente</button></p>
+  </section>
+
+  <section class="tray" id="s3" aria-labelledby="t3">
+    <span class="step">Bandeja 3 · El teorema</span>
+    <h2 id="t3">Los cuadrados de los tres lados</h2>
+    <p>Este triángulo tiene un ángulo recto. Construimos un cuadrado sobre cada lado. Cambia los catetos y compara las áreas.</p>
+    <div class="vis" id="v3"></div>
+    <div class="ops">
+      <div class="grp"><b>a = <span id="va"></span></b><button type="button" id="am" aria-label="Cateto a menos uno">−</button><button type="button" id="ap" aria-label="Cateto a más uno">+</button></div>
+      <div class="grp"><b>b = <span id="vb"></span></b><button type="button" id="bm" aria-label="Cateto b menos uno">−</button><button type="button" id="bp" aria-label="Cateto b más uno">+</button></div>
+    </div>
+    <p class="eq" id="e3" aria-live="polite"></p>
+    <p class="note msg" id="i3" aria-live="polite"></p>
+  </section>
+
+  <section class="tray" id="s4" aria-labelledby="t4">
+    <span class="step">Bandeja 4 · Calcula el lado</span>
+    <h2 id="t4">Hipotenusa y catetos</h2>
+    <p class="rule"><b>Teorema de Pitágoras:</b> en un triángulo rectángulo, <b>a² + b² = c²</b>, donde a y b son los catetos (los lados del ángulo recto) y c es la hipotenusa (el lado más largo, frente al ángulo recto).</p>
+    <p class="eq big" id="q4"></p>
+    <div class="vis" id="v4"></div>
+    <div id="o4"></div>
+    <p class="note msg" id="m4" aria-live="polite"></p>
+    <p>Aciertos: <b id="sc4">0</b> · <button id="n4" type="button">Siguiente</button></p>
+  </section>
+
+  <section class="tray" id="s5" aria-labelledby="t5">
+    <span class="step">Bandeja 5 · ¿Es rectángulo?</span>
+    <h2 id="t5">Comprueba con el teorema</h2>
+    <p class="det">Si los lados cumplen a² + b² = c² (con c el lado más largo), el triángulo tiene un ángulo recto. Si no, no.</p>
+    <p class="eq big" id="q5"></p>
+    <div class="vis" id="v5"></div>
+    <div id="o5"></div>
+    <p class="note msg" id="m5" aria-live="polite"></p>
+    <p>Aciertos: <b id="sc5">0</b> · <button id="n5" type="button">Siguiente</button></p>
+  </section>
+
+  <section class="tray" id="s6" aria-labelledby="t6">
+    <span class="step">Bandeja 6 · Problemas</span>
+    <h2 id="t6">Pitágoras en la vida diaria</h2>
+    <p class="big" id="q6"></p>
+    <div class="vis" id="v6"></div>
+    <div id="o6"></div>
+    <p class="note msg" id="m6" aria-live="polite"></p>
+    <p>Aciertos: <b id="sc6">0</b> · <button id="n6" type="button">Siguiente</button></p>
+  </section>
+
+  <section class="tray" id="s7" aria-labelledby="t7">
+    <span class="step">Bandeja 7 · Potencias y raíces</span>
+    <h2 id="t7">Cuadrados, cubos y raíces</h2>
+    <p class="det">n² = n × n · n³ = n × n × n · √ es lo contrario de ² · ∛ es lo contrario de ³. Primero se calculan las potencias y las raíces; después las sumas y restas.</p>
+    <p class="eq big" id="q7"></p>
+    <div id="o7"></div>
+    <p class="note msg" id="m7" aria-live="polite"></p>
+    <p>Aciertos: <b id="sc7">0</b> · <button id="n7" type="button">Siguiente</button></p>
+  </section>
+
+  <section class="tray" id="s8" aria-labelledby="t8">
+    <span class="step">Bandeja 8 · Ponte a prueba</span>
+    <h2 id="t8">Resuelve</h2>
+    <p class="eq big" id="q8"></p>
+    <div class="vis" id="v8"></div>
+    <div id="o8"></div>
+    <p class="note msg" id="m8" aria-live="polite"></p>
+    <p>Aciertos: <b id="sc8">0</b> · <button id="n8" type="button">Siguiente</button></p>
+  </section>
+</div>
+<button id="next" hidden aria-hidden="true" tabindex="-1">Siguiente</button>
+<script src="ilustra.js"></script>
+<script src="sonido.js"></script>
+<script src="construir.js"></script>
+<script>
+const $=(s,r=document)=>r.querySelector(s);
+const h=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;};
+const btn=(cls,txt,fn)=>{const b=h('button',cls,txt);b.type='button';b.addEventListener('click',fn);return b;};
+const rnd=n=>Math.floor(Math.random()*n);
+const ri=(a,b)=>a+rnd(b-a+1);
+const pick=a=>a[rnd(a.length)];
+const shuf=a=>a.sort(()=>Math.random()-.5);
+const say=(id,t)=>{$(id).innerHTML=t;};
+const secs=[];
+const dec=(x,d=2)=>x.toFixed(d).replace('.',',');
+const TERNAS=[[3,4,5],[6,8,10],[5,12,13],[9,12,15],[8,15,17],[12,16,20],[7,24,25],[15,20,25],[9,40,41],[10,24,26],[20,21,29]];
+const SMALL=TERNAS.filter(t=>t[2]<=26);
+const INK='#41362b';
+
+/* ---------- Dibujo de un triángulo rectángulo con etiquetas ---------- */
+function tri(a,b,la,lb,lc,ang){
+  const W=300,H=180,u=Math.min(W/a,H/b),w=a*u,hh=b*u,x0=(640-w)/2,y0=20;
+  // ángulo recto abajo a la izquierda: P(x0, y0+hh), Q(x0+w, y0+hh), R(x0, y0)
+  const P=[x0,y0+hh],Q=[x0+w,y0+hh],R=[x0,y0];
+  return `<svg viewBox="0 0 640 230" role="img" aria-label="Triángulo rectángulo con catetos ${la} y ${lb} e hipotenusa ${lc}"><path d="M${P} L${Q} L${R} Z" fill="#f2c77a" fill-opacity=".55" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/><path d="M${P[0]} ${P[1]-16} h16 v16" fill="none" stroke="${INK}" stroke-width="3"/>`+
+   `<text x="${(P[0]+Q[0])/2}" y="${P[1]+26}" text-anchor="middle" font-family="Urbanist,sans-serif" font-weight="800" font-size="20" fill="${INK}">${la}</text>`+
+   `<text x="${P[0]-12}" y="${(P[1]+R[1])/2+7}" text-anchor="end" font-family="Urbanist,sans-serif" font-weight="800" font-size="20" fill="${INK}">${lb}</text>`+
+   `<text x="${(Q[0]+R[0])/2+14}" y="${(Q[1]+R[1])/2-8}" text-anchor="start" font-family="Urbanist,sans-serif" font-weight="800" font-size="20" fill="${INK}">${lc}</text></svg>`;
+}
+
+/* ---------- Ayudante de preguntas ---------- */
+function Quiz(n,names,gen){
+  const root=$('#s'+n),qE=$('#q'+n),vE=$('#v'+n),oE=$('#o'+n);let score=0,cur,done;
+  const NV=Niveles(qE,names,()=>q());
+  function q(){done=false;say('#m'+n,'');cur=gen(NV.get());qE.innerHTML=cur.q;if(vE)vE.innerHTML=cur.vis||'';
+    if(cur.opts){oE.innerHTML='';oE.className='opts2';cur.opts.forEach(t=>oE.appendChild(btn('',t,()=>ans(t))));}
+    else{oE.className='';Construir(oE,{max:cur.max||4,submit:v=>ans(v[0])});}}
+  function ans(v){if(v===cur.ans){if(!done){score++;$('#sc'+n).textContent=score;}done=true;say('#m'+n,`<span class="ok">¡Correcto!</span> ${cur.expl} Pulsa Siguiente.`);}
+    else say('#m'+n,`<span class="bad">Casi.</span> ${cur.hint}`);}
+  $('#n'+n).addEventListener('click',q);secs.push({root,next:q});q();
+}
+
+/* ---------- Bandeja 1: cuadrados ---------- */
+(function(){
+  let n=4;
+  function draw(){
+    const u=Math.min(300/n,20),s=n*u,x0=(640-s)/2,y0=(260-s)/2+4;let g='';
+    for(let i=0;i<=n;i++)g+=`<line x1="${x0+i*u}" y1="${y0}" x2="${x0+i*u}" y2="${y0+s}" stroke="${INK}" stroke-width="1.5"/><line x1="${x0}" y1="${y0+i*u}" x2="${x0+s}" y2="${y0+i*u}" stroke="${INK}" stroke-width="1.5"/>`;
+    $('#v1').innerHTML=`<svg viewBox="0 0 640 270" role="img" aria-label="Cuadrado de lado ${n} con ${n*n} cuadritos"><rect x="${x0}" y="${y0}" width="${s}" height="${s}" fill="#86aedb" fill-opacity=".6"/>${g}<rect x="${x0}" y="${y0}" width="${s}" height="${s}" fill="none" stroke="${INK}" stroke-width="4"/><text x="${x0+s/2}" y="${y0-6}" text-anchor="middle" font-family="Urbanist,sans-serif" font-weight="800" font-size="18" fill="${INK}">lado ${n}</text></svg>`;
+    $('#e1').innerHTML=`${n}² = ${n} × ${n} = <b>${n*n}</b>`;
+    const perf=Math.sqrt(n*n)===n;
+    say('#i1',`Hay ${n} filas de ${n} cuadritos: ${n*n} en total. Entonces √${n*n} = ${n}. ${n>1?`Del cuadrado de lado ${n-1} al de lado ${n} se agregan ${2*n-1} cuadritos (${n*n-(n-1)*(n-1)}).`:''}`);}
+  $('#p1').onclick=()=>{if(n<12){n++;if(window.Snd&&Snd.pop)Snd.pop();}draw();};$('#m1').onclick=()=>{if(n>1)n--;draw();};
+  secs.push({root:$('#s1'),next(){n=ri(2,12);draw();}});draw();
+})();
+
+/* ---------- Bandeja 2: raíz cuadrada ---------- */
+Quiz(2,['Hasta 100','Hasta 400','Entre qué enteros está'],L=>{
+  if(L<2){const k=L===0?ri(2,10):ri(11,20),s=k*k;
+    return {q:`√${s} = ?`,ans:k,expl:`${k} × ${k} = ${s}, entonces √${s} = ${k}.`,hint:`Busca un número que multiplicado por sí mismo dé ${s}.`,vis:L===0?`<svg viewBox="0 0 640 60" role="img" aria-label="Un cuadrado de área ${s}"><text x="320" y="38" text-anchor="middle" font-family="Urbanist,sans-serif" font-size="22" font-weight="700" fill="${INK}">Un cuadrado de área ${s}: ¿cuánto mide su lado?</text></svg>`:''};}
+  let k=ri(2,12),n=k*k+ri(1,2*k);
+  return {q:`√${n} está entre dos enteros. ¿Cuáles?`,opts:shuf([`${k} y ${k+1}`,`${k-1} y ${k}`,`${k+1} y ${k+2}`].filter(x=>!x.startsWith('0'))),ans:`${k} y ${k+1}`,
+    expl:`${k}² = ${k*k} y ${k+1}² = ${(k+1)*(k+1)}. Como ${k*k} < ${n} < ${(k+1)*(k+1)}, √${n} está entre ${k} y ${k+1} (no es un número entero).`,hint:`Busca dos cuadrados perfectos, uno menor y uno mayor que ${n}.`};
+});
+
+/* ---------- Bandeja 3: el teorema con cuadrados ---------- */
+(function(){
+  let a=3,b=4;
+  function draw(){
+    // P=(0,0) ángulo recto; Q=(a,0); R=(0,b) con y hacia abajo. Cuadrados hacia afuera.
+    const c2=a*a+b*b,c=Math.sqrt(c2),minX=-b,maxX=a+b,minY=-a,maxY=a+b,u=Math.min(600/(maxX-minX),400/(maxY-minY)),ox=320-(minX+maxX)/2*u,oy=230-(minY+maxY)/2*u;
+    const X=x=>ox+x*u,Y=y=>oy+y*u,pt=(x,y)=>X(x)+','+Y(y);
+    let g='';
+    const grid=(x1,y1,x2,y2,nx,ny)=>{let o='';for(let i=1;i<nx;i++)o+=`<line x1="${X(x1+(x2-x1)*i/nx)}" y1="${Y(y1)}" x2="${X(x1+(x2-x1)*i/nx)}" y2="${Y(y2)}" stroke="${INK}" stroke-opacity=".45" stroke-width="1"/>`;for(let j=1;j<ny;j++)o+=`<line x1="${X(x1)}" y1="${Y(y1+(y2-y1)*j/ny)}" x2="${X(x2)}" y2="${Y(y1+(y2-y1)*j/ny)}" stroke="${INK}" stroke-opacity=".45" stroke-width="1"/>`;return o;};
+    // cuadrado sobre a (arriba): x∈[0,a], y∈[-a,0]
+    g+=`<rect x="${X(0)}" y="${Y(-a)}" width="${a*u}" height="${a*u}" fill="#86aedb" fill-opacity=".65" stroke="${INK}" stroke-width="3"/>`+grid(0,-a,a,0,a,a);
+    // cuadrado sobre b (izquierda): x∈[-b,0], y∈[0,b]
+    g+=`<rect x="${X(-b)}" y="${Y(0)}" width="${b*u}" height="${b*u}" fill="#f2c77a" fill-opacity=".75" stroke="${INK}" stroke-width="3"/>`+grid(-b,0,0,b,b,b);
+    // cuadrado sobre la hipotenusa Q(a,0) R(0,b) hacia afuera: +(b,a)
+    g+=`<polygon points="${pt(a,0)} ${pt(0,b)} ${pt(b,b+a)} ${pt(a+b,a)}" fill="#86c496" fill-opacity=".65" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/>`;
+    g+=`<polygon points="${pt(0,0)} ${pt(a,0)} ${pt(0,b)}" fill="#fffdf9" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/>`;
+    const lab=(x,y,t)=>`<text x="${X(x)}" y="${Y(y)+7}" text-anchor="middle" font-family="Urbanist,sans-serif" font-weight="800" font-size="22" fill="${INK}">${t}</text>`;
+    g+=lab(a/2,-a/2,`a² = ${a*a}`)+lab(-b/2,b/2,`b² = ${b*b}`)+lab((a+b)/2+ (b)/2*0,(a+b)/2+0.0,`c² = ${c2}`);
+    $('#v3').innerHTML=`<svg viewBox="0 0 640 460" role="img" aria-label="Triángulo rectángulo de catetos ${a} y ${b} con un cuadrado sobre cada lado: áreas ${a*a}, ${b*b} y ${c2}">${g}</svg>`;
+    $('#va').textContent=a;$('#vb').textContent=b;
+    $('#e3').innerHTML=`${a}² + ${b}² = ${a*a} + ${b*b} = <b>${c2}</b> = c²`;
+    const ent=Number.isInteger(c);
+    say('#i3',ent?`El área del cuadrado verde (${c2}) es la suma de las otras dos. Entonces c = √${c2} = <b>${c}</b>: ¡los tres lados son números enteros! (${a}, ${b}, ${c} es una <b>terna pitagórica</b>).`:`El cuadrado verde tiene área ${c2}, igual a ${a*a} + ${b*b}. Entonces c = √${c2} ≈ <b>${dec(c)}</b>: no es un número entero.`);}
+  const lim=v=>Math.max(1,Math.min(12,v));
+  const mv=(f)=>()=>{f();if(window.Snd&&Snd.pop)Snd.pop();draw();};
+  $('#ap').onclick=mv(()=>{a=lim(a+1);});$('#am').onclick=mv(()=>{a=lim(a-1);});$('#bp').onclick=mv(()=>{b=lim(b+1);});$('#bm').onclick=mv(()=>{b=lim(b-1);});
+  secs.push({root:$('#s3'),next(){const t=pick(SMALL.filter(t=>t[1]<=12));a=t[0];b=t[1];draw();}});draw();
+})();
+
+/* ---------- Bandeja 4: calcular el lado ---------- */
+Quiz(4,['Hipotenusa (ternas)','Un cateto','Raíz no exacta'],L=>{
+  const t=pick(SMALL),[a,b,c]=t,sw=Math.random()<.5,A=sw?b:a,B=sw?a:b;
+  if(L===0)return {q:`Catetos ${A} y ${B}. ¿Cuánto mide la hipotenusa c?`,ans:c,expl:`c² = ${A}² + ${B}² = ${A*A} + ${B*B} = ${c*c}, entonces c = √${c*c} = ${c}.`,hint:`Suma los cuadrados de los catetos y saca la raíz cuadrada.`,vis:tri(A,B,'a = '+A,'b = '+B,'c = ?')};
+  if(L===1)return {q:`Hipotenusa ${c} y un cateto ${A}. ¿Cuánto mide el otro cateto?`,ans:B,expl:`b² = c² − a² = ${c*c} − ${A*A} = ${B*B}, entonces b = √${B*B} = ${B}.`,hint:`Ahora se resta: b² = c² − a².`,vis:tri(A,B,'a = '+A,'b = ?','c = '+c)};
+  let x,y,s;do{x=ri(1,9);y=ri(1,9);s=x*x+y*y;}while(Number.isInteger(Math.sqrt(s)));const k=Math.floor(Math.sqrt(s));
+  return {q:`Catetos ${x} y ${y}. ¿Entre qué dos enteros está la hipotenusa?`,opts:shuf([`${k} y ${k+1}`,`${k-1} y ${k}`,`${k+1} y ${k+2}`].filter(z=>!z.startsWith('-')&&!z.startsWith('0 '))),ans:`${k} y ${k+1}`,
+    expl:`c² = ${x}² + ${y}² = ${s}. Como ${k}² = ${k*k} < ${s} < ${(k+1)*(k+1)} = ${k+1}², c está entre ${k} y ${k+1}.`,hint:`Calcula c² = a² + b² y busca entre qué cuadrados perfectos queda.`,vis:tri(x,y,'a = '+x,'b = '+y,'c = ?')};
+});
+
+/* ---------- Bandeja 5: ¿es rectángulo? ---------- */
+Quiz(5,['Lados ordenados','Lados en desorden'],L=>{
+  const t=pick(TERNAS.filter(t=>t[2]<=26));let a=t[0],b=t[1],c=t[2],ok=Math.random()<.5;
+  if(!ok){const d=pick([-2,-1,1,2]);c=c+d;if(c<=Math.max(a,b)){c=t[2]+1;}if(a*a+b*b===c*c)c++;}
+  let lados=[a,b,c];if(L===1)lados=shuf([...lados]);
+  const m=Math.max(...lados),otros=lados.filter((x,i)=>i!==lados.indexOf(m)),s=otros[0]*otros[0]+otros[1]*otros[1],es=s===m*m;
+  return {q:`Un triángulo tiene lados ${lados.join(', ')}. ¿Es un triángulo rectángulo?`,opts:['Sí','No'],ans:es?'Sí':'No',
+    expl:es?`El lado más largo es ${m}: ${otros[0]}² + ${otros[1]}² = ${otros[0]*otros[0]} + ${otros[1]*otros[1]} = ${s} = ${m}². Sí cumple el teorema.`:`El lado más largo es ${m}: ${otros[0]}² + ${otros[1]}² = ${s}, pero ${m}² = ${m*m}. No son iguales, así que no es rectángulo.`,
+    hint:`Identifica el lado más largo (c), suma los cuadrados de los otros dos y compara con c².`};
+});
+
+/* ---------- Bandeja 6: problemas ---------- */
+Quiz(6,['Escalera y pared','Diagonales','Distancia directa'],L=>{
+  const t=pick(SMALL),[a,b,c]=t;
+  if(L===0){const pared=Math.random()<.5;
+    return pared?{q:`Una escalera de ${c} m se apoya en una pared. Su base está a ${a} m de la pared. ¿A qué altura toca la pared (en m)?`,ans:b,expl:`h² = ${c}² − ${a}² = ${c*c} − ${a*a} = ${b*b}, entonces h = √${b*b} = ${b} m.`,hint:`La escalera es la hipotenusa. Se resta: h² = c² − base².`,vis:tri(a,b,'base = '+a+' m','altura = ?','escalera = '+c+' m')}
+    :{q:`Una escalera de ${c} m toca la pared a ${b} m de altura. ¿A qué distancia de la pared está su base (en m)?`,ans:a,expl:`d² = ${c}² − ${b}² = ${c*c} − ${b*b} = ${a*a}, entonces d = √${a*a} = ${a} m.`,hint:`La escalera es la hipotenusa. Se resta.`,vis:tri(a,b,'base = ?','altura = '+b+' m','escalera = '+c+' m')};}
+  if(L===1){const o=pick(['una cancha','un terreno','un patio','una alberca']);return {q:`${o[0].toUpperCase()+o.slice(1)} rectangular mide ${a} m por ${b} m. ¿Cuánto mide su diagonal (en m)?`,ans:c,expl:`La diagonal es la hipotenusa: d² = ${a}² + ${b}² = ${a*a+b*b}, entonces d = ${c} m.`,hint:`La diagonal divide el rectángulo en dos triángulos rectángulos.`,vis:tri(a,b,'largo = '+a+' m','ancho = '+b+' m','diagonal = ?')};}
+  return {q:`Caminas ${a} m al este y luego ${b} m al norte. ¿A qué distancia en línea recta quedas del punto de salida (en m)?`,ans:c,expl:`Este y norte forman un ángulo recto: d² = ${a}² + ${b}² = ${a*a+b*b}, entonces d = ${c} m.`,hint:`Los dos tramos son los catetos; la distancia directa es la hipotenusa.`,vis:tri(a,b,a+' m al este',b+' m al norte','distancia = ?')};
+});
+
+/* ---------- Bandeja 7: potencias y raíces ---------- */
+Quiz(7,['Cuadrados','Raíces cuadradas','Cubos y raíces cúbicas','Expresiones'],L=>{
+  if(L===0){const n=ri(2,15);return {q:`${n}² = ?`,ans:n*n,expl:`${n} × ${n} = ${n*n}.`,hint:`Multiplica el número por sí mismo.`,max:3};}
+  if(L===1){const n=ri(2,20);return {q:`√${n*n} = ?`,ans:n,expl:`${n}² = ${n*n}, entonces √${n*n} = ${n}.`,hint:`¿Qué número multiplicado por sí mismo da ${n*n}?`};}
+  if(L===2){const n=ri(2,6);return Math.random()<.5?{q:`${n}³ = ?`,ans:n**3,expl:`${n} × ${n} × ${n} = ${n*n} × ${n} = ${n**3}.`,hint:`Multiplica el número tres veces: n × n × n.`,max:4}:{q:`∛${n**3} = ?`,ans:n,expl:`${n}³ = ${n**3}, entonces ∛${n**3} = ${n}.`,hint:`¿Qué número multiplicado tres veces por sí mismo da ${n**3}?`};}
+  const k=rnd(3);
+  if(k===0){const a=ri(2,6),b=ri(2,6),c=ri(1,9);return {q:`${a}² + ${b}² − ${c} = ?`,ans:a*a+b*b-c,expl:`Primero las potencias: ${a*a} + ${b*b} − ${c} = ${a*a+b*b-c}.`,hint:`Calcula las potencias antes de sumar y restar.`};}
+  if(k===1){const a=ri(2,6),b=ri(1,5);return {q:`(${a} + ${b})² = ?`,ans:(a+b)**2,expl:`Primero el paréntesis: ${a+b}; luego ${a+b}² = ${(a+b)**2}.`,hint:`Resuelve primero el paréntesis.`};}
+  const a=ri(2,9),b=ri(2,9);return {q:`√(${a*a} × ${b*b}) = ?`,ans:a*b,expl:`${a*a} × ${b*b} = ${a*a*b*b}, y √${a*a*b*b} = ${a*b}. (También: √${a*a} × √${b*b} = ${a} × ${b}.)`,hint:`Puedes sacar la raíz de cada factor por separado y multiplicar.`};
+});
+
+/* ---------- Bandeja 8: ponte a prueba ---------- */
+Quiz(8,['Raíces','Hipotenusa','Cateto','Problemas','Combinadas'],L=>{
+  const t=pick(SMALL),[a,b,c]=t;
+  if(L===0){const n=ri(6,25);return {q:`√${n*n} = ?`,ans:n,expl:`${n}² = ${n*n}.`,hint:`¿Qué número al cuadrado da ${n*n}?`};}
+  if(L===1)return {q:`Catetos ${a} y ${b}. Hipotenusa = ?`,ans:c,expl:`√(${a*a} + ${b*b}) = √${c*c} = ${c}.`,hint:`c² = a² + b².`,vis:tri(a,b,'a = '+a,'b = '+b,'c = ?')};
+  if(L===2)return {q:`Hipotenusa ${c} y un cateto ${a}. Otro cateto = ?`,ans:b,expl:`√(${c*c} − ${a*a}) = √${b*b} = ${b}.`,hint:`b² = c² − a².`,vis:tri(a,b,'a = '+a,'b = ?','c = '+c)};
+  if(L===3)return {q:`Una rampa de ${c} m llega a una plataforma de ${b} m de altura. ¿Qué distancia horizontal recorre (en m)?`,ans:a,expl:`√(${c*c} − ${b*b}) = √${a*a} = ${a} m.`,hint:`La rampa es la hipotenusa.`,vis:tri(a,b,'horizontal = ?','altura = '+b+' m','rampa = '+c+' m')};
+  const k=rnd(3);
+  if(k===0){const s=ri(4,15);return {q:`Un cuadrado tiene área ${s*s} cm². ¿Cuánto mide su perímetro (en cm)?`,ans:4*s,expl:`Lado = √${s*s} = ${s} cm. Perímetro = 4 × ${s} = ${4*s} cm.`,hint:`Primero el lado (raíz del área), luego 4 lados.`};}
+  if(k===1)return {q:`Un triángulo rectángulo tiene catetos ${a} y ${b}. ¿Cuánto mide su perímetro (en unidades)?`,ans:a+b+c,expl:`Hipotenusa = ${c}. Perímetro = ${a} + ${b} + ${c} = ${a+b+c}.`,hint:`Primero calcula la hipotenusa y luego suma los tres lados.`,vis:tri(a,b,'a = '+a,'b = '+b,'c = ?')};
+  return {q:`Un triángulo rectángulo tiene catetos ${a} y ${b}. ¿Cuál es su área (en unidades cuadradas)?`,ans:a*b/2,expl:`Área = base × altura ÷ 2 = ${a} × ${b} ÷ 2 = ${a*b/2}.`,hint:`Los catetos son base y altura: área = (a × b) ÷ 2.`,vis:tri(a,b,'a = '+a,'b = '+b,'c')};
+});
+
+let active=secs[0];
+secs.forEach(s=>{s.root.addEventListener('pointerdown',()=>{active=s;},true);s.root.addEventListener('focusin',()=>{active=s;});});
+$('#next').addEventListener('click',()=>active.next());
+</script>
+<script src="taller.js"></script>
+<script src="perfiles.js"></script><script src="perfilui.js"></script><script src="pantalla.js"></script>
+</body></html>

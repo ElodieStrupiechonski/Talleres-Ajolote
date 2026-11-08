@@ -6,6 +6,8 @@
   if (!wrap || !trays.length) return;
   var MIN = 0.7, MAX = 1.3, cur = 0, scale = [], fitting = false, timer = null;
   document.body.classList.add('pf');
+  function setVh(){ var v = window.visualViewport ? window.visualViewport.height : window.innerHeight; if (v > 200) document.documentElement.style.setProperty('--vh', Math.round(v) + 'px'); }
+  setVh(); window.addEventListener('resize', setVh); window.addEventListener('orientationchange', function(){ setTimeout(setVh, 300); }); if (window.visualViewport) window.visualViewport.addEventListener('resize', setVh);
 
   function el(t, c, x){ var e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; }
 
@@ -43,7 +45,8 @@
   var META = 5, stats = trays.map(function(){ return { n: {}, flag: false }; });
   // El ajolote reacciona: celebra un acierto, "casi" ante un error
   var mas = el('div', 'pf-mas'), masT = null;
-  var big = el('div', 'pf-mas-big'), bub = el('div', 'pf-bub'), bigSv = el('div', 'pf-mas-sv'); big.appendChild(bub); big.appendChild(bigSv); document.body.appendChild(big);
+  var side = el('div', 'pf-side'), big = el('div', 'pf-mas-big'), bub = el('div', 'pf-bub'), bigSv = el('div', 'pf-mas-sv'), masNom = el('div', 'pf-mas-nom');
+  bub.setAttribute('role', 'status'); bigSv.setAttribute('role', 'button'); bigSv.tabIndex = 0; big.appendChild(bub); big.appendChild(bigSv); big.appendChild(masNom); document.body.appendChild(side);
   var FRASES = { celebra: ['¡Muy bien!', '¡Lo lograste!', '¡Genial!', '¡Sigue así!', '¡Qué listo!'], casi: ['¡Casi!', 'Inténtalo otra vez', '¡Tú puedes!', 'Piénsalo con calma'], piensa: ['Hmm…'] };
   // Perfil del niño: se guarda solo en este dispositivo (localStorage), no se envía a ningún lado
   var jugador = '';
@@ -51,27 +54,35 @@
   quien();
   function conNombre(f){ if (!jugador) return f; var ex = /!$/.test(f); return (ex ? f.slice(0, -1) : f) + ', ' + jugador + (ex ? '!' : ''); }
   function temaAct(){ var p = window.Perf && Perf.activo(); return p ? p.tema : Ilu.tema(nombre); }
-  function di(txt, ms){ bub.textContent = txt; bub.classList.toggle('on', !!txt); if (ms) setTimeout(function(){ if (bub.textContent === txt && !masT) { bub.classList.remove('on'); } }, ms); }
+  var bubT = null;
+  // La burbuja se queda el tiempo suficiente para leerla (más si el texto es largo)
+  function di(txt){ clearTimeout(bubT); bub.textContent = txt || ''; bub.classList.toggle('on', !!txt); if (txt) bubT = setTimeout(function(){ bub.classList.remove('on'); }, Math.max(7000, 2500 + 90 * txt.length)); }
   function mood(e, ms){ if (!window.Ilu) return; var sv = Ilu.html('axo_' + e, {tema: temaAct()}); mas.innerHTML = sv; bigSv.innerHTML = sv;
-    var f = FRASES[e]; bub.textContent = f ? conNombre(f[Math.floor(Math.random() * f.length)]) : ''; bub.classList.toggle('on', !!f);
+    var f = FRASES[e]; if (f) di(conNombre(f[Math.floor(Math.random() * f.length)]));
     clearTimeout(masT); masT = null; if (ms) masT = setTimeout(function(){ masT = null; mood('feliz'); }, ms); }
+  function masInfo(){ var p = window.Perf && Perf.activo(); return Perf.mascota(p, Ilu.tema(nombre)); }
+  function pintaNom(){ var m = masInfo(); masNom.textContent = m.nombre; masNom.title = m.nombre + (m.propio ? ' (en náhuatl: ' + m.nat + ', ' + m.sig + ')' : ' significa ' + m.sig + ' en náhuatl'); bigSv.setAttribute('aria-label', 'Mi ajolote ' + m.nombre + (Perf.activo() ? '. Tócalo para cambiarlo' : '')); }
+  function saludo(){ var m = masInfo(), p = Perf.activo();
+    di(p ? '¡Hola, ' + p.nombre + '! Soy ' + m.nombre + ', tu ajolote. ' + (m.propio ? '' : m.nombre + ' significa «' + m.sig + '» en náhuatl.') : '¡Hola! Soy ' + m.nombre + '. ' + m.nombre + ' significa «' + m.sig + '» en náhuatl. Toca «¿Quién juega?» para guardar tu avance.'); }
+  function cambiaMas(){ var p = Perf.activo(); if (!p) return; PerfUI.mascota(function(){ pintaWho(); pintaNom(); mood('celebra', 2500); di('¡Hola, ' + p.nombre + '! Soy ' + masInfo().nombre + '.'); }, p); }
+  bigSv.addEventListener('click', cambiaMas); bigSv.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); e.stopPropagation(); cambiaMas(); } });
   mood('feliz');
-  var track = el('aside', 'pf-track'); track.setAttribute('aria-label', 'Seguimiento de nivel'); document.body.appendChild(track);
+  var track = el('aside', 'pf-track'); track.setAttribute('aria-label', 'Seguimiento de nivel'); side.appendChild(track); side.appendChild(big);
   var who = el('button', 'pf-who'), body = el('div', 'pt-body'), emoBox = el('div', 'pf-emo-w');
   who.type = 'button';
   function pintaWho(){ var p = quien(); who.innerHTML = ''; var av = el('span', 'pu-av'); av.innerHTML = Ilu.html('axo_feliz', {tema: temaAct()}); who.appendChild(av);
     who.appendChild(el('span', 't', p ? p.nombre : '¿Quién juega?')); who.setAttribute('aria-label', p ? 'Jugador: ' + p.nombre + '. Cambiar' : 'Elegir quién juega'); }
-  who.onclick = function(){ PerfUI.elegir(function(){ cargaStats(); pintaWho(); mood('celebra', 2500); bub.textContent = jugador ? '¡Hola, ' + jugador + '!' : '¡Hola!'; renderTrack(); }); };
+  who.onclick = function(){ PerfUI.elegir(function(){ cargaStats(); pintaWho(); pintaNom(); mood('celebra', 2500); saludo(); renderTrack(); }); };
   track.appendChild(who); track.appendChild(body);
   function cargaStats(){ stats.forEach(function(s){ s.n = {}; s.flag = false; }); }
   function emoStrip(){ var w = emoBox; w.innerHTML = ''; if (!Perf.activo()) return; w.className = 'pf-emo-w'; w.appendChild(el('p', 'pf-emo-l', '¿Cómo me siento?')); var r = el('div', 'pf-emo');
     Perf.EMO.forEach(function(e){ var b = el('button'); b.type = 'button'; b.setAttribute('aria-label', Perf.EMOL[e]); b.title = Perf.EMOL[e]; b.innerHTML = Ilu.html('emo_' + e);
       b.onclick = function(){ var inf = nivInfo(trays[cur]); Perf.emocion(nombre, cur + 1, inf ? inf.lv + 1 : 0, e, 'ahora'); b.classList.add('on'); setTimeout(function(){ b.classList.remove('on'); }, 900); }; r.appendChild(b); }); w.appendChild(r); }
   function nivInfo(tr){
-    var nv = tr.querySelector('.niv'); if (!nv || nv.hidden || nv.offsetParent === null) return null;
+    var nv = tr.querySelector('.niv'), un = false; if (!nv){ nv = tr.querySelector('.chips.lv'); un = !!nv; } if (!nv || nv.hidden || nv.offsetParent === null) return null;
     var bs = [].slice.call(nv.querySelectorAll('button')); if (!bs.length) return null;
     var lv = bs.findIndex(function(b){ return b.classList.contains('on'); }); if (lv < 0) lv = 0;
-    var nm = nv.querySelector('.lbl2:last-child'); return { bs: bs, lv: lv, name: nm ? nm.textContent : '' };
+    var nm = nv.querySelector('.lbl2:last-child'); return { bs: bs, lv: lv, name: (nm && !un) ? nm.textContent : '', un: un };
   }
   function renderTrack(){
     var tr = trays[cur], info = nivInfo(tr), st = stats[cur]; body.innerHTML = '';
@@ -80,11 +91,12 @@
     if (!info){ tx.appendChild(el('p', 'pt-free', 'Actividad libre')); body.appendChild(emoBox); return; }
     info.bs.forEach(function(b, k){ if (st.n[k] === undefined) st.n[k] = Perf.get(nombre, cur + 1, k + 1); });
     var c = st.n[info.lv] || 0, done = Math.min(c, META);
-    tx.appendChild(el('p', 'pt-h', 'Nivel ' + (info.lv + 1) + ' de ' + info.bs.length));
+    tx.appendChild(el('p', 'pt-h', (info.un ? 'Reto ' : 'Nivel ') + (info.lv + 1) + ' de ' + info.bs.length));
     tx.appendChild(el('p', 'pt-n', info.name));
     var pips = el('div', 'pt-pips'); pips.setAttribute('aria-hidden', 'true');
     info.bs.forEach(function(b, k){ var p = el('i'); if ((st.n[k] || 0) >= META) p.className = 'dn'; if (k === info.lv) p.className += ' cu'; pips.appendChild(p); });
     body.appendChild(pips);
+    if (info.un){ var rs0 = c >= META; body.appendChild(el('p', 'pt-c', rs0 ? 'Reto resuelto ✓' : 'Reto por resolver')); if (rs0 && info.lv < info.bs.length - 1){ var up0 = el('button', 'pt-btn', 'Siguiente reto'); up0.type = 'button'; up0.onclick = function(){ info.bs[info.lv + 1].click(); }; body.appendChild(up0); } body.appendChild(emoBox); return; }
     var stars = el('p', 'pt-s'); for (var k = 0; k < META; k++) stars.appendChild(el('span', k < done ? 'on' : '', k < done ? '★' : '☆'));
     stars.setAttribute('aria-label', done + ' de ' + META + ' aciertos'); body.appendChild(stars);
     body.appendChild(el('p', 'pt-c', done + ' de ' + META + ' aciertos en este nivel'));
@@ -94,12 +106,12 @@
     rs.onclick = function(){ st.n = {}; st.flag = false; Perf.reset(nombre, cur + 1); var i2 = nivInfo(tr); if (i2 && i2.lv !== 0) i2.bs[0].click(); else renderTrack(); };
     body.appendChild(rs); body.appendChild(emoBox);
   }
-  var OKRE = /¡(Correcto|Exacto|Compás completo)/;
+  var OKRE = /¡(Correcto|Exacto|Compás completo|Llegó|Lo lograste)/;
   trays.forEach(function(tr, i){
     new MutationObserver(function(){
       var st = stats[i], ok = [].some.call(tr.querySelectorAll('.ok'), function(e){ return OKRE.test(e.textContent); });
       var bad = tr.querySelector('.bad'); if (bad && !st.badf){ st.badf = true; if (i === cur) mood('casi', 2500); } else if (!bad) st.badf = false;
-      if (ok && !st.flag){ st.flag = true; if (i === cur) mood('celebra', 3000); var inf = nivInfo(tr); if (inf){ st.n[inf.lv] = (st.n[inf.lv] || 0) + 1; var tot = Perf.inc(nombre, i + 1, inf.lv + 1); if (Perf.activo() && tot === META && i === cur) setTimeout(function(){ PerfUI.chequeo('¡Nivel superado! ¿Cómo te sentiste?', function(e){ if (e) Perf.emocion(nombre, i + 1, inf.lv + 1, e, 'fin'); }); }, 1800); } }
+      if (ok && !st.flag){ st.flag = true; if (i === cur) mood('celebra', 3000); var inf = nivInfo(tr); if (inf){ st.n[inf.lv] = (st.n[inf.lv] || 0) + 1; if (inf.un) st.n[inf.lv] = META; var tot = inf.un ? Perf.marca(nombre, i + 1, inf.lv + 1) : Perf.inc(nombre, i + 1, inf.lv + 1); if (Perf.activo() && tot === META && i === cur) setTimeout(function(){ PerfUI.chequeo('¡Nivel superado! ¿Cómo te sentiste?', function(e){ if (e) Perf.emocion(nombre, i + 1, inf.lv + 1, e, 'fin'); }); }, 1800); } }
       else if (!ok) st.flag = false;
       if (i === cur) { clearTimeout(tr._rt); tr._rt = setTimeout(renderTrack, 30); }
     }).observe(tr, { childList: true, subtree: true, characterData: true });
@@ -141,7 +153,9 @@
   var hm = /^#b(\d+)(?:n(\d+))?$/.exec(location.hash), b0 = hm ? Math.min(+hm[1], trays.length) - 1 : 0;
   show(b0 < 0 ? 0 : b0);
   if (hm && hm[2]){ var i0 = nivInfo(trays[cur]); if (i0 && i0.bs[+hm[2] - 1]) i0.bs[+hm[2] - 1].click(); }
-  if (!Perf.activo() && !Perf.lista().length) setTimeout(function(){ who.click(); }, 600);
+  var inv = false; try { inv = !!sessionStorage.getItem('tm_inv'); } catch (e) {}
+  pintaNom();
+  if (!Perf.activo() && !Perf.lista().length && !inv) setTimeout(function(){ who.click(); }, 600); else setTimeout(saludo, 700);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ fit(cur, true); });
   window.PF.show = show; window.PF.fit = function(f){ fit(cur, f !== false); };
 })();

@@ -1,7 +1,7 @@
 {
- "name": "Talleres de Matemáticas",
- "short_name": "Talleres",
- "description": "Talleres interactivos estilo Montessori para niñas y niños de ~10 años. Funcionan sin internet.",
+ "name": "Talleres del Ajolote",
+ "short_name": "Ajolote",
+ "description": "Matemáticas para tocar, contar y descubrir, de 6 a 15 años. Talleres estilo Montessori que funcionan sin internet ni anuncios.",
  "lang": "es-MX",
  "start_url": "index.html",
  "scope": "./",

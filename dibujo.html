@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f0e3c8"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="author" content="Elodie Strupiechonski"><meta name="author" content="Andrés de Luna Bugallo"><link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
-<title>Dibujo y matemáticas · Mandala y cuadrícula de fracciones</title><!--seo--><meta name="description" content="Taller interactivo donde dibujar es matemática: crea un mandala con simetría y pinta una cuadrícula para descubrir fracciones. Gratis y sin internet."><link rel="canonical" href="https://elodiestrupiechonski.github.io/Talleres-Matematicas/dibujo.html"><meta property="og:type" content="website"><meta property="og:locale" content="es_MX"><meta property="og:site_name" content="Talleres de Matemáticas"><meta property="og:title" content="Dibujo y matemáticas · Mandala y cuadrícula de fracciones"><meta property="og:description" content="Taller interactivo donde dibujar es matemática: crea un mandala con simetría y pinta una cuadrícula para descubrir fracciones. Gratis y sin internet."><meta property="og:url" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/dibujo.html"><meta property="og:image" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/icons/og.png"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Dibujo y matemáticas · Mandala y cuadrícula de fracciones", "description": "Taller interactivo donde dibujar es matemática: crea un mandala con simetría y pinta una cuadrícula para descubrir fracciones. Gratis y sin internet.", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/dibujo.html", "inLanguage": "es-MX", "isAccessibleForFree": true, "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/", "author": [{"@type": "Person", "name": "Elodie Strupiechonski"}, {"@type": "Person", "name": "Andrés de Luna Bugallo"}], "learningResourceType": "Recurso interactivo", "typicalAgeRange": "9-11", "educationalLevel": "Primaria", "teaches": "Simetría y fracciones", "isPartOf": {"@type": "WebSite", "name": "Talleres de Matemáticas", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/"}}</script><!--/seo-->
+<title>Dibujo y matemáticas · Mandala y cuadrícula de fracciones</title><!--seo--><meta name="description" content="Taller interactivo donde dibujar es matemática: mandala, simetría con espejo, patrones, figuras en la cuadrícula y fracciones pintadas. Gratis y sin internet."><link rel="canonical" href="https://elodiestrupiechonski.github.io/Talleres-Matematicas/dibujo.html"><meta property="og:type" content="website"><meta property="og:locale" content="es_MX"><meta property="og:site_name" content="Talleres del Ajolote"><meta property="og:title" content="Dibujo y matemáticas · Mandala y cuadrícula de fracciones"><meta property="og:description" content="Taller interactivo donde dibujar es matemática: mandala, simetría con espejo, patrones, figuras en la cuadrícula y fracciones pintadas. Gratis y sin internet."><meta property="og:url" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/dibujo.html"><meta property="og:image" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/icons/og.png"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Dibujo y matemáticas · Mandala y cuadrícula de fracciones", "description": "Taller interactivo donde dibujar es matemática: mandala, simetría con espejo, patrones, figuras en la cuadrícula y fracciones pintadas. Gratis y sin internet.", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/dibujo.html", "inLanguage": "es-MX", "isAccessibleForFree": true, "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/", "author": [{"@type": "Person", "name": "Elodie Strupiechonski"}, {"@type": "Person", "name": "Andrés de Luna Bugallo"}], "learningResourceType": "Recurso interactivo", "typicalAgeRange": "9-11", "educationalLevel": "Primaria", "teaches": "Simetría, patrones y fracciones", "isPartOf": {"@type": "WebSite", "name": "Talleres del Ajolote", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/"}}</script><!--/seo-->
 <link rel="stylesheet" href="taller.css">
 <style>
 .ed{flex:1;min-width:min(100%,280px)}
@@ -17,6 +17,15 @@ canvas{display:block;width:100%;height:auto;aspect-ratio:1;border-radius:12px;to
 .read span.k{display:inline-block;width:16px;height:16px;border-radius:50%;border:2px solid var(--fg);vertical-align:-2px;margin-right:6px}
 .msg:empty{display:none}
 .on{outline:none}
+.chips.lv{display:flex;flex-wrap:wrap;gap:8px}
+.grid div.axv{box-shadow:3px 0 0 var(--red)}.grid div.axh{box-shadow:0 3px 0 var(--red)}
+.grid div.fx{background:var(--blue)}.grid div.me{background:var(--green)}
+.seq{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.seq .tk{width:56px;height:56px;border-radius:12px;background:var(--card);border:3px solid var(--tray-edge);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:1.4rem;padding:0;color:var(--fg)}
+.seq .tk svg{width:38px;height:38px}
+.seq button.tk{cursor:pointer}.seq button.tk.on{outline:4px solid var(--blue);outline-offset:2px}
+.seq .tk.q{border-style:dashed;color:var(--muted)}
+.seq.pal3{margin:4px 0}.seq.pal3 .tk{border-color:var(--fg)}
 </style></head><body>
 <div class="wrap">
   <a class="back" href="index.html">← Todos los talleres</a>
@@ -57,6 +66,49 @@ canvas{display:block;width:100%;height:auto;aspect-ratio:1;border-radius:12px;to
       </div>
     </div>
     <p class="note msg" id="gmsg" aria-live="polite"></p>
+  </section>
+
+  <section class="tray" id="sy" aria-labelledby="t3">
+    <span class="step">Bandeja 3 · Simetría</span>
+    <h2 id="t3">Completa el otro lado como en un espejo</h2>
+    <p class="goal"></p>
+    <div class="chips lv"></div>
+    <div class="row">
+      <div class="grid" id="symg" aria-label="Cuadrícula con una línea de espejo: toca los cuadritos del lado vacío"></div>
+      <div class="col ed">
+        <p class="note">La línea roja es el espejo. Cada cuadrito azul tiene su reflejo del otro lado, a la misma distancia.</p>
+        <div class="btns"><button class="clr">Borrar lo que pinté</button><button class="pista">Pista</button><button class="nxt" hidden>Siguiente reto →</button></div>
+      </div>
+    </div>
+    <p class="note msg" aria-live="polite"></p>
+  </section>
+
+  <section class="tray" id="pa" aria-labelledby="t4">
+    <span class="step">Bandeja 4 · Patrones</span>
+    <h2 id="t4">¿Qué sigue en el patrón?</h2>
+    <p class="goal"></p>
+    <div class="chips lv"></div>
+    <div class="col">
+      <div class="seq" id="seq" aria-label="Patrón"></div>
+      <div class="seq pal3" id="pal3" aria-label="Piezas para completar"></div>
+      <div class="btns"><button class="clr">Borrar mis respuestas</button><button class="pista">Pista</button><button class="nxt" hidden>Siguiente reto →</button></div>
+    </div>
+    <p class="note msg" aria-live="polite"></p>
+  </section>
+
+  <section class="tray" id="fi" aria-labelledby="t5">
+    <span class="step">Bandeja 5 · Figuras en la cuadrícula</span>
+    <h2 id="t5">Pinta cuadritos para armar la figura</h2>
+    <p class="goal"></p>
+    <div class="chips lv"></div>
+    <div class="row">
+      <div class="grid" id="figg" aria-label="Cuadrícula de 6 por 6: toca o arrastra para pintar"></div>
+      <div class="col ed">
+        <div class="note read" id="figread" aria-live="polite"></div>
+        <div class="btns"><button class="clr">Borrar todo</button><button class="pista">Pista</button><button class="nxt" hidden>Siguiente reto →</button></div>
+      </div>
+    </div>
+    <p class="note msg" aria-live="polite"></p>
   </section>
 </div>
 <button id="next" hidden aria-hidden="true" tabindex="-1">Siguiente</button>
@@ -214,6 +266,128 @@ const sections=[];
   $('#gnxt').addEventListener('click',()=>load(S.mode+1));
   sections.push({root,next(){if(S.mode>=0&&S.solved&&S.mode<RETOS.length-1)load(S.mode+1);else $('#gclr').click();}});
   load(-1);
+})();
+
+/* ---------- Bandejas con retos (Taller 1) ---------- */
+function Tray(id,items,build){
+  const root=$('#'+id),lv=$('.lv',root),goal=$('.goal',root),msg=$('.msg',root),nxt=$('.nxt',root);
+  const S={root,idx:0,done:items.map(()=>false),solved:false,L:null,reset:null};
+  const say=t=>{msg.innerHTML=t;};S.say=say;
+  function chips(){lv.innerHTML='';items.forEach((_,i)=>lv.appendChild(btn(i===S.idx?'on':'','Reto '+(i+1)+(S.done[i]?' ✓':''),()=>S.load(i))));}
+  S.load=i=>{S.idx=i;S.L=items[i];S.solved=false;nxt.hidden=true;say('');goal.textContent=S.L.txt;build(S);chips();};
+  S.win=t=>{S.solved=true;S.done[S.idx]=true;chips();say(t);if(S.idx<items.length-1)nxt.hidden=false;else say(t+'<br><b>¡Terminaste los retos de esta bandeja!</b>');};
+  S.unwin=()=>{S.solved=false;nxt.hidden=true;};
+  $('.pista',root).addEventListener('click',()=>say('<b>Pista:</b> '+S.L.hint));
+  $('.clr',root).addEventListener('click',()=>{if(S.reset)S.reset();say('');S.unwin();});
+  nxt.addEventListener('click',()=>S.load(S.idx+1));
+  sections.push({root,next(){if(S.solved&&S.idx<items.length-1)S.load(S.idx+1);else $('.clr',root).click();}});
+  return S;
+}
+function mkGrid(grid,W,H){
+  grid.style.gridTemplateColumns=`repeat(${W},1fr)`;grid.style.aspectRatio=`${W}/${H}`;grid.style.width=`min(100%,${Math.min(W*48,380)}px)`;grid.innerHTML='';
+  const cells=[];for(let i=0;i<W*H;i++){const d=document.createElement('div');grid.appendChild(d);cells.push(d);}return cells;
+}
+function drag(grid,cfg){   // cfg() -> {W,H,can(i),set(i,on),on(i) , done()}
+  let down=false,mode=true;
+  const idx=e=>{const c=cfg(),r=grid.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;if(x<0||y<0||x>=1||y>=1)return -1;return Math.floor(y*c.H)*c.W+Math.floor(x*c.W);};
+  const ap=i=>{const c=cfg();if(i<0||!c.can(i))return;if(c.on(i)!==mode)c.set(i,mode);};
+  grid.addEventListener('pointerdown',e=>{e.preventDefault();grid.setPointerCapture(e.pointerId);down=true;const i=idx(e),c=cfg();if(i>=0&&c.can(i)){mode=!c.on(i);ap(i);}});
+  grid.addEventListener('pointermove',e=>{if(down)ap(idx(e));});
+  ['pointerup','pointercancel'].forEach(t=>grid.addEventListener(t,()=>{if(down){down=false;cfg().done();}}));
+}
+
+/* ---- Bandeja 3: simetría ---- */
+(function(){
+  const V=(c,rows)=>({ax:'v',c,rows}),Hh=(c,rows)=>({ax:'h',c,rows});
+  const ITEMS=[
+    {...V(3,['#..','##.','###','###']),txt:'Completa el dibujo: la línea roja es un espejo vertical.',hint:'Mira cada fila. Si el azul está a 1 cuadrito del espejo, su reflejo también.'},
+    {...V(4,['...#','..##','.###','####','#..#']),txt:'Otro dibujo con espejo vertical. Cuenta desde el espejo.',hint:'El cuadrito pegado al espejo en la izquierda se refleja pegado al espejo en la derecha.'},
+    {...V(4,['.#..','.##.','####','.###','..##','..#.']),txt:'Más difícil: revisa fila por fila.',hint:'Hazlo una fila a la vez, de arriba hacia abajo.'},
+    {...Hh(6,['#....#','##..##','######']),txt:'Ahora el espejo es horizontal: el reflejo queda abajo, al revés.',hint:'La fila pegada al espejo arriba se repite pegada al espejo abajo; la de más arriba pasa a ser la de más abajo.'},
+    {...Hh(8,['#......#','##....##','###..###','########']),txt:'Espejo horizontal con 4 filas.',hint:'La fila de arriba de todo es la de abajo de todo.'}
+  ];
+  const grid=$('#symg');let W,H,cells,fixed,mine,exp;
+  const S=Tray('sy',ITEMS,S=>{
+    const L=S.L,c=L.c,r=L.rows.length;W=L.ax==='v'?2*c:c;H=L.ax==='v'?r:2*r;cells=mkGrid(grid,W,H);fixed=new Set();mine=new Set();exp=new Set();
+    L.rows.forEach((row,y)=>[...row].forEach((ch,x)=>{if(ch==='#'){const i=y*W+x;fixed.add(i);exp.add(L.ax==='v'?y*W+(W-1-x):(H-1-y)*W+x);}}));
+    cells.forEach((d,i)=>{const x=i%W,y=(i/W)|0;if(L.ax==='v'&&x===c-1)d.classList.add('axv');if(L.ax==='h'&&y===r-1)d.classList.add('axh');if(fixed.has(i))d.classList.add('fx');});
+    S.W=W;
+  });
+  const can=i=>{const L=S.L,x=i%W,y=(i/W)|0;return L.ax==='v'?x>=L.c:y>=L.rows.length;};
+  S.reset=()=>{mine.clear();cells.forEach((d,i)=>d.classList.toggle('me',mine.has(i)));};
+  function check(){
+    const same=mine.size===exp.size&&[...exp].every(i=>mine.has(i));
+    if(same&&!S.solved)S.win('<span class="ok">¡Correcto!</span> Cada cuadrito azul tiene su reflejo a la misma distancia del espejo. Eso es una simetría: '+exp.size+' cuadritos de cada lado.');
+    else if(!same){S.unwin();S.say(mine.size?`Llevas ${mine.size} de ${exp.size} cuadritos. Compara con el lado azul.`:'');}
+  }
+  drag(grid,()=>({W,H,can,on:i=>mine.has(i),set:(i,v)=>{v?mine.add(i):mine.delete(i);cells[i].classList.toggle('me',v);},done:check}));
+  S.load(0);
+})();
+
+/* ---- Bandeja 4: patrones ---- */
+(function(){
+  const SH={A:'<svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="15" fill="#e0705a" stroke="#41362b" stroke-width="3"/></svg>',
+    B:'<svg viewBox="0 0 40 40"><path d="M20 5 L36 34 H4 Z" fill="#6f9fd3" stroke="#41362b" stroke-width="3" stroke-linejoin="round"/></svg>',
+    C:'<svg viewBox="0 0 40 40"><rect x="6" y="6" width="28" height="28" rx="3" fill="#6fb584" stroke="#41362b" stroke-width="3"/></svg>'};
+  const tk=(t,tag)=>{const b=h(tag||'span','tk');if(typeof t==='number'||/^\d/.test(String(t)))b.textContent=t;else b.innerHTML=SH[t];return b;};
+  const rep=(u,n)=>{let o=[];while(o.length<n)o=o.concat([...u]);return o.slice(0,n);};
+  const ITEMS=[
+    {seq:rep('AB',8),blank:[6,7],pal:['A','B'],txt:'Completa el patrón: ¿qué figuras siguen?',hint:'Se repite: círculo, triángulo, círculo, triángulo…',rule:'círculo, triángulo'},
+    {seq:rep('AAB',9),blank:[6,7,8],pal:['A','B'],txt:'Completa el patrón. Mira bien qué se repite.',hint:'Se repite un grupo de 3: círculo, círculo, triángulo.',rule:'círculo, círculo, triángulo'},
+    {seq:rep('ABC',9),blank:[6,7,8],pal:['A','B','C'],txt:'Ahora hay tres figuras distintas.',hint:'El grupo es círculo, triángulo, cuadrado.',rule:'círculo, triángulo, cuadrado'},
+    {seq:rep('ABBC',12),blank:[8,9,10,11],pal:['A','B','C'],txt:'Un grupo más largo. ¿Cuál es el grupo que se repite?',hint:'Busca dónde vuelve a aparecer el primer círculo: el grupo tiene 4 figuras.',rule:'círculo, triángulo, triángulo, cuadrado'},
+    {seq:[3,6,9,12,15,18],blank:[4,5],pal:[13,14,15,16,18,20],txt:'Patrón de números: ¿qué números siguen? Descubre la regla.',hint:'De cada número al siguiente se suma 3.',rule:'sumar 3 cada vez',num:true}
+  ];
+  const box=$('#seq'),pal=$('#pal3');let ans,cur,L;
+  const S=Tray('pa',ITEMS,S=>{L=S.L;ans={};cur=L.blank[0];draw();});
+  function draw(){
+    box.innerHTML='';pal.innerHTML='';
+    L.seq.forEach((t,i)=>{
+      if(L.blank.includes(i)){const v=ans[i];const b=v!=null?tk(v,'button'):h('button','tk q','?');if(v==null)b.setAttribute('aria-label','Espacio vacío');b.type='button';if(i===cur)b.classList.add('on');b.addEventListener('click',()=>{cur=i;draw();});box.appendChild(b);}
+      else box.appendChild(tk(t));
+    });
+    L.pal.forEach(t=>{const b=tk(t,'button');b.type='button';b.addEventListener('click',()=>put(t));pal.appendChild(b);});
+  }
+  function put(t){
+    if(cur==null)return;ans[cur]=t;const nx=L.blank.find(i=>ans[i]==null);cur=nx!=null?nx:cur;draw();
+    if(L.blank.every(i=>ans[i]!=null)){
+      const ok=L.blank.every(i=>String(ans[i])===String(L.seq[i]));
+      if(ok&&!S.solved)S.win(`<span class="ok">¡Correcto!</span> La regla: ${L.rule}.`);
+      else if(!ok){S.unwin();S.say('<span class="bad">Casi.</span> Toca un espacio para cambiarlo y mira otra vez qué se repite.');}
+    }
+  }
+  S.reset=()=>{ans={};cur=L.blank[0];draw();};
+  S.load(0);
+})();
+
+/* ---- Bandeja 5: figuras en la cuadrícula ---- */
+(function(){
+  const N=6;
+  const ITEMS=[
+    {txt:'Pinta un cuadrado de 2 por 2.',hint:'Un cuadrado tiene lados iguales: 2 cuadritos de ancho y 2 de alto.',ok:(w,hh)=>w===2&&hh===2},
+    {txt:'Pinta un rectángulo de 2 por 3.',hint:'2 cuadritos de ancho y 3 de alto, o al revés.',ok:(w,hh)=>(w===2&&hh===3)||(w===3&&hh===2)},
+    {txt:'Pinta un cuadrado con 9 cuadritos.',hint:'3 × 3 = 9.',ok:(w,hh)=>w===3&&hh===3},
+    {txt:'Pinta un rectángulo con 8 cuadritos. Hay dos formas.',hint:'2 × 4 = 8. Puede estar acostado o parado.',ok:(w,hh)=>w*hh===8},
+    {txt:'Pinta un rectángulo que no sea cuadrado y tenga perímetro 10.',hint:'El perímetro es la vuelta completa. Ancho + alto = 5: prueba 2 y 3, o 1 y 4.',ok:(w,hh)=>w!==hh&&2*(w+hh)===10}
+  ];
+  const grid=$('#figg'),rd=$('#figread');let cells,on=new Set();
+  const S=Tray('fi',ITEMS,S=>{cells=mkGrid(grid,N,N);on.clear();upd();});
+  function shape(){
+    if(!on.size)return null;let x0=99,y0=99,x1=-1,y1=-1;
+    on.forEach(i=>{const x=i%N,y=(i/N)|0;x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y);});
+    const w=x1-x0+1,hh=y1-y0+1;return w*hh===on.size?{w,h:hh}:{bad:true};
+  }
+  function upd(){
+    const sh=shape();rd.innerHTML='';
+    if(!sh){rd.textContent='Toca o arrastra para pintar cuadritos.';return;}
+    if(sh.bad){rd.textContent=`Pintaste ${on.size} cuadritos. Todavía no forman un rectángulo completo.`;S.unwin();return;}
+    rd.innerHTML=`Tu figura: <b>${sh.w} × ${sh.h}</b>.<br>Área = ${sh.w} × ${sh.h} = <b>${sh.w*sh.h}</b> cuadritos.<br>Perímetro = 2 · (${sh.w} + ${sh.h}) = <b>${2*(sh.w+sh.h)}</b>.`;
+    if(S.L.ok(sh.w,sh.h)){if(!S.solved)S.win('<span class="ok">¡Correcto!</span> '+(sh.w===sh.h?'Es un cuadrado.':'Es un rectángulo.'));}
+    else{S.unwin();S.say('<span class="bad">Es un rectángulo, pero no es el que pedimos.</span>');}
+  }
+  S.reset=()=>{on.clear();cells.forEach(d=>d.classList.remove('me'));upd();};
+  drag(grid,()=>({W:N,H:N,can:()=>true,on:i=>on.has(i),set:(i,v)=>{v?on.add(i):on.delete(i);cells[i].classList.toggle('me',v);},done:upd}));
+  S.load(0);
 })();
 
 let active=sections[0];

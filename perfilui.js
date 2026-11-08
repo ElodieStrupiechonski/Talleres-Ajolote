@@ -15,6 +15,7 @@
   var TALL={1:'Taller 1 · 6 a 9 años',2:'Taller 2 · 9 a 12 años',3:'Taller 3 · 12 a 15 años'};
   function sel(opts,val,lab){var s=el('select'); s.setAttribute('aria-label',lab); Object.keys(opts).forEach(function(k){var o=el('option',null,opts[k]); o.value=k; if(String(k)===String(val))o.selected=true; s.appendChild(o);}); return s;}
 
+  function avatarT(t,w){var s=el('span','pu-av'); if(window.Ilu) s.innerHTML=Ilu.html('axo_feliz',{tema:t}); if(w)s.style.width=w; return s;}
   window.PerfUI={
     TALL:TALL, avatar:avatar,
     // "¿Quién juega?"
@@ -30,7 +31,7 @@
           var n=el('button','pu-card pu-new'); n.type='button'; n.appendChild(el('span','pu-plus','+')); n.appendChild(el('span','pu-nom','Nuevo')); n.onclick=form; lista.appendChild(n);
         }
         var g=el('button','pu-card pu-guest'); g.type='button'; g.appendChild(el('span','pu-plus','?')); g.appendChild(el('span','pu-nom','Jugar sin perfil')); g.appendChild(el('span','pu-sub','no se guarda nada'));
-        g.onclick=function(){P.setActivo(null); c.fin(); if(cb)cb();}; lista.appendChild(g);
+        g.onclick=function(){P.setActivo(null); try{sessionStorage.setItem('tm_inv','1');}catch(e){} c.fin(); if(cb)cb();}; lista.appendChild(g);
         if(P.lista().length>=P.max()) pie.textContent='Ya hay '+P.max()+' perfiles. Un adulto puede borrar alguno o cambiar a «salón» en el Diario.'; else pie.textContent='';
       }
       var pie=el('p','pu-pie'); b.appendChild(pie);
@@ -41,12 +42,36 @@
         var l2=el('label',null,'Taller (un adulto puede ajustarlo)'); l2.appendChild(t); var l3=el('label',null,'Año del taller'); l3.appendChild(a);
         var er=el('p','pu-err'); er.setAttribute('role','alert');
         var ok=el('button','pu-go','Listo'); ok.type='button'; var ca=el('button','pu-sec','Volver'); ca.type='button';
-        ok.onclick=function(){var r=P.crear(inp.value,t.value,a.value); if(r.ok){P.setActivo(r.ok.id); c.fin(); if(cb)cb();} else er.textContent={nombre:'Escribe tu nombre (solo letras).',repetido:'Ese nombre ya existe. Agrega una letra o tu apellido.',lleno:'Ya no caben más perfiles.'}[r.err];};
+        ok.onclick=function(){var r=P.crear(inp.value,t.value,a.value); if(r.ok){P.setActivo(r.ok.id); c.fin(); window.PerfUI.mascota(cb,r.ok);} else er.textContent={nombre:'Escribe tu nombre (solo letras).',repetido:'Ese nombre ya existe. Agrega una letra o tu apellido.',lleno:'Ya no caben más perfiles.'}[r.err];};
         ca.onclick=function(){b.innerHTML=''; b.appendChild(el('h2','pu-h','¿Quién juega?')); b.appendChild(lista); b.appendChild(pie); pinta();};
         inp.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault(); ok.click();}});
         [l1,l2,l3,er].forEach(function(x){f.appendChild(x);}); var fila=el('div','pu-row'); fila.appendChild(ca); fila.appendChild(ok); f.appendChild(fila); b.appendChild(f); setTimeout(function(){inp.focus();},50);
       }
       pinta();
+    },
+    // Elegir ajolote (color con nombre en náhuatl) y ponerle nombre
+    mascota:function(cb,p){
+      if(!p){ if(cb)cb(); return; }
+      var tema=p.tema, def=P.MASC[tema].n, nom=P.mascota(p).nombre;
+      var c=capa('Elige a tu ajolote'), b=c.box, row=el('div','pu-mas'), inp=el('input'), info=el('p','pu-info'), btns={};
+      function pinta(){
+        P.TEMAS.forEach(function(t){btns[t].classList.toggle('on',t===tema);});
+        var m=P.MASC[t0()]; info.innerHTML='';
+        info.appendChild(document.createTextNode('«'+m.n+'» significa '+m.s+' en náhuatl (se dice '+m.d+').'));
+      }
+      function t0(){return tema;}
+      P.TEMAS.forEach(function(t){
+        var bt=el('button','pu-card'); bt.type='button'; bt.appendChild(avatarT(t)); bt.appendChild(el('span','pu-nom',P.MASC[t].n)); bt.appendChild(el('span','pu-sub',P.MASC[t].s));
+        bt.onclick=function(){ if(inp.value.trim()===P.MASC[tema].n||!inp.value.trim()) inp.value=P.MASC[t].n; tema=t; pinta(); };
+        btns[t]=bt; row.appendChild(bt);
+      });
+      b.appendChild(row);
+      var l=el('label','pu-lab','Ponle el nombre que quieras'); inp.type='text'; inp.maxLength=12; inp.autocomplete='off'; inp.spellcheck=false; inp.value=nom; l.appendChild(inp); b.appendChild(l);
+      inp.addEventListener('keydown',function(e){ if(e.key==='Enter'){e.preventDefault(); ok.click();} });
+      b.appendChild(info);
+      var ok=el('button','pu-go','Listo'); ok.type='button';
+      ok.onclick=function(){ var v=P.limpiaMas(inp.value)||P.MASC[tema].n; P.editar(p.id,{tema:tema,mas:v}); c.fin(); if(cb)cb(); };
+      b.appendChild(ok); pinta();
     },
     // "¿Cómo te sentiste?" (se puede saltar)
     chequeo:function(titulo,cb){

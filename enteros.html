@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f0e3c8"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="author" content="Elodie Strupiechonski"><meta name="author" content="Andrés de Luna Bugallo"><link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+<title>Números enteros · Recta numérica y fichas, interactivo</title><!--seo--><meta name="description" content="Taller interactivo para adolescentes de 12 a 15 años: números negativos en la recta, fichas azules y rojas con pares cero, suma, resta, regla de los signos y problemas. Gratis y sin internet."><link rel="canonical" href="https://elodiestrupiechonski.github.io/Talleres-Matematicas/enteros.html"><meta property="og:type" content="website"><meta property="og:locale" content="es_MX"><meta property="og:site_name" content="Talleres del Ajolote"><meta property="og:title" content="Números enteros · Recta numérica y fichas, interactivo"><meta property="og:description" content="Taller interactivo para adolescentes de 12 a 15 años: números negativos en la recta, fichas azules y rojas con pares cero, suma, resta, regla de los signos y problemas. Gratis y sin internet."><meta property="og:url" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/enteros.html"><meta property="og:image" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/icons/og.png"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Números enteros · Recta numérica y fichas, interactivo", "description": "Taller interactivo para adolescentes de 12 a 15 años: números negativos en la recta, fichas azules y rojas con pares cero, suma, resta, regla de los signos y problemas. Gratis y sin internet.", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/enteros.html", "inLanguage": "es-MX", "isAccessibleForFree": true, "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/", "author": [{"@type": "Person", "name": "Elodie Strupiechonski"}, {"@type": "Person", "name": "Andrés de Luna Bugallo"}], "learningResourceType": "Recurso interactivo", "typicalAgeRange": "12-15", "educationalLevel": "Secundaria", "teaches": "Números enteros", "isPartOf": {"@type": "WebSite", "name": "Talleres del Ajolote", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/"}}</script><!--/seo-->
+<link rel="stylesheet" href="taller.css">
+<style>
+.rect{width:min(100%,700px);flex:none}
+.rect svg{width:100%;height:auto;display:block;background:var(--card);border-radius:14px}
+.eq{font-family:var(--display);font-weight:800;font-size:1.8rem;margin:2px 0 6px}
+.big{font-family:var(--display);font-weight:800;font-size:1.5rem;margin:4px 0}
+.ops{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0}
+.ops button{min-height:52px;font-size:1.05rem;padding:8px 16px}
+.opts2{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0}
+.opts2 button{min-height:56px;min-width:110px;font-size:1.35rem;font-family:var(--display);font-weight:700}
+.chips.lv{display:flex;flex-wrap:wrap;gap:8px}
+.msg:empty{display:none}
+.fch{display:flex;flex-direction:column;gap:8px;background:var(--card);border-radius:14px;padding:10px 12px;min-height:120px;width:min(100%,520px)}
+.fch .fl{display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:44px}
+.fch .lb{font-family:var(--display);font-weight:700;color:var(--muted);font-size:.95rem}
+.fi{width:42px;height:42px;border-radius:50%;border:3px solid #41362b;display:inline-flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:1.4rem;color:#41362b;flex:none}
+.fi.p{background:#86aedb}.fi.n{background:#e9806c}
+.fi.z{outline:3px dashed #41362b;outline-offset:2px}
+.sg{display:flex;align-items:center;gap:12px;margin:6px 0;flex-wrap:wrap}
+.sg .sgb{min-width:120px;min-height:52px;font-family:var(--display);font-weight:800;font-size:1.3rem}
+.rule{background:var(--card);border-radius:12px;padding:8px 12px;margin:6px 0}
+</style></head><body>
+<div class="wrap">
+  <a class="back" href="index.html">← Todos los talleres</a>
+  <header class="col">
+    <h1>Números enteros</h1>
+    <p class="lead">Los números también viven a la izquierda del cero. Con la recta y con fichas azules (+) y rojas (−) vemos por qué se suma, se resta y se multiplica como se hace.</p>
+  </header>
+
+  <section class="tray" id="s1" aria-labelledby="t1">
+    <span class="step">Bandeja 1 · La recta</span>
+    <h2 id="t1">Camina por la recta numérica</h2>
+    <p>Toca la recta o usa las flechas para mover la ficha. A la derecha del 0 están los positivos; a la izquierda, los negativos.</p>
+    <p class="det">Dos números que están a la misma distancia del 0, uno de cada lado, son <b>opuestos</b>: el 4 y el −4.</p>
+    <div class="rect" id="r1"></div>
+    <div class="ops"><button type="button" id="b1l" aria-label="Un paso a la izquierda">◀ −1</button><button type="button" id="b1r" aria-label="Un paso a la derecha">+1 ▶</button><button type="button" id="b1n">Llévame a otro número</button></div>
+    <p class="eq" id="e1" aria-live="polite"></p>
+    <p class="note msg" id="m1" aria-live="polite"></p>
+  </section>
+
+  <section class="tray" id="s2" aria-labelledby="t2">
+    <span class="step">Bandeja 2 · Comparar</span>
+    <h2 id="t2">Mayor, menor y opuesto</h2>
+    <p class="big" id="q2"></p>
+    <div id="b2" class="rect"></div>
+    <div class="opts2" id="o2"></div>
+    <p class="note msg" id="m2" aria-live="polite"></p>
+    <p>Aciertos: <b id="sc2">0</b> · <button id="n2" type="button">Siguiente</button></p>
+  </section>
+
+  <section class="tray" id="s3" aria-labelledby="t3">
+    <span class="step">Bandeja 3 · Sumar con fichas</span>
+    <h2 id="t3">Un azul y un rojo se cancelan</h2>
+    <p class="goal"></p>
+    <div class="chips lv"></div>
+    <div class="row">
+      <div class="fch"><span class="lb">Fichas azules (+1)</span><div class="fl" data-k="p"></div><span class="lb">Fichas rojas (−1)</span><div class="fl" data-k="n"></div></div>
+      <div class="col ed">
+        <p class="eq"></p>
+        <div class="ops"></div>
+        <p class="note msg" aria-live="polite"></p>
+        <div class="btns"><button class="clr" type="button">Empezar de nuevo</button><button class="pista" type="button">Pista</button><button class="nxt" type="button" hidden>Siguiente reto →</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tray" id="s4" aria-labelledby="t4">
+    <span class="step">Bandeja 4 · Restar con fichas</span>
+    <h2 id="t4">Restar es quitar</h2>
+    <p class="goal"></p>
+    <div class="chips lv"></div>
+    <div class="row">
+      <div class="fch"><span class="lb">Fichas azules (+1)</span><div class="fl" data-k="p"></div><span class="lb">Fichas rojas (−1)</span><div class="fl" data-k="n"></div></div>
+      <div class="col ed">
+        <p class="eq"></p>
+        <div class="ops"></div>
+        <p class="note msg" aria-live="polite"></p>
+        <div class="btns"><button class="clr" type="button">Empezar de nuevo</button><button class="pista" type="button">Pista</button><button class="nxt" type="button" hidden>Siguiente reto →</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tray" id="s5" aria-labelledby="t5">
+    <span class="step">Bandeja 5 · Suma y resta</span>
+    <h2 id="t5">Saltos en la recta</h2>
+    <p class="eq" id="q5"></p>
+    <div id="b5" class="rect"></div>
+    <div id="o5"></div>
+    <p class="note msg" id="m5" aria-live="polite"></p>
+    <p>Aciertos: <b id="sc5">0</b> · <button id="n5" type="button">Siguiente</button></p>
+  </section>
+
+  <section class="tray" id="s6" aria-labelledby="t6">
+    <span class="step">Bandeja 6 · Multiplicar y dividir</span>
+    <h2 id="t6">La regla de los signos</h2>
+    <p class="rule"><b>Signos iguales</b> → el resultado es positivo. <b>Signos distintos</b> → el resultado es negativo.</p>
+    <p class="det">Por qué: (−3) × 4 es sumar −3 cuatro veces: (−3) + (−3) + (−3) + (−3) = −12. Y dividir es lo contrario de multiplicar: −12 ÷ 4 = −3, porque 4 × (−3) = −12.</p>
+    <p class="eq" id="q6"></p>
+    <div class="opts2" id="p6"></div>
+    <div id="o6"></div>
+    <p class="note msg" id="m6" aria-live="polite"></p>
+    <p>Aciertos: <b id="sc6">0</b> · <button id="n6" type="button">Siguiente</button></p>
+  </section>
+
+  <section class="tray" id="s7" aria-labelledby="t7">
+    <span class="step">Bandeja 7 · Problemas</span>
+    <h2 id="t7">Números negativos en la vida diaria</h2>
+    <p class="big" id="q7"></p>
+    <div id="o7"></div>
+    <p class="note msg" id="m7" aria-live="polite"></p>
+    <p>Aciertos: <b id="sc7">0</b> · <button id="n7" type="button">Siguiente</button></p>
+  </section>
+
+  <section class="tray" id="s8" aria-labelledby="t8">
+    <span class="step">Bandeja 8 · Ponte a prueba</span>
+    <h2 id="t8">Resuelve</h2>
+    <p class="eq" id="q8"></p>
+    <div id="o8"></div>
+    <p class="note msg" id="m8" aria-live="polite"></p>
+    <p>Aciertos: <b id="sc8">0</b> · <button id="n8" type="button">Siguiente</button></p>
+  </section>
+</div>
+<button id="next" hidden aria-hidden="true" tabindex="-1">Siguiente</button>
+<script src="ilustra.js"></script>
+<script src="sonido.js"></script>
+<script src="construir.js"></script>
+<script>
+const $=(s,r=document)=>r.querySelector(s);
+const h=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;};
+const btn=(cls,txt,fn)=>{const b=h('button',cls,txt);b.type='button';b.addEventListener('click',fn);return b;};
+const rnd=n=>Math.floor(Math.random()*n);
+const ri=(a,b)=>a+rnd(b-a+1);
+const nz=(a,b)=>{let v;do{v=ri(a,b);}while(v===0);return v;};
+const shuf=a=>a.sort(()=>Math.random()-.5);
+const say=(id,t)=>{$(id).innerHTML=t;};
+const secs=[];
+const fmt=n=>n<0?'−'+(-n):String(n);                 // con signo menos tipográfico
+const par=n=>n<0?'('+fmt(n)+')':String(n);           // negativos entre paréntesis
+const sgn=n=>n>0?'positivo':n<0?'negativo':'cero';
+
+/* ---------- Recta numérica ---------- */
+function Recta(host,onpick){
+  const NS='http://www.w3.org/2000/svg',min=-10,max=10,X=v=>30+(v-min)*30;
+  host.innerHTML='';
+  const svg=document.createElementNS(NS,'svg');svg.setAttribute('viewBox','0 0 660 120');svg.setAttribute('role','img');host.appendChild(svg);
+  let base='';
+  base+=`<rect x="${X(min)-12}" y="60" width="${X(0)-X(min)+12}" height="30" fill="#e9806c" fill-opacity=".18"/><rect x="${X(0)}" y="60" width="${X(max)-X(0)+12}" height="30" fill="#86aedb" fill-opacity=".22"/>`;
+  base+=`<line x1="${X(min)-12}" y1="75" x2="${X(max)+12}" y2="75" stroke="#41362b" stroke-width="3"/><path d="M${X(max)+14} 75 l-9 -6 v12 Z M${X(min)-14} 75 l9 -6 v12 Z" fill="#41362b"/>`;
+  for(let v=min;v<=max;v++){base+=`<line x1="${X(v)}" y1="${v===0?64:68}" x2="${X(v)}" y2="${v===0?86:82}" stroke="#41362b" stroke-width="${v===0?4:2}"/><text x="${X(v)}" y="108" text-anchor="middle" font-family="Urbanist,sans-serif" font-size="${v===0?17:14}" font-weight="${v===0?800:600}" fill="#41362b">${v<0?'−'+(-v):v}</text>`;}
+  svg.innerHTML=base+'<g id="ov"></g>';
+  const ov=svg.querySelector('#ov');
+  svg.addEventListener('click',ev=>{if(!onpick)return;const r=svg.getBoundingClientRect(),x=(ev.clientX-r.left)/r.width*660;const v=Math.round((x-30)/30)+min;if(v>=min&&v<=max)onpick(v);});
+  return {draw(marks,jump){
+    let o='';
+    if(jump&&jump.from!==jump.to){const a=X(jump.from),b=X(jump.to),m=(a+b)/2,d=b>a?1:-1;
+      o+=`<path d="M${a} 62 Q${m} 4 ${b} 62" fill="none" stroke="#c9962c" stroke-width="4"/><path d="M${b} 64 l${-7*d} -12 l${13*d} 2 Z" fill="#c9962c" stroke="#c9962c" stroke-width="2" stroke-linejoin="round"/><text x="${m}" y="22" text-anchor="middle" font-family="Urbanist,sans-serif" font-weight="800" font-size="16" fill="#41362b">${jump.txt||''}</text>`;}
+    (marks||[]).forEach(k=>{o+=`<circle cx="${X(k.v)}" cy="75" r="11" fill="${k.col||'#e8b84a'}" stroke="#41362b" stroke-width="3"/>`+(k.t?`<text x="${X(k.v)}" y="${k.up?44:55}" text-anchor="middle" font-family="Urbanist,sans-serif" font-weight="800" font-size="15" fill="#41362b">${k.t}</text>`:'');});
+    ov.innerHTML=o;
+    svg.setAttribute('aria-label','Recta numérica. '+(marks||[]).map(k=>(k.t||'Marca')+' en '+fmt(k.v)).join('; '));
+  }};
+}
+
+/* ---------- Respuesta con signo (teclado + botón de signo) ---------- */
+function SA(el,submit){
+  el.innerHTML='';let neg=false;
+  const row=h('div','sg'),sb=h('button','sgb','Signo: +');sb.type='button';sb.setAttribute('aria-pressed','false');sb.title='Cambiar entre positivo y negativo';
+  sb.onclick=()=>{neg=!neg;sb.textContent='Signo: '+(neg?'−':'+');sb.setAttribute('aria-pressed',String(neg));};
+  row.appendChild(sb);el.appendChild(row);
+  const k=h('div');el.appendChild(k);
+  Construir(k,{max:3,submit:v=>submit(neg&&v[0]!==0?-v[0]:v[0])});
+}
+
+/* ---------- Bandeja 1: la recta libre ---------- */
+(function(){
+  let pos=0,tgt=null;
+  const R=Recta($('#r1'),v=>{pos=v;draw();});
+  function draw(){
+    R.draw([{v:pos,col:'#e8b84a',t:fmt(pos),up:true}].concat(tgt!==null?[{v:tgt,col:'#f7c8da',t:'meta'}]:[]));
+    $('#e1').textContent='Posición: '+fmt(pos);
+    let t=pos===0?'Estás en el 0: ni positivo ni negativo.':`Estás ${Math.abs(pos)} paso${Math.abs(pos)>1?'s':''} a la ${pos>0?'derecha':'izquierda'} del 0. Tu opuesto es ${fmt(-pos)}.`;
+    if(tgt!==null){if(pos===tgt){t='<b>¡Llegaste a '+fmt(tgt)+'!</b> '+t;tgt=null;}else t=`Tu meta es ${fmt(tgt)}. `+t;}
+    say('#m1',t);}
+  const mv=d=>()=>{pos=Math.max(-10,Math.min(10,pos+d));if(window.Snd&&Snd.pop)Snd.pop();draw();};
+  $('#b1l').onclick=mv(-1);$('#b1r').onclick=mv(1);
+  function nuevo(){do{tgt=ri(-9,9);}while(tgt===pos);draw();}
+  $('#b1n').onclick=nuevo;secs.push({root:$('#s1'),next:nuevo});draw();
+})();
+
+/* ---------- Bandeja 2: comparar ---------- */
+(function(){
+  let score=0,cur,done;
+  const NV=Niveles($('#q2'),['¿Cuál es mayor?','¿Cuál es menor?','El opuesto'],()=>q());
+  const R=Recta($('#b2'));
+  function q(){done=false;say('#m2','');const L=NV.get();let a,b,opts;
+    if(L<2){do{a=ri(-9,9);b=ri(-9,9);}while(a===b);
+      cur=L===0?Math.max(a,b):Math.min(a,b);$('#q2').textContent=`¿Cuál es ${L===0?'mayor':'menor'}: ${fmt(a)} o ${fmt(b)}?`;
+      R.draw([{v:a,col:'#86aedb',t:fmt(a),up:true},{v:b,col:'#e9806c',t:fmt(b),up:true}]);opts=[a,b];}
+    else{a=ri(1,9)*(Math.random()<.5?1:-1);cur=-a;$('#q2').textContent=`¿Cuál es el opuesto de ${fmt(a)}?`;R.draw([{v:a,col:'#86aedb',t:fmt(a),up:true}]);
+      opts=[...new Set([-a,a,0,a>0?a+1:a-1])].filter(x=>Math.abs(x)<=10);}
+    const o=$('#o2');o.innerHTML='';shuf(opts).forEach(v=>o.appendChild(btn('',fmt(v),()=>pick(v))));}
+  function pick(v){if(v===cur){if(!done){score++;$('#sc2').textContent=score;}done=true;
+      say('#m2',`<span class="ok">¡Correcto!</span> ${NV.get()<2?`En la recta, el que está más a la ${NV.get()===0?'derecha':'izquierda'} es ${NV.get()===0?'mayor':'menor'}: ${fmt(cur)}.`:`El opuesto está a la misma distancia del 0, del otro lado: ${fmt(cur)}.`} Pulsa Siguiente.`);}
+    else say('#m2','<span class="bad">Casi.</span> Mira la recta: los números crecen hacia la derecha.');}
+  $('#n2').addEventListener('click',q);secs.push({root:$('#s2'),next:q});q();
+})();
+
+/* ---------- Fichas: bandejas 3 y 4 ---------- */
+function Fichas(root,ITEMS,meta){
+  const lv=$('.chips.lv',root),ops=$('.ops',root),nx=$('.nxt',root),eqEl=$('.eq',root),fp=$('.fl[data-k=p]',root),fn=$('.fl[data-k=n]',root);
+  let idx=0,done=ITEMS.map(()=>false),solved=false,p,n,L,quitado;
+  const msg=t=>{$('.msg',root).innerHTML=t;};
+  function chipsL(){lv.innerHTML='';ITEMS.forEach((_,i)=>{const c=h('button',i===idx?'on':'','Reto '+(i+1)+(done[i]?' ✓':''));c.type='button';c.onclick=()=>load(i);lv.appendChild(c);});}
+  function load(i){idx=i;L=ITEMS[i];p=Math.max(0,L.a);n=Math.max(0,-L.a);if(meta.suma){p=L.p;n=L.n;}solved=false;quitado=false;nx.hidden=true;msg('');
+    $('.goal',root).innerHTML=meta.goal;chipsL();draw();}
+  const chip=(c,z)=>{const e=h('span','fi '+c+(z?' z':''),c==='p'?'+':'−');e.setAttribute('aria-hidden','true');return e;};
+  function draw(){
+    fp.innerHTML='';fn.innerHTML='';
+    const pairs=Math.min(p,n);
+    for(let i=0;i<p;i++)fp.appendChild(chip('p',meta.suma&&i<pairs));
+    for(let i=0;i<n;i++)fn.appendChild(chip('n',meta.suma&&i<pairs));
+    if(!p)fp.appendChild(h('span','lb','(ninguna)'));if(!n)fn.appendChild(h('span','lb','(ninguna)'));
+    ops.innerHTML='';
+    if(meta.suma){eqEl.textContent=`${fmt(L.p)} + ${par(-L.n)} = ?`;
+      ops.appendChild(btn('','Quitar un par cero (+ y −)',()=>{if(solved)return;if(Math.min(p,n)===0){msg('No hay un azul y un rojo para formar un par.');return;}p--;n--;if(window.Snd&&Snd.pop)Snd.pop();draw();}));
+      if(Math.min(p,n)===0&&!solved)finSuma();}
+    else{eqEl.textContent=`${fmt(L.a)} − ${par(L.b)} = ?`;
+      ops.appendChild(btn('','Agregar un par cero (+1 y −1)',()=>{if(solved||quitado)return;if(p>=9||n>=9){msg('Ya hay muchas fichas. Prueba quitar.');return;}p++;n++;if(window.Snd&&Snd.pop)Snd.pop();msg('Agregar un par cero no cambia el valor: +1 − 1 = 0.');draw();}));
+      const q=Math.abs(L.b),col=L.b>0?'azules':'rojas';
+      ops.appendChild(btn('',`Quitar ${q} ficha${q>1?'s':''} ${col}`,()=>{if(solved||quitado)return;const have=L.b>0?p:n;
+        if(have<q){msg(`No alcanzan: hay ${have} ficha${have===1?'':'s'} ${col} y hay que quitar ${q}. Agrega pares cero (no cambian el valor) y vuelve a intentar.`);return;}
+        if(L.b>0)p-=q;else n-=q;quitado=true;draw();finResta();}));}
+  }
+  function finSuma(){solved=true;done[idx]=true;chipsL();const r=p-n;
+    msg(`<span class="ok">¡Correcto!</span> Quedan ${p||n} ficha${(p||n)===1?'':'s'} ${p?'azules':n?'rojas':''}${r===0?' (ninguna: se cancelaron todas)':''}. Entonces ${fmt(L.p)} + ${par(-L.n)} = <b>${fmt(r)}</b>.`);
+    nx.hidden=idx>=ITEMS.length-1;if(idx>=ITEMS.length-1)msg($('.msg',root).innerHTML+'<br><b>¡Terminaste los retos de esta bandeja!</b>');}
+  function finResta(){solved=true;done[idx]=true;chipsL();const r=p-n;
+    msg(`<span class="ok">¡Correcto!</span> Después de quitar quedan ${fmt(r)}. Entonces ${fmt(L.a)} − ${par(L.b)} = <b>${fmt(r)}</b>. Comprobamos: ${fmt(r)} + ${par(L.b)} = ${fmt(L.a)}.`);
+    nx.hidden=idx>=ITEMS.length-1;if(idx>=ITEMS.length-1)msg($('.msg',root).innerHTML+'<br><b>¡Terminaste los retos de esta bandeja!</b>');}
+  $('.clr',root).onclick=()=>load(idx);$('.pista',root).onclick=()=>msg('<b>Pista:</b> '+L.hint);nx.onclick=()=>load(idx+1);
+  secs.push({root,next(){if(solved&&idx<ITEMS.length-1)load(idx+1);else load(idx);}});
+  load(0);
+}
+Fichas($('#s3'),[
+  {p:3,n:5,hint:'Junta un azul con un rojo: se cancelan (+1 − 1 = 0). Repite hasta que no puedas.'},
+  {p:1,n:6,hint:'Un azul se cancela con un rojo. Las rojas que sobran son el resultado.'},
+  {p:4,n:1,hint:'Quita un par cero; lo que sobra es el resultado.'},
+  {p:6,n:4,hint:'Cada par cero quita un azul y un rojo.'},
+  {p:3,n:3,hint:'Si cada azul tiene su rojo, no sobra nada: el resultado es 0.'}
+].map(x=>({...x,a:0})),{goal:'Mira las fichas. Quita <b>pares cero</b> (un azul con un rojo) hasta que no puedas más; lo que queda es el resultado.',suma:true});
+Fichas($('#s4'),[
+  {a:5,b:2,hint:'Hay 5 azules y hay que quitar 2 azules. Quita directo.'},
+  {a:2,b:5,hint:'No alcanzan los azules para quitar 5. Agrega 3 pares cero (el valor no cambia) y luego quita 5 azules.'},
+  {a:3,b:-2,hint:'Restar −2 es quitar 2 rojas. No hay rojas: agrega 2 pares cero y quítalas.'},
+  {a:-2,b:3,hint:'Hay 2 rojas y hay que quitar 3 azules. Agrega 3 pares cero y quita 3 azules.'},
+  {a:-1,b:-4,hint:'Hay que quitar 4 rojas y hay 1. Agrega 3 pares cero y quita 4 rojas.'}
+],{goal:'<b>Restar es quitar fichas.</b> Si no hay suficientes de las que hay que quitar, agrega <b>pares cero</b>: no cambian el valor.',suma:false});
+
+/* ---------- Bandeja 5: suma y resta ---------- */
+(function(){
+  let score=0,cur,done,expl;
+  const NV=Niveles($('#q5'),['Sumar negativos','Sumar con signos distintos','Restar','Varias operaciones'],()=>q());
+  const R=Recta($('#b5'));
+  function q(){done=false;say('#m5','');const L=NV.get();let a,b,c,txt,r,jump=null,marks=[];
+    for(let g=0;g<200;g++){
+      if(L===0){a=-ri(1,5);b=-ri(1,5);r=a+b;txt=`${fmt(a)} + ${par(b)}`;expl=`${par(a)} + ${par(b)}: los dos son negativos, se suman y el resultado sigue siendo negativo.`;}
+      else if(L===1){a=ri(1,9)*(Math.random()<.5?1:-1);b=-Math.sign(a)*ri(1,9);r=a+b;txt=`${fmt(a)} + ${par(b)}`;expl=`${par(a)} + ${par(b)}: signos distintos, se cancelan ${Math.min(Math.abs(a),Math.abs(b))} pares y queda ${fmt(r)}.`;}
+      else if(L===2){a=nz(-8,8);b=nz(-8,8);r=a-b;txt=`${fmt(a)} − ${par(b)}`;expl=`${fmt(a)} − ${par(b)} = ${fmt(a)} + ${par(-b)} (restar es sumar el opuesto) = ${fmt(r)}.`;}
+      else{a=nz(-6,6);b=nz(-6,6);c=nz(-6,6);r=a+b-c;txt=`${fmt(a)} + ${par(b)} − ${par(c)}`;expl=`${fmt(a)} + ${par(b)} = ${fmt(a+b)}; luego ${fmt(a+b)} − ${par(c)} = ${fmt(r)}.`;}
+      if(Math.abs(r)<=10&&Math.abs(a)<=10&&(L<3||Math.abs(a+b)<=10))break;}
+    cur=r;$('#q5').textContent=txt+' = ?';
+    if(L<3){const to=L===2?a-b:r;R.draw([{v:a,col:'#86aedb',t:fmt(a),up:true}],{from:a,to:to,txt:L===2?(b>=0?'−'+b:'+'+(-b)):((b>=0?'+':'−')+Math.abs(b))});}
+    else R.draw([{v:a,col:'#86aedb',t:fmt(a),up:true}]);
+    SA($('#o5'),ans);}
+  function ans(v){if(v===cur){if(!done){score++;$('#sc5').textContent=score;}done=true;say('#m5',`<span class="ok">¡Correcto!</span> ${expl} Pulsa Siguiente.`);}
+    else say('#m5','<span class="bad">Casi.</span> En la recta, parte del primer número: sumar un positivo es ir a la derecha; sumar un negativo, a la izquierda. ¿Elegiste bien el signo?');}
+  $('#n5').addEventListener('click',q);secs.push({root:$('#s5'),next:q});q();
+})();
+
+/* ---------- Bandeja 6: multiplicar y dividir ---------- */
+(function(){
+  let score=0,cur,done,expl;
+  const NV=Niveles($('#q6'),['¿Positivo o negativo?','Multiplicar','Dividir'],()=>q());
+  function q(){done=false;say('#m6','');const L=NV.get();let a,b,txt;
+    const sg=()=>(Math.random()<.5?1:-1);
+    a=ri(2,9)*sg();b=ri(2,9)*sg();
+    if(L===0){cur=a*b>0?'positivo':'negativo';txt=`${par(a)} × ${par(b)}`;
+      $('#q6').textContent=txt+' = ?';$('#o6').innerHTML='';
+      const o=$('#p6');o.innerHTML='';['positivo','negativo'].forEach(t=>o.appendChild(btn('',t,()=>pick(t))));
+      expl=`${par(a)} × ${par(b)}: signos ${a*b>0?'iguales':'distintos'}, el resultado es ${cur} (${fmt(a*b)}).`;return;}
+    $('#p6').innerHTML='';
+    if(L===1){cur=a*b;txt=`${par(a)} × ${par(b)}`;expl=`${Math.abs(a)} × ${Math.abs(b)} = ${Math.abs(a*b)}; signos ${a*b>0?'iguales → positivo':'distintos → negativo'}: ${fmt(cur)}.`;}
+    else{cur=a;txt=`${fmt(a*b)} ÷ ${par(b)}`;expl=`${Math.abs(a*b)} ÷ ${Math.abs(b)} = ${Math.abs(a)}; ${fmt(a)} × ${par(b)} = ${fmt(a*b)}, así que el signo es ${a>0?'positivo':'negativo'}: ${fmt(cur)}.`;}
+    $('#q6').textContent=txt+' = ?';SA($('#o6'),ans);}
+  function pick(t){if(t===cur){if(!done){score++;$('#sc6').textContent=score;}done=true;say('#m6',`<span class="ok">¡Correcto!</span> ${expl} Pulsa Siguiente.`);}else say('#m6','<span class="bad">Casi.</span> Recuerda: signos iguales dan positivo; signos distintos, negativo.');}
+  function ans(v){if(v===cur){if(!done){score++;$('#sc6').textContent=score;}done=true;say('#m6',`<span class="ok">¡Correcto!</span> ${expl} Pulsa Siguiente.`);}else say('#m6','<span class="bad">Casi.</span> Calcula primero el número sin signo y luego decide el signo con la regla.');}
+  $('#n6').addEventListener('click',q);secs.push({root:$('#s6'),next:q});q();
+})();
+
+/* ---------- Bandeja 7: problemas ---------- */
+(function(){
+  let score=0,cur,done,expl;
+  const NV=Niveles($('#q7'),['Temperatura','Dinero','Pisos y alturas'],()=>q());
+  function q(){done=false;say('#m7','');const L=NV.get();let s,d,r,t;
+    for(let g=0;g<100;g++){
+      if(L===0){s=ri(-6,10);d=ri(2,12)*(Math.random()<.6?-1:1);}
+      else if(L===1){s=nz(-9,9);d=ri(3,12)*(Math.random()<.5?-1:1);}
+      else{s=ri(-3,8);d=ri(2,7)*(Math.random()<.5?-1:1);}
+      r=s+d;if(Math.abs(r)<=15&&r!==s)break;}
+    if(L===0)t=`Por la mañana el termómetro marcaba ${fmt(s)} °C. Durante la noche ${d<0?'bajó':'subió'} ${Math.abs(d)} grados. ¿Cuánto marca ahora (en °C)?`;
+    else if(L===1)t=`${s<0?`Debo $${-s} (mi saldo es ${fmt(s)}).`:`Tengo $${s} (mi saldo es ${s}).`} ${d<0?`Gasto $${-d} más`:`Me pagan $${d}`}. ¿Cuál es mi saldo ahora?`;
+    else t=`Un elevador está en el piso ${fmt(s)} ${s<0?'(sótano '+(-s)+')':s===0?'(planta baja)':''}. ${d<0?'Baja':'Sube'} ${Math.abs(d)} piso${Math.abs(d)>1?'s':''}. ¿En qué piso queda?`;
+    cur=r;expl=`${fmt(s)} ${d<0?'−':'+'} ${Math.abs(d)} = ${fmt(r)}.`;$('#q7').textContent=t;SA($('#o7'),ans);}
+  function ans(v){if(v===cur){if(!done){score++;$('#sc7').textContent=score;}done=true;say('#m7',`<span class="ok">¡Correcto!</span> ${expl} Pulsa Siguiente.`);}else say('#m7','<span class="bad">Casi.</span> Subir o ganar suma; bajar o gastar resta. Cuenta desde el número inicial. ¿Elegiste bien el signo?');}
+  $('#n7').addEventListener('click',q);secs.push({root:$('#s7'),next:q});q();
+})();
+
+/* ---------- Bandeja 8: ponte a prueba ---------- */
+(function(){
+  let score=0,cur,done,expl;
+  const NV=Niveles($('#q8'),['Suma','Resta','Multiplicar y dividir','Operaciones combinadas','Ecuaciones'],()=>q());
+  function q(){done=false;say('#m8','');const L=NV.get();let a,b,c,r,t;
+    const sg=()=>(Math.random()<.5?1:-1);
+    if(L===0){a=nz(-15,15);b=nz(-15,15);r=a+b;t=`${fmt(a)} + ${par(b)}`;expl=`${par(a)} + ${par(b)} = ${fmt(r)}.`;}
+    else if(L===1){a=nz(-15,15);b=nz(-15,15);r=a-b;t=`${fmt(a)} − ${par(b)}`;expl=`${fmt(a)} − ${par(b)} = ${fmt(a)} + ${par(-b)} = ${fmt(r)}.`;}
+    else if(L===2){a=ri(2,9)*sg();b=ri(2,9)*sg();if(Math.random()<.5){r=a*b;t=`${par(a)} × ${par(b)}`;expl=`Signos ${r>0?'iguales → positivo':'distintos → negativo'}: ${fmt(r)}.`;}else{r=a;t=`${fmt(a*b)} ÷ ${par(b)}`;expl=`${Math.abs(a*b)} ÷ ${Math.abs(b)} = ${Math.abs(a)} y el signo es ${a>0?'positivo':'negativo'}: ${fmt(r)}.`;}}
+    else if(L===3){a=ri(2,6)*sg();b=ri(2,6)*sg();c=nz(-9,9);r=a*b+c;t=`${par(a)} × ${par(b)} + ${par(c)}`;expl=`Primero se multiplica: ${fmt(a*b)}; luego ${fmt(a*b)} + ${par(c)} = ${fmt(r)}.`;}
+    else{const k=rnd(3);
+      if(k===0){r=-ri(1,9);a=ri(1,9);b=r+a;t=`x + ${a} = ${fmt(b)}`;expl=`Quitamos ${a} de cada lado: x = ${fmt(b)} − ${a} = ${fmt(r)}. Comprobamos: ${fmt(r)} + ${a} = ${fmt(b)}.`;}
+      else if(k===1){r=-ri(1,9);a=ri(2,9);b=r-a;t=`x − ${a} = ${fmt(b)}`;expl=`Sumamos ${a} a cada lado: x = ${fmt(b)} + ${a} = ${fmt(r)}. Comprobamos: ${fmt(r)} − ${a} = ${fmt(b)}.`;}
+      else{r=-ri(2,9);a=ri(2,6);b=a*r;t=`${a}x = ${fmt(b)}`;expl=`Dividimos entre ${a}: x = ${fmt(b)} ÷ ${a} = ${fmt(r)}. Comprobamos: ${a} × ${par(r)} = ${fmt(b)}.`;}}
+    cur=r;$('#q8').textContent=t+(L===4?'':' = ?');SA($('#o8'),ans);}
+  function ans(v){if(v===cur){if(!done){score++;$('#sc8').textContent=score;}done=true;say('#m8',`<span class="ok">¡Correcto!</span> ${expl} Pulsa Siguiente.`);}else say('#m8','<span class="bad">Casi.</span> Revisa el signo del resultado y vuelve a calcular.');}
+  $('#n8').addEventListener('click',q);secs.push({root:$('#s8'),next:q});q();
+})();
+
+let active=secs[0];
+secs.forEach(s=>{s.root.addEventListener('pointerdown',()=>{active=s;},true);s.root.addEventListener('focusin',()=>{active=s;});});
+$('#next').addEventListener('click',()=>active.next());
+</script>
+<script src="taller.js"></script>
+<script src="perfiles.js"></script><script src="perfilui.js"></script><script src="pantalla.js"></script>
+</body></html>

@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f0e3c8"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="author" content="Elodie Strupiechonski"><meta name="author" content="Andrés de Luna Bugallo"><link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
-<title>Divisiones · Repartir y residuo, taller interactivo</title><!--seo--><meta name="description" content="Taller interactivo de divisiones: reparte cuentas en platos, forma grupos iguales y entiende el residuo. Para niñas y niños de unos 10 años, gratis y sin internet."><link rel="canonical" href="https://elodiestrupiechonski.github.io/Talleres-Matematicas/divisiones.html"><meta property="og:type" content="website"><meta property="og:locale" content="es_MX"><meta property="og:site_name" content="Talleres de Matemáticas"><meta property="og:title" content="Divisiones · Repartir y residuo, taller interactivo"><meta property="og:description" content="Taller interactivo de divisiones: reparte cuentas en platos, forma grupos iguales y entiende el residuo. Para niñas y niños de unos 10 años, gratis y sin internet."><meta property="og:url" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/divisiones.html"><meta property="og:image" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/icons/og.png"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Divisiones · Repartir y residuo, taller interactivo", "description": "Taller interactivo de divisiones: reparte cuentas en platos, forma grupos iguales y entiende el residuo. Para niñas y niños de unos 10 años, gratis y sin internet.", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/divisiones.html", "inLanguage": "es-MX", "isAccessibleForFree": true, "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/", "author": [{"@type": "Person", "name": "Elodie Strupiechonski"}, {"@type": "Person", "name": "Andrés de Luna Bugallo"}], "learningResourceType": "Recurso interactivo", "typicalAgeRange": "9-11", "educationalLevel": "Primaria", "teaches": "División", "isPartOf": {"@type": "WebSite", "name": "Talleres de Matemáticas", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/"}}</script><!--/seo-->
+<title>Divisiones · Repartir y residuo, taller interactivo</title><!--seo--><meta name="description" content="Taller interactivo de divisiones: reparte cuentas en platos, forma grupos iguales y entiende el residuo. Para niñas y niños de unos 10 años, gratis y sin internet."><link rel="canonical" href="https://elodiestrupiechonski.github.io/Talleres-Matematicas/divisiones.html"><meta property="og:type" content="website"><meta property="og:locale" content="es_MX"><meta property="og:site_name" content="Talleres del Ajolote"><meta property="og:title" content="Divisiones · Repartir y residuo, taller interactivo"><meta property="og:description" content="Taller interactivo de divisiones: reparte cuentas en platos, forma grupos iguales y entiende el residuo. Para niñas y niños de unos 10 años, gratis y sin internet."><meta property="og:url" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/divisiones.html"><meta property="og:image" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/icons/og.png"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Divisiones · Repartir y residuo, taller interactivo", "description": "Taller interactivo de divisiones: reparte cuentas en platos, forma grupos iguales y entiende el residuo. Para niñas y niños de unos 10 años, gratis y sin internet.", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/divisiones.html", "inLanguage": "es-MX", "isAccessibleForFree": true, "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/", "author": [{"@type": "Person", "name": "Elodie Strupiechonski"}, {"@type": "Person", "name": "Andrés de Luna Bugallo"}], "learningResourceType": "Recurso interactivo", "typicalAgeRange": "9-11", "educationalLevel": "Primaria", "teaches": "División", "isPartOf": {"@type": "WebSite", "name": "Talleres del Ajolote", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/"}}</script><!--/seo-->
 <link rel="stylesheet" href="taller.css">
 <style>
 .pf .q3grid{display:grid;grid-template-columns:auto 1fr;column-gap:28px;row-gap:10px;align-items:start}
@@ -29,6 +29,7 @@ input[type=range]{width:min(320px,100%);accent-color:var(--red)}
 .hist{display:flex;flex-direction:column;gap:2px;font-size:1.05rem}
 .story{display:flex;align-items:center;gap:16px}.story svg{width:96px;height:96px;flex:none}
 .story p{font-size:1.3rem;margin:0}
+.plate{position:relative}.plate-minus{position:absolute;top:6px;right:8px;width:34px;height:34px;min-height:0;padding:0;border-radius:50%;font-size:22px;line-height:1;font-weight:700}
 </style></head><body>
 <div class="wrap">
   <a class="back" href="index.html">← Todos los talleres</a>
@@ -37,9 +38,20 @@ input[type=range]{width:min(320px,100%);accent-color:var(--red)}
     <p class="lead">Dividir es repartir en partes iguales; lo que sobra es el residuo.</p>
   </header>
 
+  <section class="tray" id="s0" aria-labelledby="t0">
+    <span class="step">Bandeja 1 · Reparte tú</span>
+    <h2 id="t0">Reparte en partes iguales</h2>
+    <p class="goal" id="g0"></p>
+    <div class="chips lv" id="lv0"></div>
+    <div class="pile" id="pile0" aria-label="Montón de galletas"></div>
+    <div class="plates" id="plates0"></div>
+    <p class="note msg" id="m0" aria-live="polite"></p>
+    <div class="ctl"><button id="clr0" type="button">Empezar de nuevo</button><button id="pis0" type="button">Pista</button><button id="nxt0" type="button" hidden>Siguiente reto →</button></div>
+  </section>
   <section class="tray" id="s1" aria-labelledby="t1">
-    <span class="step">Bandeja 1 · Repartir</span>
+    <span class="step">Bandeja 2 · Repartir (libre)</span>
     <h2 id="t1">¿Cuántas le tocan a cada plato?</h2>
+    <p>Elige cuántas hay y cuántos platos. Cada vuelta da <b>una a cada plato</b>. Lo que sobra y ya no alcanza para otra vuelta se llama <b>residuo</b>.</p>
     <div class="ctl"><label for="dv">Cuántas: <b id="dvv"></b></label><input id="dv" type="range" min="4" max="40" value="17">
       <label for="ds">Platos: <b id="dsv"></b></label><input id="ds" type="range" min="2" max="6" value="3">
       <span class="chips" id="sk"></span></div>
@@ -50,7 +62,7 @@ input[type=range]{width:min(320px,100%);accent-color:var(--red)}
   </section>
 
   <section class="tray" id="s2" aria-labelledby="t2">
-    <span class="step">Bandeja 2 · Hacer grupos</span>
+    <span class="step">Bandeja 3 · Hacer grupos</span>
     <h2 id="t2">¿Cuántos grupos caben?</h2>
     <p class="det">Otra forma de ver la división: formar grupos del mismo tamaño. Cada fila completa es un grupo.</p>
     <div class="ctl"><label for="gd">Cuántas: <b id="gdv"></b></label><input id="gd" type="range" min="4" max="40" value="23">
@@ -60,9 +72,9 @@ input[type=range]{width:min(320px,100%);accent-color:var(--red)}
   </section>
 
   <section class="tray" id="s3" aria-labelledby="t3">
-    <span class="step">Bandeja 3 · Multiplicar y dividir</span>
+    <span class="step">Bandeja 4 · Multiplicar y dividir</span>
     <h2 id="t3">Se ayudan entre sí</h2>
-    <p class="det">Si 4 × 6 = 24, entonces 24 ÷ 4 = 6 y 24 ÷ 6 = 4. Con residuo: cociente × divisor + residuo = lo que repartimos.</p>
+    <p class="det">Multiplicar y dividir se ayudan: si 4 × 6 = 24, entonces 24 ÷ 4 = 6 y 24 ÷ 6 = 4. Para comprobar una división, multiplicamos y sumamos lo que sobró.</p>
     <div class="ctl" id="lv3"></div>
     <div class="arr" id="ar3" aria-label="Cuentas en filas"></div>
     <p class="eq" id="eq3"></p>
@@ -72,7 +84,7 @@ input[type=range]{width:min(320px,100%);accent-color:var(--red)}
   </section>
 
   <section class="tray" id="s4" aria-labelledby="t4">
-    <span class="step">Bandeja 4 · División larga</span>
+    <span class="step">Bandeja 5 · División larga</span>
     <h2 id="t4">Paso a paso</h2>
     <p class="det">Tomamos una cifra a la vez. Preguntamos cuántas veces cabe el divisor, restamos y bajamos la siguiente cifra.</p>
     <div class="ctl" id="lv4"></div>
@@ -84,7 +96,7 @@ input[type=range]{width:min(320px,100%);accent-color:var(--red)}
   </section>
 
   <section class="tray" id="s5" aria-labelledby="t5">
-    <span class="step">Bandeja 5 · Problemas</span>
+    <span class="step">Bandeja 6 · Problemas</span>
     <h2 id="t5">¿Qué hacemos con lo que sobra?</h2>
     <div class="ctl" id="lv5"></div>
     <div class="story" id="st5"></div>
@@ -94,7 +106,7 @@ input[type=range]{width:min(320px,100%);accent-color:var(--red)}
   </section>
 
   <section class="tray" id="s6" aria-labelledby="t6">
-    <span class="step">Bandeja 6 · Ponte a prueba</span>
+    <span class="step">Bandeja 7 · Ponte a prueba</span>
     <h2 id="t6">Resuelve la división</h2>
     <div class="ctl" id="lv6"></div>
     <p class="big" id="qq"></p>
@@ -122,7 +134,54 @@ function bead(c){if(skin==='galletas'){const d=document.createElement('span');d.
   const b=document.createElement("div");b.className="bead"+(c?" "+c:"");return b;}
 function chips(box,list,cur,fn){box.innerHTML='';list.forEach(([k,t])=>{const b=h('button',cur===k?'on':'',t);b.type='button';b.onclick=()=>fn(k);box.appendChild(b);});}
 
-/* Bandeja 1 */
+/* Bandeja 1 (nueva): reparte tú */
+(function(){
+  const ITEMS=[
+    {D:6,K:2,hint:'Da una galleta a cada plato, otra vuelta, otra vuelta… hasta que se acaben.'},
+    {D:12,K:3,hint:'Son 3 platos. Da una a cada uno y repite.'},
+    {D:15,K:5,hint:'Cuenta cuántas galletas lleva cada plato en cada vuelta.'},
+    {D:20,K:4,hint:'Si un plato tiene más que otro, quita galletas tocándolas.'},
+    {D:14,K:4,hint:'Reparte hasta que no alcance para dar una más a cada plato. Lo que queda en el montón es el residuo.'}
+  ];
+  const lv=$('lv0'),pl=$('plates0'),pi=$('pile0'),nx=$('nxt0');
+  let idx=0,done=ITEMS.map(()=>false),solved=false,pile,pls,L;
+  const NAMES=['Ana','Beto','Caro','Dani','Eli'];
+  const cook=(c)=>{const d=document.createElement('span');d.innerHTML=COOK;const e=d.firstChild;if(c)e.classList.add(c);return e;};
+  const msg=t=>{$('m0').innerHTML=t;};
+  function chipsL(){lv.innerHTML='';ITEMS.forEach((_,i)=>{const b=h('button',i===idx?'on':'','Reto '+(i+1)+(done[i]?' ✓':''));b.type='button';b.onclick=()=>load(i);lv.appendChild(b);});}
+  function load(i){idx=i;L=ITEMS[i];pile=L.D;pls=Array(L.K).fill(0);solved=false;nx.hidden=true;msg('');
+    $('g0').innerHTML=`Hay <b>${L.D}</b> galletas para <b>${L.K}</b> amigos. Toca un plato para darle <b>una</b> galleta (con «−» la devuelves). Todos deben tener <b>lo mismo</b>.`;chipsL();draw();}
+  function draw(){
+    pi.innerHTML='';for(let i=0;i<pile;i++)pi.appendChild(cook());
+    if(!pile)pi.innerHTML='<span style="color:var(--muted)">Ya no queda nada en el montón.</span>';
+    pl.innerHTML='';
+    pls.forEach((c,i)=>{const d=h('div','plate');d.tabIndex=0;d.setAttribute('role','button');d.setAttribute('aria-label',`Plato de ${NAMES[i]}: tiene ${c}. Toca para darle una galleta`);
+      for(let j=0;j<c;j++){d.appendChild(cook());}
+      const s=h('span',null,`${NAMES[i]}: ${c}`);d.appendChild(s);
+      if(c>0){const m=h('button','plate-minus','−');m.type='button';m.title='Devolver una galleta al montón';m.setAttribute('aria-label',`Devolver una galleta de ${NAMES[i]} al montón`);m.addEventListener('click',ev=>{ev.stopPropagation();take(i);});m.addEventListener('keydown',ev=>ev.stopPropagation());d.appendChild(m);}
+      d.addEventListener('click',()=>give(i));d.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();ev.stopPropagation();give(i);}});pl.appendChild(d);});
+    check();
+  }
+  function give(i){if(pile>0){pile--;pls[i]++;if(window.Snd)Snd.pop();draw();}}
+  function take(i){if(pls[i]>0){pls[i]--;pile++;draw();}}
+  function check(){
+    const q=Math.floor(L.D/L.K),r=L.D%L.K,eq=pls.every(c=>c===q)&&pile===r;
+    if(eq){if(!solved){solved=true;done[idx]=true;chipsL();
+      msg(`<span class="ok">¡Correcto!</span> Repartimos ${L.D} entre ${L.K}: a cada amigo le tocan <b>${q}</b>. Se escribe <b>${L.D} ÷ ${L.K} = ${q}</b>`+(r?` y <b>sobran ${r}</b> (el residuo): no alcanzan para dar una más a cada uno.`:'.')+`<br>Comprobamos: ${L.K} × ${q}${r?' + '+r:''} = ${L.D}.`);
+      if(idx<ITEMS.length-1)nx.hidden=false;else msg($('m0').innerHTML+'<br><b>¡Terminaste los retos de esta bandeja!</b>');}return;}
+    solved=false;nx.hidden=true;
+    const eqPl=pls.every(c=>c===pls[0]);
+    if(pile===0)msg(`<span class="bad">Ojo:</span> ya no quedan galletas y no todos tienen lo mismo. Toca el botón «−» de un plato para devolver una galleta al montón.`);
+    else if(pile<L.K&&!eqPl)msg('Todavía no todos tienen lo mismo. Toca «−» en un plato para devolver una galleta.');
+    else if(pile<L.K&&eqPl&&pile!==r)msg('Revisa: quedan galletas en el montón y todos tienen lo mismo. ¿Se puede dar una más a cada uno?');
+    else msg(`En el montón quedan ${pile}. Sigue dando una galleta a cada plato.`);
+  }
+  $('clr0').onclick=()=>load(idx);$('pis0').onclick=()=>msg('<b>Pista:</b> '+L.hint);nx.onclick=()=>load(idx+1);
+  secs.push({root:$('s0'),next(){if(solved&&idx<ITEMS.length-1)load(idx+1);else load(idx);}});
+  load(0);
+})();
+
+/* Bandeja 2 (reparto libre) */
 let D,K,pile,plates;
 function reset1(){D=+$("dv").value;K=+$("ds").value;pile=D;plates=Array(K).fill(0);r1();}
 function vuelta(){if(pile>=K){pile-=K;plates=plates.map(x=>x+1);if(window.Snd)Snd.pop();}r1();}

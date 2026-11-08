@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f0e3c8"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="author" content="Elodie Strupiechonski"><meta name="author" content="Andrés de Luna Bugallo"><link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
-<title>Talleres de Matemáticas · Material interactivo estilo Montessori</title><!--seo--><meta name="description" content="Talleres interactivos de matemáticas estilo Montessori para niñas y niños de unos 10 años: cuentas doradas, tablero decimal, fracciones, ángulos, probabilidad, ajedrez y más. Gratis y funciona sin internet."><link rel="canonical" href="https://elodiestrupiechonski.github.io/Talleres-Matematicas/"><meta property="og:type" content="website"><meta property="og:locale" content="es_MX"><meta property="og:site_name" content="Talleres de Matemáticas"><meta property="og:title" content="Talleres de Matemáticas · Material interactivo estilo Montessori"><meta property="og:description" content="Talleres interactivos de matemáticas estilo Montessori para niñas y niños de unos 10 años: cuentas doradas, tablero decimal, fracciones, ángulos, probabilidad, ajedrez y más. Gratis y funciona sin internet."><meta property="og:url" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/"><meta property="og:image" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/icons/og.png"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Talleres de Matemáticas · Material interactivo estilo Montessori", "description": "Talleres interactivos de matemáticas estilo Montessori para niñas y niños de unos 10 años: cuentas doradas, tablero decimal, fracciones, ángulos, probabilidad, ajedrez y más. Gratis y funciona sin internet.", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/", "inLanguage": "es-MX", "isAccessibleForFree": true, "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/", "author": [{"@type": "Person", "name": "Elodie Strupiechonski"}, {"@type": "Person", "name": "Andrés de Luna Bugallo"}]}</script><!--/seo-->
+<title>Talleres del Ajolote · Matemáticas para tocar, contar y descubrir</title><!--seo--><meta name="description" content="Talleres interactivos de matemáticas estilo Montessori para niñas y niños de 6 a 15 años: cuentas doradas, fracciones, álgebra con balanza, números enteros, Pitágoras, probabilidad y más. Gratis, sin anuncios y funciona sin internet."><link rel="canonical" href="https://elodiestrupiechonski.github.io/Talleres-Matematicas/"><meta property="og:type" content="website"><meta property="og:locale" content="es_MX"><meta property="og:site_name" content="Talleres del Ajolote"><meta property="og:title" content="Talleres del Ajolote · Matemáticas para tocar, contar y descubrir"><meta property="og:description" content="Talleres interactivos de matemáticas estilo Montessori para niñas y niños de 6 a 15 años: cuentas doradas, fracciones, álgebra con balanza, números enteros, Pitágoras, probabilidad y más. Gratis, sin anuncios y funciona sin internet."><meta property="og:url" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/"><meta property="og:image" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/icons/og.png"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Talleres del Ajolote · Matemáticas para tocar, contar y descubrir", "description": "Talleres interactivos de matemáticas estilo Montessori para niñas y niños de 6 a 15 años: cuentas doradas, fracciones, álgebra con balanza, números enteros, Pitágoras, probabilidad y más. Gratis, sin anuncios y funciona sin internet.", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/", "inLanguage": "es-MX", "isAccessibleForFree": true, "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/", "author": [{"@type": "Person", "name": "Elodie Strupiechonski"}, {"@type": "Person", "name": "Andrés de Luna Bugallo"}]}</script><!--/seo-->
 <link rel="stylesheet" href="taller.css">
 <style>
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
@@ -15,14 +15,52 @@
 .gd{color:var(--muted);font-size:1rem}
 .mi{margin:0 0 6px}.miLink{display:inline-flex;align-items:center;min-height:48px;padding:6px 20px;border:4px solid var(--fg);border-radius:16px;background:var(--card);color:var(--fg);font-family:var(--display);font-weight:800;font-size:1.15rem;text-decoration:none}.miLink:hover{transform:translateY(-2px)}
 .go{font-family:var(--display);font-weight:800;color:var(--red);margin-top:auto}
+
+.hero{display:flex;gap:16px;align-items:center;background:var(--grain),var(--tray);border:6px solid var(--tray-edge);border-radius:22px;padding:14px 18px;box-shadow:inset 0 2px 3px rgba(255,255,255,.3),0 2px 5px rgba(0,0,0,.14)}
+.hero-axo{flex:none;width:112px}.hero-axo svg{width:100%;height:auto;display:block}
+.hero-tx{display:flex;flex-direction:column;gap:6px;min-width:0}
+.hero h1{font-size:clamp(1.8rem,7vw,2.6rem)}
+.kick{color:var(--muted);font-size:1.05rem}
+.bub{background:var(--card);border:3px solid var(--fg);border-radius:16px 16px 16px 4px;padding:6px 12px;font-size:1rem;max-width:34ch}
+.cta{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;min-height:56px;padding:8px 26px;border:4px solid var(--fg);border-radius:18px;background:var(--gold);color:#2b2118;font-family:var(--display);font-weight:800;font-size:1.25rem;text-decoration:none;cursor:pointer;box-shadow:0 4px 0 var(--fg)}
+.cta:active{transform:translateY(3px);box-shadow:0 1px 0 var(--fg)}
+.areas{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px;scrollbar-width:none;position:sticky;top:0;z-index:5;background:var(--bg);margin-inline:-4px;padding-inline:4px}
+.areas::-webkit-scrollbar{display:none}
+.areas a{flex:none;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:4px 16px;border:3px solid var(--tray-edge);border-radius:999px;background:var(--card);color:var(--fg);font-family:var(--display);font-weight:800;font-size:1rem;text-decoration:none}
+.areas i{width:14px;height:14px;border-radius:50%;border:2px solid var(--fg);display:inline-block}
+.card{border-top:10px solid var(--ac,var(--tray-edge))}
+.novo{display:inline-block;margin-left:6px;padding:1px 10px;border-radius:999px;background:var(--gold);color:#2b2118!important;font-size:.7rem}
+@media (max-width:640px){
+ body{font-size:18px}
+ .wrap{gap:18px}
+ .hero{padding:12px;gap:12px}.hero-axo{width:84px}
+ .grid{grid-template-columns:1fr;gap:12px}
+ .card{display:grid;grid-template-columns:64px 1fr;column-gap:14px;row-gap:1px;align-items:center;padding:10px 14px;border-width:5px;border-top-width:5px;border-left:12px solid var(--ac,var(--tray-edge))}
+ .card svg{grid-row:1/4;grid-column:1;width:64px;height:64px}
+ .card .tag,.card h2,.card p{grid-column:2}
+ .card h2{font-size:1.12rem}
+ .card p{font-size:.88rem;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+ .card .go{display:none}
+ .gh h2{font-size:1.4rem}
+}
 </style></head><body>
 <div class="wrap">
-  <header class="col">
-    <h1>Talleres de Matemáticas</h1>
-    <p class="lead">Material para tocar, contar y descubrir. Cada taller tiene varias bandejas: primero manipulamos, luego comparamos y al final nos ponemos a prueba. Para niñas y niños de unos 10 años.</p>
+  <header class="hero">
+    <div class="hero-axo" id="heroAxo" aria-hidden="true"></div>
+    <div class="hero-tx">
+      <h1>Talleres del Ajolote</h1>
+      <p class="kick">Matemáticas para tocar, contar y descubrir · de 6 a 15 años · sin internet ni anuncios</p>
+      <p class="bub" id="heroBub">¡Hola! Soy tu ajolote. ¿Jugamos?</p>
+      <a class="cta" id="cta" href="camino.html">Empezar →</a>
+    </div>
   </header>
-  <p class="mi"><a class="miLink" href="camino.html">⭐ Mi camino</a></p>
-  <section class="grupo" aria-labelledby="g1">
+  <nav class="areas" aria-label="Áreas">
+    <a href="#g1"><i style="background:var(--green)"></i>Números</a>
+    <a href="#g2"><i style="background:var(--red)"></i>Fracciones</a>
+    <a href="#g3"><i style="background:var(--blue)"></i>Geometría</a>
+    <a href="#g4"><i style="background:var(--gold)"></i>Lógica</a>
+  </nav>
+  <section class="grupo" id="g1" aria-labelledby="g1" style="--ac:var(--green);scroll-margin-top:64px">
     <div class="gh"><span class="dot" style="background:var(--green)"></span><div><h2 id="g1">Números y operaciones</h2><p class="gd">Cuentas, decimales, multiplicar y repartir.</p></div></div>
     <nav class="grid" aria-label="Números y operaciones">
     <a class="card" href="contar.html">
@@ -31,9 +69,21 @@
       <p>Para los primeros años: marco de diez, contar, comparar, juntar, quitar y partir en mitades y cuartos.</p>
       <span class="go">Entrar →</span>
     </a>
+    <a class="card" href="proporciones.html">
+      <svg viewBox="0 0 120 120" aria-hidden="true"><g style="stroke:var(--fg)" stroke-width="3"><rect x="10" y="22" width="100" height="26" rx="6" style="fill:var(--card)"/><rect x="10" y="22" width="34" height="26" rx="6" style="fill:#86aedb"/><rect x="10" y="62" width="100" height="26" rx="6" style="fill:var(--card)"/><rect x="10" y="62" width="68" height="26" rx="6" style="fill:#86aedb"/></g><text x="86" y="41" text-anchor="middle" font-size="16" font-weight="800" style="fill:var(--fg)">1 : 3</text><text x="94" y="81" text-anchor="middle" font-size="16" font-weight="800" style="fill:var(--fg)">%</text><text x="60" y="110" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--fg)">2 : 3 = 4 : 6</text></svg>
+      <span class="tag">8 bandejas <b class="novo">Nuevo</b></span><h2>Proporciones y porcentajes</h2>
+      <p>Para 12 a 15 años: razones, regla de tres, escalas, cuadrícula del 100 %, descuentos y aumentos.</p>
+      <span class="go">Entrar →</span>
+    </a>
+    <a class="card" href="enteros.html">
+      <svg viewBox="0 0 120 120" aria-hidden="true"><g style="stroke:var(--fg)" stroke-width="3" stroke-linecap="round"><rect x="8" y="44" width="52" height="30" rx="6" style="fill:var(--red)"/><rect x="60" y="44" width="52" height="30" rx="6" style="fill:var(--blue)"/><path d="M60 38 V80" stroke-width="5"/><circle cx="34" cy="26" r="11" style="fill:var(--red)"/><circle cx="86" cy="26" r="11" style="fill:var(--blue)"/></g><text x="34" y="31" text-anchor="middle" font-size="16" font-weight="800" style="fill:var(--fg)">−</text><text x="86" y="31" text-anchor="middle" font-size="16" font-weight="800" style="fill:var(--fg)">+</text><text x="34" y="98" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--fg)">−3</text><text x="86" y="98" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--fg)">3</text></svg>
+      <span class="tag">8 bandejas <b class="novo">Nuevo</b></span><h2>Números enteros</h2>
+      <p>Para 12 a 15 años: recta numérica, fichas azules y rojas, sumar, restar, multiplicar con signos y problemas con negativos.</p>
+      <span class="go">Entrar →</span>
+    </a>
     <a class="card" href="algebra.html">
       <svg viewBox="0 0 120 120" aria-hidden="true"><g style="stroke:var(--fg)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M60 24 V98 M36 100 Q60 90 84 100 Z" style="fill:#d9b98a" fill-opacity="1"/><path d="M18 34 H102" fill="none" stroke-width="5"/><circle cx="60" cy="32" r="6" style="fill:#e8b84a"/><path d="M18 34 L8 70 M18 34 L30 70 M102 34 L92 70 M102 34 L114 70" fill="none" stroke-width="2"/><path d="M4 70 H34 Q31 80 27 80 H11 Q7 80 4 70 Z M88 70 H118 Q115 80 111 80 H95 Q91 80 88 70 Z" style="fill:var(--card)"/><rect x="11" y="50" width="16" height="16" rx="4" style="fill:#86aedb"/><rect x="92" y="56" width="9" height="10" rx="2" style="fill:#f2c77a"/><rect x="103" y="56" width="9" height="10" rx="2" style="fill:#f2c77a"/></g><text x="19" y="63" text-anchor="middle" font-size="13" font-weight="800" style="fill:var(--fg)">x</text></svg>
-      <span class="tag">6 bandejas</span><h2>Álgebra con balanza</h2>
+      <span class="tag">6 bandejas <b class="novo">Nuevo</b></span><h2>Álgebra con balanza</h2>
       <p>Para 12 a 15 años: ecuaciones como una balanza en equilibrio, quitar lo mismo de los dos lados, repartir y resolver.</p>
       <span class="go">Entrar →</span>
     </a>
@@ -57,7 +107,7 @@
     </a>
     </nav>
   </section>
-  <section class="grupo" aria-labelledby="g2">
+  <section class="grupo" id="g2" aria-labelledby="g2" style="--ac:var(--red);scroll-margin-top:64px">
     <div class="gh"><span class="dot" style="background:var(--red)"></span><div><h2 id="g2">Divisiones y fracciones</h2><p class="gd">Repartir en partes iguales, partir el entero y medir en música.</p></div></div>
     <nav class="grid" aria-label="Divisiones y fracciones">
     <a class="card" href="divisiones.html">
@@ -80,9 +130,15 @@
     </a>
     </nav>
   </section>
-  <section class="grupo" aria-labelledby="g3">
+  <section class="grupo" id="g3" aria-labelledby="g3" style="--ac:var(--blue);scroll-margin-top:64px">
     <div class="gh"><span class="dot" style="background:var(--blue)"></span><div><h2 id="g3">Geometría y dibujo</h2><p class="gd">Ángulos, área, simetría y color.</p></div></div>
     <nav class="grid" aria-label="Geometría y dibujo">
+    <a class="card" href="pitagoras.html">
+      <svg viewBox="0 0 120 120" aria-hidden="true"><g style="stroke:var(--fg)" stroke-width="3" stroke-linejoin="round"><rect x="14" y="18" width="34" height="34" style="fill:#86aedb"/><rect x="14" y="52" width="34" height="34" style="fill:#f2c77a"/><path d="M48 52 L48 86 L14 52 Z" style="fill:var(--card)"/><polygon points="48,86 14,52 38,28 72,62" style="fill:#86c496"/></g><text x="31" y="41" text-anchor="middle" font-size="14" font-weight="800" style="fill:var(--fg)">a²</text><text x="31" y="75" text-anchor="middle" font-size="14" font-weight="800" style="fill:var(--fg)">b²</text><text x="86" y="104" text-anchor="middle" font-size="15" font-weight="800" style="fill:var(--fg)">a²+b²=c²</text></svg>
+      <span class="tag">8 bandejas <b class="novo">Nuevo</b></span><h2>Pitágoras y raíces</h2>
+      <p>Para 12 a 15 años: cuadrados y raíces, el teorema con cuadrados sobre los lados, hipotenusa, catetos y problemas.</p>
+      <span class="go">Entrar →</span>
+    </a>
     <a class="card" href="angulos.html">
       <svg viewBox="0 0 120 120" aria-hidden="true"><g style="stroke:var(--fg)" stroke-width="3" fill="none"><path d="M20 96 L100 96" style="stroke:var(--blue)"/><path d="M20 96 L88 40" style="stroke:var(--red)"/><path d="M52 96 A32 32 0 0 0 46 77" /></g></svg>
       <span class="tag">3 bandejas</span><h2>Ángulos</h2>
@@ -103,7 +159,7 @@
     </a>
     </nav>
   </section>
-  <section class="grupo" aria-labelledby="g4">
+  <section class="grupo" id="g4" aria-labelledby="g4" style="--ac:var(--gold);scroll-margin-top:64px">
     <div class="gh"><span class="dot" style="background:var(--gold)"></span><div><h2 id="g4">Lógica, datos y azar</h2><p class="gd">Pensar con reglas, programar y contar posibilidades.</p></div></div>
     <nav class="grid" aria-label="Lógica, datos y azar">
     <a class="card" href="ajedrez.html">
@@ -127,7 +183,19 @@
     </nav>
   </section>
   <p class="footer">Sugerencia: trabajar un taller por sesión y dejar que el niño explore antes de explicar.</p>
-  <p class="footer">© 2026 Elodie Strupiechonski y Andrés de Luna Bugallo · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es">CC BY-NC-SA 4.0</a> · <a href="diario.html">Diario para adultos</a> · <a href="creditos.html">Créditos, licencia y cómo citar</a></p>
+  <p class="footer">© 2026 Elodie Strupiechonski y Andrés de Luna Bugallo · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es">CC BY-NC-SA 4.0</a> · <a href="diario.html">Diario para adultos</a> · <a href="privacidad.html">Privacidad</a> · <a href="creditos.html">Créditos, licencia y cómo citar</a></p>
 </div>
+<script src="ilustra.js"></script><script src="perfiles.js"></script><script src="rutas.js"></script><script src="perfilui.js"></script>
+<script>
+(function(){
+  try{
+    var p=Perf.activo(),m=Perf.mascota(p),a=document.getElementById('heroAxo'),b=document.getElementById('heroBub'),c=document.getElementById('cta');
+    a.innerHTML=Ilu.html('axo_feliz',{tema:m.tema});
+    if(p){b.textContent='¡Hola, '+p.nombre+'! Soy '+m.nombre+'. ¿Seguimos?';c.textContent='Seguir mi camino →';}
+    else{b.textContent='¡Hola! Soy '+m.nombre+', tu ajolote. ¿Jugamos?';
+      c.addEventListener('click',function(e){e.preventDefault();PerfUI.elegir(function(){location.href='camino.html';});});}
+  }catch(e){}
+})();
+</script>
 <script src="taller.js"></script>
 </body></html>

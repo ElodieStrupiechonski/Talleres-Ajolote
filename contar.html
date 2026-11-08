@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f0e3c8"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="author" content="Elodie Strupiechonski"><meta name="author" content="Andrés de Luna Bugallo"><link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+<title>Contar y partir · Taller interactivo para primeros años</title><!--seo--><meta name="description" content="Taller interactivo para niñas y niños de 6 a 8 años: marco de diez, contar, comparar, juntar y quitar, y partir en mitades y cuartos. Gratis y sin internet."><link rel="canonical" href="https://elodiestrupiechonski.github.io/Talleres-Matematicas/contar.html"><meta property="og:type" content="website"><meta property="og:locale" content="es_MX"><meta property="og:site_name" content="Talleres del Ajolote"><meta property="og:title" content="Contar y partir · Taller interactivo para primeros años"><meta property="og:description" content="Taller interactivo para niñas y niños de 6 a 8 años: marco de diez, contar, comparar, juntar y quitar, y partir en mitades y cuartos. Gratis y sin internet."><meta property="og:url" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/contar.html"><meta property="og:image" content="https://elodiestrupiechonski.github.io/Talleres-Matematicas/icons/og.png"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Contar y partir · Taller interactivo para primeros años", "description": "Taller interactivo para niñas y niños de 6 a 8 años: marco de diez, contar, comparar, juntar y quitar, y partir en mitades y cuartos. Gratis y sin internet.", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/contar.html", "inLanguage": "es-MX", "isAccessibleForFree": true, "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/", "author": [{"@type": "Person", "name": "Elodie Strupiechonski"}, {"@type": "Person", "name": "Andrés de Luna Bugallo"}], "learningResourceType": "Recurso interactivo", "typicalAgeRange": "6-8", "educationalLevel": "Primaria", "teaches": "Número, comparar y fracciones simples", "isPartOf": {"@type": "WebSite", "name": "Talleres del Ajolote", "url": "https://elodiestrupiechonski.github.io/Talleres-Matematicas/"}}</script><!--/seo-->
+<link rel="stylesheet" href="taller.css">
+<style>.cols0{display:flex;flex-direction:column;gap:10px}
+svg.ob{width:34px;height:34px;flex:none}
+.scat{position:relative;width:min(100%,420px);aspect-ratio:2.2;background:var(--card);border-radius:12px;flex:none}
+.scat svg.ob{position:absolute;transform:translate(-50%,-50%)}
+.fl{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.gr{display:inline-flex;gap:2px;padding:4px 6px;border:3px dashed var(--tray-edge);border-radius:12px;background:var(--card)}
+.line{display:flex;gap:4px;align-items:center;background:var(--card);border-radius:12px;padding:6px 8px;min-height:46px;flex-wrap:wrap}
+.line .lb{font-family:var(--display);font-weight:700;color:var(--muted);min-width:6.5em}
+.pair{display:grid;grid-template-columns:repeat(var(--n),38px);gap:4px 4px;background:var(--card);border-radius:12px;padding:8px;width:max-content;max-width:100%}
+svg.ob.x{opacity:.28}
+.tf{display:grid;grid-template-columns:repeat(5,44px);gap:3px;background:var(--tray-edge);padding:3px;border-radius:8px;width:max-content}
+.tf button{width:44px;height:44px;border:0;border-radius:4px;background:var(--card);padding:0;cursor:pointer;min-height:0}
+.tf button svg{width:100%;height:100%;display:block}
+.tf2{display:flex;flex-direction:column;gap:10px}
+.big{font-family:var(--display);font-weight:800;font-size:1.6rem;margin:4px 0}
+.opts2{display:flex;flex-wrap:wrap;gap:10px}
+.opts2 button{min-height:52px;min-width:90px;font-size:1.2rem}
+.shp{display:flex;gap:14px;flex-wrap:wrap;min-width:150px}
+.shp button{width:150px;height:130px;padding:6px;border:3px solid var(--tray-edge);border-radius:14px;background:var(--card);cursor:pointer}
+.shp button svg{width:100%;height:100%}
+.part{cursor:pointer}
+.chips.lv{display:flex;flex-wrap:wrap;gap:8px}
+.msg:empty{display:none}
+</style></head><body>
+<div class="wrap">
+  <a class="back" href="index.html">← Todos los talleres</a>
+  <header class="col">
+    <h1>Taller de Contar y Partir</h1>
+    <p class="lead">Contar, comparar, juntar, quitar y partir en mitades y cuartos, con cantidades pequeñas que podemos ver y tocar.</p>
+  </header>
+
+  <section class="tray" id="s1" aria-labelledby="t1">
+    <span class="step">Bandeja 1 · Marco de diez</span>
+    <h2 id="t1">Pon fichas y mira cuántas hay</h2>
+    <p>Toca una casilla para poner o quitar una ficha. Cada marco tiene 10 casillas.</p>
+    <p class="det">Llena primero un marco de 10 y luego empieza el siguiente. Así vemos que 13 es 10 y 3 más.</p>
+    <div class="row">
+      <div class="tf2"><div class="tf" id="m1a"></div><div class="tf" id="m1b"></div></div>
+      <div class="col ed">
+        <p class="big" id="n1">0</p>
+        <p class="note" id="i1" aria-live="polite"></p>
+        <div class="btns"><button id="c1" type="button">Borrar todo</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tray" id="s2" aria-labelledby="t2">
+    <span class="step">Bandeja 2 · Contar</span>
+    <h2 id="t2">¿Cuántos hay?</h2>
+    <div id="b2"></div>
+    <div id="o2"></div>
+    <p class="note msg" id="m2" aria-live="polite"></p>
+    <p>Aciertos: <b id="sc2">0</b> · <button id="n2" type="button">Siguiente</button></p>
+  </section>
+
+  <section class="tray" id="s3" aria-labelledby="t3">
+    <span class="step">Bandeja 3 · Comparar</span>
+    <h2 id="t3">¿Dónde hay más?</h2>
+    <p class="big" id="q3"></p>
+    <div id="b3"></div>
+    <div class="opts2" id="o3"></div>
+    <div id="k3"></div>
+    <p class="note msg" id="m3" aria-live="polite"></p>
+    <p>Aciertos: <b id="sc3">0</b> · <button id="n3" type="button">Siguiente</button></p>
+  </section>
+
+  <section class="tray" id="s4" aria-labelledby="t4">
+    <span class="step">Bandeja 4 · Mitades y cuartos</span>
+    <h2 id="t4">Partir en partes iguales</h2>
+    <p class="goal"></p>
+    <div class="chips lv"></div>
+    <div class="row">
+      <div class="shp" id="sh4" aria-label="Figura para pintar"></div>
+      <div class="col ed">
+        <div class="btns"><button class="clr" type="button">Borrar</button><button class="pista" type="button">Pista</button><button class="nxt" type="button" hidden>Siguiente reto →</button></div>
+      </div>
+    </div>
+    <p class="note msg" aria-live="polite"></p>
+  </section>
+
+  <section class="tray" id="s5" aria-labelledby="t5">
+    <span class="step">Bandeja 5 · Juntar y quitar</span>
+    <h2 id="t5">Suma y resta con objetos</h2>
+    <p class="big" id="q5"></p>
+    <div id="b5"></div>
+    <div id="o5"></div>
+    <p class="note msg" id="m5" aria-live="polite"></p>
+    <p>Aciertos: <b id="sc5">0</b> · <button id="n5" type="button">Siguiente</button></p>
+  </section>
+</div>
+<button id="next" hidden aria-hidden="true" tabindex="-1">Siguiente</button>
+<script src="ilustra.js"></script>
+<script src="sonido.js"></script>
+<script src="construir.js"></script>
+<script>
+const $=(s,r=document)=>r.querySelector(s);
+const h=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;};
+const btn=(cls,txt,fn)=>{const b=h('button',cls,txt);b.type='button';b.addEventListener('click',fn);return b;};
+const rnd=n=>Math.floor(Math.random()*n);
+const shuf=a=>a.sort(()=>Math.random()-.5);
+const secs=[];
+const COL=['#e9806c','#86aedb','#f2c77a','#86c496','#c4a6e0'];
+const PATH={s:'M20 4 L25 15 L37 16 L28 24 L31 36 L20 30 L9 36 L12 24 L3 16 L15 15 Z',h:'M20 35 C3 23 3 8 13 8 C17 8 20 11 20 14 C20 11 23 8 27 8 C37 8 37 23 20 35 Z'};
+function ob(kind,col,cls){
+  const s=document.createElementNS('http://www.w3.org/2000/svg','svg');s.setAttribute('viewBox','0 0 40 40');s.setAttribute('class','ob'+(cls?' '+cls:''));s.setAttribute('aria-hidden','true');
+  const inner=kind==='c'?`<circle cx="20" cy="20" r="15"/>`:`<path d="${PATH[kind]}" stroke-linejoin="round"/>`;
+  s.innerHTML=`<g fill="${col}" stroke="#41362b" stroke-width="2.5">${inner}</g>`;return s;
+}
+const KINDS=['c','s','h'];
+const pickKC=()=>({k:KINDS[rnd(3)],c:COL[rnd(5)]});
+function line(n,kc,crossed){const f=h('div','fl');for(let i=0;i<n;i++)f.appendChild(ob(kc.k,kc.c,crossed&&i>=n-crossed?'x':''));return f;}
+function scatter(n,kc){
+  const box=h('div','scat');const cols=7,rows=3,cells=shuf([...Array(cols*rows).keys()]).slice(0,n);
+  cells.forEach(c=>{const x=((c%cols)+.5)/cols*100+(Math.random()-.5)*5,y=(((c/cols)|0)+.5)/rows*100+(Math.random()-.5)*8;const o=ob(kc.k,kc.c);o.style.left=x+'%';o.style.top=y+'%';box.appendChild(o);});
+  box.setAttribute('role','img');box.setAttribute('aria-label','Un grupo de objetos para contar');return box;
+}
+const say=(id,t)=>{$(id).innerHTML=t;};
+function ask(box,fn){Construir(box,{max:2,submit:v=>fn(v[0])});}
+
+/* Bandeja 1: marco de diez */
+(function(){
+  const on=Array(20).fill(false);
+  function frame(el,off){el.innerHTML='';for(let i=0;i<10;i++){const b=btn('','',()=>{on[off+i]=!on[off+i];draw();});b.setAttribute('aria-label','Casilla '+(off+i+1));el.appendChild(b);}}
+  function draw(){
+    [['#m1a',0],['#m1b',10]].forEach(([id,off])=>[...$(id).children].forEach((b,i)=>{b.innerHTML=on[off+i]?'<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="15" fill="#e9806c" stroke="#41362b" stroke-width="2.5"/></svg>':'';}));
+    const n=on.filter(Boolean).length;$('#n1').textContent=n;
+    $('#i1').innerHTML=n===0?'Toca las casillas para poner fichas.':n<=10?`${n}. Faltan <b>${10-n}</b> para 10.`:`${n} = 10 y ${n-10} más. Faltan <b>${20-n}</b> para 20.`;
+  }
+  frame($('#m1a'),0);frame($('#m1b'),10);draw();
+  $('#c1').addEventListener('click',()=>{on.fill(false);draw();});
+  secs.push({root:$('#s1'),next(){const n=1+rnd(20);on.fill(false);for(let i=0;i<n;i++)on[i]=true;draw();}});
+})();
+
+/* Bandeja 2: contar */
+(function(){
+  let score=0,cur,done;
+  const NV=Niveles($('#b2'),['Hasta 5','Hasta 10','Hasta 20','De 2 en 2','De 5 y de 10 en 10'],()=>q());
+  function q(){done=false;say('#m2','');const L=NV.get(),b=$('#b2');b.innerHTML='';const kc=pickKC();
+    if(L===0){cur=1+rnd(5);b.appendChild(scatter(cur,kc));}
+    else if(L===1){cur=6+rnd(5);b.appendChild(scatter(cur,kc));}
+    else if(L===2){cur=11+rnd(10);const f=h('div','fl');f.style.maxWidth='400px';for(let i=0;i<cur;i++){f.appendChild(ob(kc.k,kc.c));if(i===4||i===9||i===14){const br=h('div');br.style.flexBasis='100%';br.style.height='0';f.appendChild(br);}}b.appendChild(f);}
+    else{const sz=L===3?2:(Math.random()<.5?5:10),k=L===3?2+rnd(8):2+rnd(sz===5?5:4);cur=sz*k;const f=h('div','fl');f.style.gap='8px';f.style.maxWidth='520px';
+      for(let g=0;g<k;g++){const gr=h('span','gr');for(let i=0;i<sz;i++)gr.appendChild(ob(kc.k,kc.c));f.appendChild(gr);}b.appendChild(f);
+      b.appendChild(h('p','note',`Hay ${k} grupos de ${sz}. Cuenta de ${sz} en ${sz}.`));}
+    ask($('#o2'),ans);}
+  function ans(x){if(x===cur){if(!done){score++;$('#sc2').textContent=score;}done=true;say('#m2',`<span class="ok">¡Correcto!</span> Son ${cur}. Pulsa Siguiente.`);}else say('#m2','<span class="bad">Casi.</span> Cuenta otra vez, tocando cada uno con el dedo.');}
+  $('#n2').addEventListener('click',q);secs.push({root:$('#s2'),next:q});q();
+})();
+
+/* Bandeja 3: comparar */
+(function(){
+  let score=0,cur,done;
+  const NV=Niveles($('#b3'),['Más o menos (hasta 5)','Más o menos (hasta 10)','¿Cuántos más?','Números hasta 99','Números hasta 999'],()=>q());
+  function pair(a,b,kc1,kc2){const p=h('div','pair');p.style.setProperty('--n',Math.max(a,b));
+    for(let i=0;i<Math.max(a,b);i++){const c=h('div');c.style.height='38px';if(i<a)c.appendChild(ob(kc1.k,kc1.c));p.appendChild(c);}
+    for(let i=0;i<Math.max(a,b);i++){const c=h('div');c.style.height='38px';if(i<b)c.appendChild(ob(kc2.k,kc2.c));p.appendChild(c);}return p;}
+  function q(){done=false;say('#m3','');const L=NV.get(),b=$('#b3'),o=$('#o3'),k=$('#k3');b.innerHTML='';o.innerHTML='';k.innerHTML='';
+    if(L<=1){const mx=L===0?5:10;let a=1+rnd(mx),c=Math.random()<.2?a:1+rnd(mx);cur=a>c?'A':a<c?'B':'E';$('#q3').textContent='¿En qué fila hay más?';
+      b.appendChild(pair(a,c,{k:'c',c:COL[0]},{k:'c',c:COL[1]}));
+      [['A','La de arriba'],['B','La de abajo'],['E','Hay igual']].forEach(([v,t])=>o.appendChild(btn('',t,()=>ans1(v,a,c))));}
+    else if(L===2){let a=3+rnd(7),c;do{c=1+rnd(a-1);}while(c===a);cur=Math.abs(a-c);const sw=Math.random()<.5;const A=sw?c:a,B=sw?a:c;$('#q3').textContent='¿Cuántos más hay en la fila que tiene más?';
+      b.appendChild(pair(A,B,{k:'s',c:COL[2]},{k:'h',c:COL[3]}));ask(k,x=>ans2(x,A,B));}
+    else{const mx=L===3?99:999;let a=1+rnd(mx),c=Math.random()<.15?a:1+rnd(mx);if(L===3&&Math.random()<.5)c=Math.max(1,Math.min(99,a+(rnd(11)-5)));cur=a>c?'>':a<c?'<':'=';
+      $('#q3').innerHTML=`<span class="big">${a} ○ ${c}</span>`;
+      ['<','=','>'].forEach(v=>o.appendChild(btn('',v,()=>ans3(v,a,c))));}}
+  function ok(t){if(!done){score++;$('#sc3').textContent=score;}done=true;say('#m3',`<span class="ok">¡Correcto!</span> ${t} Pulsa Siguiente.`);}
+  const bad=t=>say('#m3',`<span class="bad">Casi.</span> ${t}`);
+  function ans1(v,a,c){v===cur?ok(a===c?`Hay ${a} y ${c}: igual.`:`Hay ${a} arriba y ${c} abajo.`):bad('Junta cada objeto de arriba con uno de abajo: ¿a cuál le sobran?');}
+  function ans2(x,A,B){x===cur?ok(`${Math.max(A,B)} − ${Math.min(A,B)} = ${cur}. Sobran ${cur}.`):bad('Junta cada objeto de arriba con uno de abajo y cuenta los que sobran.');}
+  function ans3(v,a,c){v===cur?ok(`${a} ${cur} ${c}.`+(a===c?' Son iguales.':` La boca del signo abre hacia el número más grande.`)):bad('Compara primero las centenas o las decenas. La boca abre hacia el más grande.');}
+  $('#n3').addEventListener('click',q);secs.push({root:$('#s3'),next:q});q();
+})();
+
+/* Bandeja 4: mitades y cuartos */
+(function(){
+  const sec=$('#s4'),box=$('#sh4');
+  const INK='#41362b',FILL='#86aedb';
+  function sectors(n,r,cx,cy){const o=[];for(let i=0;i<n;i++){const a0=-Math.PI/2+2*Math.PI*i/n,a1=-Math.PI/2+2*Math.PI*(i+1)/n;
+    o.push(`M${cx} ${cy} L${cx+r*Math.cos(a0)} ${cy+r*Math.sin(a0)} A${r} ${r} 0 ${n===2?1:0} 1 ${cx+r*Math.cos(a1)} ${cy+r*Math.sin(a1)} Z`);}return o;}
+  function cols(n,x,y,w,hh){const o=[];for(let i=0;i<n;i++)o.push(`M${x+w*i/n} ${y} h${w/n} v${hh} h${-w/n} Z`);return o;}
+  function grid4(x,y,w,hh){return [`M${x} ${y} h${w/2} v${hh/2} h${-w/2} Z`,`M${x+w/2} ${y} h${w/2} v${hh/2} h${-w/2} Z`,`M${x} ${y+hh/2} h${w/2} v${hh/2} h${-w/2} Z`,`M${x+w/2} ${y+hh/2} h${w/2} v${hh/2} h${-w/2} Z`];}
+  const SHAPES={
+    c2:()=>sectors(2,56,70,65),c4:()=>sectors(4,56,70,65),r2:()=>cols(2,10,25,120,80),r4:()=>cols(4,10,25,120,80),q4:()=>grid4(20,10,100,100)
+  };
+  const ITEMS=[
+    {txt:'Pinta la mitad del rectángulo.',shape:'r2',want:1,tot:2,word:'½ (una mitad)',hint:'Mitad significa 1 de 2 partes iguales.'},
+    {txt:'Pinta un cuarto del círculo.',shape:'c4',want:1,tot:4,word:'¼ (un cuarto)',hint:'Un cuarto es 1 de 4 partes iguales.'},
+    {txt:'Pinta la mitad del círculo. Está partido en 4 partes.',shape:'c4',want:2,tot:4,word:'½ = 2/4',hint:'La mitad de 4 partes son 2 partes.'},
+    {choice:true,txt:'Toca la figura que está partida en dos mitades iguales.',hint:'Las dos partes deben tener el mismo tamaño.'},
+    {txt:'Pinta tres cuartos del cuadrado.',shape:'q4',want:3,tot:4,word:'¾ (tres cuartos)',hint:'Tres de las cuatro partes.'}
+  ];
+  let idx=0,done=ITEMS.map(()=>false),solved=false,sel=new Set(),L;
+  const lv=$('.lv',sec),goal=$('.goal',sec),nxt=$('.nxt',sec);
+  function chips(){lv.innerHTML='';ITEMS.forEach((_,i)=>lv.appendChild(btn(i===idx?'on':'','Reto '+(i+1)+(done[i]?' ✓':''),()=>load(i))));}
+  function win(t){solved=true;done[idx]=true;chips();say('#s4 .msg',t);if(idx<ITEMS.length-1)nxt.hidden=false;else say('#s4 .msg',t+'<br><b>¡Terminaste los retos de esta bandeja!</b>');}
+  function svg(inner,cls){const s=`<svg viewBox="0 0 140 130" role="img" aria-label="Figura">${inner}</svg>`;return s;}
+  function load(i){idx=i;L=ITEMS[i];solved=false;sel.clear();nxt.hidden=true;say('#s4 .msg','');goal.textContent=L.txt;chips();box.innerHTML='';
+    if(L.choice){
+      const ok=rnd(3),opts=[0,1,2].map(k=>k===ok?'good':['bad1','bad2','bad3'][rnd(3)]);
+      const mk=t=>t==='good'?(Math.random()<.5?`<circle cx="70" cy="65" r="56" fill="#fffdf9" stroke="${INK}" stroke-width="4"/><path d="M70 9 V121" stroke="${INK}" stroke-width="4"/>`:`<rect x="10" y="25" width="120" height="80" fill="#fffdf9" stroke="${INK}" stroke-width="4"/><path d="M70 25 V105" stroke="${INK}" stroke-width="4"/>`)
+        :t==='bad1'?`<rect x="10" y="25" width="120" height="80" fill="#fffdf9" stroke="${INK}" stroke-width="4"/><path d="M50 25 V105" stroke="${INK}" stroke-width="4"/>`
+        :t==='bad2'?`<circle cx="70" cy="65" r="56" fill="#fffdf9" stroke="${INK}" stroke-width="4"/><path d="M95 12 V118" stroke="${INK}" stroke-width="4"/>`
+        :`<rect x="20" y="10" width="100" height="100" fill="#fffdf9" stroke="${INK}" stroke-width="4"/><path d="M20 70 H120" stroke="${INK}" stroke-width="4"/>`;
+      const uniq=new Set();opts.forEach((t,k)=>{if(t!=='good'){let tt=t;const pool=['bad1','bad2','bad3'].filter(x=>!uniq.has(x));tt=pool[0];uniq.add(tt);opts[k]=tt;}});
+      opts.forEach((t,k)=>{const b=btn('','',()=>{if(t==='good')win('<span class="ok">¡Correcto!</span> Las dos partes tienen el mismo tamaño: cada una es ½.');else say('#s4 .msg','<span class="bad">Casi.</span> Mira si las dos partes son del mismo tamaño.');});b.innerHTML=svg(mk(t));b.setAttribute('aria-label','Figura '+(k+1));box.appendChild(b);});
+      return;}
+    const paths=SHAPES[L.shape](),w=h('div');w.style.width='280px';w.style.maxWidth='100%';
+    let s=`<svg viewBox="0 0 140 130" role="group" aria-label="Figura partida en ${L.tot} partes: toca las partes para pintarlas">`;
+    paths.forEach((p,k)=>{s+=`<path class="part" data-k="${k}" d="${p}" fill="#fffdf9" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/>`;});s+='</svg>';
+    w.innerHTML=s;box.appendChild(w);
+    w.querySelectorAll('.part').forEach(p=>p.addEventListener('click',()=>{const k=+p.dataset.k;sel.has(k)?sel.delete(k):sel.add(k);p.setAttribute('fill',sel.has(k)?FILL:'#fffdf9');chk();}));
+  }
+  function chk(){
+    if(sel.size===L.want){if(!solved)win(`<span class="ok">¡Correcto!</span> Pintaste ${sel.size} de ${L.tot} partes iguales: ${L.word}.`);}
+    else{solved=false;nxt.hidden=true;say('#s4 .msg',sel.size?`Pintaste ${sel.size} de ${L.tot} partes.`:'');}
+  }
+  $('.pista',sec).addEventListener('click',()=>say('#s4 .msg','<b>Pista:</b> '+L.hint));
+  $('.clr',sec).addEventListener('click',()=>{if(!L.choice){sel.clear();sec.querySelectorAll('.part').forEach(p=>p.setAttribute('fill','#fffdf9'));solved=false;nxt.hidden=true;say('#s4 .msg','');}});
+  nxt.addEventListener('click',()=>load(idx+1));
+  secs.push({root:sec,next(){if(solved&&idx<ITEMS.length-1)load(idx+1);else $('.clr',sec).click();}});
+  load(0);
+})();
+
+/* Bandeja 5: juntar y quitar */
+(function(){
+  let score=0,cur,done;
+  const NV=Niveles($('#b5'),['Juntar hasta 5','Juntar hasta 10','Quitar hasta 5','Quitar hasta 10','¿Cuántos faltan para 10?'],()=>q());
+  function q(){done=false;say('#m5','');const L=NV.get(),b=$('#b5');b.innerHTML='';let a,c;
+    if(L<=1){const mx=L===0?5:10;do{a=1+rnd(mx-1);c=1+rnd(mx-a);}while(c<1);cur=a+c;$('#q5').textContent=`${a} + ${c} = ?`;
+      const l=h('div','line');l.appendChild(line(a,{k:'c',c:COL[0]}));l.appendChild(h('span','big','+'));l.appendChild(line(c,{k:'c',c:COL[1]}));b.appendChild(l);}
+    else if(L<=3){const mx=L===2?5:10;a=2+rnd(mx-1);c=1+rnd(a-1);cur=a-c;$('#q5').textContent=`${a} − ${c} = ?`;
+      const l=h('div','line');l.appendChild(line(a,{k:'s',c:COL[2]},c));b.appendChild(l);b.appendChild(h('p','note',`Hay ${a}. Quitamos ${c} (los más claros). ¿Cuántos quedan?`));}
+    else{a=1+rnd(9);cur=10-a;$('#q5').textContent=`${a} + ? = 10`;
+      const l=h('div','tf');for(let i=0;i<10;i++){const d=h('button');d.disabled=true;if(i<a)d.innerHTML='<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="15" fill="#e9806c" stroke="#41362b" stroke-width="2.5"/></svg>';l.appendChild(d);}b.appendChild(l);}
+    Construir($('#o5'),{max:2,submit:ans});}
+  function ans(v){const x=v[0];if(x===cur){if(!done){score++;$('#sc5').textContent=score;}done=true;say('#m5',`<span class="ok">¡Correcto!</span> ${$('#q5').textContent.replace('?',cur)}. Pulsa Siguiente.`);}else say('#m5','<span class="bad">Casi.</span> Cuenta con el dedo, una por una.');}
+  $('#n5').addEventListener('click',q);secs.push({root:$('#s5'),next:q});q();
+})();
+
+let active=secs[0];
+secs.forEach(s=>{s.root.addEventListener('pointerdown',()=>{active=s;},true);s.root.addEventListener('focusin',()=>{active=s;});});
+$('#next').addEventListener('click',()=>active.next());
+</script>
+<script src="taller.js"></script>
+<script src="perfiles.js"></script><script src="perfilui.js"></script><script src="pantalla.js"></script>
+</body></html>

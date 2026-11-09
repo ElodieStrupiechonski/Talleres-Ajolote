@@ -58,6 +58,44 @@
       y+=10; d.parrafo(40,y,515,'«Avance del camino»: pasos superados de la ruta propuesta para su Taller y año. «Niveles»: niveles con 5 aciertos. Las emociones son autoevaluaciones del niño; úselas para conversar, no para calificar. Los datos no salen de este dispositivo.',{size:9,color:MUT});
       return d.bytes();}
   };
+
+  // ---- Excel (.xlsx) real, sin librerías: ZIP sin compresión + hojas con texto en línea ----
+  var CRCT=null; function crc32(u){ if(!CRCT){CRCT=[]; for(var n=0;n<256;n++){var c=n; for(var k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1; CRCT[n]=c>>>0;}} var c2=0xFFFFFFFF; for(var i=0;i<u.length;i++)c2=CRCT[(c2^u[i])&255]^(c2>>>8); return (c2^0xFFFFFFFF)>>>0; }
+  function utf8(t){ return new TextEncoder().encode(t); }
+  function zip(arch){ var partes=[],cen=[],off=0;
+    function w16(a,v){a.push(v&255,(v>>8)&255);} function w32(a,v){a.push(v&255,(v>>>8)&255,(v>>>16)&255,(v>>>24)&255);}
+    arch.forEach(function(f){ var nm=utf8(f.n),d=utf8(f.d),crc=crc32(d),h=[];
+      w32(h,0x04034b50); w16(h,20); w16(h,0x0800); w16(h,0); w16(h,0); w16(h,0x21); w32(h,crc); w32(h,d.length); w32(h,d.length); w16(h,nm.length); w16(h,0);
+      partes.push(new Uint8Array(h),nm,d);
+      var c=[]; w32(c,0x02014b50); w16(c,20); w16(c,20); w16(c,0x0800); w16(c,0); w16(c,0); w16(c,0x21); w32(c,crc); w32(c,d.length); w32(c,d.length); w16(c,nm.length); w16(c,0); w16(c,0); w16(c,0); w16(c,0); w32(c,0); w32(c,off);
+      cen.push(new Uint8Array(c),nm); off+=h.length+nm.length+d.length; });
+    var csz=0; cen.forEach(function(x){csz+=x.length;}); var e=[]; w32(e,0x06054b50); w16(e,0); w16(e,0); w16(e,arch.length); w16(e,arch.length); w32(e,csz); w32(e,off); w16(e,0);
+    var todo=partes.concat(cen,[new Uint8Array(e)]),tot=0; todo.forEach(function(x){tot+=x.length;}); var out=new Uint8Array(tot),o=0; todo.forEach(function(x){out.set(x,o);o+=x.length;}); return out; }
+  function esc(t){ return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}).replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g,''); }
+  function col(i){ var s=''; i++; while(i>0){var m=(i-1)%26; s=String.fromCharCode(65+m)+s; i=Math.floor((i-1)/26);} return s; }
+  function hoja(filas,anchos){ var x='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><cols>';
+    anchos.forEach(function(a,i){ x+='<col min="'+(i+1)+'" max="'+(i+1)+'" width="'+a+'" customWidth="1"/>'; }); x+='</cols><sheetData>';
+    filas.forEach(function(f,r){ x+='<row r="'+(r+1)+'">'; f.forEach(function(v,c){ if(v===''||v==null)return; var ref=col(c)+(r+1);
+      if(typeof v==='number') x+='<c r="'+ref+'"'+(r===0?' s="1"':'')+'><v>'+v+'</v></c>'; else x+='<c r="'+ref+'" t="inlineStr"'+(r===0?' s="1"':'')+'><is><t>'+esc(v)+'</t></is></c>'; }); x+='</row>'; });
+    return x+'</sheetData></worksheet>'; }
+  API.xlsx=function(ps){
+    var res=[['Perfil','Taller','Año','Pasos del camino superados','Pasos del camino (total)','Avance (%)','Último uso']];
+    ps.forEach(function(p){ var e=R.estado(p); res.push([p.nombre,'Taller '+p.taller,+p.anio,e.hechos,e.total,e.total?Math.round(100*e.hechos/e.total):0,p.ult?fecha(p.ult):'']); });
+    var av=[['Perfil','Taller','Año','Tema','Bandeja','Nivel','Aciertos','Superado (5 aciertos)','Fecha superado']];
+    ps.forEach(function(p){ claves(p).sort(function(a,b){return (a.p>b.p)-(a.p<b.p)||a.b-b.b||a.l-b.l;}).forEach(function(c){ av.push([p.nombre,'Taller '+p.taller,+p.anio,R.TEMA[c.p]||c.p,c.b+'. '+bandeja(c.p,c.b),c.l||'',c.n,c.n>=P.META?'sí':'no',c.t?fecha(c.t):'']); });
+      Object.keys(p.vis).forEach(function(k){ var a=k.split('|'); av.push([p.nombre,'Taller '+p.taller,+p.anio,R.TEMA[a[0]]||a[0],a[1]+'. '+bandeja(a[0],+a[1]),'','','visitada',fecha(p.vis[k])]); }); });
+    var em=[['Perfil','Taller','Año','Fecha','Hora','Tema','Bandeja','Nivel','Emoción','Momento']];
+    ps.forEach(function(p){ p.emo.forEach(function(e){ em.push([p.nombre,'Taller '+p.taller,+p.anio,fecha(e.t),hora(e.t),R.TEMA[e.p]||e.p,e.b+'. '+bandeja(e.p,e.b),e.l||'',P.EMOL[e.e],e.tipo==='fin'?'al terminar el nivel':'durante la actividad']); }); });
+    var N='xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"',RL='http://schemas.openxmlformats.org/officeDocument/2006/relationships',H='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
+    return zip([
+      {n:'[Content_Types].xml',d:H+'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/worksheets/sheet2.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/worksheets/sheet3.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/></Types>'},
+      {n:'_rels/.rels',d:H+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="'+RL+'/officeDocument" Target="xl/workbook.xml"/></Relationships>'},
+      {n:'xl/workbook.xml',d:H+'<workbook '+N+' xmlns:r="'+RL+'"><sheets><sheet name="Resumen" sheetId="1" r:id="rId1"/><sheet name="Avance" sheetId="2" r:id="rId2"/><sheet name="Emociones" sheetId="3" r:id="rId3"/></sheets></workbook>'},
+      {n:'xl/_rels/workbook.xml.rels',d:H+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="'+RL+'/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="'+RL+'/worksheet" Target="worksheets/sheet2.xml"/><Relationship Id="rId3" Type="'+RL+'/worksheet" Target="worksheets/sheet3.xml"/><Relationship Id="rId4" Type="'+RL+'/styles" Target="styles.xml"/></Relationships>'},
+      {n:'xl/styles.xml',d:H+'<styleSheet '+N+'><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFD9E4EF"/></patternFill></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>'},
+      {n:'xl/worksheets/sheet1.xml',d:hoja(res,[22,12,8,26,24,12,14])},
+      {n:'xl/worksheets/sheet2.xml',d:hoja(av,[22,12,8,24,34,8,10,20,16])},
+      {n:'xl/worksheets/sheet3.xml',d:hoja(em,[22,12,8,12,8,24,34,8,14,26])}]); };
   root.Inf=API;
   if(typeof module!=='undefined')module.exports=API;
 })(typeof window!=='undefined'?window:globalThis);

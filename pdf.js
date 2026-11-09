@@ -54,6 +54,8 @@
   }
   function descarga(nombre,datos,tipo){
     var blob=new Blob([datos],{type:tipo||'application/pdf'});
+    // En la app de Android (WebView) las descargas con enlace no funcionan: se ofrece compartir/guardar el archivo.
+    try { if (root.Capacitor && navigator.canShare) { var fl = new File([blob], nombre, { type: blob.type }); if (navigator.canShare({ files: [fl] })) { navigator.share({ files: [fl], title: nombre }).catch(function(){}); return; } } } catch (e) {}
     var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=nombre; document.body.appendChild(a); a.click();
     setTimeout(function(){document.body.removeChild(a); URL.revokeObjectURL(a.href);},2000);
   }

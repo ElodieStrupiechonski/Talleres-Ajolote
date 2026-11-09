@@ -158,10 +158,27 @@
     body.appendChild(rs); body.appendChild(emoBox);
   }
   // Parpadeo en el botón «Siguiente» (u «Otra», «Otro»…) cuando la respuesta fue correcta
-  var SIGRE = /^\s*(Siguiente|Otro|Otra|Nuevo|Nueva)/i;
+  var SIGRE = /^[^A-Za-zÁ-ú]*(Siguiente|Otro|Otra|Nuevo|Nueva)/i;
   function pulseSig(tr){ [].forEach.call(tr.querySelectorAll('button'), function(b){ if (b.classList.contains('ayuda') || b.hidden || b.offsetParent === null) return; if (SIGRE.test(b.textContent)) b.classList.add('pf-pulse'); }); }
   function clearPulse(tr){ [].forEach.call(tr.querySelectorAll('.pf-pulse'), function(b){ b.classList.remove('pf-pulse'); }); }
   document.addEventListener('click', function(e){ var b = e.target.closest && e.target.closest('.tray .pf-pulse'); if (b) b.classList.remove('pf-pulse'); }, true);
+
+  // ---- Anti-repetición: si tras «Siguiente/Otro» aparece una pregunta con los mismos números que una de las últimas,
+  // se vuelve a pulsar (hasta 8 veces). Los números se ordenan para detectar también 4×2 y 2×4. ----
+  var HIST = [], reint = 0, auto = false;
+  function firma(tr){ var c = (tr.firstChild || tr).cloneNode(true); [].forEach.call(c.querySelectorAll('.msg,.ok,.bad,.cn,.niv,.chips.lv,h2,.pf-sug,button.ayuda,.note,.step,.pt-sug'), function(e){ e.remove(); });
+    var tx = (c.textContent || '').replace(/(Aciertos|Puntos|Racha|Intentos|Correctas|Retos?|Nivel)[:\s]*\d+(\s*(de|\/)\s*\d+)?/gi, ''), t = tx.match(/\d+(?:[.,]\d+)?/g); return t ? t.sort().join(',') : null; }
+  function sigBtn(tr){ return [].filter.call(tr.querySelectorAll('button'), function(b){ return !b.classList.contains('ayuda') && !b.hidden && b.offsetParent !== null && SIGRE.test(b.textContent); })[0]; }
+  setTimeout(function(){ var tr = trays[cur]; if (tr) HIST = [firma(tr)]; }, 600);
+  document.addEventListener('click', function(e){
+    if (auto) return; var b = e.target.closest && e.target.closest('.tray button'); if (!b || !SIGRE.test(b.textContent) || b.classList.contains('ayuda')) return;
+    var tr = b.closest('.tray'); reint = 0;
+    (function revisa(){ setTimeout(function(){
+      var f = firma(tr);
+      if (f !== null && HIST.indexOf(f) >= 0 && reint < 8){ var nb = sigBtn(tr); if (nb){ reint++; auto = true; nb.click(); auto = false; return revisa(); } }
+      if (f !== null){ HIST.push(f); if (HIST.length > 3) HIST.shift(); }
+    }, 70); })();
+  }, false);
   var OKRE = /¡(Correcto|Exacto|Compás completo|Llegó|Lo lograste)/;
   trays.forEach(function(tr, i){
     new MutationObserver(function(){
@@ -255,17 +272,33 @@
     var p = el('p', 'pf-sug'); p.innerHTML = '🎯 <b>Prueba esto:</b> '; p.appendChild(document.createTextNode(t)); h2.parentNode.insertBefore(p, h2.nextSibling); });
 
   // ---- Pausas y cambio de tema ----
-  var SK = 'tm_ses', LIM_MIN = 12, LIM_NIV = 3, psAbierta = false, ult = Date.now();
+  var SK = 'tm_ses', LIM_MIN = 20, LIM_NIV = 1, psAbierta = false, ult = Date.now();
   try { var lm = parseInt(localStorage.getItem('tm_pausa_min'), 10); if (!isNaN(lm)) LIM_MIN = lm; } catch (e) {}
   function ses(){ try { var o = JSON.parse(sessionStorage.getItem(SK) || 'null'); if (o && typeof o.seg === 'number') return o; } catch (e) {} return { seg: 0, lv: 0 }; }
   function guardaSes(o){ try { sessionStorage.setItem(SK, JSON.stringify(o)); } catch (e) {} }
   function sesion(tipo){ var o = ses(); if (tipo === 'nivel') o.lv = (o.lv || 0) + 1; guardaSes(o); setTimeout(revisaPausa, tipo === 'nivel' ? 4500 : 2500); }
+  // Propone cambiar de tema solo si, en el plan del año (Gantt), este tema va muy adelantado y otros siguen sin avance.
+  var RUT = null; (function(){ var sc = document.createElement('script'); sc.src = 'rutas.js'; sc.onload = function(){ RUT = window.Rutas; }; document.head.appendChild(sc); })();
+  function desequilibrio(){
+    try {
+      var p = window.Perf && Perf.activo(); if (!p || !RUT || !p.taller || !p.anio) return null;
+      var ps = RUT.pasos(p.taller, p.anio), T = {};
+      ps.forEach(function(s){ var t = T[s.p] || (T[s.p] = { n: 0, h: 0 }); t.n++; if (Perf.hecho(p, s.p, s.b, s.l)) t.h++; });
+      var me = T[nombre]; if (!me || me.h < 4 || me.h / me.n < 0.5) return null;
+      var vacios = Object.keys(T).filter(function(k){ return k !== nombre && T[k].h === 0; });
+      if (vacios.length < 2) return null;
+      var av = {}; try { av = JSON.parse(localStorage.getItem('tm_tema_av') || '{}'); } catch (e) {}
+      var hoy = new Date().toISOString().slice(0, 10); if (av[nombre] === hoy) return null;
+      av[nombre] = hoy; try { localStorage.setItem('tm_tema_av', JSON.stringify(av)); } catch (e) {}
+      return { tema: RUT.TEMA[nombre] || nombre, otros: vacios.slice(0, 3).map(function(k){ return RUT.TEMA[k] || k; }) };
+    } catch (e) { return null; }
+  }
   function revisaPausa(){
     if (psAbierta || ayAbierta) return; var o = ses();
     if (LIM_MIN > 0 && (o.seg || 0) / 60 >= LIM_MIN) return pausa('tiempo');
-    if ((o.lv || 0) >= LIM_NIV) pausa('temas');
+    if ((o.lv || 0) >= LIM_NIV && !o.avT){ var d = desequilibrio(); if (d){ o.avT = 1; guardaSes(o); pausa('temas', d); } }
   }
-  function pausa(tipo){
+  function pausa(tipo, info){
     psAbierta = true; var ov = el('div', 'pf-ps'), bx = el('div', 'pf-ps-b'), av = el('div', 'pf-ps-av'), ms = document.querySelector('.pf-mas svg');
     ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); av.innerHTML = ms ? ms.outerHTML : ''; bx.appendChild(av);
     var nom = jugador ? ', ' + jugador : '';
@@ -275,8 +308,8 @@
       bx.appendChild(el('p', null, 'Llevas un buen rato jugando. Mira lejos por la ventana, estira los brazos y toma un poco de agua.'));
       cuenta = el('p', 'pf-ps-r', '30'); bx.appendChild(cuenta);
     } else {
-      bx.appendChild(el('h2', null, '¡Superaste ' + LIM_NIV + ' niveles' + nom + '!'));
-      bx.appendChild(el('p', null, 'Es un buen momento para cambiar de tema. Tu cerebro aprende más cuando alternamos. Después puedes volver aquí.'));
+      bx.appendChild(el('h2', null, '¡Mucho avance en ' + (info ? info.tema : 'este tema') + nom + '!'));
+      bx.appendChild(el('p', null, 'Tu plan también tiene ' + (info ? info.otros.join(', ') : 'otros temas') + '. Tu cerebro aprende más cuando alternamos. Después puedes volver aquí.'));
     }
     var bt = el('div', 'pf-ps-bt'), cam = el('button', 'go', 'Cambiar de tema'), seg = el('button', null, 'Seguir jugando'); cam.type = seg.type = 'button';
     function fin(){ clearInterval(iv); ov.remove(); psAbierta = false; }
@@ -294,5 +327,5 @@
     var gi = el('div', 'pf-gira'); gi.setAttribute('role', 'status'); gi.appendChild(el('span', null, '↻ Gira el teléfono: se juega mejor en horizontal.'));
     var gx = el('button', null, 'Ok'); gx.type = 'button'; gx.onclick = function(){ gi.remove(); try { sessionStorage.setItem('tm_gira', '1'); } catch (e) {} }; gi.appendChild(gx); document.body.appendChild(gi); } } catch (e) {}
 
-  window.PF.show = show; window.PF.pausa = pausa; window.PF.fit = function(f){ fit(cur, f !== false); };
+  window.PF.show = show; window.PF.pausa = pausa; window.PF.deseq = function(){ return desequilibrio(); }; window.PF.fit = function(f){ fit(cur, f !== false); };
 })();

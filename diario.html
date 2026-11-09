@@ -12,8 +12,19 @@
 .pin input{width:7em;text-align:center;letter-spacing:.3em}.err{color:#b3392a;min-height:1.2em}
 table.t{border-collapse:collapse;width:100%;font-size:.95rem}.t th,.t td{text-align:left;padding:6px 8px;border-bottom:2px solid #e6dccb}.t th{font-family:var(--display)}
 .bar{display:inline-block;width:110px;height:10px;background:#eee6d6;border-radius:6px;overflow:hidden;vertical-align:middle}.bar i{display:block;height:100%;background:#6fae7e}
-.emos{display:flex;gap:14px;flex-wrap:wrap}.emos div{text-align:center;font-size:.85rem;width:74px}.emos svg{width:56px;height:auto;display:block;margin:auto}</style>
-</head><body>
+.emos{display:flex;gap:14px;flex-wrap:wrap}.emos div{text-align:center;font-size:.85rem;width:74px}.emos svg{width:56px;height:auto;display:block;margin:auto}
+/* Zona de adultos: otra paleta y botones rectos para que se distinga del juego */
+body.adulto{background:#e9eef3;--bg:#e9eef3;--card:#fff;--tray-edge:#8aa0b5;--acc:#2f4a63;--acc-fg:#fff}
+body.adulto::before{content:"🔒 Zona para personas adultas";display:block;background:#2f4a63;color:#fff;font:800 .95rem var(--display);padding:8px 16px;letter-spacing:.03em}
+body.adulto button,body.adulto a.b{border-radius:4px;border:2px solid #2f4a63;background:#fff;color:#2f4a63;box-shadow:none;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-weight:700;text-transform:none;display:inline-block;text-decoration:none;padding:8px 14px;min-height:44px;box-sizing:border-box}
+body.adulto .tabs button.on,body.adulto .b.p{background:#2f4a63;color:#fff;border-color:#2f4a63}
+body.adulto .b.d{border-color:#b3392a;color:#b3392a;background:#fff}
+body.adulto .box{border:1px solid #8aa0b5;border-left:6px solid #2f4a63;border-radius:6px}
+body.adulto h1,body.adulto h2{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body.adulto .res-btn{display:none!important}
+body.adulto .t th{background:#dde6ee}
+</style>
+</head><body class="adulto">
 <div class="wrap">
   <a class="back" href="index.html">← Todos los talleres</a>
   <header><h1>Diario para adultos</h1><p class="lead">Avance y emociones de las niñas y los niños. Todo se queda en este dispositivo.</p></header>
@@ -28,6 +39,7 @@ table.t{border-collapse:collapse;width:100%;font-size:.95rem}.t th,.t td{text-al
   function bajar(nom,datos,tipo){PDF.descarga(nom,datos,tipo);}
   function slug(s){return s.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Za-z0-9]+/g,'_').toLowerCase()||'perfil';}
   var hoy=function(){return new Date().toISOString().slice(0,10);};
+  var FORM='https://docs.google.com/forms/d/e/1FAIpQLSfFgB4tBlcDQSVD1FTA5hHJsmtsmVeor33_lmQyXGLj3qjF0w/viewform', CORREO='elodieclaire@ieee.org';
   function render(){
     app.innerHTML='';
     if(!Perf.tienePin()&&!sinPin) return crearPin();
@@ -58,6 +70,11 @@ table.t{border-collapse:collapse;width:100%;font-size:.95rem}.t th,.t td{text-al
     [['res','Resumen'],['per','Perfiles'],['dat','Datos']].forEach(function(x){var b=el('button',x[0]===sec?'on':'',x[1]);b.type='button';b.onclick=function(){sec=x[0];render();};t.appendChild(b);});
     var cl=el('button',null,'Salir'); cl.type='button'; cl.onclick=function(){Perf.cierra();sinPin=false;location.href='index.html';}; t.appendChild(cl);
     app.appendChild(t); ({res:resumen,per:perfiles,dat:datos})[sec]();
+    var fb=el('div','box fb'); fb.appendChild(el('h2',null,'Comparte tus comentarios'));
+    fb.appendChild(el('p','nota','¿Qué funcionó, qué no, qué falta? Tu opinión nos ayuda a mejorar los talleres. No incluyas nombres ni datos de los niños.'));
+    var rf=el('div','row'), a1=el('a','b p','Abrir el formulario'); a1.href=FORM; a1.target='_blank'; a1.rel='noopener';
+    var a2=el('a','b','Escribir un correo'); a2.href='mailto:'+CORREO+'?subject='+encodeURIComponent('Comentarios sobre Talleres del Ajolote')+'&body='+encodeURIComponent('Hola:\n\nMi comentario sobre los talleres:\n\n');
+    rf.appendChild(a1); rf.appendChild(a2); fb.appendChild(rf); app.appendChild(fb);
   }
   function lista(){return sel==='*'?Perf.lista():Perf.lista().filter(function(p){return p.id===sel;});}
   function resumen(){
@@ -109,9 +126,10 @@ table.t{border-collapse:collapse;width:100%;font-size:.95rem}.t th,.t td{text-al
   }
   function datos(){
     var b=el('div','box'); b.appendChild(el('h2',null,'Descargar'));
-    b.appendChild(el('p','nota','PDF: para leer o imprimir. CSV: para abrir en Excel, Numbers o Google Sheets.'));
+    b.appendChild(el('p','nota','PDF: para leer o imprimir. Excel (.xlsx): hojas de resumen, avance y emociones de cada alumno. CSV: texto plano compatible con cualquier hoja de cálculo.'));
     var ps=Perf.lista(),r=el('div','row');
     r.appendChild(btn('PDF del grupo','p',function(){bajar('resumen_grupo_'+hoy()+'.pdf',Inf.pdfGrupo(ps,'Resumen del grupo'));}));
+    r.appendChild(btn('Excel de la progresión (todos)','p',function(){bajar('progresion_'+hoy()+'.xlsx',Inf.xlsx(ps),'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');}));
     r.appendChild(btn('CSV de avance (todos)','',function(){bajar('avance_'+hoy()+'.csv',Inf.csvProgreso(ps),'text/csv;charset=utf-8');}));
     r.appendChild(btn('CSV de emociones (todos)','',function(){bajar('emociones_'+hoy()+'.csv',Inf.csvEmociones(ps),'text/csv;charset=utf-8');})); b.appendChild(r);
     b.appendChild(el('p','nota','El informe individual en PDF está en Resumen, al elegir un perfil.')); app.appendChild(b);

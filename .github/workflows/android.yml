@@ -63,7 +63,7 @@ jobs:
           grep -E "versionCode ${{ github.run_number }}" app/build.gradle || { echo "No se pudo fijar versionCode; revisar app/build.gradle"; cat app/build.gradle; exit 1; }
           sed -i 's/android:allowBackup="true"/android:allowBackup="false"/' app/src/main/AndroidManifest.xml
           # Fija la app en horizontal (permite girar 180°, sin pasar por vertical)
-          sed -i '0,/<activity /s//<activity android:screenOrientation="sensorLandscape" /' app/src/main/AndroidManifest.xml
+          sed -i '0,/<activity\b/s//<activity android:screenOrientation="sensorLandscape"/' app/src/main/AndroidManifest.xml
           grep -q sensorLandscape app/src/main/AndroidManifest.xml || { echo 'No se pudo fijar la orientación'; cat app/src/main/AndroidManifest.xml; exit 1; }
 
       - name: Sincronizar y compilar

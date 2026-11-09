@@ -527,3 +527,6 @@ body.pf .meta-b i.on{background:linear-gradient(#ffe58f,#f0b93a);border:0}
 .res-btn{border-radius:4px!important;background:#fff!important;color:#2f4a63!important;border:2px solid #2f4a63!important;box-shadow:none!important;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important;font-weight:700!important}
 .res-btn::before{content:"🔒 "}
 @media (min-aspect-ratio:1/1) and (max-height:520px){.pf .pf-inner>h2~p:first-of-type{padding-right:110px}}
+/* Cola del globo: triángulo recortado (antes era un rombo que tapaba letras del texto) */
+.pf-bub:after{width:22px;height:13px;bottom:-13px;border:0;background:var(--fg);transform:translateX(-50%);clip-path:polygon(0 0,100% 0,50% 100%)}
+.pf-bub:before{content:"";position:absolute;left:50%;bottom:-9px;width:12px;height:9px;background:var(--card);transform:translateX(-50%);clip-path:polygon(0 0,100% 0,50% 100%);z-index:1}

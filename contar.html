@@ -37,13 +37,15 @@ svg.ob.x{opacity:.28}
     <span class="step">Bandeja 1 · Marco de diez</span>
     <h2 id="t1">Pon fichas y mira cuántas hay</h2>
     <p>Toca una casilla para poner o quitar una ficha. Cada marco tiene 10 casillas.</p>
+    <p class="pf-sug" id="g1"></p>
     <p class="det">Llena primero un marco de 10 y luego empieza el siguiente. Así vemos que 13 es 10 y 3 más.</p>
     <div class="row">
       <div class="tf2"><div class="tf" id="m1a"></div><div class="tf" id="m1b"></div></div>
       <div class="col ed">
         <p class="big" id="n1">0</p>
         <p class="note" id="i1" aria-live="polite"></p>
-        <div class="btns"><button id="c1" type="button">Borrar todo</button></div>
+        <p class="note msg" id="m1" aria-live="polite"></p>
+        <div class="btns"><button id="c1" type="button">Borrar todo</button><button id="o1" type="button" hidden>Otro reto</button></div>
       </div>
     </div>
   </section>
@@ -129,9 +131,18 @@ function ask(box,fn){Construir(box,{max:2,submit:v=>fn(v[0])});}
     [['#m1a',0],['#m1b',10]].forEach(([id,off])=>[...$(id).children].forEach((b,i)=>{b.innerHTML=on[off+i]?'<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="15" fill="#e9806c" stroke="#41362b" stroke-width="2.5"/></svg>':'';}));
     const n=on.filter(Boolean).length;$('#n1').textContent=n;
     $('#i1').innerHTML=n===0?'Toca las casillas para poner fichas.':n<=10?`${n}. Faltan <b>${10-n}</b> para 10.`:`${n} = 10 y ${n-10} más. Faltan <b>${20-n}</b> para 20.`;
+    if(gi<metas.length){
+      if(n===metas[gi]&&!hit){hit=true;$('#o1').hidden=false;
+        say('#m1',`<span class="ok">¡Correcto!</span> Pusiste ${n}. `+(n<10?`Faltan ${10-n} para llenar el marco.`:n===10?'El marco está lleno: 10 fichas.':n===20?'Dos marcos llenos: 20 = 10 + 10.':`${n} = 10 y ${n-10} más.`)+(gi<metas.length-1?' Pulsa «Otro reto».':' ¡Ese fue el último reto!'));}
+      else if(n!==metas[gi]&&hit){hit=false;$('#o1').hidden=true;say('#m1','');}
+    }
   }
-  frame($('#m1a'),0);frame($('#m1b'),10);draw();
+  /* Retos con meta: así siempre sabemos qué hacer (poner N fichas) y cuándo terminamos */
+  const metas=[5,8,10,13,16,20];let gi=0,hit=false;
+  function pintaMeta(){const g=$('#g1');g.innerHTML=gi>=metas.length?'🎯 <b>¡Terminaste los retos del marco de diez!</b> Pasa a la bandeja «2 · Contar».':`🎯 <b>Reto ${gi+1} de ${metas.length}:</b> pon <b>${metas[gi]}</b> fichas.`;}
+  frame($('#m1a'),0);frame($('#m1b'),10);pintaMeta();draw();
   $('#c1').addEventListener('click',()=>{on.fill(false);draw();});
+  $('#o1').addEventListener('click',()=>{gi++;hit=false;on.fill(false);$('#o1').hidden=true;say('#m1',gi>=metas.length?'<span class="ok">¡Lo lograste!</span> Terminaste todos los retos del marco de diez.':'');pintaMeta();draw();});
   secs.push({root:$('#s1'),next(){const n=1+rnd(20);on.fill(false);for(let i=0;i<n;i++)on[i]=true;draw();}});
 })();
 

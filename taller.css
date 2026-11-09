@@ -305,3 +305,192 @@ a{overflow-wrap:anywhere}
   body.pf .pf-side .pf-bub .pf-ba{display:block;flex:none;width:44px;height:44px}
   body.pf .pf-side .pf-bub .pf-ba svg{width:44px;height:44px;display:block}
 }
+
+/* ===== v3 · zonas seguras, horizontal, progreso por nivel, ayuda grande, pausas ===== */
+/* La app dibuja bajo la barra de estado y la de gestos: dejamos libres esos espacios (Capacitor inyecta --safe-area-inset-*). */
+:root{--sat:max(env(safe-area-inset-top,0px),var(--safe-area-inset-top,0px));--sab:max(env(safe-area-inset-bottom,0px),var(--safe-area-inset-bottom,0px));--sal:max(env(safe-area-inset-left,0px),var(--safe-area-inset-left,0px));--sar:max(env(safe-area-inset-right,0px),var(--safe-area-inset-right,0px))}
+body{padding-top:calc(24px + var(--sat));padding-bottom:calc(48px + var(--sab));padding-left:calc(16px + var(--sal));padding-right:calc(16px + var(--sar))}
+body.pf{box-sizing:border-box;padding:var(--sat) var(--sar) var(--sab) var(--sal)}
+@media (max-aspect-ratio:1/1),(max-width:899px){body.pf .pf-side .pf-mas-big{top:calc(72px + var(--sat))}}
+.grp{flex-wrap:nowrap}
+
+/* Barra de nivel tipo Gantt (un tramo por nivel) y barra de aciertos para subir de nivel */
+.pt-lv{font-weight:800;font-size:1.05rem;line-height:1.1}
+.pt-nm{font-size:.8rem;color:var(--muted);line-height:1.1}
+.gantt{display:flex;gap:3px;width:100%;min-width:120px}
+.gantt .gs{position:relative;flex:1 1 0;min-width:0;height:22px;border-radius:8px;background:rgba(65,54,43,.12);border:2px solid var(--tray-edge);overflow:hidden;font:800 .72rem/18px var(--display);text-align:center;color:var(--muted)}
+.gantt .gs i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(#9bd9aa,#62a875);transition:width .6s ease}
+.gantt .gs span{position:relative}
+.gantt .gs.dn{border-color:#4f9a63;color:#173d27}
+.gantt .gs.cu{border-color:var(--fg);box-shadow:0 0 0 2px var(--acc)}
+.meta{display:flex;flex-direction:column;gap:3px;width:100%}
+.meta-t{display:flex;justify-content:space-between;gap:6px;font:800 .8rem/1.1 var(--display)}
+.meta-t span:last-child{color:var(--muted)}
+.meta-b{display:flex;gap:3px;height:24px}
+.meta-b i{flex:1 1 0;border-radius:8px;background:rgba(65,54,43,.12);border:2px solid var(--tray-edge);transition:background .3s}
+.meta-b i.on{background:linear-gradient(#ffd96e,#e3ab33);border-color:#b98312}
+.meta-b i.nw{animation:pfPop .6s ease}
+@keyframes pfPop{0%{transform:scale(.4)}60%{transform:scale(1.25)}100%{transform:scale(1)}}
+.meta-f{font:700 .85rem/1.15 var(--display);color:var(--muted)}
+.meta-f.ok2{color:#2f7d4a}
+.pt-free{font-size:.9rem;color:var(--muted)}
+.pf-track .pt-btn{width:100%}
+
+/* Parpadeo que invita a tocar "Siguiente" */
+@keyframes pfPulse{0%,100%{transform:scale(1);box-shadow:0 2px 0 var(--tray-edge),0 0 0 0 rgba(63,111,163,.65)}50%{transform:scale(1.08);box-shadow:0 2px 0 var(--tray-edge),0 0 0 12px rgba(63,111,163,0)}}
+.pf-pulse{animation:pfPulse 1.1s ease-in-out infinite!important;background:var(--acc)!important;color:var(--acc-fg)!important;border-color:var(--fg)!important;position:relative;z-index:3}
+.pf .pf-tab.pf-pulse{animation:pfPulse 1.1s ease-in-out infinite!important}
+@media (prefers-reduced-motion:reduce){.pf-pulse{animation:none!important;outline:4px solid var(--fg)}}
+
+/* Sugerencia de qué hacer en las bandejas de exploración */
+.pf-sug{background:#fff3c9;color:#41362b;border:3px dashed #d9a63a;border-radius:12px;padding:6px 12px;font-size:1.05rem;max-width:none}
+.pf-sug b{font-family:var(--display)}
+
+/* Ayuda grande: se abre sobre la actividad (no cambia el tamaño de la pantalla) y se puede escuchar */
+.pf-ay{position:fixed;inset:0;z-index:70;background:rgba(65,54,43,.55);display:flex;align-items:center;justify-content:center;padding:calc(10px + var(--sat)) calc(10px + var(--sar)) calc(10px + var(--sab)) calc(10px + var(--sal));box-sizing:border-box}
+.pf-ay-b{background:var(--card);color:var(--fg);border:5px solid var(--fg);border-radius:24px;padding:14px 18px;max-width:760px;width:100%;max-height:100%;overflow:auto;box-sizing:border-box;display:flex;gap:16px;align-items:flex-start;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.pf-ay-av{flex:none;width:clamp(64px,18vmin,130px)}.pf-ay-av svg{width:100%;height:auto;display:block}
+.pf-ay-c{min-width:0;flex:1}
+.pf-ay-h{font-family:var(--display);font-weight:800;font-size:clamp(22px,5.4vmin,34px);line-height:1.15;margin:0 0 8px}
+.pf-ay-t p{margin:0 0 .5em;max-width:none;font-size:clamp(22px,5.4vmin,34px);line-height:1.35}
+.pf-ay-t p.pf-ay-q{color:var(--muted);font-size:clamp(18px,4.4vmin,28px)}
+.pf-ay-bt{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.pf-ay-bt button{min-height:52px;font-size:clamp(18px,4.4vmin,26px);padding:6px 20px}
+.pf-ay-bt .go{background:var(--acc);color:var(--acc-fg);border-color:var(--fg)}
+.pf button.ayuda{min-height:48px;font-size:1.05rem;padding:4px 16px}
+
+/* Pausa y cambio de tema */
+.pf-ps{position:fixed;inset:0;z-index:80;background:rgba(65,54,43,.72);display:flex;align-items:center;justify-content:center;padding:calc(10px + var(--sat)) calc(10px + var(--sar)) calc(10px + var(--sab)) calc(10px + var(--sal));box-sizing:border-box}
+.pf-ps-b{background:var(--card);border:5px solid var(--fg);border-radius:26px;padding:16px 22px;max-width:640px;width:100%;max-height:100%;overflow:auto;box-sizing:border-box;text-align:center}
+.pf-ps-av{width:clamp(70px,22vmin,150px);margin:0 auto;animation:pfNada 3s ease-in-out infinite}.pf-ps-av svg{width:100%;height:auto;display:block}
+@keyframes pfNada{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-8px) rotate(3deg)}}
+.pf-ps h2{font-size:clamp(24px,6vmin,38px);margin:6px 0}
+.pf-ps p{margin:4px auto 10px;font-size:clamp(18px,4.6vmin,26px);max-width:34ch}
+.pf-ps-r{font:800 clamp(28px,8vmin,48px) var(--display);margin:0 auto 6px;color:var(--acc)}
+.pf-ps-bt{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.pf-ps-bt button{min-height:52px;font-size:clamp(18px,4.4vmin,24px);padding:6px 20px}
+.pf-ps-bt .go{background:var(--acc);color:var(--acc-fg);border-color:var(--fg)}
+@media (prefers-reduced-motion:reduce){.pf-ps-av{animation:none}}
+
+/* Aviso en teléfono vertical (en la app queda fija en horizontal) */
+.pf-gira{position:fixed;left:8px;right:8px;bottom:calc(64px + var(--sab));z-index:40;background:var(--fg);color:var(--bg);border-radius:14px;padding:8px 12px;font:700 .95rem/1.25 var(--display);display:flex;gap:10px;align-items:center}
+.pf-gira button{min-height:36px;padding:2px 12px;font-size:.9rem;flex:none}
+@media (min-aspect-ratio:1/1),(min-width:700px){.pf-gira{display:none}}
+
+/* Horizontal en pantallas bajas (teléfonos): columnas angostas, pestañas que se reparten el alto, sin deslizar */
+@media (min-aspect-ratio:1/1) and (max-height:520px){
+  body.pf{grid-template-columns:clamp(128px,15vw,172px) minmax(0,1fr)}
+  .pf .pf-top{flex-direction:row;flex-wrap:wrap;align-items:center;gap:4px;padding:4px 6px 0}
+  .pf .pf-top .back{flex:none;font-size:0;min-width:46px;min-height:40px;padding:2px 10px;justify-content:center}
+  .pf .pf-top .back::before{content:"←";font-size:1.45rem;line-height:1}
+  .pf .pf-slot{flex:none}
+  .pf .snd-btn{min-height:40px;min-width:46px;padding:2px 10px}
+  .pf .snd-btn span{display:none}
+  .pf .pf-tit{flex:1 0 100%;gap:6px}
+  .pf .pf-top h1{font-size:.95rem;line-height:1.1}
+  .pf .pf-tit .pf-ico svg{width:28px;height:28px}
+  .pf .pf-cr{display:none}
+  .pf .pf-nav{gap:3px;padding:2px 6px 2px;overflow:hidden}
+  .pf .pf-tab{flex:1 1 0;min-height:0;max-height:44px;font-size:.84rem;padding:1px 8px;display:flex;align-items:center}
+}
+@media (min-aspect-ratio:1/1) and (min-width:900px) and (max-height:520px){
+  body.pf{grid-template-columns:clamp(128px,15vw,172px) minmax(0,1fr) clamp(150px,17vw,210px)}
+  body.pf .pf-side{padding:6px 8px 4px 0;gap:4px}
+  body.pf .pf-side .pf-track{max-height:none;padding:6px 8px;gap:4px;margin:0}
+  .pf-track .pt-s,.pf-track .pt-c{display:block}
+  .pf-mas-sv{min-height:40px}
+  .pf-track .pt-hd .pf-mas{display:none}
+  .pf-who{min-height:36px;font-size:.95rem}
+  .pf-bub{font-size:.85rem!important;padding:4px 8px!important;margin-bottom:6px!important}
+}
+/* Reservar el lugar de los mensajes para que la pantalla no cambie de tamaño cuando aparecen */
+.pf .note:empty{display:block;visibility:hidden;min-height:2.4em}
+@media (min-aspect-ratio:1/1) and (max-height:520px){
+  .pf .tray{border-width:3px;border-radius:14px}
+  .pf .pf-inner{gap:6px;padding:6px 10px}
+  .pf h2{font-size:1.1rem}
+  .pf .pf-inner>h2{padding-right:120px}
+  .pf button.ayuda{top:5px;right:8px}
+  .pf .note{padding:5px 10px}
+  .pf .note:empty{min-height:2.2em}
+  .pf .wrap{padding:4px 8px 4px 2px}
+}
+@media (min-aspect-ratio:1/1) and (min-width:900px) and (max-height:520px){
+  body.pf{grid-template-columns:clamp(124px,14vw,160px) minmax(0,1fr) clamp(140px,15vw,190px)}
+}
+/* Riel angosto a la izquierda en teléfonos horizontales: solo números de bandeja (el título está en la actividad) */
+@media (min-aspect-ratio:1/1) and (max-height:520px){
+  body.pf{grid-template-columns:58px minmax(0,1fr)}
+  .pf .pf-top{flex-direction:column;align-items:center;gap:3px;padding:4px 4px 0}
+  .pf .pf-tit{flex:none;justify-content:center}.pf .pf-tit h1{display:none}
+  .pf .pf-tit .pf-ico svg{width:34px;height:34px}
+  .pf .pf-top .back{width:100%;min-width:0;box-sizing:border-box}
+  .pf .pf-slot{width:100%}.pf .snd-btn{width:100%;box-sizing:border-box;justify-content:center}
+  .pf .pf-nav{padding:2px 4px}
+  .pf .pf-tab{font-size:0;justify-content:center;padding:0;max-height:40px;min-height:28px}
+  .pf .pf-tab::before{content:attr(data-n);font-size:1.15rem;font-family:var(--display);font-weight:800}
+}
+@media (min-aspect-ratio:1/1) and (min-width:900px) and (max-height:520px){
+  body.pf{grid-template-columns:58px minmax(0,1fr) clamp(140px,15vw,184px)}
+}
+
+/* Globo del ajolote en teléfonos horizontales: flota sobre el ajolote en lugar de empujar el seguimiento */
+@media (min-aspect-ratio:1/1) and (max-height:520px){
+  body.pf .pf-side .pf-mas-big{position:relative}
+  body.pf .pf-side .pf-bub{position:absolute;left:0;right:0;bottom:34px;margin:0;z-index:5;box-shadow:0 3px 8px rgba(0,0,0,.25)}
+}
+/* Teléfono horizontal: aprovechar el ancho. Teclado de respuesta a la derecha, lo demás a la izquierda */
+@media (min-aspect-ratio:1/1) and (max-height:520px){
+  .pf .pf-inner{display:grid;grid-template-columns:minmax(0,1fr) max-content;column-gap:14px;row-gap:6px;align-content:start;align-items:start}
+  .pf .pf-inner>*{grid-column:1;min-width:0}
+  .pf .pf-inner>.cn,.pf .pf-inner>:has(>.cn):not(.row){grid-column:2;grid-row:2 / span 6}
+  .pf .pf-inner>h2{grid-column:1 / -1}
+  .pf-emo-w{display:none}
+  .pf-track .pt-btn{min-height:34px;font-size:.9rem;padding:2px 8px}
+  .meta-b{height:20px}.gantt .gs{height:20px}
+}
+
+@media (min-aspect-ratio:1/1) and (max-height:520px){
+  .pf-track .pt-btn{width:auto;align-self:flex-start;min-height:28px;font-size:.8rem;padding:1px 10px}
+  .pf-track .pt-btn.pf-pulse{width:100%;min-height:36px;font-size:.95rem}
+  .pf-who{min-height:34px}
+  .pt-lv{font-size:.95rem}
+}
+/* Vertical (solo respaldo en navegador): seguimiento compacto */
+@media (max-aspect-ratio:1/1){
+  .pf-track .pt-nm,.pf-track .meta-f,.pf-track .pt-btn:not(.pf-pulse){display:none}
+  .pf-track .meta-b,.gantt .gs{height:16px}
+}
+
+/* Teléfono horizontal: las imágenes cuadradas se miden con el alto disponible (--vis) para que el texto conserve su tamaño */
+.pf .pf-inner{--vis:9999px}
+@media (min-aspect-ratio:1/1) and (max-height:520px){
+  .pf .pf-inner{--vis:calc(var(--pfh,900px) - 100px)}
+  .pf .bwrap,.pf .canvwrap,.pf .grid,.pf svg.ang,.pf svg.board,.pf svg.rul{width:min(100%,var(--vis))!important}
+}
+
+.pt-sug{display:none;font-size:.85rem;line-height:1.25;background:#fff3c9;border:2px dashed #d9a63a;border-radius:10px;padding:4px 8px;color:#41362b}
+@media (min-aspect-ratio:1/1) and (max-height:520px){
+  .pf .pf-sug{display:none}.pt-sug{display:block}
+  .pf .pf-inner button{min-height:40px;padding:3px 12px;font-size:1rem}
+  .pf .pf-inner button.sw{width:38px;height:38px;min-width:38px;min-height:38px}
+  .pf .ed{gap:6px}.pf .chips{gap:5px}.pf .btns{gap:6px}
+  .pf .tabla{width:min(100%,440px,calc(var(--vis) * 1.1))!important}
+  .pf .pf-inner .stepper button{width:44px}
+}
+@media (min-aspect-ratio:1/1) and (max-height:520px){
+  .pf .pf-inner .bd .c,.pf .pf-inner .grid>button,.pf .pf-inner .tabla button{min-width:0!important;min-height:0!important;padding:0!important}
+}
+
+@media (min-aspect-ratio:1/1) and (max-height:520px){
+  .pf .pf-inner .bd{min-width:0}.pf .pf-inner .bd>*{min-width:0}
+  .pf .pf-inner .bwrap{min-width:0}
+}
+@media (min-aspect-ratio:1/1) and (max-height:520px){
+  .pf .bal{width:min(100%,calc(var(--vis) * 1.7))!important}
+  .pf .vis{width:min(100%,calc(var(--vis) * 1.4))!important}
+  .pf .rect{width:min(100%,calc(var(--vis) * 2))!important}
+  .pf svg.ch,.pf .tree{width:min(100%,calc(var(--vis) * 1.7))!important}
+  .pf .scat{width:min(100%,calc(var(--vis) * 2.2))!important}
+  .pf .g100{--cs:calc((var(--vis) - 30px) / 10)}
+}

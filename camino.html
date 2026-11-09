@@ -15,6 +15,19 @@ h2.tm{margin:14px 0 6px;font-size:1.2rem}.nota{color:var(--muted);font-size:.95r
 .tema .ic{width:52px;height:52px;display:block}.tema .ic svg{width:100%;height:100%}.tema b{font-family:var(--display);font-size:1rem;line-height:1.15}.tema small{color:var(--muted)}
 .tema.ok{border-color:#6fae7e}.mini{display:block;width:80%;height:8px;border-radius:6px;background:#eee6d6;overflow:hidden}.mini i{display:block;height:100%;background:#6fae7e}
 .elim{margin:22px 0 8px;color:var(--muted)}.elim summary{cursor:pointer;min-height:44px;display:flex;align-items:center}.dng{border-color:#b5483a!important;color:#8a2c20}
+
+.gt{background:var(--card);border:3px solid var(--tray-edge);border-radius:18px;padding:10px 12px;max-width:760px;margin-top:6px}
+.gt h2{margin:0 0 6px}.gr{display:flex;align-items:center;gap:8px;min-height:30px}.gl{flex:0 0 clamp(104px,30%,170px);display:flex;align-items:center;gap:6px;font:700 .85rem/1.1 var(--display);min-width:0}
+.gl .ic{flex:none;width:24px;height:24px}.gl .ic svg{width:100%;height:100%}.gl span{overflow-wrap:anywhere}
+.gtk{position:relative;flex:1;height:20px;border-radius:10px;background:rgba(65,54,43,.08)}
+.gc{position:absolute;top:2px;bottom:2px;border-radius:5px;background:#d9c7a5;margin:0 1px}
+.gc.d{background:linear-gradient(#9bd9aa,#5fa673)}.gc.n{background:var(--acc);box-shadow:0 0 0 2px var(--fg);animation:gtp 1.2s ease-in-out infinite;z-index:2}
+@keyframes gtp{50%{transform:scaleY(1.35)}}
+.gh{position:absolute;top:-3px;bottom:-3px;width:0;border-left:2px dashed var(--red);z-index:1}
+.gax{display:flex;align-items:center;gap:8px;margin-top:2px}.gax .gl{visibility:hidden}.gax .gtk{background:none;height:16px}
+.gax b{position:absolute;top:0;font:700 .7rem/1 var(--display);color:var(--muted);transform:translateX(-50%)}
+.gleg{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px;font-size:.85rem;color:var(--muted)}.gleg i{display:inline-block;width:14px;height:10px;border-radius:4px;vertical-align:middle;margin-right:4px}
+@media (prefers-reduced-motion:reduce){.gc.n{animation:none}}
 @media (max-width:480px){.sig{font-size:1.1rem}.who .pu-av{width:64px}}</style>
 </head><body>
 <div class="wrap">
@@ -27,6 +40,22 @@ h2.tm{margin:14px 0 6px;font-size:1.2rem}.nota{color:var(--muted);font-size:.95r
 (function(){
   var cont=document.getElementById('cont'),who=document.getElementById('who'),anio=null,tema=null;
   function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;}
+
+  // Plan del año tipo Gantt: una fila por tema, una casilla por paso, en el orden sugerido
+  function gantt(p,ps){
+    var N=ps.length,box=el('div','gt'),g={},ord=[],sigI=-1;
+    box.appendChild(el('h2','tm','Mi plan del año'));
+    ps.forEach(function(s,i){ if(!g[s.p]){g[s.p]=[];ord.push(s.p);} g[s.p].push(i); if(sigI<0&&!Perf.hecho(p,s.p,s.b,s.l))sigI=i; });
+    ord.forEach(function(k){
+      var row=el('div','gr'),lab=el('div','gl'),ic=el('span','ic'); if(window.Ilu&&Ilu.titulo('icono_'+k))ic.innerHTML=Ilu.html('icono_'+k); lab.appendChild(ic); lab.appendChild(el('span',null,Rutas.TEMA[k]));
+      var tr=el('div','gtk');
+      g[k].forEach(function(i){ var s=ps[i],ok=Perf.hecho(p,s.p,s.b,s.l),c=el('div','gc'+(ok?' d':'')+(i===sigI?' n':'')); c.style.left=(100*i/N)+'%'; c.style.width=(100/N)+'%'; c.title=Rutas.etiqueta(s); tr.appendChild(c); });
+      if(sigI>=0){ var h=el('i','gh'); h.style.left=(100*sigI/N)+'%'; tr.appendChild(h); }
+      row.appendChild(lab); row.appendChild(tr); box.appendChild(row); });
+    var ax=el('div','gax'),al=el('div','gl'),at=el('div','gtk'); [1,10,20,30].forEach(function(n){ if(n<=N){ var b=el('b',null,String(n)); b.style.left=(100*(n-.5)/N)+'%'; at.appendChild(b); } }); ax.appendChild(al); ax.appendChild(at); box.appendChild(ax);
+    var lg=el('div','gleg'); lg.innerHTML='<span><i style="background:#5fa673"></i>Hecho</span><span><i style="background:var(--acc)"></i>Sigue</span><span><i style="background:#d9c7a5"></i>Falta</span><span>Pasos del año: 1 a '+N+'</span>'; box.appendChild(lg);
+    return box;
+  }
   function pinta(){
     var p=Perf.activo(); who.innerHTML=''; cont.innerHTML='';
     if(!p){who.appendChild(el('h1',null,'Mi camino')); var b=el('button','pu-go','Elegir quién soy'); b.type='button'; b.onclick=function(){PerfUI.elegir(pinta);}; cont.appendChild(el('p','lead','Elige tu perfil para ver tus pasos.')); cont.appendChild(b); return;}
@@ -45,6 +74,7 @@ h2.tm{margin:14px 0 6px;font-size:1.2rem}.nota{color:var(--muted);font-size:.95r
     var T=Rutas.TALLER[p.taller]; if(T.nota)cont.appendChild(el('p','nota',T.nota));
     var ps=Rutas.pasos(p.taller,anio);
     if(!ps.length){cont.appendChild(el('p','nota','Todavía no hay pasos para este año.')); borra(p); return;}
+    if(!tema)cont.appendChild(gantt(p,ps));
     // 3) mapa de temas; solo al elegir uno se ven sus pasos
     var g={},ord=[]; ps.forEach(function(s){ if(!g[s.p]){g[s.p]=[];ord.push(s.p);} g[s.p].push(s); });
     if(tema&&!g[tema])tema=null;

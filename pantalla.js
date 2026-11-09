@@ -4,8 +4,21 @@
   var wrap = document.querySelector('.wrap');
   var trays = [].slice.call(document.querySelectorAll('.wrap .tray'));
   if (!wrap || !trays.length) return;
-  var MIN = 0.7, MAX = 1.3, cur = 0, scale = [], fitting = false, timer = null;
+  var MIN = 0.5, MAX = 1.8, cur = 0, scale = [], fitting = false, timer = null;
   document.body.classList.add('pf');
+  var SUG = {
+    'divisiones:2': 'Elige 12 galletas y 3 platos y reparte. Luego prueba con 13: ¿qué pasa con la que sobra?',
+    'divisiones:3': 'Pon «Cuántas» en 20 y el tamaño del grupo en 5. Luego prueba 23 con 8: ¿cuántas sobran?',
+    'dorado:1': 'Forma el número 1 235: 1 cubo, 2 placas, 3 barras y 5 cuentas.',
+    'decimal:1': 'Toca la casilla de la fila 3 y la columna 4. ¿Qué número sale? Prueba otra.',
+    'cadenas:2': 'Toca la casilla de la fila 3 y la columna 4. Cuenta las cuentas del rectángulo.',
+    'ajedrez:2': 'Elige el caballo y toca una casilla. Cuenta los puntos verdes: son sus movimientos.',
+    'dibujo:1': 'Dibuja una forma con el dedo. Después cambia el número de sectores y mira qué pasa.',
+    'probabilidad:1': 'Lanza la moneda 20 veces. ¿Salió águila la mitad de las veces?',
+    'ritmo:1': 'Arrastra figuras hasta llenar el compás: cuando suma 1, está completo.',
+    'angulos:1': 'Abre el ángulo hasta que sea recto (90°). Luego ábrelo hasta 180°.'
+  };
+
   function setVh(){ var v = window.visualViewport ? window.visualViewport.height : window.innerHeight; if (v > 200) document.documentElement.style.setProperty('--vh', Math.round(v) + 'px'); }
   setVh(); window.addEventListener('resize', setVh); window.addEventListener('orientationchange', function(){ setTimeout(setVh, 300); }); if (window.visualViewport) window.visualViewport.addEventListener('resize', setVh);
 
@@ -34,7 +47,7 @@
     var inner = el('div', 'pf-inner');
     while (tr.firstChild) inner.appendChild(tr.firstChild);
     tr.appendChild(inner);
-    var b = el('button', 'pf-tab', txt); b.type = 'button';
+    var b = el('button', 'pf-tab', txt); b.type = 'button'; b.setAttribute('data-n', (/^\d+/.exec(txt) || [String(i + 1)])[0]);
     if (h2) b.title = h2.textContent;
     b.onclick = function(){ show(i); };
     nav.appendChild(b); scale[i] = 1;
@@ -63,7 +76,8 @@
   function masInfo(){ var p = window.Perf && Perf.activo(); return Perf.mascota(p, Ilu.tema(nombre)); }
   function pintaNom(){ var m = masInfo(); masNom.textContent = m.nombre; masNom.title = m.nombre + (m.propio ? ' (en náhuatl: ' + m.nat + ', ' + m.sig + ')' : ' significa ' + m.sig + ' en náhuatl'); bigSv.setAttribute('aria-label', 'Mi ajolote ' + m.nombre + (Perf.activo() ? '. Tócalo para cambiarlo' : '')); }
   function saludo(){ var m = masInfo(), p = Perf.activo();
-    di(p ? '¡Hola, ' + p.nombre + '! Soy ' + m.nombre + ', tu ajolote. ' + (m.propio ? '' : m.nombre + ' significa «' + m.sig + '» en náhuatl.') : '¡Hola! Soy ' + m.nombre + '. ' + m.nombre + ' significa «' + m.sig + '» en náhuatl. Toca «¿Quién juega?» para guardar tu avance.'); }
+    if (window.matchMedia('(min-aspect-ratio:1/1) and (max-height:520px)').matches){ di(p ? '¡Hola, ' + p.nombre + '! Soy ' + m.nombre + '.' : '¡Hola! Soy ' + m.nombre + '.'); return; }
+    di(p ? '¡Hola, ' + p.nombre + '! Soy ' + m.nombre + ' («' + m.sig + '» en náhuatl).' : '¡Hola! Soy ' + m.nombre + ' («' + m.sig + '» en náhuatl). Toca «¿Quién juega?» para guardar tu avance.'); }
   function cambiaMas(){ var p = Perf.activo(); if (!p) return; PerfUI.mascota(function(){ pintaWho(); pintaNom(); mood('celebra', 2500); di('¡Hola, ' + p.nombre + '! Soy ' + masInfo().nombre + '.'); }, p); }
   bigSv.addEventListener('click', cambiaMas); bigSv.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); e.stopPropagation(); cambiaMas(); } });
   mood('feliz');
@@ -84,52 +98,98 @@
     var lv = bs.findIndex(function(b){ return b.classList.contains('on'); }); if (lv < 0) lv = 0;
     var nm = nv.querySelector('.lbl2:last-child'); return { bs: bs, lv: lv, name: (nm && !un) ? nm.textContent : '', un: un };
   }
+  // ¿Ya se superó todo en esta bandeja? ¿Cuál es el paso siguiente?
+  function sigBandeja(){
+    if (cur < trays.length - 1) return { txt: 'Siguiente bandeja →', go: function(){ show(cur + 1); } };
+    return { txt: 'Elegir otro tema →', go: function(){ location.href = Perf.activo() ? 'camino.html' : 'index.html'; } };
+  }
+  function marcaSig(on){ [].forEach.call(nav.children, function(b, k){ b.classList.toggle('pf-pulse', !!on && k === cur + 1); }); }
+  function ganttDe(info, st){
+    var g = el('div', 'gantt'); g.setAttribute('aria-hidden', 'true');
+    info.bs.forEach(function(b, k){
+      var c = Math.min(st.n[k] || 0, META), s = el('div', 'gs' + (c >= META ? ' dn' : '') + (k === info.lv ? ' cu' : '')), f = el('i');
+      f.style.width = (info.un ? (c >= META ? 100 : 0) : 100 * c / META) + '%'; s.appendChild(f);
+      if (info.bs.length <= 8) s.appendChild(el('span', null, String(k + 1)));
+      g.appendChild(s); });
+    return g;
+  }
+  function btnSig(txt, fn){ var b = el('button', 'pt-btn pf-pulse', txt); b.type = 'button'; b.onclick = fn; return b; }
   function renderTrack(){
-    var tr = trays[cur], info = nivInfo(tr), st = stats[cur]; body.innerHTML = '';
+    var tr = trays[cur], info = nivInfo(tr), st = stats[cur]; body.innerHTML = ''; marcaSig(false);
     emoStrip();
     var hd = el('div', 'pt-hd'), tx = el('div', 'pt-tx'); hd.appendChild(mas); hd.appendChild(tx); body.appendChild(hd);
-    if (!info){ tx.appendChild(el('p', 'pt-free', 'Actividad libre')); body.appendChild(emoBox); return; }
+    if (!info){
+      tx.appendChild(el('p', 'pt-free', 'Actividad libre: explora'));
+      var sgT = SUG[nombre + ':' + (cur + 1)] || tr.querySelector('.pf-sug') && tr.querySelector('.pf-sug').textContent.replace(/^[^:]*:\s*/, '');
+      if (sgT){ var sp = el('p', 'pt-sug'); sp.innerHTML = '🎯 <b>Prueba esto:</b> '; sp.appendChild(document.createTextNode(sgT)); body.appendChild(sp); }
+      var listo = (st.mut || 0) >= 8 && Date.now() - (st.t0 || 0) >= 15000;
+      if (listo){ var sg = sigBandeja(); body.appendChild(btnSig(sg.txt, sg.go)); marcaSig(cur < trays.length - 1); }
+      else { clearTimeout(tr._eg); tr._eg = setTimeout(function(){ if (cur === trays.indexOf(tr)) renderTrack(); }, Math.max(500, 15000 - (Date.now() - (st.t0 || Date.now())) + 60)); }
+      body.appendChild(emoBox); return; }
     info.bs.forEach(function(b, k){ if (st.n[k] === undefined) st.n[k] = Perf.get(nombre, cur + 1, k + 1); });
-    var c = st.n[info.lv] || 0, done = Math.min(c, META);
-    tx.appendChild(el('p', 'pt-h', (info.un ? 'Reto ' : 'Nivel ') + (info.lv + 1) + ' de ' + info.bs.length));
-    tx.appendChild(el('p', 'pt-n', info.name));
-    var pips = el('div', 'pt-pips'); pips.setAttribute('aria-hidden', 'true');
-    info.bs.forEach(function(b, k){ var p = el('i'); if ((st.n[k] || 0) >= META) p.className = 'dn'; if (k === info.lv) p.className += ' cu'; pips.appendChild(p); });
-    body.appendChild(pips);
-    if (info.un){ var rs0 = c >= META; body.appendChild(el('p', 'pt-c', rs0 ? 'Reto resuelto ✓' : 'Reto por resolver')); if (rs0 && info.lv < info.bs.length - 1){ var up0 = el('button', 'pt-btn', 'Siguiente reto'); up0.type = 'button'; up0.onclick = function(){ info.bs[info.lv + 1].click(); }; body.appendChild(up0); } body.appendChild(emoBox); return; }
-    var stars = el('p', 'pt-s'); for (var k = 0; k < META; k++) stars.appendChild(el('span', k < done ? 'on' : '', k < done ? '★' : '☆'));
-    stars.setAttribute('aria-label', done + ' de ' + META + ' aciertos'); body.appendChild(stars);
-    body.appendChild(el('p', 'pt-c', done + ' de ' + META + ' aciertos en este nivel'));
-    if (c >= META){ body.appendChild(el('p', 'pt-ok', info.lv < info.bs.length - 1 ? '¡Nivel superado!' : '¡Último nivel superado!'));
-      if (info.lv < info.bs.length - 1){ var up = el('button', 'pt-btn', 'Subir de nivel'); up.type = 'button'; up.onclick = function(){ info.bs[info.lv + 1].click(); }; body.appendChild(up); } }
+    var c = st.n[info.lv] || 0, done = Math.min(c, META), N = info.bs.length;
+    var todo = info.bs.every(function(b, k){ return (st.n[k] || 0) >= META; });
+    tx.appendChild(el('p', 'pt-lv', (info.un ? 'Reto ' : 'Nivel ') + (info.lv + 1) + ' de ' + N));
+    if (info.name) tx.appendChild(el('p', 'pt-nm', info.name));
+    body.appendChild(ganttDe(info, st));
+    if (info.un){
+      var rs0 = c >= META, nres = info.bs.filter(function(b, k){ return (st.n[k] || 0) >= META; }).length;
+      var m0 = el('div', 'meta'); m0.appendChild(el('div', 'meta-t')).innerHTML = '<span>Retos</span><span>' + nres + ' de ' + N + '</span>';
+      m0.appendChild(el('p', 'meta-f' + (rs0 ? ' ok2' : ''), todo ? '¡Terminaste todos los retos!' : rs0 ? '¡Reto resuelto! Sigue con otro.' : 'Resuelve este reto'));
+      body.appendChild(m0);
+      if (todo){ var sg0 = sigBandeja(); body.appendChild(btnSig(sg0.txt, sg0.go)); marcaSig(cur < trays.length - 1); }
+      else if (rs0){ var nx = info.bs.findIndex(function(b, k){ return k > info.lv && (st.n[k] || 0) < META; }); if (nx < 0) nx = info.bs.findIndex(function(b, k){ return (st.n[k] || 0) < META; }); if (nx >= 0) body.appendChild(btnSig('Siguiente reto →', function(){ info.bs[nx].click(); })); }
+      body.appendChild(emoBox); return; }
+    // Aciertos para subir de nivel: META casillas que se llenan
+    var m = el('div', 'meta'), bar = el('div', 'meta-b'), prev = (st.shown && st.shown.lv === info.lv) ? st.shown.done : done;
+    m.appendChild(el('div', 'meta-t')).innerHTML = '<span>Aciertos</span><span>' + done + ' de ' + META + '</span>';
+    for (var k = 0; k < META; k++){ var q = el('i', k < done ? 'on' + (k >= prev ? ' nw' : '') : ''); bar.appendChild(q); }
+    bar.setAttribute('role', 'img'); bar.setAttribute('aria-label', done + ' de ' + META + ' aciertos'); m.appendChild(bar);
+    st.shown = { lv: info.lv, done: done };
+    var falta = META - done;
+    m.appendChild(el('p', 'meta-f' + (c >= META ? ' ok2' : ''), c >= META ? (todo ? '¡Terminaste todos los niveles!' : '¡Nivel superado!') : (falta === 1 ? '¡Te falta 1 para subir!' : 'Te faltan ' + falta + ' para subir')));
+    body.appendChild(m);
+    if (c >= META){
+      if (info.lv < N - 1){ var nl = info.bs.findIndex(function(b, k){ return k > info.lv && (st.n[k] || 0) < META; }); if (nl < 0) nl = info.lv + 1; body.appendChild(btnSig('Subir de nivel ↑', function(){ info.bs[nl].click(); })); }
+      else { var sg = sigBandeja(); body.appendChild(btnSig(sg.txt, sg.go)); marcaSig(cur < trays.length - 1); }
+    }
     var rs = el('button', 'pt-btn', 'Reiniciar'); rs.type = 'button';
-    rs.onclick = function(){ st.n = {}; st.flag = false; Perf.reset(nombre, cur + 1); var i2 = nivInfo(tr); if (i2 && i2.lv !== 0) i2.bs[0].click(); else renderTrack(); };
+    rs.onclick = function(){ st.n = {}; st.flag = false; st.shown = null; Perf.reset(nombre, cur + 1); var i2 = nivInfo(tr); if (i2 && i2.lv !== 0) i2.bs[0].click(); else renderTrack(); };
     body.appendChild(rs); body.appendChild(emoBox);
   }
+  // Parpadeo en el botón «Siguiente» (u «Otra», «Otro»…) cuando la respuesta fue correcta
+  var SIGRE = /^\s*(Siguiente|Otro|Otra|Nuevo|Nueva)/i;
+  function pulseSig(tr){ [].forEach.call(tr.querySelectorAll('button'), function(b){ if (b.classList.contains('ayuda') || b.hidden || b.offsetParent === null) return; if (SIGRE.test(b.textContent)) b.classList.add('pf-pulse'); }); }
+  function clearPulse(tr){ [].forEach.call(tr.querySelectorAll('.pf-pulse'), function(b){ b.classList.remove('pf-pulse'); }); }
+  document.addEventListener('click', function(e){ var b = e.target.closest && e.target.closest('.tray .pf-pulse'); if (b) b.classList.remove('pf-pulse'); }, true);
   var OKRE = /¡(Correcto|Exacto|Compás completo|Llegó|Lo lograste)/;
   trays.forEach(function(tr, i){
     new MutationObserver(function(){
       var st = stats[i], ok = [].some.call(tr.querySelectorAll('.ok'), function(e){ return OKRE.test(e.textContent); });
+      st.mut = (st.mut || 0) + 1;
       var bad = tr.querySelector('.bad'); if (bad && !st.badf){ st.badf = true; if (i === cur) mood('casi', 2500); } else if (!bad) st.badf = false;
-      if (ok && !st.flag){ st.flag = true; if (i === cur) mood('celebra', 3000); var inf = nivInfo(tr); if (inf){ st.n[inf.lv] = (st.n[inf.lv] || 0) + 1; if (inf.un) st.n[inf.lv] = META; var tot = inf.un ? Perf.marca(nombre, i + 1, inf.lv + 1) : Perf.inc(nombre, i + 1, inf.lv + 1); if (Perf.activo() && tot === META && i === cur) setTimeout(function(){ PerfUI.chequeo('¡Nivel superado! ¿Cómo te sentiste?', function(e){ if (e) Perf.emocion(nombre, i + 1, inf.lv + 1, e, 'fin'); }); }, 1800); } }
-      else if (!ok) st.flag = false;
+      if (ok && !st.flag){ st.flag = true; if (i === cur){ mood('celebra', 3000); setTimeout(function(){ pulseSig(tr); }, 90); } sesion('ok'); var inf = nivInfo(tr); if (inf){ st.n[inf.lv] = (st.n[inf.lv] || 0) + 1; if (inf.un) st.n[inf.lv] = META; var tot = inf.un ? Perf.marca(nombre, i + 1, inf.lv + 1) : Perf.inc(nombre, i + 1, inf.lv + 1); if (tot === META) sesion('nivel'); if (Perf.activo() && tot === META && i === cur) setTimeout(function(){ PerfUI.chequeo('¡Nivel superado! ¿Cómo te sentiste?', function(e){ if (e) Perf.emocion(nombre, i + 1, inf.lv + 1, e, 'fin'); }); }, 1800); } }
+      else if (!ok){ st.flag = false; clearPulse(tr); }
       if (i === cur) { clearTimeout(tr._rt); tr._rt = setTimeout(renderTrack, 30); }
     }).observe(tr, { childList: true, subtree: true, characterData: true });
   });
 
+  var mqC = window.matchMedia('(min-aspect-ratio:1/1) and (max-height:520px)');
   function box(tr){ var cs = getComputedStyle(tr); return { w: tr.clientWidth, h: tr.clientHeight }; }
-  function natural(tr, s){ var inner = tr.firstChild, b = box(tr); inner.style.width = (b.w / s) + 'px'; inner.style.setProperty('--pfh', (b.h / s) + 'px'); inner.style.transform = 'scale(' + s + ')'; return inner.offsetHeight; }
+  function natural(tr, s){ var inner = tr.firstChild, b = box(tr); inner.style.width = (b.w / s) + 'px'; inner.style.setProperty('--pfh', (b.h / (mqC.matches ? 1 : s)) + 'px'); inner.style.transform = 'scale(' + s + ')'; return inner.offsetHeight; }
   // Escala estable: se calcula al mostrar la bandeja, al girar la pantalla o al cargar las fuentes, con un margen
   // (HOLGURA) para que el contenido pueda crecer al iniciar una actividad sin que la pantalla "salte".
   // Durante el juego solo se reduce si el contenido de verdad ya no cabe (nunca crece sola).
-  var HOLGURA = 1.16;
+  var HOLGURA = 1.06;
+  // En teléfono horizontal la escala se queda en 1 (letra legible) y las imágenes se adaptan al alto con --vis (ver taller.css)
   function fit(i, force){
     var tr = trays[i]; if (!tr.classList.contains('pf-on')) return;
     fitting = true;
     var b = box(tr), s0 = scale[i], best = null;
     if (force){
-      for (var s2 = MAX; s2 >= MIN - 0.001; s2 = Math.round((s2 - 0.05) * 100) / 100){ if (natural(tr, s2) * s2 <= b.h / HOLGURA + 1){ best = s2; break; } }
-      if (best == null){ for (var s3 = MAX; s3 >= MIN - 0.001; s3 = Math.round((s3 - 0.05) * 100) / 100){ if (natural(tr, s3) * s3 <= b.h + 1){ best = s3; break; } } }
+      var MXc = mqC.matches ? 1 : MAX;
+      for (var s2 = MXc; s2 >= MIN - 0.001; s2 = Math.round((s2 - 0.05) * 100) / 100){ if (natural(tr, s2) * s2 <= b.h / HOLGURA + 1){ best = s2; break; } }
+      if (best == null){ for (var s3 = MXc; s3 >= MIN - 0.001; s3 = Math.round((s3 - 0.05) * 100) / 100){ if (natural(tr, s3) * s3 <= b.h + 1){ best = s3; break; } } }
       if (best == null) best = MIN;
     } else {
       best = s0;
@@ -145,6 +205,7 @@
     trays.forEach(function(t, k){ t.classList.toggle('pf-on', k === i); });
     [].forEach.call(nav.children, function(b, k){ b.classList.toggle('on', k === i); });
     var e = document.createEvent('Event'); e.initEvent('pointerdown', true, true); trays[i].dispatchEvent(e);
+    if (!stats[i].t0){ stats[i].t0 = Date.now(); stats[i].mut = 0; }
     fit(i, true); window.scrollTo(0, 0); Perf.visita(nombre, i + 1); renderTrack();
   }
   function later(force){ clearTimeout(timer); timer = setTimeout(function(){ fit(cur, force); }, 120); }
@@ -160,5 +221,78 @@
   pintaNom();
   if (!Perf.activo() && !Perf.lista().length && !inv) setTimeout(function(){ who.click(); }, 600); else setTimeout(saludo, 700);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ fit(cur, true); });
-  window.PF.show = show; window.PF.fit = function(f){ fit(cur, f !== false); };
+
+  // ---- Ayuda grande: se abre sobre la actividad, con letra grande y la opción de escucharla ----
+  var ayAbierta = null;
+  function lee(txt){ try { if (!('speechSynthesis' in window)) return; speechSynthesis.cancel(); var u = new SpeechSynthesisUtterance(txt); u.lang = 'es-MX'; u.rate = 0.9; speechSynthesis.speak(u); } catch (e) {} }
+  function paraAyuda(tr){
+    var h2 = tr.querySelector('h2'), partes = [], inner = tr.firstChild;
+    var lead = [].slice.call(inner.children).filter(function(p){ return p.tagName === 'P' && !p.classList.contains('det') && !p.classList.contains('pf-sug') && !/^(note|big|goal|sc|lead)/.test(p.className) && p.textContent.length > 25 && !/Aciertos/.test(p.textContent); })[0];
+    return { titulo: h2 ? h2.textContent : 'Ayuda', lead: lead ? lead.textContent : '', det: [].map.call(tr.querySelectorAll('.det'), function(d){ return d.innerHTML; }) };
+  }
+  function cierraAyuda(){ if (!ayAbierta) return; try { speechSynthesis.cancel(); } catch (e) {} ayAbierta.remove(); ayAbierta = null; }
+  function abreAyuda(tr){
+    cierraAyuda(); var d = paraAyuda(tr), ov = el('div', 'pf-ay'), bx = el('div', 'pf-ay-b'), av = el('div', 'pf-ay-av'), c = el('div', 'pf-ay-c'), t = el('div', 'pf-ay-t');
+    ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', 'Ayuda');
+    var ms = document.querySelector('.pf-mas svg'); av.innerHTML = ms ? ms.outerHTML : '';
+    c.appendChild(el('h3', 'pf-ay-h', d.titulo));
+    var yaEsta = d.lead && d.det.join(' ').replace(/<[^>]*>/g, '').indexOf(d.lead.slice(0, 25)) >= 0;
+    if (d.lead && !yaEsta){ var q = el('p', 'pf-ay-q', d.lead); t.appendChild(q); }
+    d.det.forEach(function(h){ var p = el('p'); p.innerHTML = h; t.appendChild(p); });
+    c.appendChild(t);
+    var bt = el('div', 'pf-ay-bt');
+    if ('speechSynthesis' in window){ var es = el('button', null, '🔊 Escúchame'); es.type = 'button'; es.onclick = function(){ lee(d.titulo + '. ' + t.textContent); }; bt.appendChild(es); }
+    var ok = el('button', 'go', 'Entendido ✓'); ok.type = 'button'; ok.onclick = cierraAyuda; bt.appendChild(ok);
+    c.appendChild(bt); bx.appendChild(av); bx.appendChild(c); ov.appendChild(bx);
+    ov.addEventListener('click', function(e){ if (e.target === ov) cierraAyuda(); });
+    document.body.appendChild(ov); ayAbierta = ov; ok.focus();
+  }
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') cierraAyuda(); });
+  trays.forEach(function(tr){ var ab = tr.querySelector('button.ayuda'); if (!ab) return; ab.onclick = function(){ abreAyuda(tr); }; ab.setAttribute('aria-haspopup', 'dialog'); });
+
+  // ---- Qué hacer en las bandejas de exploración (borrador para revisar con las guías) ----
+  trays.forEach(function(tr, i){ var t = SUG[nombre + ':' + (i + 1)], h2 = tr.querySelector('h2'); if (!t || !h2) return;
+    var p = el('p', 'pf-sug'); p.innerHTML = '🎯 <b>Prueba esto:</b> '; p.appendChild(document.createTextNode(t)); h2.parentNode.insertBefore(p, h2.nextSibling); });
+
+  // ---- Pausas y cambio de tema ----
+  var SK = 'tm_ses', LIM_MIN = 12, LIM_NIV = 3, psAbierta = false, ult = Date.now();
+  try { var lm = parseInt(localStorage.getItem('tm_pausa_min'), 10); if (!isNaN(lm)) LIM_MIN = lm; } catch (e) {}
+  function ses(){ try { var o = JSON.parse(sessionStorage.getItem(SK) || 'null'); if (o && typeof o.seg === 'number') return o; } catch (e) {} return { seg: 0, lv: 0 }; }
+  function guardaSes(o){ try { sessionStorage.setItem(SK, JSON.stringify(o)); } catch (e) {} }
+  function sesion(tipo){ var o = ses(); if (tipo === 'nivel') o.lv = (o.lv || 0) + 1; guardaSes(o); setTimeout(revisaPausa, tipo === 'nivel' ? 4500 : 2500); }
+  function revisaPausa(){
+    if (psAbierta || ayAbierta) return; var o = ses();
+    if (LIM_MIN > 0 && (o.seg || 0) / 60 >= LIM_MIN) return pausa('tiempo');
+    if ((o.lv || 0) >= LIM_NIV) pausa('temas');
+  }
+  function pausa(tipo){
+    psAbierta = true; var ov = el('div', 'pf-ps'), bx = el('div', 'pf-ps-b'), av = el('div', 'pf-ps-av'), ms = document.querySelector('.pf-mas svg');
+    ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); av.innerHTML = ms ? ms.outerHTML : ''; bx.appendChild(av);
+    var nom = jugador ? ', ' + jugador : '';
+    var cuenta = null;
+    if (tipo === 'tiempo'){
+      bx.appendChild(el('h2', null, '¡Hora de una pausa' + nom + '!'));
+      bx.appendChild(el('p', null, 'Llevas un buen rato jugando. Mira lejos por la ventana, estira los brazos y toma un poco de agua.'));
+      cuenta = el('p', 'pf-ps-r', '30'); bx.appendChild(cuenta);
+    } else {
+      bx.appendChild(el('h2', null, '¡Superaste ' + LIM_NIV + ' niveles' + nom + '!'));
+      bx.appendChild(el('p', null, 'Es un buen momento para cambiar de tema. Tu cerebro aprende más cuando alternamos. Después puedes volver aquí.'));
+    }
+    var bt = el('div', 'pf-ps-bt'), cam = el('button', 'go', 'Cambiar de tema'), seg = el('button', null, 'Seguir jugando'); cam.type = seg.type = 'button';
+    function fin(){ clearInterval(iv); ov.remove(); psAbierta = false; }
+    var iv = null;
+    if (cuenta){ var n = 30; iv = setInterval(function(){ n--; if (n <= 0){ clearInterval(iv); cuenta.textContent = '¡Listo!'; } else cuenta.textContent = String(n); }, 1000); }
+    cam.onclick = function(){ guardaSes({ seg: 0, lv: 0 }); fin(); location.href = Perf.activo() ? 'camino.html' : 'index.html'; };
+    seg.onclick = function(){ var o = ses(); o.seg = 0; o.lv = 0; guardaSes(o); fin(); };
+    bt.appendChild(cam); bt.appendChild(seg); bx.appendChild(bt); ov.appendChild(bx); document.body.appendChild(ov); cam.focus();
+  }
+  document.addEventListener('pointerdown', function(){ ult = Date.now(); }, true);
+  setInterval(function(){ if (document.hidden || Date.now() - ult > 60000) return; var o = ses(); o.seg = (o.seg || 0) + 5; guardaSes(o); if (LIM_MIN > 0 && o.seg / 60 >= LIM_MIN + 3) revisaPausa(); }, 5000);
+
+  // ---- Aviso en teléfono vertical ----
+  try { if (window.matchMedia('(max-aspect-ratio:1/1) and (max-width:699px)').matches && !sessionStorage.getItem('tm_gira')){
+    var gi = el('div', 'pf-gira'); gi.setAttribute('role', 'status'); gi.appendChild(el('span', null, '↻ Gira el teléfono: se juega mejor en horizontal.'));
+    var gx = el('button', null, 'Ok'); gx.type = 'button'; gx.onclick = function(){ gi.remove(); try { sessionStorage.setItem('tm_gira', '1'); } catch (e) {} }; gi.appendChild(gx); document.body.appendChild(gi); } } catch (e) {}
+
+  window.PF.show = show; window.PF.pausa = pausa; window.PF.fit = function(f){ fit(cur, f !== false); };
 })();

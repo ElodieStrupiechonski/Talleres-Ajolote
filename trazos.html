@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f0e3c8"><link rel="icon" href="favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="icons/favicon-64.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="author" content="Elodie Strupiechonski"><meta name="author" content="Andrés de Luna Bugallo"><link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+<title>Trazos · Líneas, curvas y números con el dedo</title><!--seo--><meta name="description" content="Taller para aprender a trazar: líneas rectas, zigzag, curvas, círculos, espirales y los números del 1 al 5, siguiendo el camino con el dedo. Gratis y sin internet."><link rel="canonical" href="https://elodiestrupiechonski.github.io/Talleres-Ajolote/trazos.html"><meta property="og:type" content="website"><meta property="og:locale" content="es_MX"><meta property="og:site_name" content="Talleres del Ajolote"><meta property="og:title" content="Trazos · Líneas, curvas y números con el dedo"><meta property="og:description" content="Taller para aprender a trazar: líneas rectas, zigzag, curvas, círculos, espirales y los números del 1 al 5, siguiendo el camino con el dedo. Gratis y sin internet."><meta property="og:url" content="https://elodiestrupiechonski.github.io/Talleres-Ajolote/trazos.html"><meta property="og:image" content="https://elodiestrupiechonski.github.io/Talleres-Ajolote/icons/og.png"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Trazos · Líneas, curvas y números con el dedo", "description": "Taller para aprender a trazar: líneas rectas, zigzag, curvas, círculos, espirales y los números del 1 al 5, siguiendo el camino con el dedo. Gratis y sin internet.", "url": "https://elodiestrupiechonski.github.io/Talleres-Ajolote/trazos.html", "inLanguage": "es-MX", "isAccessibleForFree": true, "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/", "author": [{"@type": "Person", "name": "Elodie Strupiechonski"}, {"@type": "Person", "name": "Andrés de Luna Bugallo"}], "learningResourceType": "Recurso interactivo", "typicalAgeRange": "9-11", "educationalLevel": "Primaria", "teaches": "Simetría, patrones y fracciones", "isPartOf": {"@type": "WebSite", "name": "Talleres del Ajolote", "url": "https://elodiestrupiechonski.github.io/Talleres-Ajolote/"}}</script><!--/seo-->
+<link rel="stylesheet" href="taller.css">
+<style>
+.ed{flex:1;min-width:min(100%,220px)}
+.lbl{font-family:var(--display);font-weight:600;color:var(--muted);margin-bottom:6px;display:block}
+.pal2{display:flex;flex-wrap:wrap;gap:8px}
+button.sw{width:52px;height:52px;min-width:52px;padding:0;border-radius:50%;border:3px solid var(--fg)}
+button.sw.on{outline:4px solid var(--blue);outline-offset:2px}
+.canvwrap{width:min(100%,400px);flex:none}
+canvas{display:block;width:100%;height:auto;aspect-ratio:1;border-radius:14px;touch-action:none;background:var(--card);cursor:crosshair;border:3px solid var(--tray-edge)}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+.msg:empty{display:none}
+.chips.lv{display:flex;flex-wrap:wrap;gap:8px}
+.big{font-size:1.25rem;font-weight:800}
+</style></head><body>
+<div class="wrap">
+  <a class="back" href="index.html">← Todos los talleres</a>
+  <header class="col">
+    <h1>Taller de Trazos</h1>
+    <p class="lead">Antes de escribir, la mano aprende a dibujar caminos.</p>
+  </header>
+
+  <section class="tray" id="lib" aria-labelledby="t1">
+    <span class="step">Bandeja 1 · Dibuja libre</span>
+    <h2 id="t1">Dibuja con el dedo</h2>
+    <p class="big">Elige un color y dibuja lo que quieras.</p>
+    <div class="row">
+      <div class="canvwrap"><canvas id="cv" width="600" height="600" role="img" aria-label="Lienzo para dibujar con el dedo"></canvas></div>
+      <div class="col ed">
+        <div><span class="lbl">Color</span><div class="pal2" id="cols"></div></div>
+        <div><span class="lbl">Pincel</span><div class="chips" id="brush"></div></div>
+        <div class="btns"><button id="undo">Deshacer</button><button id="clear">Borrar todo</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tray" id="li" aria-labelledby="t2">
+    <span class="step">Bandeja 2 · Líneas</span>
+    <h2 id="t2">Sigue el camino de puntitos</h2>
+    <p class="goal big"></p>
+    <div class="chips lv"></div>
+    <div class="row">
+      <div class="canvwrap"><canvas class="tz" width="600" height="600" role="img" aria-label="Camino para trazar con el dedo"></canvas></div>
+      <div class="col ed">
+        <p class="note">Empieza en el punto verde y sigue los puntitos sin soltar el dedo.</p>
+        <div class="btns"><button class="clr">Borrar</button><button class="pista">Pista</button><button class="nxt" hidden>Siguiente reto →</button></div>
+      </div>
+    </div>
+    <p class="note msg big" aria-live="polite"></p>
+  </section>
+
+  <section class="tray" id="cu" aria-labelledby="t3">
+    <span class="step">Bandeja 3 · Curvas</span>
+    <h2 id="t3">Curvas, círculos y espirales</h2>
+    <p class="goal big"></p>
+    <div class="chips lv"></div>
+    <div class="row">
+      <div class="canvwrap"><canvas class="tz" width="600" height="600" role="img" aria-label="Camino curvo para trazar con el dedo"></canvas></div>
+      <div class="col ed">
+        <p class="note">Sigue la curva despacito. Si te sales, borra y vuelve a intentar.</p>
+        <div class="btns"><button class="clr">Borrar</button><button class="pista">Pista</button><button class="nxt" hidden>Siguiente reto →</button></div>
+      </div>
+    </div>
+    <p class="note msg big" aria-live="polite"></p>
+  </section>
+
+  <section class="tray" id="nu" aria-labelledby="t4">
+    <span class="step">Bandeja 4 · Números</span>
+    <h2 id="t4">Traza los números</h2>
+    <p class="goal big"></p>
+    <div class="chips lv"></div>
+    <div class="row">
+      <div class="canvwrap"><canvas class="tz" width="600" height="600" role="img" aria-label="Número para trazar con el dedo"></canvas></div>
+      <div class="col ed">
+        <p class="note">Empieza en el punto verde y sigue los puntitos. Si hay 1 y 2, primero el 1.</p>
+        <div class="btns"><button class="clr">Borrar</button><button class="pista">Pista</button><button class="nxt" hidden>Siguiente reto →</button></div>
+      </div>
+    </div>
+    <p class="note msg big" aria-live="polite"></p>
+  </section>
+</div>
+<button id="next" hidden aria-hidden="true" tabindex="-1">Siguiente</button>
+
+<script src="ilustra.js"></script>
+<script src="sonido.js"></script>
+<script>
+const $=(s,r=document)=>r.querySelector(s);
+const h=(t,c,txt)=>{const e=document.createElement(t);if(c)e.className=c;if(txt!=null)e.textContent=txt;return e;};
+const btn=(cls,txt,fn,aria)=>{const b=h('button',cls,txt);b.type='button';if(aria)b.setAttribute('aria-label',aria);b.addEventListener('click',fn);return b;};
+const sections=[];
+const COL=[['Rojo','#e0705a'],['Naranja','#f0a35a'],['Verde','#6fb584'],['Azul','#4f7fbf'],['Morado','#a58ad0'],['Tinta','#41362b']];
+const TAU=Math.PI*2, S=600;
+
+/* ---------- Geometría de los caminos (lienzo de 600 × 600) ---------- */
+const arc=(cx,cy,r,a0,a1,n=48)=>{const o=[];for(let i=0;i<=n;i++){const a=(a0+(a1-a0)*i/n)*Math.PI/180;o.push([cx+r*Math.cos(a),cy+r*Math.sin(a)]);}return o;};
+const poly=(...p)=>p;
+const par=(f,n=90)=>{const o=[];for(let i=0;i<=n;i++)o.push(f(i/n));return o;};
+const LINEAS=[
+  {txt:'Traza una línea recta de izquierda a derecha.',hint:'Pon el dedo en el punto verde y llévalo derechito hasta el otro lado.',strokes:[poly([80,300],[520,300])]},
+  {txt:'Traza una línea recta de arriba hacia abajo.',hint:'Empieza arriba, en el punto verde, y baja sin soltar.',strokes:[poly([300,80],[300,520])]},
+  {txt:'Traza una línea inclinada.',hint:'Sube en diagonal, desde abajo a la izquierda.',strokes:[poly([100,500],[500,100])]},
+  {txt:'Traza una cruz: primero la línea 1 y luego la 2.',hint:'Haz una línea acostada y después una parada.',strokes:[poly([80,300],[520,300]),poly([300,80],[300,520])]},
+  {txt:'Traza el zigzag: sube y baja como un serrucho.',hint:'Sube, baja, sube, baja… sin levantar el dedo.',strokes:[poly([60,430],[150,170],[240,430],[330,170],[420,430],[510,170])]}
+];
+const CURVAS=[
+  {txt:'Traza la media luna.',hint:'Sigue la curva de izquierda a derecha, pasando por arriba.',strokes:[arc(300,400,220,180,360)]},
+  {txt:'Traza el círculo. Empieza arriba.',hint:'Gira como las manecillas del reloj hasta volver al punto verde.',strokes:[arc(300,300,200,-90,270,72)]},
+  {txt:'Traza las olas.',hint:'Sube y baja suavecito, como el agua.',strokes:[par(t=>[60+480*t,300-95*Math.sin(t*TAU*2)],100)]},
+  {txt:'Traza los lazos.',hint:'Da una vuelta en cada lazo y sigue hacia la derecha.',strokes:[par(t=>[70+460*t-62*Math.sin(t*TAU*3),300-62*Math.cos(t*TAU*3)+62],140)]},
+  {txt:'Traza la espiral: empieza en el centro.',hint:'Gira y gira, alejándote del centro poco a poco.',strokes:[par(t=>{const a=t*TAU*2.5-Math.PI/2,r=18+t*190;return [300+r*Math.cos(a),300+r*Math.sin(a)];},160)]}
+];
+const NUMS=[
+  {txt:'Traza el número 1.',hint:'Un piquito hacia arriba y luego bajas derecho.',strokes:[poly([225,175],[330,90],[330,510])]},
+  {txt:'Traza el número 2.',hint:'Una curva arriba, baja en diagonal y termina con una línea.',strokes:[arc(300,205,115,180,400,50).concat([[200,500]],[[430,500]])]},
+  {txt:'Traza el número 3.',hint:'Dos barrigas: una arriba y otra abajo.',strokes:[arc(290,195,100,200,450,40).concat(arc(290,395,120,270,520,44))]},
+  {txt:'Traza el número 4.',hint:'Primero la línea 1: baja y cruza. Después la línea 2, parada.',strokes:[poly([380,90],[150,370],[470,370]),poly([380,90],[380,520])]},
+  {txt:'Traza el número 5.',hint:'Línea de arriba, baja un poquito y haz la barriga.',strokes:[poly([420,100],[215,100],[195,280]).concat(arc(290,370,130,238,505,44))]}
+];
+
+/* ---------- Bandeja 1: dibujo libre ---------- */
+(function(){
+  const cv=$('#cv'),ctx=cv.getContext('2d');let ci=3,w=14,strokes=[],cur=null;
+  const WS=[8,14,26],BN=['Fino','Medio','Grueso'];
+  const redraw=()=>{ctx.clearRect(0,0,S,S);ctx.lineCap='round';ctx.lineJoin='round';strokes.concat(cur?[cur]:[]).forEach(s=>{ctx.strokeStyle=s.c;ctx.lineWidth=s.w;ctx.beginPath();s.p.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));if(s.p.length===1)ctx.lineTo(s.p[0][0]+.1,s.p[0][1]);ctx.stroke();});};
+  const pos=e=>{const r=cv.getBoundingClientRect();return [(e.clientX-r.left)*S/r.width,(e.clientY-r.top)*S/r.height];};
+  cv.addEventListener('pointerdown',e=>{e.preventDefault();cv.setPointerCapture(e.pointerId);cur={c:COL[ci][1],w,p:[pos(e)]};redraw();});
+  cv.addEventListener('pointermove',e=>{if(cur){cur.p.push(pos(e));redraw();}});
+  ['pointerup','pointercancel'].forEach(t=>cv.addEventListener(t,()=>{if(cur){strokes.push(cur);cur=null;redraw();}}));
+  const pick=()=>{const b=$('#cols');b.innerHTML='';COL.forEach((c,i)=>{const x=btn('sw'+(i===ci?' on':''),'',()=>{ci=i;pick();},c[0]);x.style.background=c[1];x.setAttribute('aria-pressed',i===ci);b.appendChild(x);});
+    const bb=$('#brush');bb.innerHTML='';WS.forEach((v,i)=>bb.appendChild(btn(v===w?'on':'',BN[i],()=>{w=v;pick();})));};
+  $('#undo').addEventListener('click',()=>{strokes.pop();redraw();});
+  $('#clear').addEventListener('click',()=>{strokes=[];redraw();});
+  pick();sections.push({root:$('#lib'),next(){$('#clear').click();}});
+})();
+
+/* ---------- Bandejas de trazado con retos ---------- */
+const COV=38,PRE=52; // tolerancias (px del lienzo): cobertura y precisión
+const dist2=(a,b)=>{const x=a[0]-b[0],y=a[1]-b[1];return x*x+y*y;};
+const dense=(p,step)=>{const o=[p[0]];for(let i=1;i<p.length;i++){const a=p[i-1],b=p[i],d=Math.sqrt(dist2(a,b)),n=Math.max(1,Math.ceil(d/step));for(let k=1;k<=n;k++)o.push([a[0]+(b[0]-a[0])*k/n,a[1]+(b[1]-a[1])*k/n]);}return o;};
+function Trazo(id,items,onWin){
+  const root=$('#'+id),cv=$('canvas',root),ctx=cv.getContext('2d'),lv=$('.lv',root),goal=$('.goal',root),msg=$('.msg',root),nxt=$('.nxt',root);
+  const T={idx:0,done:items.map(()=>false),solved:false,L:null,guide:[],mine:[],cur:null};
+  const say=t=>{msg.innerHTML=t;};
+  const chips=()=>{lv.innerHTML='';items.forEach((_,i)=>lv.appendChild(btn(i===T.idx?'on':'','Reto '+(i+1)+(T.done[i]?' ✓':''),()=>load(i))));};
+  const near=(q,pts,r)=>{const r2=r*r;for(let i=0;i<pts.length;i++)if(dist2(q,pts[i])<=r2)return true;return false;};
+  function draw(){
+    ctx.clearRect(0,0,S,S);ctx.lineCap='round';ctx.lineJoin='round';
+    // camino de puntitos
+    T.L.strokes.forEach(st=>{ctx.strokeStyle=T.solved?'#6fb584':'#c9bda8';ctx.lineWidth=T.solved?20:22;ctx.setLineDash(T.solved?[]:[1,26]);ctx.beginPath();st.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.stroke();});
+    ctx.setLineDash([]);
+    // trazo del niño
+    T.mine.concat(T.cur?[T.cur]:[]).forEach(s=>{ctx.strokeStyle='#4f7fbf';ctx.lineWidth=14;ctx.beginPath();s.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));if(s.length===1)ctx.lineTo(s[0][0]+.1,s[0][1]);ctx.stroke();});
+    // puntos de inicio
+    if(!T.solved)T.L.strokes.forEach((st,i)=>{const p=st[0];ctx.fillStyle='#4fa36a';ctx.strokeStyle='#41362b';ctx.lineWidth=4;ctx.beginPath();ctx.arc(p[0],p[1],24,0,TAU);ctx.fill();ctx.stroke();
+      ctx.fillStyle='#fff';ctx.font='800 28px system-ui,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(T.L.strokes.length>1?String(i+1):'▶',p[0],p[1]+1);});
+  }
+  function load(i){T.idx=i;T.L=items[i];T.solved=false;T.mine=[];T.cur=null;T.guide=T.L.strokes.map(s=>dense(s,6));nxt.hidden=true;say('');goal.textContent=T.L.txt;chips();draw();}
+  const pos=e=>{const r=cv.getBoundingClientRect();return [(e.clientX-r.left)*S/r.width,(e.clientY-r.top)*S/r.height];};
+  function evalua(){
+    const all=[].concat(...T.guide),mine=[].concat(...T.mine.map(s=>dense(s,6)));
+    if(!mine.length)return;
+    const cub=all.filter(g=>near(g,mine,COV)).length/all.length;
+    if(cub>=.92){T.solved=true;T.done[T.idx]=true;chips();draw();if(window.Snd&&Snd.ok)Snd.ok();
+      say('<span class="ok">¡Muy bien!</span> Seguiste el camino.'+(T.idx<items.length-1?'':'<br><b>¡Terminaste esta bandeja!</b>'));
+      if(T.idx<items.length-1)nxt.hidden=false;
+      if(onWin)onWin(T);
+      // marca para pantalla.js: el mensaje ".ok" activa el avance
+    }else say('Sigue los puntitos. Te falta un poco.');
+  }
+  cv.addEventListener('pointerdown',e=>{if(T.solved)return;e.preventDefault();cv.setPointerCapture(e.pointerId);T.cur=[pos(e)];draw();});
+  cv.addEventListener('pointermove',e=>{if(T.cur){T.cur.push(pos(e));draw();}});
+  ['pointerup','pointercancel'].forEach(t=>cv.addEventListener(t,()=>{
+    if(!T.cur)return;const s=T.cur;T.cur=null;
+    const all=[].concat(...T.guide),d=dense(s,6),bien=d.filter(q=>near(q,all,PRE)).length/d.length;
+    if(d.length<4||bien<.8){say('Casi. Sigue los puntitos despacio.');draw();return;} // ese trazo no se guarda
+    T.mine.push(s);say('');draw();evalua();
+  }));
+  $('.pista',root).addEventListener('click',()=>say('<b>Pista:</b> '+T.L.hint));
+  $('.clr',root).addEventListener('click',()=>{T.mine=[];T.cur=null;T.solved=false;nxt.hidden=true;say('');draw();});
+  nxt.addEventListener('click',()=>load(T.idx+1));
+  sections.push({root,next(){if(T.solved&&T.idx<items.length-1)load(T.idx+1);else $('.clr',root).click();}});
+  load(0);return T;
+}
+Trazo('li',LINEAS);Trazo('cu',CURVAS);Trazo('nu',NUMS);
+
+let active=sections[0];
+sections.forEach(s=>{s.root.addEventListener('pointerdown',()=>{active=s;},true);s.root.addEventListener('focusin',()=>{active=s;});});
+document.getElementById('next').addEventListener('click',()=>active.next());
+</script>
+<script src="taller.js"></script>
+<script src="perfiles.js"></script><script src="perfilui.js"></script><script src="pantalla.js"></script>
+</body></html>

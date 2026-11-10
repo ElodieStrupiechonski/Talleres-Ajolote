@@ -13,6 +13,7 @@
     'decimal:1': 'Toca la casilla de la fila 3 y la columna 4. ¿Qué número sale? Prueba otra.',
     'cadenas:2': 'Toca la casilla de la fila 3 y la columna 4. Cuenta las cuentas del rectángulo.',
     'ajedrez:2': 'Elige el caballo y toca una casilla. Cuenta los puntos verdes: son sus movimientos.',
+    'trazos:1': 'Elige un color y dibuja una casa, una flor o lo que quieras.',
     'dibujo:1': 'Dibuja una forma con el dedo. Después cambia el número de sectores y mira qué pasa.',
     'probabilidad:1': 'Lanza la moneda 20 veces. ¿Salió águila la mitad de las veces?',
     'ritmo:1': 'Arrastra figuras hasta llenar el compás: cuando suma 1, está completo.',
@@ -193,7 +194,7 @@
       if (f !== null){ HIST.push(f); if (HIST.length > 3) HIST.shift(); }
     }, 70); })();
   }, false);
-  var OKRE = /¡(Correcto|Exacto|Compás completo|Llegó|Lo lograste)/;
+  var OKRE = /¡(Correcto|Exacto|Muy bien|Compás completo|Llegó|Lo lograste)/;
   trays.forEach(function(tr, i){
     new MutationObserver(function(){
       var st = stats[i], ok = [].some.call(tr.querySelectorAll('.ok'), function(e){ return OKRE.test(e.textContent); });

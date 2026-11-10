@@ -253,7 +253,7 @@
     if (insObs){ insObs.disconnect(); insObs = null; }
     // El botón «Ayuda» de la bandeja activa vive en la barra (así no tapa el contenido)
     if (ayMov){ ayMov.ref.appendChild(ayMov.b); ayMov = null; }
-    var ab = tr.querySelector('button.ayuda'); if (ab && ab.parentNode){ ayMov = { b: ab, ref: ab.parentNode }; ins.insertBefore(ab, insB); }
+    var ab = tr._ay || tr.querySelector('button.ayuda'); if (ab && (ab.parentNode)){ tr._ay = ab; ayMov = { b: ab, ref: ab.parentNode }; ins.insertBefore(ab, insB); }
     trays.forEach(function(t){ [].forEach.call(t.querySelectorAll('.pf-ins-src'), function(x){ x.classList.remove('pf-ins-src'); }); });
     var f = insFuente(tr); if (!f || !f.e){ ins.hidden = true; return; }
     ins.hidden = false; f.e.classList.add('pf-ins-src');
@@ -309,7 +309,7 @@
     document.body.appendChild(ov); ayAbierta = ov; ok.focus();
   }
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape') cierraAyuda(); });
-  trays.forEach(function(tr){ var ab = tr.querySelector('button.ayuda'); if (!ab) return; ab.onclick = function(){ abreAyuda(tr); }; ab.setAttribute('aria-haspopup', 'dialog'); });
+  trays.forEach(function(tr){ var ab = tr._ay || tr.querySelector('button.ayuda'); if (!ab) return; ab.onclick = function(){ abreAyuda(tr); }; ab.setAttribute('aria-haspopup', 'dialog'); });
 
   // ---- Qué hacer en las bandejas de exploración (borrador para revisar con las guías) ----
   trays.forEach(function(tr, i){ var t = SUG[nombre + ':' + (i + 1)], h2 = tr.querySelector('h2'); if (!t || !h2) return;

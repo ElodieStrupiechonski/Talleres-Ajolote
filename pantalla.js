@@ -248,8 +248,12 @@
     var q = tr.querySelector('.q,[id^=q]:not(button)'); if (q && q.tagName !== 'BUTTON' && !q.children.length && /[A-Za-zÁ-ú¿?]/.test(q.textContent)) return { e: q, ocultar: true };
     return { e: h2, ocultar: true, titulo: true };
   }
+  var ayMov = null;
   function insPon(tr){
     if (insObs){ insObs.disconnect(); insObs = null; }
+    // El botón «Ayuda» de la bandeja activa vive en la barra (así no tapa el contenido)
+    if (ayMov){ ayMov.ref.appendChild(ayMov.b); ayMov = null; }
+    var ab = tr.querySelector('button.ayuda'); if (ab && ab.parentNode){ ayMov = { b: ab, ref: ab.parentNode }; ins.insertBefore(ab, insB); }
     trays.forEach(function(t){ [].forEach.call(t.querySelectorAll('.pf-ins-src'), function(x){ x.classList.remove('pf-ins-src'); }); });
     var f = insFuente(tr); if (!f || !f.e){ ins.hidden = true; return; }
     ins.hidden = false; f.e.classList.add('pf-ins-src');

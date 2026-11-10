@@ -39,7 +39,7 @@ svg.rec text{font-family:var(--display);font-weight:800;font-size:15px;fill:var(
       <svg id="pie" viewBox="0 0 240 240" width="240" height="240" role="img" aria-label="Círculo de fracciones"></svg>
       <div style="display:flex;flex-direction:column;gap:12px">
         <div class="frac"><span class="n" id="pn">0</span><span class="bar"></span><span class="d" id="pd">4</span></div>
-        <p class="note" id="pmsg">Toca las piezas del círculo para colorearlas.</p>
+        <p class="note" id="pmsg">Pinta con el dedo las piezas del círculo.</p>
       </div>
     </div>
     <p class="note det"><b class="n">Numerador</b> (arriba): cuántas piezas tomamos. <b class="d">Denominador</b> (abajo): en cuántas partes iguales se partió el entero.</p>
@@ -154,15 +154,35 @@ const gcd=(a,b)=>b?gcd(b,a%b):a;
 // Bandeja 1
 let d1=4,f1=[];
 const words={1:"entero",2:"medios",3:"tercios",4:"cuartos",5:"quintos",6:"sextos",8:"octavos",10:"décimos"};
+/* Pintar con el dedo: una pieza queda coloreada cuando más de la mitad está cubierta; un toque corto también la cambia */
+function pinta1(svg){
+  if(svg._off)svg._off();
+  const parts=[...svg.querySelectorAll('path')];if(!parts.length)return;
+  const cov=parts.map(p=>{const s=[];for(let y=0;y<=240;y+=6)for(let x=0;x<=240;x+=6)if(p.isPointInFill(new DOMPoint(x,y)))s.push([x,y,false]);return{s,c:0};});
+  const g=document.createElementNS(NS,'g');g.setAttribute('pointer-events','none');g.style.fill='var(--red)';g.style.opacity='.75';svg.appendChild(g);
+  const R=20;let down=false,moved=false,start=null,last=null;svg.style.touchAction='none';
+  const pos=e=>{const q=new DOMPoint(e.clientX,e.clientY).matrixTransform(svg.getScreenCTM().inverse());return[q.x,q.y];};
+  function dot(x,y){const c=document.createElementNS(NS,'circle');c.setAttribute('cx',x.toFixed(1));c.setAttribute('cy',y.toFixed(1));c.setAttribute('r',R);g.appendChild(c);
+    cov.forEach(pc=>pc.s.forEach(t=>{if(!t[2]&&(t[0]-x)**2+(t[1]-y)**2<=R*R){t[2]=true;pc.c++;}}));}
+  const dn=e=>{down=true;moved=false;start=last=pos(e);try{svg.setPointerCapture(e.pointerId);}catch(_){}e.preventDefault();};svg.addEventListener('pointerdown',dn);
+  const mv=e=>{if(!down)return;const q=pos(e);if(!moved&&Math.hypot(q[0]-start[0],q[1]-start[1])<8)return;moved=true;
+    const d=Math.hypot(q[0]-last[0],q[1]-last[1]),n=Math.max(1,Math.ceil(d/(R*.6)));for(let i=1;i<=n;i++)dot(last[0]+(q[0]-last[0])*i/n,last[1]+(q[1]-last[1])*i/n);last=q;e.preventDefault();};svg.addEventListener('pointermove',mv);
+  const up=e=>{if(!down)return;down=false;
+    if(!moved){const k=parts.findIndex(p=>p.isPointInFill(new DOMPoint(start[0],start[1])));if(k>=0)f1[k]=!f1[k];}
+    else cov.forEach((pc,k)=>{if(pc.s.length&&pc.c/pc.s.length>0.5)f1[k]=true;});
+    if(window.Snd)Snd.pop&&Snd.pop();r1();};
+  const canc=()=>{down=false;};svg.addEventListener('pointerup',up);svg.addEventListener('pointercancel',canc);
+  svg._off=()=>{svg.removeEventListener('pointerdown',dn);svg.removeEventListener('pointermove',mv);svg.removeEventListener('pointerup',up);svg.removeEventListener('pointercancel',canc);};
+}
 function r1(){
   chips(document.getElementById("dens"),[1,2,3,4,5,6,8,10],d1,v=>{d1=v;f1=Array(v).fill(false);r1();});
-  drawPie(document.getElementById("pie"),d1,f1,i=>{f1[i]=!f1[i];r1();});
+  drawPie(document.getElementById("pie"),d1,f1,null);pinta1(document.getElementById("pie"));
   const n=f1.filter(Boolean).length;
   document.getElementById("pn").textContent=n;document.getElementById("pd").textContent=d1;
   let m=`Tenemos ${n} de ${d1} ${words[d1]}.`;
   if(n===d1&&d1>1) m+=` ¡${d1}/${d1} = 1 entero completo!`;
   else if(n>0){const g=gcd(n,d1);if(g>1)m+=` Es lo mismo que ${n/g}/${d1/g}.`;}
-  else m="Toca las piezas del círculo para colorearlas.";
+  else m="Pinta con el dedo las piezas del círculo.";
   document.getElementById("pmsg").textContent=m;
 }
 f1=Array(d1).fill(false);r1();

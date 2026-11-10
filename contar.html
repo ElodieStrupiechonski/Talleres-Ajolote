@@ -25,6 +25,7 @@ svg.ob.x{opacity:.28}
 .part{cursor:pointer}
 .chips.lv{display:flex;flex-wrap:wrap;gap:8px}
 .msg:empty{display:none}
+.ob.mk g{stroke:#2a6fb0;stroke-width:6}.ob.mk{filter:drop-shadow(0 0 3px #2a6fb0)}
 </style></head><body>
 <div class="wrap">
   <a class="back" href="index.html">← Todos los talleres</a>
@@ -113,6 +114,13 @@ function ob(kind,col,cls){
   s.innerHTML=`<g fill="${col}" stroke="#41362b" stroke-width="2.5">${inner}</g>`;return s;
 }
 const KINDS=['c','s','h'];
+/* Contar con el dedo: tocar o arrastrar sobre los objetos los marca con un aro azul (ayuda para no perder la cuenta) */
+function marcar(box){box.style.touchAction='none';let down=false,mode=true;
+  const ob_=e=>{const x=document.elementFromPoint(e.clientX,e.clientY);const o=x&&x.closest&&x.closest('svg.ob');return o&&box.contains(o)?o:null;};
+  const put=o=>{if(o&&o.classList.contains('mk')!==mode)o.classList.toggle('mk',mode);};
+  box.addEventListener('pointerdown',e=>{const o=ob_(e);if(!o)return;down=true;mode=!o.classList.contains('mk');put(o);e.preventDefault();});
+  box.addEventListener('pointermove',e=>{if(down)put(ob_(e));});
+  ['pointerup','pointercancel','pointerleave'].forEach(t=>box.addEventListener(t,()=>{down=false;}));}
 const pickKC=()=>({k:KINDS[rnd(3)],c:COL[rnd(5)]});
 function line(n,kc,crossed){const f=h('div','fl');for(let i=0;i<n;i++)f.appendChild(ob(kc.k,kc.c,crossed&&i>=n-crossed?'x':''));return f;}
 function scatter(n,kc){
@@ -126,7 +134,7 @@ function ask(box,fn){Construir(box,{max:2,submit:v=>fn(v[0])});}
 /* Bandeja 1: marco de diez */
 (function(){
   const on=Array(20).fill(false);
-  function frame(el,off){el.innerHTML='';for(let i=0;i<10;i++){const b=btn('','',()=>{on[off+i]=!on[off+i];draw();});b.setAttribute('aria-label','Casilla '+(off+i+1));el.appendChild(b);}}
+  function frame(el,off){el.innerHTML='';for(let i=0;i<10;i++){const b=btn('','',e=>{if(e&&e.detail>0)return;on[off+i]=!on[off+i];draw();});b.dataset.c=off+i;b.setAttribute('aria-label','Casilla '+(off+i+1));el.appendChild(b);}}
   function draw(){
     [['#m1a',0],['#m1b',10]].forEach(([id,off])=>[...$(id).children].forEach((b,i)=>{b.innerHTML=on[off+i]?'<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="15" fill="#e9806c" stroke="#41362b" stroke-width="2.5"/></svg>':'';}));
     const n=on.filter(Boolean).length;$('#n1').textContent=n;
@@ -143,6 +151,13 @@ function ask(box,fn){Construir(box,{max:2,submit:v=>fn(v[0])});}
   frame($('#m1a'),0);frame($('#m1b'),10);pintaMeta();draw();
   $('#c1').addEventListener('click',()=>{on.fill(false);draw();});
   $('#o1').addEventListener('click',()=>{gi++;hit=false;on.fill(false);$('#o1').hidden=true;say('#m1',gi>=metas.length?'<span class="ok">¡Lo lograste!</span> Terminaste todos los retos del marco de diez.':'');pintaMeta();draw();});
+  /* Arrastrar el dedo por las casillas las llena (o las vacía, según la primera que se toca) */
+  (function(){const cont=$('.tf2',$('#s1'));let down=false,mode=true;cont.style.touchAction='none';
+    const cel=e=>{const x=document.elementFromPoint(e.clientX,e.clientY);const b=x&&x.closest&&x.closest('button[data-c]');return b&&cont.contains(b)?+b.dataset.c:-1;};
+    function put(i){if(i<0||on[i]===mode)return;on[i]=mode;draw();if(window.Snd&&Snd.pop)Snd.pop();}
+    cont.addEventListener('pointerdown',e=>{const i=cel(e);if(i<0)return;down=true;mode=!on[i];put(i);e.preventDefault();});
+    cont.addEventListener('pointermove',e=>{if(down)put(cel(e));});
+    ['pointerup','pointercancel','pointerleave'].forEach(t=>cont.addEventListener(t,()=>{down=false;}));})();
   secs.push({root:$('#s1'),next(){const n=1+rnd(20);on.fill(false);for(let i=0;i<n;i++)on[i]=true;draw();}});
 })();
 
@@ -157,8 +172,8 @@ function ask(box,fn){Construir(box,{max:2,submit:v=>fn(v[0])});}
     else{const sz=L===3?2:(Math.random()<.5?5:10),k=L===3?2+rnd(8):2+rnd(sz===5?5:4);cur=sz*k;const f=h('div','fl');f.style.gap='8px';f.style.maxWidth='520px';
       for(let g=0;g<k;g++){const gr=h('span','gr');for(let i=0;i<sz;i++)gr.appendChild(ob(kc.k,kc.c));f.appendChild(gr);}b.appendChild(f);
       b.appendChild(h('p','note',`Hay ${k} grupos de ${sz}. Cuenta de ${sz} en ${sz}.`));}
-    ask($('#o2'),ans);}
-  function ans(x){if(x===cur){if(!done){score++;$('#sc2').textContent=score;}done=true;say('#m2',`<span class="ok">¡Correcto!</span> Son ${cur}. Pulsa Siguiente.`);}else say('#m2','<span class="bad">Casi.</span> Cuenta otra vez, tocando cada uno con el dedo.');}
+    marcar(b);ask($('#o2'),ans);}
+  function ans(x){if(x===cur){if(!done){score++;$('#sc2').textContent=score;}done=true;say('#m2',`<span class="ok">¡Correcto!</span> Son ${cur}. Pulsa Siguiente.`);}else say('#m2','<span class="bad">Casi.</span> Cuenta otra vez: toca o pasa el dedo sobre cada uno para marcarlo.');}
   $('#n2').addEventListener('click',q);secs.push({root:$('#s2'),next:q});q();
 })();
 

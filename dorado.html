@@ -32,6 +32,7 @@ button:disabled{opacity:.4}
     <p class="det">Una cuenta es 1 unidad. Una barra tiene 10 cuentas, una placa tiene 100 y un cubo tiene 1 000. Agrega las piezas que quieras (hasta 9 de cada una) y mira el número.</p>
     <div class="cols" id="b1"></div>
     <p class="note" id="i1" aria-live="polite"></p>
+    <div class="btns"><button id="traza1" type="button">✏️ Traza el número</button></div>
   </section>
   <section class="tray" id="s2" aria-labelledby="t2">
     <span class="step">Bandeja 2 · Sumar y cambiar 10 por 1</span>
@@ -105,6 +106,7 @@ const words=a=>a.map((n,i)=>n?`${n} ${PL[i].n[n===1?0:1]}`:'').filter(Boolean).j
 /* Bandeja 1 */
 (function(){
   const a=[0,0,0,0];
+  $('#traza1').addEventListener('click',()=>{const v=val(a);if(!v){$('#i1').textContent='Primero agrega piezas para formar un número.';return;}TrazaNumero.abre(v);});
   function draw(){colsView($('#b1'),a,{step:(i,d)=>{a[i]=Math.max(0,Math.min(9,a[i]+d));draw();}});
     const v=val(a);$('#i1').innerHTML=v?`<span class="big">${comma(v)}</span><br>${words(a)}.`:'Toca + para agregar.';}
   secs.push({root:$('#s1'),next(){const r=rnd(10000),d=digs(r);for(let i=0;i<4;i++)a[i]=d[i];draw();}});
@@ -174,6 +176,7 @@ let active=secs[0];
 secs.forEach(s=>{s.root.addEventListener('pointerdown',()=>{active=s;},true);s.root.addEventListener('focusin',()=>{active=s;});});
 $('#next').addEventListener('click',()=>active.next());
 </script>
+<script src="trazodig.js"></script>
 <script src="taller.js"></script>
 <script src="perfiles.js"></script><script src="perfilui.js"></script><script src="pantalla.js"></script>
 </body></html>

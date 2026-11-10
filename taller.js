@@ -120,9 +120,15 @@
       if(!pan.hidden){ pan.hidden=true; return; }
       var min=Math.max(1,Math.round((Date.now()-t0)/60000)), f='';
       Object.keys(datos).forEach(function(k){ var d=datos[k], tot=d.ok+d.bad; f+='<tr><td>'+k+'</td><td>'+d.ok+'</td><td>'+d.bad+'</td></tr>'; });
+      var plan='';
+      try { var pp=window.Perf&&Perf.activo(), RR=window.Rutas;
+        if(pp&&RR&&pp.taller&&pp.anio){ var ps=RR.pasos(pp.taller,pp.anio), T={}, sig=null, hechos=0;
+          ps.forEach(function(s){ var x=T[s.p]||(T[s.p]={n:0,h:0}); x.n++; if(Perf.hecho(pp,s.p,s.b,s.l)){ x.h++; hechos++; } else if(!sig) sig=s; });
+          plan='<p><b>Plan del año de '+pp.nombre+':</b> '+hechos+' de '+ps.length+' pasos ('+Math.round(100*hechos/ps.length)+' %)'+(sig?'<br>Sigue: '+RR.etiqueta(sig):'<br>¡Plan completo!')+'</p><table><tr><th>Tema</th><th>Pasos hechos</th></tr>'+
+            Object.keys(T).map(function(k){ return '<tr><td>'+(RR.TEMA[k]||k)+'</td><td>'+T[k].h+' de '+T[k].n+'</td></tr>'; }).join('')+'</table>'; } } catch(e){}
       pan.innerHTML='<b>Resumen de esta visita</b><br><small>'+document.title+' · unos '+min+' min en pantalla</small>'+
-        (f?'<table><tr><th>Bandeja</th><th>✓ Correctas</th><th>Intentos fallidos</th></tr>'+f+'</table>':'<p>Todavía no hay respuestas.</p>')+
-        '<small>Solo se muestra aquí. No se guarda nada y se borra al salir del taller.</small><br><button type="button" class="res-x">Cerrar</button>';
+        (f?'<table><tr><th>Bandeja</th><th>✓ Correctas</th><th>Intentos fallidos</th></tr>'+f+'</table>':'<p>En esta visita todavía no hay respuestas.</p>')+plan+
+        '<small>Las respuestas de esta visita solo se muestran aquí y se borran al salir. El avance del plan sí se guarda en este dispositivo.</small><br><button type="button" class="res-x">Cerrar</button>';
       pan.querySelector('.res-x').onclick=function(){ pan.hidden=true; }; pan.hidden=false; reiniciarInactividad(); };
   })();
 

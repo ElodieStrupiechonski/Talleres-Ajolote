@@ -48,7 +48,7 @@ window.Niveles = function(ancla, nombres, cb){
     nombres.forEach(function(n,i){ var b=document.createElement('button'); b.type='button'; b.textContent=String(i+1); b.className=lv===i?'on':'';
       b.title=n; b.setAttribute('aria-label','Nivel '+(i+1)+': '+n); b.style.minWidth='46px';
       b.onclick=function(){ lv=i; pinta(); cb&&cb(i); }; caja.appendChild(b); });
-    var d=document.createElement('span'); d.className='lbl2'; d.textContent=nombres[lv]; caja.appendChild(d);
+    var d=document.createElement('span'); d.className='lbl2'; d.textContent=/^Hasta [\d.,]+$/.test(nombres[lv])?'Con números hasta '+nombres[lv].slice(6):nombres[lv]; caja.appendChild(d);
   }
   var nodo=ancla; while(nodo.parentNode && !(nodo.parentNode.classList && nodo.parentNode.classList.contains('tray')) && nodo.parentNode!==document.body) nodo=nodo.parentNode;
   nodo.parentNode.insertBefore(caja,nodo); pinta();

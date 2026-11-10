@@ -541,3 +541,14 @@ body.pf-lector .tray button{font-weight:800}
 .niv .lbl2{color:var(--lado-fg,#eef3f8)!important;font-weight:700}
 .niv button{width:36px;height:36px;min-width:36px!important;min-height:36px;padding:0;border-radius:50%;background:var(--lado2,#3d5d7a);color:var(--lado-fg,#eef3f8);border:2px solid transparent;box-shadow:none;font-size:1rem}
 .niv button.on{background:var(--lado-ac,#ffd96e);color:#2b2110;border-color:#fff}
+/* Teléfono horizontal: aprovechar el alto (hallazgos de los jugadores virtuales) */
+@media (min-aspect-ratio:1/1) and (max-height:520px){
+  .pf .pf-inner{row-gap:3px;padding:4px 10px}
+  .pf .pf-inner>.step{display:none}
+  .pf .note:empty{min-height:1.6em}
+  /* El botón Ayuda (arriba a la derecha) ya no tapa la primera fila del teclado */
+  .pf .pf-inner>.cn,.pf .pf-inner>:has(>.cn):not(.row){margin-top:42px}
+}
+/* Año 1 del Taller 1: también la pregunta de cada reto (.big, .goal…) y los botones de respuesta, grandes y legibles */
+body.pf-lector.pf .tray .pf-inner :is(.big,.goal,.q,.tf,.tf2,[id^=q]):not(button):not(svg *){font-size:clamp(22px,5.2vmin,34px)!important;font-weight:900!important;line-height:1.2;color:var(--fg)}
+body.pf-lector .tray .pf-inner button:not(.sw):not(.c):not(.cn-k):not(.niv button):not(.ayuda){font-size:1.15rem!important;font-weight:800;min-height:46px}

@@ -195,6 +195,8 @@
     }, 70); })();
   }, false);
   var OKRE = /¡(Correcto|Exacto|Muy bien|Compás completo|Llegó|Lo lograste)/;
+  // Si el contenido cabe (overflow oculto), la bandeja nunca debe quedar desplazada (p. ej. por un foco): se vuelve a 0.
+  trays.forEach(function(tr){ tr.addEventListener('scroll', function(){ if (tr.style.overflowY === 'hidden' && (tr.scrollTop || tr.scrollLeft)){ tr.scrollTop = 0; tr.scrollLeft = 0; } }); });
   trays.forEach(function(tr, i){
     new MutationObserver(function(){
       var st = stats[i], ok = [].some.call(tr.querySelectorAll('.ok'), function(e){ return OKRE.test(e.textContent); });
@@ -229,7 +231,7 @@
     }
     scale[i] = best; var h = natural(tr, best);
     tr.style.overflowY = (h * best > b.h + 1) ? 'auto' : 'hidden';
-    tr.dataset.escala = best.toFixed(2);
+    tr.dataset.escala = best.toFixed(2); if (tr.style.overflowY === 'hidden'){ tr.scrollTop = 0; tr.scrollLeft = 0; }
     fitting = false;
   }
   function show(i){
@@ -342,5 +344,5 @@
     var gi = el('div', 'pf-gira'); gi.setAttribute('role', 'status'); gi.appendChild(el('span', null, '↻ Gira el teléfono: se juega mejor en horizontal.'));
     var gx = el('button', null, 'Ok'); gx.type = 'button'; gx.onclick = function(){ gi.remove(); try { sessionStorage.setItem('tm_gira', '1'); } catch (e) {} }; gi.appendChild(gx); document.body.appendChild(gi); } } catch (e) {}
 
-  window.PF.show = show; window.PF.pausa = pausa; window.PF.deseq = function(){ return desequilibrio(); }; window.PF.fit = function(f){ fit(cur, f !== false); };
+  window.PF.show = show; window.PF.pausa = pausa; window.PF.deseq = function(){ return desequilibrio(); }; window.PF.escala = function(){ return scale[cur]; }; window.PF.fit = function(f){ fit(cur, f !== false); };
 })();

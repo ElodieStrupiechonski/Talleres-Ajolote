@@ -1,0 +1,43 @@
+# Jugadores virtuales: recorren el plan de cada taller en un teléfono horizontal simulado y buscan problemas mecánicos
+# (desbordes, botones chicos o tapados, preguntas repetidas, errores). Deja un informe y capturas como artefacto.
+# Se ejecuta solo cuando cambian páginas, estilos o scripts, o a mano desde la pestaña «Actions».
+name: Jugadores virtuales
+
+on:
+  workflow_dispatch:
+    inputs:
+      perfiles:
+        description: 'Taller-año a revisar, separados por coma (por ejemplo 1-1,1-2,2-1)'
+        required: false
+        default: '1-1,1-2'
+  push:
+    branches: [main]
+    paths: ['*.html', '*.js', '*.css', 'herramientas/jugadores_virtuales.js']
+
+permissions:
+  contents: read
+
+jobs:
+  revisar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Instalar Playwright
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Jugar
+        run: node herramientas/jugadores_virtuales.js --perfiles "${{ github.event.inputs.perfiles || '1-1,1-2' }}" --rapido --salida informes-vv
+      - name: Resumen en la página de la ejecución
+        if: always()
+        run: |
+          if [ -f informes-vv/jugadores_virtuales.md ]; then head -c 60000 informes-vv/jugadores_virtuales.md >> "$GITHUB_STEP_SUMMARY"; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jugadores-virtuales
+          path: informes-vv

@@ -85,6 +85,22 @@
       b.setAttribute('aria-expanded', on); b.textContent = on ? '× Cerrar ayuda' : '? Ayuda'; reiniciarInactividad(); };
   });
 
+  // Candado de adultos: si hay candado y no se ha abierto en los últimos 15 min, lo pide antes de continuar
+  function pideAdulto(ok){
+    var P=window.Perf;
+    if(!P||!P.tienePin||!P.tienePin()||P.abierto()){ ok(); return; }
+    var v=document.createElement('div'); v.className='pin-ov'; v.setAttribute('role','dialog'); v.setAttribute('aria-modal','true');
+    v.innerHTML='<div class="pin-bx"><h3>🔒 Solo para personas adultas</h3><p>Escribe el número del candado (4 números).</p><input type="password" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="Número del candado"><p class="pin-er" role="alert"></p><div class="pin-bt"><button type="button" class="go">Entrar</button><button type="button" class="no">Cancelar</button></div></div>';
+    var inp=v.querySelector('input'),er=v.querySelector('.pin-er');
+    function cierra(){ v.remove(); }
+    function va(){ if(P.revisaPin(inp.value)){ P.abre(); cierra(); ok(); } else { er.textContent='No es ese número.'; inp.value=''; inp.focus(); } }
+    v.querySelector('.go').onclick=va; v.querySelector('.no').onclick=cierra;
+    inp.addEventListener('keydown',function(e){ e.stopPropagation(); if(e.key==='Enter')va(); if(e.key==='Escape')cierra(); });
+    v.addEventListener('click',function(e){ if(e.target===v)cierra(); });
+    document.body.appendChild(v); setTimeout(function(){ inp.focus(); },50);
+  }
+  window.pideAdulto=pideAdulto;
+
   // 4. Marcador de aciertos: oculto por defecto (se sigue contando); los adultos pueden mostrarlo desde el índice
   var KEY='quiosco-aciertos';
   function leer(){ try{ return localStorage.getItem(KEY)==='1'; }catch(e){ return false; } }
@@ -100,7 +116,7 @@
   if (isIndex) {
     var tg = document.createElement('button'); tg.type='button'; tg.className='tg-aciertos';
     function rot(){ tg.textContent = leer() ? 'Ocultar aciertos y resumen (adultos)' : 'Mostrar aciertos y resumen (adultos)'; }
-    tg.onclick = function(){ guardar(!leer()); document.documentElement.classList.toggle('ver-aciertos', leer()); rot(); };
+    tg.onclick = function(){ function aplica(){ guardar(!leer()); document.documentElement.classList.toggle('ver-aciertos', leer()); rot(); } if(leer()) aplica(); else pideAdulto(aplica); };
     rot(); document.body.appendChild(tg);
   }
 
@@ -116,8 +132,8 @@
     new MutationObserver(function(ms){ ms.forEach(function(m){ m.addedNodes.forEach(cuenta); }); }).observe(document.body,{childList:true,subtree:true});
     var btn=document.createElement('button'); btn.type='button'; btn.className='res-btn'; btn.textContent='Resumen'; document.body.appendChild(btn);
     var pan=document.createElement('div'); pan.className='res-panel'; pan.hidden=true; document.body.appendChild(pan);
-    btn.onclick=function(){
-      if(!pan.hidden){ pan.hidden=true; return; }
+    btn.onclick=function(){ if(!pan.hidden){ pan.hidden=true; return; } pideAdulto(abrePanel); };
+    function abrePanel(){
       var min=Math.max(1,Math.round((Date.now()-t0)/60000)), f='';
       Object.keys(datos).forEach(function(k){ var d=datos[k], tot=d.ok+d.bad; f+='<tr><td>'+k+'</td><td>'+d.ok+'</td><td>'+d.bad+'</td></tr>'; });
       var plan='';
@@ -129,7 +145,7 @@
       pan.innerHTML='<b>Resumen de esta visita</b><br><small>'+document.title+' · unos '+min+' min en pantalla</small>'+
         (f?'<table><tr><th>Bandeja</th><th>✓ Correctas</th><th>Intentos fallidos</th></tr>'+f+'</table>':'<p>En esta visita todavía no hay respuestas.</p>')+plan+
         '<small>Las respuestas de esta visita solo se muestran aquí y se borran al salir. El avance del plan sí se guarda en este dispositivo.</small><br><button type="button" class="res-x">Cerrar</button>';
-      pan.querySelector('.res-x').onclick=function(){ pan.hidden=true; }; pan.hidden=false; reiniciarInactividad(); };
+      pan.querySelector('.res-x').onclick=function(){ pan.hidden=true; }; pan.hidden=false; if(typeof reiniciarInactividad==='function') reiniciarInactividad(); }
   })();
 
   // 7. Funcionar sin internet cuando se instala como app (requiere https o localhost)

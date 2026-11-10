@@ -280,7 +280,7 @@ secs.push({root:$('s2'),next(){$("gd").value=R0(6,40);$("gs").value=R0(2,9);r2()
 (function(){
   let score=0,cur,done;
   const NV=Niveles($('st5'),['Repartir','Repartir y sobran','¿Cuántas cajas se llenan?','¿Cuántas cajas se necesitan?','Dos pasos'],()=>q());
-  const IT=[['galleta','galletas'],['canica_azul','canicas'],['estrella','estrellas'],['canica_roja','fichas']];
+  const IT=[['galleta','galletas'],['canica_azul','canicas'],['canica_verde','canicas verdes'],['canica_roja','fichas']];
   function q(){done=false;$('m5').textContent='';const L=NV.get(),it=IT[rnd(IT.length)],k=R0(3,8),c=R0(3,9);let tx,ans,msg,d;
     if(L===0){d=k*c;tx=`Hay ${d} ${it[1]}. ${k} amigos reciben lo mismo. ¿Cuántas recibe cada uno?`;ans=c;msg=`${d} ÷ ${k} = ${c}`;}
     else if(L===1){const r=R0(1,k-1);d=k*c+r;tx=`Hay ${d} ${it[1]}. ${k} amigos reciben lo mismo. ¿Cuántas sobran?`;ans=r;msg=`${d} ÷ ${k} = ${c}, sobran ${r}`;}

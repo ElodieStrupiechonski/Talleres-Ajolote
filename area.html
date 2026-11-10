@@ -229,8 +229,15 @@ const cellEl=(s,i,j,fill,op,cls)=>{const c=el('rect',{x:X0+i*U,y:Y0+j*U,width:U,
     $('dMsg').textContent='';draw();}
   function draw(){const s=$('gD');grid(s);
     for(let i=0;i<W;i++)for(let j=0;j<H;j++){const on=paint.has(cellKey(i,j));const c=cellEl(s,i,j,on?'var(--red)':'transparent',on?.8:1,'paint');
-      c.addEventListener('click',()=>{on?paint.delete(cellKey(i,j)):paint.add(cellKey(i,j));done=false;draw();if(window.Snd)Snd.pop();});}
+      c.style.cursor='pointer';}
     $('dA').textContent=paint.size;$('dP').textContent=paint.size?perimOf(paint):0;}
+  // Pintar con el dedo: arrastrar pinta (o borra, según la primera casilla que se toca)
+  (function(){const sv=$('gD');let down=false,mode=true,last=null;sv.style.touchAction='none';
+    const cellAt=e=>{const m=sv.getScreenCTM();if(!m)return null;const q=new DOMPoint(e.clientX,e.clientY).matrixTransform(m.inverse());const i=Math.floor((q.x-X0)/U),j=Math.floor((q.y-Y0)/U);return(i>=0&&i<W&&j>=0&&j<H)?[i,j]:null;};
+    function put(c){if(!c)return;const k=cellKey(c[0],c[1]);if(mode===paint.has(k))return;mode?paint.add(k):paint.delete(k);done=false;draw();if(window.Snd)Snd.pop();}
+    sv.addEventListener('pointerdown',e=>{const c=cellAt(e);if(!c)return;down=true;try{sv.setPointerCapture(e.pointerId);}catch(_){}mode=!paint.has(cellKey(c[0],c[1]));put(c);e.preventDefault();});
+    sv.addEventListener('pointermove',e=>{if(down)put(cellAt(e));});
+    const up=()=>{down=false;};sv.addEventListener('pointerup',up);sv.addEventListener('pointercancel',up);})();
   function chk(){const m=$('dMsg'),n=paint.size,p=perimOf(paint);
     if(n!==cur.N){m.innerHTML=`<span class="bad">Casi.</span> Tienes ${n} cuadritos y pedimos ${cur.N}.`;if(window.Snd)Snd.bad();return;}
     if(!connected(paint)){m.innerHTML='<span class="bad">Casi.</span> Todos los cuadritos deben tocarse por un lado.';return;}

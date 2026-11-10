@@ -67,7 +67,10 @@ h2.tm{margin:14px 0 6px;font-size:1.2rem}.nota{color:var(--muted);font-size:.95r
       if(sigI>=0){ var h=el('i','gh'); h.style.left=(100*sigI/N)+'%'; tr.appendChild(h); }
       row.appendChild(lab); row.appendChild(tr); box.appendChild(row); });
     var ax=el('div','gax'),al=el('div','gl'),at=el('div','gtk'); [1,10,20,30].forEach(function(n){ if(n<=N){ var b=el('b',null,String(n)); b.style.left=(100*(n-.5)/N)+'%'; at.appendChild(b); } }); ax.appendChild(al); ax.appendChild(at); box.appendChild(ax);
+    // Zona táctil amplia: tocar en la columna del paso que sigue (en cualquier fila, a ±22 px) también propone entrar
+    if(sigI>=0){ box.addEventListener('click',function(e){ if(e.target.closest('.gc.n'))return; var q=box.querySelector('.gc.n'); if(!q)return; var r=q.getBoundingClientRect(); if(!e.target.closest('.gtk'))return; var cx=r.left+r.width/2; if(Math.abs(e.clientX-cx)<=22) propone(ps[sigI]); }); }
     var lg=el('div','gleg'); lg.innerHTML='<span><i style="background:#5fa673"></i>Hecho</span><span><i style="background:var(--acc)"></i>Sigue</span><span><i style="background:#d9c7a5"></i>Falta</span><span>Pasos del año: 1 a '+N+'</span>'; box.appendChild(lg);
+    if(sigI>=0){ var go=el('button','gsig','Entrar a mi siguiente paso →'); go.type='button'; go.onclick=function(){ propone(ps[sigI]); }; box.appendChild(go); }
     return box;
   }
   function pinta(){

@@ -259,8 +259,8 @@ const INK='#41362b';
 (function(){
   let score=0,cur,done;
   const NV=Niveles($('#qAnc'),['Grupos iguales','Filas y columnas','El doble o el triple','Dos pasos','¿Cuántos grupos?'],()=>q());
-  function q(){const L=NV.get();done=false;let txt,ans,msg,ic=PK(['canica_roja','galleta','estrella','canica_azul']),a,b;
-    if(L===0){a=RR(3,9);b=RR(2,8);ans=a*b;txt=`Una bolsa tiene ${a} ${ic.startsWith('canica')?'canicas':ic==='galleta'?'galletas':'estrellas'}. ¿Cuántas hay en ${b} bolsas?`;msg=`${b} × ${a} = ${ans}`;}
+  function q(){const L=NV.get();done=false;let txt,ans,msg,ic=PK(['canica_roja','galleta','canica_verde','canica_azul']),a,b;
+    if(L===0){a=RR(3,9);b=RR(2,8);ans=a*b;txt=`Una bolsa tiene ${a} ${ic.startsWith('canica')?'canicas':'galletas'}. ¿Cuántas hay en ${b} bolsas?`;msg=`${b} × ${a} = ${ans}`;}
     else if(L===1){a=RR(3,9);b=RR(3,9);ans=a*b;ic='icono_cadenas';txt=`En un salón hay ${a} filas de ${b} sillas. ¿Cuántas sillas hay?`;msg=`${a} × ${b} = ${ans}`;}
     else if(L===2){a=RR(3,9);b=RR(2,5);const m=PK([2,3]);ans=m*a*b;txt=`Luis compró ${b} cajas con ${a} galletas cada una. Ana compró ${m===2?'el doble':'el triple'}. ¿Cuántas galletas compró Ana?`;msg=`Luis: ${b} × ${a} = ${a*b}. Ana: ${m} × ${a*b} = ${ans}`;ic='galleta';}
     else if(L===3){a=RR(3,9);b=RR(2,5);const c=RR(3,9),d=RR(2,5);ans=a*b+c*d;txt=`Hay ${b} bolsas con ${a} canicas y ${d} bolsas con ${c} canicas. ¿Cuántas canicas hay en total?`;msg=`${b} × ${a} + ${d} × ${c} = ${a*b} + ${c*d} = ${ans}`;ic='bolsa_canicas';}

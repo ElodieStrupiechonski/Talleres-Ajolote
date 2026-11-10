@@ -234,8 +234,31 @@
     tr.dataset.escala = best.toFixed(2); if (tr.style.overflowY === 'hidden'){ tr.scrollTop = 0; tr.scrollLeft = 0; }
     fitting = false;
   }
+
+  // ---- Barra de instrucción: siempre en el mismo lugar, letra grande y negrita, con botón para escucharla ----
+  var ins = el('div', 'pf-ins'), insT = el('p', 'pf-ins-t'), insB = el('button', 'pf-ins-b', '🔊'), insObs = null;
+  insB.type = 'button'; insB.setAttribute('aria-label', 'Escuchar la instrucción'); insB.title = 'Escuchar';
+  ins.appendChild(insT); ins.appendChild(insB); wrap.insertBefore(ins, wrap.firstChild); wrap.classList.add('pf-wi');
+  insB.onclick = function(){ lee(insT.textContent); };
+  function insFuente(tr){
+    var inner = tr.firstChild, h2 = tr.querySelector('h2'), f;
+    f = tr.querySelector('.goal'); if (f) return { e: f, ocultar: true };
+    var lead = [].slice.call(inner.children).filter(function(p){ return p.tagName === 'P' && !/^(det|pf-sug|note|big|sc|msg|pf-ins)/.test(p.className) && p.textContent.trim().length >= 10 && !/Aciertos/.test(p.textContent); })[0];
+    if (lead && lead.textContent.length <= 120) return { e: lead, ocultar: true };
+    var q = tr.querySelector('.q,[id^=q]:not(button)'); if (q && q.tagName !== 'BUTTON' && !q.children.length && /[A-Za-zÁ-ú¿?]/.test(q.textContent)) return { e: q, ocultar: true };
+    return { e: h2, ocultar: true, titulo: true };
+  }
+  function insPon(tr){
+    if (insObs){ insObs.disconnect(); insObs = null; }
+    trays.forEach(function(t){ [].forEach.call(t.querySelectorAll('.pf-ins-src'), function(x){ x.classList.remove('pf-ins-src'); }); });
+    var f = insFuente(tr); if (!f || !f.e){ ins.hidden = true; return; }
+    ins.hidden = false; f.e.classList.add('pf-ins-src');
+    function copia(){ var t = f.e.textContent.replace(/\s+/g, ' ').trim(); if (insT.textContent !== t){ insT.textContent = t; later(true); } ins.hidden = !t; }
+    copia(); insObs = new MutationObserver(copia); insObs.observe(f.e, { childList: true, subtree: true, characterData: true });
+  }
   function show(i){
     cur = i;
+    insPon(trays[i]);
     trays.forEach(function(t, k){ t.classList.toggle('pf-on', k === i); });
     [].forEach.call(nav.children, function(b, k){ b.classList.toggle('on', k === i); });
     var e = document.createEvent('Event'); e.initEvent('pointerdown', true, true); trays[i].dispatchEvent(e);

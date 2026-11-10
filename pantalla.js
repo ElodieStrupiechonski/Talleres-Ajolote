@@ -84,14 +84,27 @@
   var track = el('aside', 'pf-track'); track.setAttribute('aria-label', 'Seguimiento de nivel'); side.appendChild(track); side.appendChild(big);
   var who = el('button', 'pf-who'), body = el('div', 'pt-body'), emoBox = el('div', 'pf-emo-w');
   who.type = 'button';
-  function pintaWho(){ var p = quien(); who.innerHTML = ''; var av = el('span', 'pu-av'); av.innerHTML = Ilu.html('axo_feliz', {tema: temaAct()}); who.appendChild(av);
+  // Primer año del Taller 1 (6-7 años, aprenden a leer): instrucciones en letra grande y negrita
+  function lector(){ var p = window.Perf && Perf.activo(); document.body.classList.toggle('pf-lector', !!(p && +p.taller === 1 && +p.anio === 1)); }
+  lector();
+  function pintaWho(){ lector(); var p = quien(); who.innerHTML = ''; var av = el('span', 'pu-av'); av.innerHTML = Ilu.html('axo_feliz', {tema: temaAct()}); who.appendChild(av);
     who.appendChild(el('span', 't', p ? p.nombre : '¿Quién juega?')); who.setAttribute('aria-label', p ? 'Jugador: ' + p.nombre + '. Cambiar' : 'Elegir quién juega'); }
   who.onclick = function(){ PerfUI.elegir(function(){ cargaStats(); pintaWho(); pintaNom(); mood('celebra', 2500); saludo(); renderTrack(); }); };
   track.appendChild(who); track.appendChild(body);
   function cargaStats(){ stats.forEach(function(s){ s.n = {}; s.flag = false; }); }
-  function emoStrip(){ var w = emoBox; w.innerHTML = ''; if (!Perf.activo()) return; w.className = 'pf-emo-w'; w.appendChild(el('p', 'pf-emo-l', '¿Cómo me siento?')); var r = el('div', 'pf-emo');
+  function emoStrip(){ return; var w = emoBox; w.innerHTML = ''; if (!Perf.activo()) return; w.className = 'pf-emo-w'; w.appendChild(el('p', 'pf-emo-l', '¿Cómo me siento?')); var r = el('div', 'pf-emo');
     Perf.EMO.forEach(function(e){ var b = el('button'); b.type = 'button'; b.setAttribute('aria-label', Perf.EMOL[e]); b.title = Perf.EMOL[e]; b.innerHTML = Ilu.html('emo_' + e);
       b.onclick = function(){ var inf = nivInfo(trays[cur]); Perf.emocion(nombre, cur + 1, inf ? inf.lv + 1 : 0, e, 'ahora'); b.classList.add('on'); setTimeout(function(){ b.classList.remove('on'); }, 900); }; r.appendChild(b); }); w.appendChild(r); }
+  // La encuesta «¿Cómo te sentiste?» no sale en cada reto: solo al terminar todos los retos de una bandeja o,
+  // en los demás niveles, cuando han pasado al menos 10 minutos desde la última.
+  function quiereChequeo(inf){
+    var st = stats[cur], todos = inf.un ? inf.bs.every(function(b, k){ return (st.n[k] || 0) >= META; }) : true;
+    if (inf.un && !todos) return false;
+    var t = 0; try { t = +sessionStorage.getItem('tm_chq') || 0; } catch (e) {}
+    if (Date.now() - t < 10 * 60000) return false;
+    try { sessionStorage.setItem('tm_chq', String(Date.now())); } catch (e) {}
+    return true;
+  }
   function nivInfo(tr){
     var nv = tr.querySelector('.niv'), un = false; if (!nv){ nv = tr.querySelector('.chips.lv'); un = !!nv; } if (!nv || nv.hidden || nv.offsetParent === null) return null;
     var bs = [].slice.call(nv.querySelectorAll('button')); if (!bs.length) return null;
@@ -154,7 +167,8 @@
       else { var sg = sigBandeja(); body.appendChild(btnSig(sg.txt, sg.go)); marcaSig(cur < trays.length - 1); }
     }
     var rs = el('button', 'pt-btn', 'Reiniciar'); rs.type = 'button';
-    rs.onclick = function(){ st.n = {}; st.flag = false; st.shown = null; Perf.reset(nombre, cur + 1); var i2 = nivInfo(tr); if (i2 && i2.lv !== 0) i2.bs[0].click(); else renderTrack(); };
+    var armado = 0;
+    rs.onclick = function(){ if (!armado){ armado = 1; rs.textContent = '¿Seguro? Toca otra vez'; rs.classList.add('pt-peligro'); setTimeout(function(){ armado = 0; rs.textContent = 'Reiniciar'; rs.classList.remove('pt-peligro'); }, 4000); return; } armado = 0; st.n = {}; st.flag = false; st.shown = null; Perf.reset(nombre, cur + 1); var i2 = nivInfo(tr); if (i2 && i2.lv !== 0) i2.bs[0].click(); else renderTrack(); };
     body.appendChild(rs); body.appendChild(emoBox);
   }
   // Parpadeo en el botón «Siguiente» (u «Otra», «Otro»…) cuando la respuesta fue correcta
@@ -185,7 +199,7 @@
       var st = stats[i], ok = [].some.call(tr.querySelectorAll('.ok'), function(e){ return OKRE.test(e.textContent); });
       st.mut = (st.mut || 0) + 1;
       var bad = tr.querySelector('.bad'); if (bad && !st.badf){ st.badf = true; if (i === cur) mood('casi', 2500); } else if (!bad) st.badf = false;
-      if (ok && !st.flag){ st.flag = true; if (i === cur){ mood('celebra', 3000); setTimeout(function(){ pulseSig(tr); }, 90); } sesion('ok'); var inf = nivInfo(tr); if (inf){ st.n[inf.lv] = (st.n[inf.lv] || 0) + 1; if (inf.un) st.n[inf.lv] = META; var tot = inf.un ? Perf.marca(nombre, i + 1, inf.lv + 1) : Perf.inc(nombre, i + 1, inf.lv + 1); if (tot === META) sesion('nivel'); if (Perf.activo() && tot === META && i === cur) setTimeout(function(){ PerfUI.chequeo('¡Nivel superado! ¿Cómo te sentiste?', function(e){ if (e) Perf.emocion(nombre, i + 1, inf.lv + 1, e, 'fin'); }); }, 1800); } }
+      if (ok && !st.flag){ st.flag = true; if (i === cur){ mood('celebra', 3000); setTimeout(function(){ pulseSig(tr); }, 90); } sesion('ok'); var inf = nivInfo(tr); if (inf){ st.n[inf.lv] = (st.n[inf.lv] || 0) + 1; if (inf.un) st.n[inf.lv] = META; var tot = inf.un ? Perf.marca(nombre, i + 1, inf.lv + 1) : Perf.inc(nombre, i + 1, inf.lv + 1); if (tot === META) sesion('nivel'); if (Perf.activo() && tot === META && i === cur && quiereChequeo(inf)) setTimeout(function(){ PerfUI.chequeo('¡Nivel superado! ¿Cómo te sentiste?', function(e){ if (e) Perf.emocion(nombre, i + 1, inf.lv + 1, e, 'fin'); }); }, 1800); } }
       else if (!ok){ st.flag = false; clearPulse(tr); }
       if (i === cur) { clearTimeout(tr._rt); tr._rt = setTimeout(renderTrack, 30); }
     }).observe(tr, { childList: true, subtree: true, characterData: true });

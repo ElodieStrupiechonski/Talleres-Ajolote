@@ -21,6 +21,13 @@ h2.tm{margin:14px 0 6px;font-size:1.2rem}.nota{color:var(--muted);font-size:.95r
 .gl .ic{flex:none;width:24px;height:24px}.gl .ic svg{width:100%;height:100%}.gl span{overflow-wrap:anywhere}
 .gtk{position:relative;flex:1;height:20px;border-radius:10px;background:rgba(65,54,43,.08)}
 .gc{position:absolute;top:2px;bottom:2px;border-radius:5px;background:#d9c7a5;margin:0 1px}
+
+.gv{position:fixed;inset:0;background:rgba(40,30,20,.55);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px}
+.gvb{background:var(--card,#fff);border:4px solid var(--fg,#41362b);border-radius:20px;padding:20px 24px;max-width:420px;text-align:center}
+.gvb h3{margin:0 0 6px;font-size:1.3rem}.gvt{font-size:1.15rem;font-weight:700;margin:0 0 14px}
+.gvr{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.gvgo,.gvno{font:800 1.1rem var(--display,inherit);padding:12px 22px;border-radius:14px;border:3px solid var(--fg,#41362b);text-decoration:none;cursor:pointer;min-height:48px;box-sizing:border-box}
+.gvgo{background:var(--acc);color:var(--acc-fg,#fff)}.gvno{background:#fff;color:var(--fg,#41362b)}
 .gc.d{background:linear-gradient(#9bd9aa,#5fa673)}.gc.n{background:var(--acc);box-shadow:0 0 0 2px var(--fg);animation:gtp 1.2s ease-in-out infinite;z-index:2}
 @keyframes gtp{50%{transform:scaleY(1.35)}}
 .gh{position:absolute;top:-3px;bottom:-3px;width:0;border-left:2px dashed var(--red);z-index:1}
@@ -42,6 +49,13 @@ h2.tm{margin:14px 0 6px;font-size:1.2rem}.nota{color:var(--muted);font-size:.95r
   function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;}
 
   // Plan del año tipo Gantt: una fila por tema, una casilla por paso, en el orden sugerido
+  // Al tocar el cuadro azul «Sigue» se propone entrar al taller correspondiente
+  function propone(s){
+    var v=el('div','gv'),b=el('div','gvb'); v.appendChild(b);
+    b.appendChild(el('h3',null,'Tu siguiente paso')); b.appendChild(el('p','gvt',Rutas.etiqueta(s)));
+    var r=el('div','gvr'),a=el('a','gvgo','Entrar'); a.href=Rutas.url(s); var n=el('button','gvno','Ahora no'); n.type='button'; n.onclick=function(){v.remove();};
+    r.appendChild(a); r.appendChild(n); b.appendChild(r); v.onclick=function(e){if(e.target===v)v.remove();}; document.body.appendChild(v); a.focus();
+  }
   function gantt(p,ps){
     var N=ps.length,box=el('div','gt'),g={},ord=[],sigI=-1;
     box.appendChild(el('h2','tm','Mi plan del año'));
@@ -49,7 +63,7 @@ h2.tm{margin:14px 0 6px;font-size:1.2rem}.nota{color:var(--muted);font-size:.95r
     ord.forEach(function(k){
       var row=el('div','gr'),lab=el('div','gl'),ic=el('span','ic'); if(window.Ilu&&Ilu.titulo('icono_'+k))ic.innerHTML=Ilu.html('icono_'+k); lab.appendChild(ic); lab.appendChild(el('span',null,Rutas.TEMA[k]));
       var tr=el('div','gtk');
-      g[k].forEach(function(i){ var s=ps[i],ok=Perf.hecho(p,s.p,s.b,s.l),c=el('div','gc'+(ok?' d':'')+(i===sigI?' n':'')); c.style.left=(100*i/N)+'%'; c.style.width=(100/N)+'%'; c.title=Rutas.etiqueta(s); tr.appendChild(c); });
+      g[k].forEach(function(i){ var s=ps[i],ok=Perf.hecho(p,s.p,s.b,s.l),c=el('div','gc'+(ok?' d':'')+(i===sigI?' n':'')); c.style.left=(100*i/N)+'%'; c.style.width=(100/N)+'%'; c.title=Rutas.etiqueta(s); if(i===sigI){ c.setAttribute('role','button'); c.tabIndex=0; c.style.cursor='pointer'; c.setAttribute('aria-label','Sigue: '+Rutas.etiqueta(s)+'. Tocar para entrar'); (function(s){ var ir=function(){ propone(s); }; c.onclick=ir; c.onkeydown=function(e){ if(e.key==='Enter'||e.key===' '){e.preventDefault();ir();} }; })(s); } tr.appendChild(c); });
       if(sigI>=0){ var h=el('i','gh'); h.style.left=(100*sigI/N)+'%'; tr.appendChild(h); }
       row.appendChild(lab); row.appendChild(tr); box.appendChild(row); });
     var ax=el('div','gax'),al=el('div','gl'),at=el('div','gtk'); [1,10,20,30].forEach(function(n){ if(n<=N){ var b=el('b',null,String(n)); b.style.left=(100*(n-.5)/N)+'%'; at.appendChild(b); } }); ax.appendChild(al); ax.appendChild(at); box.appendChild(ax);

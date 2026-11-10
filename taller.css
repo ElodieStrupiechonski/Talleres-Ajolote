@@ -530,3 +530,9 @@ body.pf .meta-b i.on{background:linear-gradient(#ffe58f,#f0b93a);border:0}
 /* Cola del globo: triángulo recortado (antes era un rombo que tapaba letras del texto) */
 .pf-bub:after{width:22px;height:13px;bottom:-13px;border:0;background:var(--fg);transform:translateX(-50%);clip-path:polygon(0 0,100% 0,50% 100%)}
 .pf-bub:before{content:"";position:absolute;left:50%;bottom:-9px;width:12px;height:9px;background:var(--card);transform:translateX(-50%);clip-path:polygon(0 0,100% 0,50% 100%);z-index:1}
+body.pf .pf-track .pt-btn.pt-peligro{background:#c0463a;border-color:#fff;color:#fff}
+/* Instrucciones para quienes apenas aprenden a leer (Taller 1, año 1) */
+body.pf-lector .tray :is(h2,h3){font-size:clamp(24px,5.6vmin,38px)!important;font-weight:900!important;line-height:1.2}
+body.pf-lector .tray :is(p,.note,.msg,label,.lbl2):not(.pf-sug):not(.pt-sug){font-size:clamp(20px,4.6vmin,30px)!important;font-weight:800!important;line-height:1.3;color:var(--fg)}
+body.pf-lector .tray button{font-weight:800}
+.gc.n::after{content:"";position:absolute;inset:-12px -6px}

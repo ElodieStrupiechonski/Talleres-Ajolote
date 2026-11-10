@@ -20,7 +20,7 @@
     nombre=limpia(nombre); if(!nombre)return {err:'nombre'};
     if(D.perfiles.length>=max())return {err:'lleno'};
     if(D.perfiles.some(function(p){return p.nombre.toLowerCase()===nombre.toLowerCase();}))return {err:'repetido'};
-    var p={id:uid(),nombre:nombre,taller:+taller||2,anio:+anio||1,tema:(TEMAS.indexOf(tema)>=0?tema:TEMAS[D.perfiles.length%TEMAS.length]),mas:limpiaMas(mas),creado:Date.now(),prog:{},sup:{},vis:{},emo:[],ult:0};
+    var p={id:uid(),nombre:nombre,taller:+taller||2,anio:+anio||1,tema:(TEMAS.indexOf(tema)>=0?tema:TEMAS[D.perfiles.length%TEMAS.length]),mas:limpiaMas(mas),gen:'',creado:Date.now(),prog:{},sup:{},vis:{},emo:[],ult:0};
     D.perfiles.push(p); save(); return {ok:p};}
   function k(page,b,l){return page+'|'+b+'|'+(l||0);}
   function load(){
@@ -41,7 +41,7 @@
     crear:crear,
     editar:function(id,c){var p=porId(id); if(!p)return {err:'no'};
       if(c.nombre!=null){var n=limpia(c.nombre); if(!n)return {err:'nombre'}; if(D.perfiles.some(function(q){return q!==p&&q.nombre.toLowerCase()===n.toLowerCase();}))return {err:'repetido'}; p.nombre=n;}
-      if(c.taller)p.taller=+c.taller; if(c.anio)p.anio=+c.anio; if(c.tema&&TEMAS.indexOf(c.tema)>=0){ if(c.tema!==p.tema&&c.mas==null&&(!p.mas||p.mas===MASC[p.tema].n))p.mas=''; p.tema=c.tema;} if(c.mas!=null)p.mas=limpiaMas(c.mas); save(); return {ok:1};},
+      if(c.taller)p.taller=+c.taller; if(c.anio)p.anio=+c.anio; if(c.tema&&TEMAS.indexOf(c.tema)>=0){ if(c.tema!==p.tema&&c.mas==null&&(!p.mas||p.mas===MASC[p.tema].n))p.mas=''; p.tema=c.tema;} if(c.mas!=null)p.mas=limpiaMas(c.mas); if(c.gen!=null)p.gen=(c.gen==='a'||c.gen==='o')?c.gen:''; save(); return {ok:1};},
     borrar:function(id){D.perfiles=D.perfiles.filter(function(p){return p.id!==id;}); if(D.activo===id)D.activo=null; save();},
     // progreso del perfil activo (sin perfil = invitado: no se guarda)
     get:function(page,b,l){var p=activo(); return p?(p.prog[k(page,b,l)]||0):0;},

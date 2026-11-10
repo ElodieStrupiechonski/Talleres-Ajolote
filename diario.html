@@ -70,6 +70,17 @@ body.adulto .t th{background:#dde6ee}
     [['res','Resumen'],['per','Perfiles'],['dat','Datos']].forEach(function(x){var b=el('button',x[0]===sec?'on':'',x[1]);b.type='button';b.onclick=function(){sec=x[0];render();};t.appendChild(b);});
     var cl=el('button',null,'Salir'); cl.type='button'; cl.onclick=function(){Perf.cierra();sinPin=false;location.href='index.html';}; t.appendChild(cl);
     app.appendChild(t); ({res:resumen,per:perfiles,dat:datos})[sec]();
+    if(window.Voz&&'speechSynthesis' in window){
+      var vb=el('div','box'); vb.appendChild(el('h2',null,'Voz del ajolote'));
+      vb.appendChild(el('p','nota','Elige la voz que lee las instrucciones (botón 🔊). Las voces dependen del teléfono o tablet; si hay varias en español, prueba cuál suena más suave. Una voz más aguda suena más joven.'));
+      var vr=el('div','row'), vs=el('select'), vt=el('select'), vp=el('button','b p','Probar'); vs.setAttribute('aria-label','Voz'); vt.setAttribute('aria-label','Tono'); vp.type='button';
+      function llena(){ vs.innerHTML=''; var l=Voz.lista(), e=Voz.elegida(); if(!l.length){ var o0=el('option',null,'Voz predeterminada del dispositivo'); o0.value=''; vs.appendChild(o0); return; } l.forEach(function(v){ var o=el('option',null,v.name+' ('+v.lang+')'); o.value=v.name; if(e&&e.name===v.name)o.selected=true; vs.appendChild(o); }); }
+      [['1','Tono normal'],['1.25','Tono suave y joven'],['1.5','Tono más agudo']].forEach(function(x){ var o=el('option',null,x[1]); o.value=x[0]; if(Math.abs(Voz.tono()-parseFloat(x[0]))<.01)o.selected=true; vt.appendChild(o); });
+      llena(); try{ speechSynthesis.onvoiceschanged=llena; }catch(e){}
+      vs.onchange=function(){ Voz.pon(vs.value); }; vt.onchange=function(){ Voz.ponTono(vt.value); };
+      vp.onclick=function(){ Voz.pon(vs.value); Voz.ponTono(vt.value); Voz.habla('Hola, soy tu ajolote. Vamos a jugar con los números.'); };
+      vr.appendChild(vs); vr.appendChild(vt); vr.appendChild(vp); vb.appendChild(vr); app.appendChild(vb);
+    }
     var fb=el('div','box fb'); fb.appendChild(el('h2',null,'Comparte tus comentarios'));
     fb.appendChild(el('p','nota','¿Qué funcionó, qué no, qué falta? Tu opinión nos ayuda a mejorar los talleres. No incluyas nombres ni datos de los niños.'));
     var rf=el('div','row'), a1=el('a','b p','Abrir el formulario'); a1.href=FORM; a1.target='_blank'; a1.rel='noopener';

@@ -61,7 +61,12 @@
   var mas = el('div', 'pf-mas'), masT = null;
   var side = el('div', 'pf-side'), big = el('div', 'pf-mas-big'), bub = el('div', 'pf-bub'), bigSv = el('div', 'pf-mas-sv'), masNom = el('div', 'pf-mas-nom');
   var bubA = el('span', 'pf-ba'), bubT2 = el('span', 'pf-bt'); bub.appendChild(bubA); bub.appendChild(bubT2); bub.setAttribute('role', 'status'); bigSv.setAttribute('role', 'button'); bigSv.tabIndex = 0; big.appendChild(bub); big.appendChild(bigSv); big.appendChild(masNom); document.body.appendChild(side);
-  var FRASES = { celebra: ['¡Muy bien!', '¡Lo lograste!', '¡Genial!', '¡Sigue así!', '¡Qué listo!'], casi: ['¡Casi!', 'Inténtalo otra vez', '¡Tú puedes!', 'Piénsalo con calma'], piensa: ['Hmm…'] };
+  var FRASES = { celebra: ['¡Muy bien!', '¡Lo lograste!', '¡Genial!', '¡Sigue así!', '¡Qué list{o}!', '¡Qué bien lo hiciste!', '¡Estoy orgullos{o} de ti!', '¡Eres muy hábil!'], casi: ['¡Casi!', 'Inténtalo otra vez', '¡Tú puedes!', 'Piénsalo con calma'], piensa: ['Hmm…'] };
+  // Género: {o} se vuelve «a» u «o» según el perfil; con perfil neutro esas frases no se usan
+  function gen(){ var p = window.Perf && Perf.activo(); return p && (p.gen === 'a' || p.gen === 'o') ? p.gen : ''; }
+  function gg(t){ return t.replace(/\{o\}/g, gen()); }
+  function frasesOk(a){ var g = gen(); return g ? a : a.filter(function(x){ return x.indexOf('{o}') < 0; }); }
+  function hola(n){ var g = gen(); return g ? '¡Bienvenid' + g + (n ? ', ' + n : '') + '!' : '¡Hola' + (n ? ', ' + n : '') + '!'; }
   // Perfil del niño: se guarda solo en este dispositivo (localStorage), no se envía a ningún lado
   var jugador = '';
   function quien(){ var p = window.Perf && Perf.activo(); jugador = p ? p.nombre : ''; return p; }
@@ -72,14 +77,14 @@
   // La burbuja se queda el tiempo suficiente para leerla (más si el texto es largo)
   function di(txt){ clearTimeout(bubT); bubT2.textContent = txt || ''; if (txt){ var ms = document.querySelector('.pf-mas svg'); bubA.innerHTML = ms ? ms.outerHTML : ''; } bub.classList.toggle('on', !!txt); if (txt) bubT = setTimeout(function(){ bub.classList.remove('on'); }, Math.max(7000, 2500 + 90 * txt.length)); }
   function mood(e, ms){ if (!window.Ilu) return; var sv = Ilu.html('axo_' + e, {tema: temaAct()}); mas.innerHTML = sv; bigSv.innerHTML = sv;
-    var f = FRASES[e]; if (f) di(conNombre(f[Math.floor(Math.random() * f.length)]));
+    var f = FRASES[e]; if (f){ f = frasesOk(f); di(conNombre(gg(f[Math.floor(Math.random() * f.length)]))); }
     clearTimeout(masT); masT = null; if (ms) masT = setTimeout(function(){ masT = null; mood('feliz'); }, ms); }
   function masInfo(){ var p = window.Perf && Perf.activo(); return Perf.mascota(p, Ilu.tema(nombre)); }
   function pintaNom(){ var m = masInfo(); masNom.textContent = m.nombre; masNom.title = m.nombre + (m.propio ? ' (en náhuatl: ' + m.nat + ', ' + m.sig + ')' : ' significa ' + m.sig + ' en náhuatl'); bigSv.setAttribute('aria-label', 'Mi ajolote ' + m.nombre + (Perf.activo() ? '. Tócalo para cambiarlo' : '')); }
   function saludo(){ var m = masInfo(), p = Perf.activo();
-    if (window.matchMedia('(min-aspect-ratio:1/1) and (max-height:520px)').matches){ di(p ? '¡Hola, ' + p.nombre + '! Soy ' + m.nombre + '.' : '¡Hola! Soy ' + m.nombre + '.'); return; }
-    di(p ? '¡Hola, ' + p.nombre + '! Soy ' + m.nombre + ' («' + m.sig + '» en náhuatl).' : '¡Hola! Soy ' + m.nombre + ' («' + m.sig + '» en náhuatl). Toca «¿Quién juega?» para guardar tu avance.'); }
-  function cambiaMas(){ var p = Perf.activo(); if (!p) return; PerfUI.mascota(function(){ pintaWho(); pintaNom(); mood('celebra', 2500); di('¡Hola, ' + p.nombre + '! Soy ' + masInfo().nombre + '.'); }, p); }
+    if (window.matchMedia('(min-aspect-ratio:1/1) and (max-height:520px)').matches){ di(p ? hola(p.nombre) + ' Soy ' + m.nombre + '.' : '¡Hola! Soy ' + m.nombre + '.'); return; }
+    di(p ? hola(p.nombre) + ' Soy ' + m.nombre + ' («' + m.sig + '» en náhuatl).' : '¡Hola! Soy ' + m.nombre + ' («' + m.sig + '» en náhuatl). Toca «¿Quién juega?» para guardar tu avance.'); }
+  function cambiaMas(){ var p = Perf.activo(); if (!p) return; PerfUI.mascota(function(){ pintaWho(); pintaNom(); mood('celebra', 2500); di(hola(p.nombre) + ' Soy ' + masInfo().nombre + '.'); }, p); }
   bigSv.addEventListener('click', cambiaMas); bigSv.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); e.stopPropagation(); cambiaMas(); } });
   mood('feliz');
   var track = el('aside', 'pf-track'); track.setAttribute('aria-label', 'Seguimiento de nivel'); side.appendChild(track); side.appendChild(big);
@@ -285,7 +290,7 @@
 
   // ---- Ayuda grande: se abre sobre la actividad, con letra grande y la opción de escucharla ----
   var ayAbierta = null;
-  function lee(txt){ try { if (!('speechSynthesis' in window)) return; speechSynthesis.cancel(); var u = new SpeechSynthesisUtterance(txt); u.lang = 'es-MX'; u.rate = 0.9; speechSynthesis.speak(u); } catch (e) {} }
+  function lee(txt){ if (window.Voz) Voz.habla(txt); }
   function paraAyuda(tr){
     var h2 = tr.querySelector('h2'), partes = [], inner = tr.firstChild;
     var lead = [].slice.call(inner.children).filter(function(p){ return p.tagName === 'P' && !p.classList.contains('det') && !p.classList.contains('pf-sug') && !/^(note|big|goal|sc|lead)/.test(p.className) && p.textContent.length > 25 && !/Aciertos/.test(p.textContent); })[0];

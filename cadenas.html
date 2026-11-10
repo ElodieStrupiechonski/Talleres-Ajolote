@@ -58,7 +58,7 @@ button:disabled{opacity:.4}
   <section class="tray" id="s2" aria-labelledby="t2">
     <span class="step">Bandeja 2 · La tabla de multiplicar</span>
     <h2 id="t2">Rectángulos de cuentas</h2>
-    <p>Toca una casilla: el rectángulo tiene filas × columnas.</p>
+    <p>Toca o arrastra el dedo por la tabla: el rectángulo tiene filas × columnas.</p>
     <p class="det">Toca una casilla: el rectángulo de cuentas tiene tantas filas como el primer número y tantas columnas como el segundo.</p>
     <div class="row">
       <div class="tabla" id="tb" role="grid"></div>
@@ -161,7 +161,13 @@ const bead=n=>`<svg width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy
   tb.appendChild(h('div','hd','×'));
   for(let b=1;b<=10;b++)tb.appendChild(h('div','hd',b));
   for(let a=1;a<=10;a++){tb.appendChild(h('div','hd',a));
-    for(let b=1;b<=10;b++){const c=h('button','t',a*b);c.type='button';c.setAttribute('aria-label',a+' por '+b);c.addEventListener('click',()=>{A=a;B=b;paint();});tb.appendChild(c);cells[a+','+b]=c;}}
+    for(let b=1;b<=10;b++){const c=h('button','t',a*b);c.type='button';c.setAttribute('aria-label',a+' por '+b);c.dataset.a=a;c.dataset.b=b;c.addEventListener('click',()=>{A=a;B=b;paint();});tb.appendChild(c);cells[a+','+b]=c;}}
+  /* Arrastrar el dedo desde la esquina arriba-izquierda dibuja el rectángulo de cuentas */
+  (function(){let d=false;tb.style.touchAction='none';
+    const at=e=>{const x=document.elementFromPoint(e.clientX,e.clientY),c=x&&x.closest&&x.closest('button.t');return c&&tb.contains(c)?c:null;};
+    tb.addEventListener('pointerdown',e=>{if(at(e))d=true;});
+    tb.addEventListener('pointermove',e=>{if(!d)return;const c=at(e);if(c&&(+c.dataset.a!==A||+c.dataset.b!==B)){A=+c.dataset.a;B=+c.dataset.b;paint();}e.preventDefault();});
+    ['pointerup','pointercancel','pointerleave'].forEach(t=>tb.addEventListener(t,()=>{d=false;}));})();
   function paint(){
     for(const k in cells){const [a,b]=k.split(',').map(Number),c=cells[k];c.className='t';
       if(A&&a<=A&&b<=B)c.classList.add('rect');

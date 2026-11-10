@@ -85,6 +85,21 @@
       b.setAttribute('aria-expanded', on); b.textContent = on ? '× Cerrar ayuda' : '? Ayuda'; reiniciarInactividad(); };
   });
 
+  // Voz del ajolote: elige una voz en español (preferencia guardada en este dispositivo) y la hace más aguda y suave
+  var Voz = (function(){
+    var K = 'tm_voz', KP = 'tm_voz_tono';
+    function lee(k, d){ try { var v = localStorage.getItem(k); return v == null ? d : v; } catch (e) { return d; } }
+    function guarda(k, v){ try { localStorage.setItem(k, v); } catch (e) {} }
+    function lista(){ try { return speechSynthesis.getVoices().filter(function(v){ return /^es/i.test(v.lang); }); } catch (e) { return []; } }
+    function puntaje(v){ var n = 0; if (/^es[-_]MX/i.test(v.lang)) n += 3; else if (/^es[-_]US/i.test(v.lang)) n += 2; if (/Dalia|Paloma|Sabina|Paulina|Mónica|Monica|Helena|Laura|Lucía|Lucia|Elena|female|mujer|femen|eea|-x-/i.test(v.name)) n += 2; if (/Jorge|Pablo|Raul|Raúl|Diego|Alvaro|Álvaro|male|hombre/i.test(v.name)) n -= 3; if (/natural|neural|online/i.test(v.name)) n += 1; return n; }
+    function elegida(){ var l = lista(), nom = lee(K, ''); var v = nom && l.filter(function(x){ return x.name === nom; })[0]; if (v) return v; return l.slice().sort(function(a, b){ return puntaje(b) - puntaje(a); })[0] || null; }
+    function tono(){ var t = parseFloat(lee(KP, '1.25')); return isNaN(t) ? 1.25 : Math.max(0.8, Math.min(2, t)); }
+    function habla(txt){ try { if (!('speechSynthesis' in window) || !txt) return; speechSynthesis.cancel(); var u = new SpeechSynthesisUtterance(txt), v = elegida(); u.lang = v ? v.lang : 'es-MX'; if (v) u.voice = v; u.pitch = tono(); u.rate = 0.92; speechSynthesis.speak(u); } catch (e) {} }
+    return { habla: habla, lista: lista, elegida: elegida, tono: tono, pon: function(nom){ guarda(K, nom || ''); }, ponTono: function(t){ guarda(KP, String(t)); } };
+  })();
+  window.Voz = Voz;
+  try { if ('speechSynthesis' in window) speechSynthesis.getVoices(); } catch (e) {}
+
   // Candado de adultos: si hay candado y no se ha abierto en los últimos 15 min, lo pide antes de continuar
   function pideAdulto(ok){
     var P=window.Perf;

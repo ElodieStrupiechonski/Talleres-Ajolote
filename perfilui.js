@@ -3,6 +3,7 @@
   var P=window.Perf; if(!P) return;
   function el(t,c,x){var e=document.createElement(t); if(c)e.className=c; if(x!=null)e.textContent=x; return e;}
   function avatar(p,w){var s=el('span','pu-av'); if(window.Ilu) s.innerHTML=Ilu.html('axo_feliz',{tema:p?p.tema:'rosa'}); if(w)s.style.width=w; return s;}
+  function selGen(v){var s=el('select'); [['','Sin género (neutro)'],['a','Niña'],['o','Niño']].forEach(function(x){var o=el('option',null,x[1]); o.value=x[0]; if(x[0]===(v||''))o.selected=true; s.appendChild(o);}); return s;}
   function capa(titulo,cierra){
     var ov=el('div','pu-ov'), box=el('div','pu-box'); ov.setAttribute('role','dialog'); ov.setAttribute('aria-modal','true'); ov.setAttribute('aria-label',titulo);
     ov.appendChild(box); box.appendChild(el('h2','pu-h',titulo));
@@ -39,13 +40,13 @@
         b.innerHTML=''; b.appendChild(el('h2','pu-h','Perfil nuevo'));
         var f=el('div','pu-form'), l1=el('label',null,'Nombre'), inp=el('input'); inp.type='text'; inp.maxLength=14; inp.autocomplete='off'; inp.spellcheck=false; l1.appendChild(inp);
         var t=sel(TALL,2,'Taller'), a=sel({1:'Año 1',2:'Año 2',3:'Año 3'},1,'Año del ciclo');
-        var l2=el('label',null,'Taller (un adulto puede ajustarlo)'); l2.appendChild(t); var l3=el('label',null,'Año del taller'); l3.appendChild(a);
+        var g=selGen(''), lg=el('label',null,'Cómo te habla el ajolote'); lg.appendChild(g); var l2=el('label',null,'Taller (un adulto puede ajustarlo)'); l2.appendChild(t); var l3=el('label',null,'Año del taller'); l3.appendChild(a);
         var er=el('p','pu-err'); er.setAttribute('role','alert');
         var ok=el('button','pu-go','Listo'); ok.type='button'; var ca=el('button','pu-sec','Volver'); ca.type='button';
-        ok.onclick=function(){var r=P.crear(inp.value,t.value,a.value); if(r.ok){P.setActivo(r.ok.id); c.fin(); window.PerfUI.mascota(cb,r.ok);} else er.textContent={nombre:'Escribe tu nombre (solo letras).',repetido:'Ese nombre ya existe. Agrega una letra o tu apellido.',lleno:'Ya no caben más perfiles.'}[r.err];};
+        ok.onclick=function(){var r=P.crear(inp.value,t.value,a.value); if(r.ok){P.editar(r.ok.id,{gen:g.value}); P.setActivo(r.ok.id); c.fin(); window.PerfUI.mascota(cb,r.ok);} else er.textContent={nombre:'Escribe tu nombre (solo letras).',repetido:'Ese nombre ya existe. Agrega una letra o tu apellido.',lleno:'Ya no caben más perfiles.'}[r.err];};
         ca.onclick=function(){b.innerHTML=''; b.appendChild(el('h2','pu-h','¿Quién juega?')); b.appendChild(lista); b.appendChild(pie); pinta();};
         inp.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault(); ok.click();}});
-        [l1,l2,l3,er].forEach(function(x){f.appendChild(x);}); var fila=el('div','pu-row'); fila.appendChild(ca); fila.appendChild(ok); f.appendChild(fila); b.appendChild(f); setTimeout(function(){inp.focus();},50);
+        [l1,lg,l2,l3,er].forEach(function(x){f.appendChild(x);}); var fila=el('div','pu-row'); fila.appendChild(ca); fila.appendChild(ok); f.appendChild(fila); b.appendChild(f); setTimeout(function(){inp.focus();},50);
       }
       pinta();
     },
@@ -69,8 +70,9 @@
       var l=el('label','pu-lab','Ponle el nombre que quieras'); inp.type='text'; inp.maxLength=12; inp.autocomplete='off'; inp.spellcheck=false; inp.value=nom; l.appendChild(inp); b.appendChild(l);
       inp.addEventListener('keydown',function(e){ if(e.key==='Enter'){e.preventDefault(); ok.click();} });
       b.appendChild(info);
+      var gs=selGen(p.gen), lg2=el('label','pu-lab','Cómo te habla el ajolote'); lg2.appendChild(gs); b.appendChild(lg2);
       var ok=el('button','pu-go','Listo'); ok.type='button';
-      ok.onclick=function(){ var v=P.limpiaMas(inp.value)||P.MASC[tema].n; P.editar(p.id,{tema:tema,mas:v}); c.fin(); if(cb)cb(); };
+      ok.onclick=function(){ var v=P.limpiaMas(inp.value)||P.MASC[tema].n; P.editar(p.id,{tema:tema,mas:v,gen:gs.value}); c.fin(); if(cb)cb(); };
       b.appendChild(ok); pinta();
     },
     // "¿Cómo te sentiste?" (se puede saltar)

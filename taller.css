@@ -616,3 +616,6 @@ body.pf .pf-tab.on,body.pf .pf-tab[aria-current=true]{border-color:#fff;box-shad
 .tz-m{margin:0;min-height:1.4em;font-weight:800}.tz-bt{display:flex;gap:10px}
 .tz-bt button{min-height:44px;padding:4px 18px;font-weight:800}
 .pf-ins .ayuda{position:static!important;flex:none;margin:0;min-height:40px;white-space:nowrap}
+/* Estrellas de nivel: las ya superadas se quedan amarillas; la actual es más grande y más intensa */
+.niv button.pas{background:var(--lado-ac,#ffd96e)!important;color:#2b2110!important}
+.niv button.on{background:#ffc22e!important;transform:scale(1.14);z-index:1}

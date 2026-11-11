@@ -45,37 +45,40 @@
   var PERS={rosa:'artista',azul:'deportista',amarillo:'ingeniero',menta:'estudioso',lila:'timido',durazno:'rebelde'};
   /* Personalidad: desde la etapa 1 hay un rasgo propio; en las etapas 2 y 3 se acentúa */
   function rasgos(per,et,e,up,t){
-    var o='',ver=!up&&e!=='casi',R=t.R,cej=ver?path('M62 79 L88 85',null,5.5)+path('M138 79 L112 85',null,5.5):'';
+    var o='',ver=!up&&e!=='casi',R=t.R,
+    cej=ver?path('M64 80 Q75 73 88 77',null,5)+path('M112 77 Q125 73 136 80',null,5):''; // cejas arqueadas y amables
     var lente=function(x,r){return '<circle cx="'+x+'" cy="92" r="'+r+'" fill="rgba(255,255,255,.28)" stroke="'+C.ink+'" stroke-width="3.6"/>';};
-    var capucha=function(g){var d='M45 100 Q38 32 100 30 Q162 32 155 100';return path(d,null,g+5)+'<path d="'+d+'" fill="none" stroke="'+R+'" stroke-width="'+g+'" stroke-linecap="round"/>';};
+    var arco=function(g,col,d){d=d||'M45 100 Q38 32 100 30 Q162 32 155 100';return path(d,null,g+5)+'<path d="'+d+'" fill="none" stroke="'+col+'" stroke-width="'+g+'" stroke-linecap="round"/>';};
     if(per==='artista'){ // boina, manchas de pintura y, al final, gafas de sol
       var k=et===1?0:et===2?7:10;
       o+='<g transform="rotate(-12 112 50)">'+ell(112,50,24+k,11+k*0.3,R)+circ(112,38-k*0.3,4,R,3.5)+'</g>';
       if(et>=2)o+=circ(150,70,4,C.blue,0)+circ(142,62,3,C.yel,0)+circ(155,80,3,C.green,0);
       if(et===3)o+='<rect x="58" y="82" width="36" height="21" rx="7" fill="#2b2430" stroke="'+C.ink+'" stroke-width="3.5"/><rect x="106" y="82" width="36" height="21" rx="7" fill="#2b2430" stroke="'+C.ink+'" stroke-width="3.5"/>'+path('M94 90 Q100 86 106 90',null,3.5)+'<path d="M65 88 L72 87 M113 88 L120 87" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none"/>';
-      if(et>=2)o+=cej;}
+      if(et===2)o+=cej;}
     else if(per==='deportista'){ // cinta, luego sudor y al final gorra al revés
       if(et===1)o+=path('M52 78 Q100 64 148 78',null,10)+'<path d="M52 78 Q100 64 148 78" fill="none" stroke="'+R+'" stroke-width="5.5" stroke-linecap="round"/>';
-      else if(et===2){o+=path('M52 80 Q100 62 148 80',null,12)+'<path d="M52 80 Q100 62 148 80" fill="none" stroke="'+R+'" stroke-width="7.5" stroke-linecap="round"/>'+circ(150,81,6,R,3.5)+path('M150 84 L158 96 M150 84 L145 97',null,4)+path('M146 56 Q154 66 148 72 Q140 66 146 56 Z',C.blue,3)+cej;}
-      else o+=path('M54 80 Q52 38 100 38 Q148 38 146 80 Q100 70 54 80 Z',R,4)+path('M146 78 Q172 76 176 86 Q160 90 146 86 Z',t.PD,4)+circ(100,40,5,C.cream,3)+cej;}
-    else if(per==='ingeniero'){ // engrane, casco y gafas de protección
-      if(et===1)o+=engrane(124,50,13,C.blue);
-      else{o+=path('M56 78 Q54 38 100 38 Q146 38 144 78 Z',R,4)+rect(46,74,108,10,5,R,4)+rect(92,30,16,12,4,R,3.5)+circ(100,56,0.1,R,0);
-        if(et===3)o+='<rect x="56" y="84" width="88" height="22" rx="10" fill="rgba(134,174,219,.4)" stroke="'+C.ink+'" stroke-width="4"/>'+path('M62 90 L72 88',null,0)+'<path d="M64 91 L74 89" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none"/>'+circ(100,52,7,'#fff5b8',3.5);
-        o+=cej;}}
+      else if(et===2){o+=path('M52 80 Q100 62 148 80',null,12)+'<path d="M52 80 Q100 62 148 80" fill="none" stroke="'+R+'" stroke-width="7.5" stroke-linecap="round"/>'+circ(150,81,6,R,3.5)+path('M150 84 L158 96 M150 84 L145 97',null,4)+path('M146 56 Q154 66 148 72 Q140 66 146 56 Z',C.blue,3);}
+      else o+=path('M54 80 Q52 38 100 38 Q148 38 146 80 Q100 70 54 80 Z',R,4)+path('M146 78 Q172 76 176 86 Q160 90 146 86 Z',t.PD,4)+circ(100,40,5,C.cream,3);}
+    else if(per==='ingeniero'){ // casco de ingeniero (siempre el mismo); el visor sube en la etapa 2 y baja en la 3
+      o+=path('M56 78 Q54 38 100 38 Q146 38 144 78 Z',R,4)+rect(46,74,108,10,5,R,4)+rect(91,30,18,12,4,R,3.5)+circ(100,57,6.5,'#fff5b8',3.5)+path('M70 62 Q74 50 86 46',null,3.5);
+      if(et===2)o+='<path d="M60 70 Q100 52 140 70 L140 76 Q100 60 60 76 Z" fill="rgba(134,174,219,.45)" stroke="'+C.ink+'" stroke-width="3.5" stroke-linejoin="round"/>';
+      if(et===3)o+='<path d="M56 86 H144 Q148 86 148 92 V104 Q148 114 138 114 H62 Q52 114 52 104 V92 Q52 86 56 86 Z" fill="rgba(190,220,245,.22)" stroke="'+C.ink+'" stroke-width="4"/><path d="M64 94 L78 92 M64 101 L70 100 M118 94 L132 92" stroke="#fff" stroke-opacity=".85" stroke-width="3.5" stroke-linecap="round" fill="none"/>'+circ(52,80,3.5,C.ink,0)+circ(148,80,3.5,C.ink,0);
+      }
     else if(per==='estudioso'){ // lentes, lápiz y birrete
       o+=lente(74,et===1?14:16.5)+lente(126,et===1?14:16.5)+path('M88 91 Q100 85 112 91',null,3.6);
       if(et>=2)o+='<g transform="rotate(32 136 52)">'+rect(116,47,40,9,3,C.yel,3.5)+path('M156 47 L168 51.5 L156 56',C.pink,3)+rect(110,47,8,9,2,C.pink,3.5)+'</g>';
-      if(et===3)o+=path('M82 56 V70 Q100 80 118 70 V56','#3b3552',4)+path('M52 52 L100 32 L148 52 L100 72 Z','#3b3552',4.5)+path('M142 53 L144 74',null,3.5)+circ(144,76,4.5,C.gold,3)+cej;}
-    else if(per==='timido'){ // flequillo, luego capucha y audífonos
-      if(et===1)o+=path('M54 72 Q66 42 112 46 Q106 68 82 82 Q64 86 54 72 Z',t.PD,4);
-      else{o+=capucha(et===3?13:10);
-        if(et===3)o+=ell(46,100,9,15,R)+ell(154,100,9,15,R)+path('M62 84 Q74 76 88 82',null,5)+path('M138 84 Q126 76 112 82',null,5);}}
-    else { // rebelde: cresta, arete y gorro de lana
+      if(et===3)o+=path('M82 56 V70 Q100 80 118 70 V56','#3b3552',4)+path('M52 52 L100 32 L148 52 L100 72 Z','#3b3552',4.5)+path('M142 53 L144 74',null,3.5)+circ(144,76,4.5,C.gold,3);}
+    else if(per==='timido'){ // capucha siempre igual; cordones en la etapa 2 y audífonos completos en la 3
+      var pw=ver?path('M64 83 Q76 81 88 76',null,4.5)+path('M112 76 Q124 81 136 83',null,4.5):'';
+      o+='<path d="M44 104 Q28 20 100 18 Q172 20 156 104 Q154 122 136 118 L64 118 Q46 122 44 104 Z M54 96 A46 38 0 1 0 146 96 A46 38 0 1 0 54 96 Z" fill="'+t.PD+'" fill-rule="evenodd" '+st(4.5)+'/>';
+      if(et>=2)o+=path('M92 124 Q90 140 94 152',null,3.5)+path('M108 124 Q110 140 106 152',null,3.5)+circ(94,153,3.2,C.cream,3)+circ(106,153,3.2,C.cream,3);
+      if(et===3)o+=arco(7,R,'M42 100 Q36 20 100 20 Q164 20 158 100')+ell(43,102,9,16,R)+ell(157,102,9,16,R);
+      if(et>=2)o+=pw;}
+    else { // rebelde: cresta y, al final, bandana
       if(et<3)o+=path('M82 58 L88 30 L97 52 L106 24 L113 52 L124 32 L120 60 Z',R,4);
-      else o+=path('M54 78 Q52 36 100 36 Q148 36 146 78 Z',R,4)+path('M52 76 Q100 88 148 76 L146 66 Q100 78 54 66 Z','#f6efe0',4)+circ(100,30,9,'#f6efe0',4);
-      if(et>=2)o+='<circle cx="52" cy="116" r="5" fill="none" stroke="'+C.gold+'" stroke-width="3.5"/>';
-      if(ver)o+=path('M62 80 L88 84',null,5.5)+path('M138 74 Q126 74 112 84',null,5.5);}
+      else{o+=path('M148 74 L166 66 L164 82 L168 94 L150 84 Z',R,3.5)+path('M52 78 Q100 58 148 78 L148 62 Q100 42 52 62 Z',R,4)+circ(150,74,6,R,3.5);
+        [[72,66],[92,59],[112,59],[130,66]].forEach(function(q){o+=circ(q[0],q[1],2.8,'#fffdf9',0);});}
+      if(ver)o+=path('M62 76 Q75 69 88 75',null,5)+path('M112 80 L136 80',null,5);}
     return o;}
   function axo(e,tema,etapa){
     e=e||'feliz';var et=etapa||etapaActiva(),t=TEMAS[tema]||TEMAS.rosa,P=t.P,PD=t.PD,up=e==='celebra',o='',per=PERS[TEMAS[tema]?tema:'rosa'];

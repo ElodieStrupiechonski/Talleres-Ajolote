@@ -21,6 +21,18 @@
   function near(q, pts, r){ var r2 = r * r; for (var i = 0; i < pts.length; i++){ var x = q[0] - pts[i][0], y = q[1] - pts[i][1]; if (x * x + y * y <= r2) return true; } return false; }
   function comas(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
 
+  function flechas(ctx, st, sz, gap){
+    var acc = 0, nx = gap * .8;
+    for (var i = 1; i < st.length; i++){
+      var a = st[i - 1], b = st[i], d = Math.hypot(b[0] - a[0], b[1] - a[1]); if (!d) continue;
+      while (acc + d >= nx){
+        var t = (nx - acc) / d, x = a[0] + (b[0] - a[0]) * t, y = a[1] + (b[1] - a[1]) * t, an = Math.atan2(b[1] - a[1], b[0] - a[0]);
+        ctx.save(); ctx.translate(x, y); ctx.rotate(an); ctx.fillStyle = '#2f7d4a'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.lineJoin = 'round';
+        ctx.beginPath(); ctx.moveTo(sz, 0); ctx.lineTo(-sz * .7, -sz * .8); ctx.lineTo(-sz * .3, 0); ctx.lineTo(-sz * .7, sz * .8); ctx.closePath(); ctx.stroke(); ctx.fill(); ctx.restore(); nx += gap;
+      }
+      acc += d;
+    }
+  }
   function abre(num){
     var txt = String(num), nd = txt.length, s = Math.min(2.1, (W - 40) / (nd * 100 + (nd - 1) * 36), (H - 70) / 140);
     var tw = nd * 100 * s + (nd - 1) * 36 * s, x0 = (W - tw) / 2, y0 = (H - 140 * s) / 2, strokes = [];
@@ -34,6 +46,7 @@
       ctx.clearRect(0, 0, W, H); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
       strokes.forEach(function(st){ ctx.strokeStyle = ok ? '#6fb584' : '#c9bda8'; ctx.lineWidth = ok ? 18 : 20; ctx.setLineDash(ok ? [] : [1, 24]); ctx.beginPath(); st.forEach(function(q, i){ i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1]); }); ctx.stroke(); });
       ctx.setLineDash([]);
+      if (!ok) strokes.forEach(function(st){ flechas(ctx, st, 14, 80); });
       mine.concat(cur ? [cur] : []).forEach(function(st){ ctx.strokeStyle = '#4f7fbf'; ctx.lineWidth = 12; ctx.beginPath(); st.forEach(function(q, i){ i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1]); }); if (st.length === 1) ctx.lineTo(st[0][0] + .1, st[0][1]); ctx.stroke(); });
       if (!ok) strokes.forEach(function(st, i){ var p = st[0]; ctx.fillStyle = '#4fa36a'; ctx.strokeStyle = '#41362b'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(p[0], p[1], 15, 0, TAU); ctx.fill(); ctx.stroke(); ctx.fillStyle = '#fff'; ctx.font = '800 18px system-ui,sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(String(i + 1), p[0], p[1] + 1); });
     }

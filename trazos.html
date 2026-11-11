@@ -115,7 +115,7 @@ const NUMS=[
   {txt:'Traza el número 1.',hint:'Un piquito hacia arriba y luego bajas derecho.',strokes:[poly([225,175],[330,90],[330,510])]},
   {txt:'Traza el número 2.',hint:'Una curva arriba, baja en diagonal y termina con una línea.',strokes:[arc(300,205,115,180,400,50).concat([[200,500]],[[430,500]])]},
   {txt:'Traza el número 3.',hint:'Dos barrigas: una arriba y otra abajo.',strokes:[arc(290,195,100,200,450,40).concat(arc(290,395,120,270,520,44))]},
-  {txt:'Traza el número 4.',hint:'Primero la línea 1: baja y cruza. Después la línea 2, parada.',strokes:[poly([380,90],[150,370],[470,370]),poly([380,90],[380,520])]},
+  {txt:'Traza el número 4.',hint:'Primero la línea 1: baja en diagonal y cruza a la derecha. Después la línea 2, de arriba hacia abajo.',strokes:[poly([380,90],[150,370],[470,370]),poly([380,90],[380,520])]},
   {txt:'Traza el número 5.',hint:'Línea de arriba, baja un poquito y haz la barriga.',strokes:[poly([420,100],[215,100],[195,280]).concat(arc(290,370,130,238,505,44))]}
 ];
 
@@ -139,6 +139,22 @@ const NUMS=[
 const COV=38,PRE=52; // tolerancias (px del lienzo): cobertura y precisión
 const dist2=(a,b)=>{const x=a[0]-b[0],y=a[1]-b[1];return x*x+y*y;};
 const dense=(p,step)=>{const o=[p[0]];for(let i=1;i<p.length;i++){const a=p[i-1],b=p[i],d=Math.sqrt(dist2(a,b)),n=Math.max(1,Math.ceil(d/step));for(let k=1;k<=n;k++)o.push([a[0]+(b[0]-a[0])*k/n,a[1]+(b[1]-a[1])*k/n]);}return o;};
+/* Flechitas que muestran hacia dónde va el trazo */
+function flechas(ctx,st,sz,gap){
+  let acc=0,next=gap*0.8;
+  for(let i=1;i<st.length;i++){
+    const a=st[i-1],b=st[i],d=Math.hypot(b[0]-a[0],b[1]-a[1]);
+    if(!d)continue;
+    while(acc+d>=next){
+      const t=(next-acc)/d,x=a[0]+(b[0]-a[0])*t,y=a[1]+(b[1]-a[1])*t,an=Math.atan2(b[1]-a[1],b[0]-a[0]);
+      ctx.save();ctx.translate(x,y);ctx.rotate(an);
+      ctx.fillStyle='#2f7d4a';ctx.strokeStyle='#fff';ctx.lineWidth=Math.max(2,sz/6);ctx.lineJoin='round';
+      ctx.beginPath();ctx.moveTo(sz,0);ctx.lineTo(-sz*.7,-sz*.8);ctx.lineTo(-sz*.3,0);ctx.lineTo(-sz*.7,sz*.8);ctx.closePath();ctx.stroke();ctx.fill();
+      ctx.restore();next+=gap;
+    }
+    acc+=d;
+  }
+}
 function Trazo(id,items,onWin){
   const root=$('#'+id),cv=$('canvas',root),ctx=cv.getContext('2d'),lv=$('.lv',root),goal=$('.goal',root),msg=$('.msg',root),nxt=$('.nxt',root);
   const T={idx:0,done:items.map(()=>false),solved:false,L:null,guide:[],mine:[],cur:null};
@@ -150,10 +166,11 @@ function Trazo(id,items,onWin){
     // camino de puntitos
     T.L.strokes.forEach(st=>{ctx.strokeStyle=T.solved?'#6fb584':'#c9bda8';ctx.lineWidth=T.solved?20:22;ctx.setLineDash(T.solved?[]:[1,26]);ctx.beginPath();st.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.stroke();});
     ctx.setLineDash([]);
+    if(!T.solved)T.L.strokes.forEach(st=>flechas(ctx,st,24,120));
     // trazo del niño
     T.mine.concat(T.cur?[T.cur]:[]).forEach(s=>{ctx.strokeStyle='#4f7fbf';ctx.lineWidth=14;ctx.beginPath();s.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));if(s.length===1)ctx.lineTo(s[0][0]+.1,s[0][1]);ctx.stroke();});
     // puntos de inicio
-    if(!T.solved)T.L.strokes.forEach((st,i)=>{const p=st[0];ctx.fillStyle='#4fa36a';ctx.strokeStyle='#41362b';ctx.lineWidth=4;ctx.beginPath();ctx.arc(p[0],p[1],24,0,TAU);ctx.fill();ctx.stroke();
+    if(!T.solved)T.L.strokes.forEach((st,i)=>{let p=st[0];if(T.L.strokes.slice(0,i).some(o=>dist2(o[0],p)<900)){let a=0;for(let k=1;k<st.length;k++){const d=Math.sqrt(dist2(st[k],st[k-1]));if(a+d>=70){const t=(70-a)/d;p=[st[k-1][0]+(st[k][0]-st[k-1][0])*t,st[k-1][1]+(st[k][1]-st[k-1][1])*t];break;}a+=d;}}ctx.fillStyle='#4fa36a';ctx.strokeStyle='#41362b';ctx.lineWidth=4;ctx.beginPath();ctx.arc(p[0],p[1],24,0,TAU);ctx.fill();ctx.stroke();
       ctx.fillStyle='#fff';ctx.font='800 28px system-ui,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(T.L.strokes.length>1?String(i+1):'▶',p[0],p[1]+1);});
   }
   function load(i){T.idx=i;T.L=items[i];T.solved=false;T.mine=[];T.cur=null;T.guide=T.L.strokes.map(s=>dense(s,6));nxt.hidden=true;say('');goal.textContent=T.L.txt;chips();draw();}

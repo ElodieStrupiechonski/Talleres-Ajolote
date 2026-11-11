@@ -25,7 +25,7 @@ svg.ob.x{opacity:.28}
 .part{cursor:pointer}
 .chips.lv{display:flex;flex-wrap:wrap;gap:8px}
 .msg:empty{display:none}
-.ob.mk g{stroke:#2a6fb0;stroke-width:6}.ob.mk{filter:drop-shadow(0 0 3px #2a6fb0)}
+.ob{cursor:pointer;transition:transform .12s}.ob.mk{transform:scale(1.08)}.ob.mk g{fill:#7fcf95;stroke:#2f7d4a;stroke-width:3.5}.ob.mk.x g{fill:#7fcf95}
 </style></head><body>
 <div class="wrap">
   <a class="back" href="index.html">← Todos los talleres</a>
@@ -54,6 +54,7 @@ svg.ob.x{opacity:.28}
   <section class="tray" id="s2" aria-labelledby="t2">
     <span class="step">Bandeja 2 · Contar</span>
     <h2 id="t2">¿Cuántos hay?</h2>
+    <p class="goal">¿Cuántos hay? Toca cada objeto para contarlo: se pone verde.</p>
     <div id="b2"></div>
     <div id="o2"></div>
     <p class="note msg" id="m2" aria-live="polite"></p>
@@ -114,7 +115,7 @@ function ob(kind,col,cls){
   s.innerHTML=`<g fill="${col}" stroke="#41362b" stroke-width="2.5">${inner}</g>`;return s;
 }
 const KINDS=['c','s','h'];
-/* Contar con el dedo: tocar o arrastrar sobre los objetos los marca con un aro azul (ayuda para no perder la cuenta) */
+/* Contar con el dedo: tocar o arrastrar sobre los objetos los pinta de verde (ayuda para no perder la cuenta) */
 function marcar(box){box.style.touchAction='none';let down=false,mode=true;
   const ob_=e=>{const x=document.elementFromPoint(e.clientX,e.clientY);const o=x&&x.closest&&x.closest('svg.ob');return o&&box.contains(o)?o:null;};
   const put=o=>{if(o&&o.classList.contains('mk')!==mode)o.classList.toggle('mk',mode);};
@@ -173,7 +174,7 @@ function ask(box,fn){Construir(box,{max:2,submit:v=>fn(v[0])});}
       for(let g=0;g<k;g++){const gr=h('span','gr');for(let i=0;i<sz;i++)gr.appendChild(ob(kc.k,kc.c));f.appendChild(gr);}b.appendChild(f);
       b.appendChild(h('p','note',`Hay ${k} grupos de ${sz}. Cuenta de ${sz} en ${sz}.`));}
     marcar(b);ask($('#o2'),ans);}
-  function ans(x){if(x===cur){if(!done){score++;$('#sc2').textContent=score;}done=true;say('#m2',`<span class="ok">¡Correcto!</span> Son ${cur}. Pulsa Siguiente.`);}else say('#m2','<span class="bad">Casi.</span> Cuenta otra vez: toca o pasa el dedo sobre cada uno para marcarlo.');}
+  function ans(x){if(x===cur){if(!done){score++;$('#sc2').textContent=score;}done=true;say('#m2',`<span class="ok">¡Correcto!</span> Son ${cur}. Pulsa Siguiente.`);}else say('#m2','<span class="bad">Casi.</span> Cuenta otra vez: toca cada objeto y se pone verde.');}
   $('#n2').addEventListener('click',q);secs.push({root:$('#s2'),next:q});q();
 })();
 
@@ -186,10 +187,10 @@ function ask(box,fn){Construir(box,{max:2,submit:v=>fn(v[0])});}
     for(let i=0;i<Math.max(a,b);i++){const c=h('div');c.style.height='38px';if(i<b)c.appendChild(ob(kc2.k,kc2.c));p.appendChild(c);}return p;}
   function q(){done=false;say('#m3','');const L=NV.get(),b=$('#b3'),o=$('#o3'),k=$('#k3');b.innerHTML='';o.innerHTML='';k.innerHTML='';
     if(L<=1){const mx=L===0?5:10;let a=1+rnd(mx),c=Math.random()<.2?a:1+rnd(mx);cur=a>c?'A':a<c?'B':'E';$('#q3').textContent='¿En qué fila hay más?';
-      b.appendChild(pair(a,c,{k:'c',c:COL[0]},{k:'c',c:COL[1]}));
+      b.appendChild(pair(a,c,{k:'c',c:COL[0]},{k:'c',c:COL[1]}));marcar(b);
       [['A','La de arriba'],['B','La de abajo'],['E','Hay igual']].forEach(([v,t])=>o.appendChild(btn('',t,()=>ans1(v,a,c))));}
     else if(L===2){let a=3+rnd(7),c;do{c=1+rnd(a-1);}while(c===a);cur=Math.abs(a-c);const sw=Math.random()<.5;const A=sw?c:a,B=sw?a:c;$('#q3').textContent='¿Cuántos más hay en la fila que tiene más?';
-      b.appendChild(pair(A,B,{k:'s',c:COL[2]},{k:'h',c:COL[3]}));ask(k,x=>ans2(x,A,B));}
+      b.appendChild(pair(A,B,{k:'s',c:COL[2]},{k:'h',c:COL[3]}));marcar(b);ask(k,x=>ans2(x,A,B));}
     else{const mx=L===3?99:999;let a=1+rnd(mx),c=Math.random()<.15?a:1+rnd(mx);if(L===3&&Math.random()<.5)c=Math.max(1,Math.min(99,a+(rnd(11)-5)));cur=a>c?'>':a<c?'<':'=';
       $('#q3').innerHTML=`<span class="big">${a} ○ ${c}</span>`;
       ['<','=','>'].forEach(v=>o.appendChild(btn('',v,()=>ans3(v,a,c))));}}

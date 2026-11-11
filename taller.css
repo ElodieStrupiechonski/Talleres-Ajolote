@@ -637,3 +637,5 @@ body.pf .gantt .gs:focus-visible{outline:3px solid #fff;outline-offset:1px}
 .ed-bx{background:#fffdf9;border:4px solid #e9b44c;border-radius:22px;padding:16px 22px;max-width:460px;text-align:center;max-height:96vh;overflow:auto}
 .ed-bx .ed-axo{width:110px;margin:0 auto 4px}
 .ed-go{margin-top:8px;min-height:52px;padding:6px 26px;font-size:1.15rem;font-weight:900;border-radius:14px;border:3px solid #e9b44c;background:#ffd96e;color:#2b2110;cursor:pointer}
+/* Retos: igual que los niveles, se eligen en el panel derecho (sus botones quedan fuera de la vista para el código) */
+body.pf .chips.lv{position:absolute!important;width:1px;height:1px;margin:0;padding:0!important;overflow:hidden;clip:rect(0 0 0 0);opacity:0;pointer-events:none}

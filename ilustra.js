@@ -34,8 +34,10 @@
   function gillE(x,y,ang,L,s){var a=ang*Math.PI/180,dx=s*Math.cos(a),dy=Math.sin(a),cx=x+dx*L*0.5,cy=y+dy*L*0.5,rot=s*ang;
     return '<ellipse cx="'+cx.toFixed(1)+'" cy="'+cy.toFixed(1)+'" rx="'+(L*0.5+4)+'" ry="7.5" fill="__R__" '+st()+' transform="rotate('+rot+' '+cx.toFixed(1)+' '+cy.toFixed(1)+')"/>'+
       '<ellipse cx="'+(cx+dx*3).toFixed(1)+'" cy="'+(cy+dy*3).toFixed(1)+'" rx="'+(L*0.28).toFixed(1)+'" ry="2.2" fill="#f5a99a" transform="rotate('+rot+' '+(cx+dx*3).toFixed(1)+' '+(cy+dy*3).toFixed(1)+')"/>';}
-  function axo(e,tema){
-    e=e||'feliz';var t=TEMAS[tema]||TEMAS.rosa,P=t.P,PD=t.PD,up=e==='celebra',o='';
+  /* Etapa del ajolote según el taller del perfil activo: 1 = tierno, 2 = con actitud, 3 = cool */
+  function etapaActiva(){try{var p=window.Perf&&Perf.activo&&Perf.activo();var n=p?+p.taller:1;return n>=3?3:n===2?2:1;}catch(_){return 1;}}
+  function axo(e,tema,etapa){
+    e=e||'feliz';var et=etapa||etapaActiva(),t=TEMAS[tema]||TEMAS.rosa,P=t.P,PD=t.PD,up=e==='celebra',o='';
     o+='<ellipse cx="100" cy="186" rx="60" ry="8" fill="'+C.sh+'"/>';
     o+=path('M122 160 Q168 170 184 138 Q190 122 178 118 Q170 140 142 142 Z',PD)+path('M150 150 Q170 150 178 132',null,3);
     o+=ell(70,174,15,9,P)+ell(130,174,15,9,P);
@@ -57,7 +59,14 @@
     if(up)o+=path('M78 104 Q100 134 122 104 Z','#7d4a3f',4)+path('M90 116 Q100 126 110 116 Q100 110 90 116','#e9806c',0);
     else if(e==='casi')o+=path('M82 112 Q91 106 100 112 T118 112',null,4);
     else if(e==='piensa')o+=path('M92 112 Q104 116 114 108',null,4);
+    else if(et>=2)o+=path('M88 110 Q104 120 118 104',null,4.5)+path('M116 103 L121 100',null,3.5);
     else o+=path('M88 108 Q94 116 100 108 Q106 116 112 108',null,4);
+    if(et===2){ // actitud: cejas decididas y una banda en la frente
+      o+=path('M52 80 Q100 62 148 80',null,10)+'<path d="M52 80 Q100 62 148 80" fill="none" stroke="'+t.R+'" stroke-width="6" stroke-linecap="round"/>'+circ(150,81,6,t.R,3.5)+path('M150 84 L158 96 M150 84 L145 97',null,4);
+      if(!up&&e!=='casi')o+=path('M62 78 L88 84',null,5.5)+path('M138 78 L112 84',null,5.5);}
+    if(et===3){ // cool: lentes oscuros y audífonos
+      o+=path('M48 92 Q48 30 100 30 Q152 30 152 92',null,10)+'<path d="M48 92 Q48 30 100 30 Q152 30 152 92" fill="none" stroke="'+t.R+'" stroke-width="5" stroke-linecap="round"/>'+ell(47,98,10,16,t.R)+ell(153,98,10,16,t.R);
+      o+='<rect x="58" y="82" width="36" height="22" rx="9" fill="#2b2430" stroke="'+C.ink+'" stroke-width="3.5"/><rect x="106" y="82" width="36" height="22" rx="9" fill="#2b2430" stroke="'+C.ink+'" stroke-width="3.5"/>'+path('M94 90 Q100 86 106 90',null,3.5)+'<path d="M64 89 L72 87 M112 89 L120 87" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none"/>';}
     if(e==='piensa')o+='<text x="152" y="46" font-family="Urbanist,sans-serif" font-weight="800" font-size="38" fill="'+C.ink+'">?</text>';
     if(e==='casi')o+='<text x="150" y="40" font-family="Urbanist,sans-serif" font-weight="800" font-size="34" fill="'+C.ink+'">&#8230;</text>';
     if(up)o+=star(14,22,11,C.pink)+star(188,20,11,C.blue)+star(100,12,9,C.yel)+star(190,86,7,C.green);
@@ -66,8 +75,8 @@
     '@keyframes i-axl{50%{transform:rotate(-4deg)}}@keyframes i-axr{50%{transform:rotate(4deg)}}'+
     '.i-ay{transform-origin:100px 96px;animation:i-ay 4s infinite}@keyframes i-ay{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}';
   var EXPR=['feliz','piensa','celebra','casi'];
-  EXPR.forEach(function(e){def('axo_'+e,'Ajolote '+e,function(op){return '<g'+(e==='celebra'?' class="i-pc"':'')+'>'+axo(e,op&&op.tema)+'</g>';},AXCSS+(e==='celebra'?'.i-pc{animation:i-pc .8s ease-in-out infinite;transform-origin:100px 180px}@keyframes i-pc{50%{transform:translateY(-10px)}}':''));});
-  Object.keys(TEMAS).forEach(function(k){if(k==='rosa')return;EXPR.forEach(function(e){def('axo_'+k+'_'+e,'Ajolote '+k+' '+e,function(){return axo(e,k);},AXCSS);});});
+  EXPR.forEach(function(e){def('axo_'+e,'Ajolote '+e,function(op){return '<g'+(e==='celebra'?' class="i-pc"':'')+'>'+axo(e,op&&op.tema,op&&op.etapa)+'</g>';},AXCSS+(e==='celebra'?'.i-pc{animation:i-pc .8s ease-in-out infinite;transform-origin:100px 180px}@keyframes i-pc{50%{transform:translateY(-10px)}}':''));});
+  Object.keys(TEMAS).forEach(function(k){if(k==='rosa')return;EXPR.forEach(function(e){def('axo_'+k+'_'+e,'Ajolote '+k+' '+e,function(op){return axo(e,k,op&&op.etapa);},AXCSS);});});
 
   /* ---- Caritas de emociones (5): feliz, tranquilo, aburrido, confundido, frustrado ---- */
   function cara(fill,cont){return sombra(100,182,56)+circ(100,100,70,fill)+brillo(56,70,14)+cont;}

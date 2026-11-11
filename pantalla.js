@@ -208,7 +208,7 @@
       var st = stats[i], ok = [].some.call(tr.querySelectorAll('.ok'), function(e){ return OKRE.test(e.textContent); });
       st.mut = (st.mut || 0) + 1;
       var bad = tr.querySelector('.bad'); if (bad && !st.badf){ st.badf = true; if (i === cur) mood('casi', 2500); } else if (!bad) st.badf = false;
-      if (ok && !st.flag){ st.flag = true; if (i === cur){ mood('celebra', 3000); setTimeout(function(){ pulseSig(tr); }, 90); } sesion('ok'); var inf = nivInfo(tr); if (inf){ st.n[inf.lv] = (st.n[inf.lv] || 0) + 1; if (inf.un) st.n[inf.lv] = META; var tot = inf.un ? Perf.marca(nombre, i + 1, inf.lv + 1) : Perf.inc(nombre, i + 1, inf.lv + 1); if (tot === META) sesion('nivel'); if (Perf.activo() && tot === META && i === cur && quiereChequeo(inf)) setTimeout(function(){ PerfUI.chequeo('¡Nivel superado! ¿Cómo te sentiste?', function(e){ if (e) Perf.emocion(nombre, i + 1, inf.lv + 1, e, 'fin'); }); }, 1800); } }
+      if (ok && !st.flag){ st.flag = true; if (i === cur){ mood('celebra', 3000); setTimeout(function(){ pulseSig(tr); }, 90); } sesion('ok'); var inf = nivInfo(tr); if (inf){ st.n[inf.lv] = (st.n[inf.lv] || 0) + 1; if (inf.un) st.n[inf.lv] = META; var tot = inf.un ? Perf.marca(nombre, i + 1, inf.lv + 1) : Perf.inc(nombre, i + 1, inf.lv + 1); if (tot === META){ sesion('nivel'); if (window.Baile) setTimeout(Baile.revisa, 2600); } if (Perf.activo() && tot === META && i === cur && quiereChequeo(inf)) setTimeout(function(){ PerfUI.chequeo('¡Nivel superado! ¿Cómo te sentiste?', function(e){ if (e) Perf.emocion(nombre, i + 1, inf.lv + 1, e, 'fin'); }); }, 1800); } }
       else if (!ok){ st.flag = false; clearPulse(tr); }
       if (i === cur) { clearTimeout(tr._rt); tr._rt = setTimeout(renderTrack, 30); }
     }).observe(tr, { childList: true, subtree: true, characterData: true });
@@ -385,3 +385,4 @@
 
   window.PF.show = show; window.PF.pausa = pausa; window.PF.deseq = function(){ return desequilibrio(); }; window.PF.escala = function(){ return scale[cur]; }; window.PF.fit = function(f){ fit(cur, f !== false); };
 })();
+;(function(){ if (window.Baile) return; var b = document.createElement('script'); b.src = 'baile.js'; document.head.appendChild(b); })();

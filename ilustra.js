@@ -36,49 +36,70 @@
       '<ellipse cx="'+(cx+dx*3).toFixed(1)+'" cy="'+(cy+dy*3).toFixed(1)+'" rx="'+(L*0.28).toFixed(1)+'" ry="2.2" fill="#f5a99a" transform="rotate('+rot+' '+(cx+dx*3).toFixed(1)+' '+(cy+dy*3).toFixed(1)+')"/>';}
   /* Etapa del ajolote según el taller del perfil activo: 1 = tierno, 2 = con actitud, 3 = cool */
   function etapaActiva(){try{var p=window.Perf&&Perf.activo&&Perf.activo();var n=p?+p.taller:1;return n>=3?3:n===2?2:1;}catch(_){return 1;}}
+
+  /* Mano abierta: palma y tres deditos separados (no es un círculo cerrado) */
+  function mano(x,y,rot,P){var o='<g transform="translate('+x+' '+y+') rotate('+rot+')">';
+    [-1,0,1].forEach(function(i){o+='<ellipse cx="'+(i*7.5)+'" cy="'+(i?-9.5:-11.5)+'" rx="3.9" ry="6.6" fill="'+P+'" '+st(3.2)+' transform="rotate('+(i*24)+' '+(i*7.5)+' -3)"/>';});
+    return o+ell(0,0,9,7.5,P,3.5)+'</g>';}
+  function engrane(cx,cy,R,f){var p=[],i,pat=[1,1,.76,.76];for(i=0;i<32;i++){var a=i*Math.PI/16,r=R*pat[i%4];p.push((cx+r*Math.cos(a)).toFixed(1)+','+(cy+r*Math.sin(a)).toFixed(1));}return '<polygon points="'+p.join(' ')+'" fill="'+f+'" '+st(3.5)+'/>'+circ(cx,cy,R*0.3,C.cream,3);}
+  var PERS={rosa:'artista',azul:'deportista',amarillo:'ingeniero',menta:'estudioso',lila:'timido',durazno:'rebelde'};
+  /* Personalidad: desde la etapa 1 hay un rasgo propio; en las etapas 2 y 3 se acentúa */
+  function rasgos(per,et,e,up,t){
+    var o='',ver=!up&&e!=='casi',R=t.R,cej=ver?path('M62 79 L88 85',null,5.5)+path('M138 79 L112 85',null,5.5):'';
+    var lente=function(x,r){return '<circle cx="'+x+'" cy="92" r="'+r+'" fill="rgba(255,255,255,.28)" stroke="'+C.ink+'" stroke-width="3.6"/>';};
+    var capucha=function(g){var d='M45 100 Q38 32 100 30 Q162 32 155 100';return path(d,null,g+5)+'<path d="'+d+'" fill="none" stroke="'+R+'" stroke-width="'+g+'" stroke-linecap="round"/>';};
+    if(per==='artista'){ // boina, manchas de pintura y, al final, gafas de sol
+      var k=et===1?0:et===2?7:10;
+      o+='<g transform="rotate(-12 112 50)">'+ell(112,50,24+k,11+k*0.3,R)+circ(112,38-k*0.3,4,R,3.5)+'</g>';
+      if(et>=2)o+=circ(150,70,4,C.blue,0)+circ(142,62,3,C.yel,0)+circ(155,80,3,C.green,0);
+      if(et===3)o+='<rect x="58" y="82" width="36" height="21" rx="7" fill="#2b2430" stroke="'+C.ink+'" stroke-width="3.5"/><rect x="106" y="82" width="36" height="21" rx="7" fill="#2b2430" stroke="'+C.ink+'" stroke-width="3.5"/>'+path('M94 90 Q100 86 106 90',null,3.5)+'<path d="M65 88 L72 87 M113 88 L120 87" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none"/>';
+      if(et>=2)o+=cej;}
+    else if(per==='deportista'){ // cinta, luego sudor y al final gorra al revés
+      if(et===1)o+=path('M52 78 Q100 64 148 78',null,10)+'<path d="M52 78 Q100 64 148 78" fill="none" stroke="'+R+'" stroke-width="5.5" stroke-linecap="round"/>';
+      else if(et===2){o+=path('M52 80 Q100 62 148 80',null,12)+'<path d="M52 80 Q100 62 148 80" fill="none" stroke="'+R+'" stroke-width="7.5" stroke-linecap="round"/>'+circ(150,81,6,R,3.5)+path('M150 84 L158 96 M150 84 L145 97',null,4)+path('M146 56 Q154 66 148 72 Q140 66 146 56 Z',C.blue,3)+cej;}
+      else o+=path('M54 80 Q52 38 100 38 Q148 38 146 80 Q100 70 54 80 Z',R,4)+path('M146 78 Q172 76 176 86 Q160 90 146 86 Z',t.PD,4)+circ(100,40,5,C.cream,3)+cej;}
+    else if(per==='ingeniero'){ // engrane, casco y gafas de protección
+      if(et===1)o+=engrane(124,50,13,C.blue);
+      else{o+=path('M56 78 Q54 38 100 38 Q146 38 144 78 Z',R,4)+rect(46,74,108,10,5,R,4)+rect(92,30,16,12,4,R,3.5)+circ(100,56,0.1,R,0);
+        if(et===3)o+='<rect x="56" y="84" width="88" height="22" rx="10" fill="rgba(134,174,219,.4)" stroke="'+C.ink+'" stroke-width="4"/>'+path('M62 90 L72 88',null,0)+'<path d="M64 91 L74 89" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none"/>'+circ(100,52,7,'#fff5b8',3.5);
+        o+=cej;}}
+    else if(per==='estudioso'){ // lentes, lápiz y birrete
+      o+=lente(74,et===1?14:16.5)+lente(126,et===1?14:16.5)+path('M88 91 Q100 85 112 91',null,3.6);
+      if(et>=2)o+='<g transform="rotate(32 136 52)">'+rect(116,47,40,9,3,C.yel,3.5)+path('M156 47 L168 51.5 L156 56',C.pink,3)+rect(110,47,8,9,2,C.pink,3.5)+'</g>';
+      if(et===3)o+=path('M82 56 V70 Q100 80 118 70 V56','#3b3552',4)+path('M52 52 L100 32 L148 52 L100 72 Z','#3b3552',4.5)+path('M142 53 L144 74',null,3.5)+circ(144,76,4.5,C.gold,3)+cej;}
+    else if(per==='timido'){ // flequillo, luego capucha y audífonos
+      if(et===1)o+=path('M54 72 Q66 42 112 46 Q106 68 82 82 Q64 86 54 72 Z',t.PD,4);
+      else{o+=capucha(et===3?13:10);
+        if(et===3)o+=ell(46,100,9,15,R)+ell(154,100,9,15,R)+path('M62 84 Q74 76 88 82',null,5)+path('M138 84 Q126 76 112 82',null,5);}}
+    else { // rebelde: cresta, arete y gorro de lana
+      if(et<3)o+=path('M82 58 L88 30 L97 52 L106 24 L113 52 L124 32 L120 60 Z',R,4);
+      else o+=path('M54 78 Q52 36 100 36 Q148 36 146 78 Z',R,4)+path('M52 76 Q100 88 148 76 L146 66 Q100 78 54 66 Z','#f6efe0',4)+circ(100,30,9,'#f6efe0',4);
+      if(et>=2)o+='<circle cx="52" cy="116" r="5" fill="none" stroke="'+C.gold+'" stroke-width="3.5"/>';
+      if(ver)o+=path('M62 80 L88 84',null,5.5)+path('M138 74 Q126 74 112 84',null,5.5);}
+    return o;}
   function axo(e,tema,etapa){
-    e=e||'feliz';var et=etapa||etapaActiva(),t=TEMAS[tema]||TEMAS.rosa,P=t.P,PD=t.PD,up=e==='celebra',o='';
+    e=e||'feliz';var et=etapa||etapaActiva(),t=TEMAS[tema]||TEMAS.rosa,P=t.P,PD=t.PD,up=e==='celebra',o='',per=PERS[TEMAS[tema]?tema:'rosa'];
     o+='<ellipse cx="100" cy="186" rx="60" ry="8" fill="'+C.sh+'"/>';
     o+=path('M122 160 Q168 170 184 138 Q190 122 178 118 Q170 140 142 142 Z',PD)+path('M150 150 Q170 150 178 132',null,3);
     o+=ell(70,174,15,9,P)+ell(130,174,15,9,P);
     [-1,1].forEach(function(s){o+='<g class="'+(s<0?'i-axl':'i-axr')+'">';[[-58,34],[-22,38],[14,32]].forEach(function(g){o+=gillE(100+s*46,90+(g[0]+22)*0.45,g[0],g[1],s).replace(/__R__/g,t.R);});o+='</g>';});
     o+=ell(100,142,38,36,P)+ell(100,152,22,24,C.cream,0);
-    if(up){[-1,1].forEach(function(s){var d='M'+(100+s*34)+' 138 Q'+(100+s*58)+' 118 '+(100+s*60)+' 98';o+='<path d="'+d+'" fill="none" '+st(13)+'/><path d="'+d+'" fill="none" stroke="'+P+'" stroke-width="9" stroke-linecap="round"/>'+circ(100+s*60,96,8,P);});}
-    else if(e==='piensa'){o+=ell(70,160,12,9,P)+'<path d="M132 146 Q122 128 112 116" fill="none" '+st(13)+'/><path d="M132 146 Q122 128 112 116" fill="none" stroke="'+P+'" stroke-width="9" stroke-linecap="round"/>'+circ(110,114,8,P);}
+    if(up){[-1,1].forEach(function(s){var d='M'+(100+s*34)+' 138 Q'+(100+s*58)+' 118 '+(100+s*60)+' 98';o+='<path d="'+d+'" fill="none" '+st(13)+'/><path d="'+d+'" fill="none" stroke="'+P+'" stroke-width="9" stroke-linecap="round"/>'+mano(100+s*60,98,s*12,P);});}
+    else if(e==='piensa'){o+=ell(70,160,12,9,P)+'<path d="M132 146 Q122 128 112 116" fill="none" '+st(13)+'/><path d="M132 146 Q122 128 112 116" fill="none" stroke="'+P+'" stroke-width="9" stroke-linecap="round"/>'+mano(111,116,-24,P);}
     else o+=ell(68,160,12,9,P)+ell(132,160,12,9,P);
     o+=ell(100,92,52,40,P)+ell(100,106,34,20,t.B,0);
     [[84,74],[100,70],[116,74],[92,80],[108,80]].forEach(function(q){o+=circ(q[0],q[1],1.8,'#e6a0b4',0);});
-    if(t.acc==='star')o+=star(122,52,13,C.yel);
-    if(t.acc==='leaf')o+=path('M120 62 Q112 40 138 36 Q142 58 120 62 Z',C.green,4)+path('M122 58 Q128 48 136 40',null,3);
-    if(t.acc==='plus')o+=circ(122,54,12,C.blue,4)+path('M122 48 V60 M116 54 H128',null,4);
-    if(t.acc==='drop')o+=path('M122 38 Q138 56 130 64 Q122 70 114 64 Q106 56 122 38 Z',C.blue,4);
     if(up)o+=path('M64 92 Q74 80 84 92',null,5)+path('M116 92 Q126 80 136 92',null,5);
     else if(e==='casi')o+=path('M68 90 Q77 84 86 90',null,5)+path('M114 90 Q123 84 132 90',null,5);
-    else{var dy=e==='piensa'?-3:0,dx=e==='piensa'?3:0;o+='<g class="i-ay">';[74,126].forEach(function(x){o+=ell(x,92,10,11.5,C.ink,0)+circ(x-3+dx,87+dy,4.2,'#fff',0)+circ(x+4+dx*0.5,96+dy*0.5,2,'#fff',0);});o+='</g>';}
-    o+=ell(56,104,11,7,'#f59aae',0)+ell(144,104,11,7,'#f59aae',0)+circ(96,98,1.4,C.ink,0)+circ(104,98,1.4,C.ink,0);
+    else{var dy=e==='piensa'?-3:0,dx=e==='piensa'?3:0;if(per==='timido'&&e==='feliz'){dx=-4;dy=3;}o+='<g class="i-ay">';[74,126].forEach(function(x){o+=ell(x,92,10,11.5,C.ink,0)+circ(x-3+dx,87+dy,4.2,'#fff',0)+circ(x+4+dx*0.5,96+dy*0.5,2,'#fff',0);});o+='</g>';}
+    var tim=per==='timido';o+=ell(63,107,tim?10:8.5,tim?6.5:5.5,tim?'#f2819a':'#f59aae',0)+ell(137,107,tim?10:8.5,tim?6.5:5.5,tim?'#f2819a':'#f59aae',0)+circ(96,98,1.4,C.ink,0)+circ(104,98,1.4,C.ink,0);
     if(up)o+=path('M78 104 Q100 134 122 104 Z','#7d4a3f',4)+path('M90 116 Q100 126 110 116 Q100 110 90 116','#e9806c',0);
     else if(e==='casi')o+=path('M82 112 Q91 106 100 112 T118 112',null,4);
     else if(e==='piensa')o+=path('M92 112 Q104 116 114 108',null,4);
-    else if(et>=2)o+=path('M88 110 Q104 120 118 104',null,4.5)+path('M116 103 L121 100',null,3.5);
+    else if(per==='timido')o+=path('M92 111 Q100 116 108 111',null,3.5);
+    else if(et>=2||per==='rebelde')o+=path('M88 110 Q104 120 118 104',null,4.5)+path('M116 103 L121 100',null,3.5);
     else o+=path('M88 108 Q94 116 100 108 Q106 116 112 108',null,4);
-    if(et===2){ // actitud: cejas decididas y una banda en la frente
-      o+=path('M52 80 Q100 62 148 80',null,10)+'<path d="M52 80 Q100 62 148 80" fill="none" stroke="'+t.R+'" stroke-width="6" stroke-linecap="round"/>'+circ(150,81,6,t.R,3.5)+path('M150 84 L158 96 M150 84 L145 97',null,4);
-      if(!up&&e!=='casi')o+=path('M62 78 L88 84',null,5.5)+path('M138 78 L112 84',null,5.5);}
-    if(et===3){ // cool: cada ajolote con su propio estilo (no todos con lentes de sol)
-      var tk=TEMAS[tema]?tema:'rosa',cej=(!up&&e!=='casi')?path('M62 79 L88 85',null,5.5)+path('M138 79 L112 85',null,5.5):'';
-      var lentes='<rect x="58" y="82" width="36" height="22" rx="9" fill="#2b2430" stroke="'+C.ink+'" stroke-width="3.5"/><rect x="106" y="82" width="36" height="22" rx="9" fill="#2b2430" stroke="'+C.ink+'" stroke-width="3.5"/>'+path('M94 90 Q100 86 106 90',null,3.5)+'<path d="M64 89 L72 87 M112 89 L120 87" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none"/>';
-      var audif=path('M48 92 Q48 30 100 30 Q152 30 152 92',null,10)+'<path d="M48 92 Q48 30 100 30 Q152 30 152 92" fill="none" stroke="'+t.R+'" stroke-width="5" stroke-linecap="round"/>'+ell(47,98,10,16,t.R)+ell(153,98,10,16,t.R);
-      if(tk==='rosa')o+=audif+lentes;                                  // lentes de sol + audífonos
-      else if(tk==='azul'){ // gorra al revés
-        o+=path('M54 80 Q52 38 100 38 Q148 38 146 80 Q100 70 54 80 Z',t.R,4)+path('M146 78 Q172 76 176 86 Q160 90 146 86 Z',t.PD,4)+circ(100,40,5,C.cream,3)+cej;}
-      else if(tk==='amarillo'){ // audífonos grandes y cejas de "yo puedo"
-        o+=audif+cej;}
-      else if(tk==='menta'){ // lentes redondos de "intelectual cool"
-        o+='<circle cx="74" cy="92" r="17" fill="rgba(255,255,255,.28)" stroke="'+C.ink+'" stroke-width="4"/><circle cx="126" cy="92" r="17" fill="rgba(255,255,255,.28)" stroke="'+C.ink+'" stroke-width="4"/>'+path('M91 90 Q100 84 109 90',null,4)+path('M57 90 L50 86 M143 90 L150 86',null,4)+cej;}
-      else if(tk==='lila'){ // lentes de estrella
-        o+=star(74,93,21,'#2b2430')+star(126,93,21,'#2b2430')+path('M94 92 Q100 88 106 92',null,3.5);}
-      else { // durazno: gorro de lana con pompón
-        o+=path('M54 78 Q52 36 100 36 Q148 36 146 78 Z','#e9806c',4)+path('M52 76 Q100 88 148 76 L146 66 Q100 78 54 66 Z','#f6efe0',4)+circ(100,30,9,'#f6efe0',4)+cej;} }
+    o+=rasgos(PERS[TEMAS[tema]?tema:'rosa'],et,e,up,t);
     if(e==='piensa')o+='<text x="152" y="46" font-family="Urbanist,sans-serif" font-weight="800" font-size="38" fill="'+C.ink+'">?</text>';
     if(e==='casi')o+='<text x="150" y="40" font-family="Urbanist,sans-serif" font-weight="800" font-size="34" fill="'+C.ink+'">&#8230;</text>';
     if(up)o+=star(14,22,11,C.pink)+star(188,20,11,C.blue)+star(100,12,9,C.yel)+star(190,86,7,C.green);

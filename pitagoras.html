@@ -16,6 +16,14 @@
 .opts2{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0}
 .opts2 button{min-height:56px;min-width:110px;font-size:1.25rem;font-family:var(--display);font-weight:700}
 .rule{background:var(--card);border-radius:12px;padding:8px 12px;margin:6px 0}
+@media (min-aspect-ratio:3/2) and (min-height:521px){
+#s3 .pf-inner,#s4 .pf-inner{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);column-gap:24px}
+#s3 .pf-inner>*,#s4 .pf-inner>*{grid-column:2}
+#s3 .pf-inner>.vis,#s4 .pf-inner>.vis{grid-column:1;grid-row:1/span 8}
+#s3 .pf-inner>.step,#s3 .pf-inner>h2,#s4 .pf-inner>.step,#s4 .pf-inner>h2{display:none}
+#s3 .pf-inner,#s4 .pf-inner{align-content:center;grid-auto-rows:min-content}
+#s3 .vis,#s4 .vis{max-width:none;align-self:center}
+}
 </style></head><body>
 <div class="wrap">
   <a class="back" href="index.html">← Todos los talleres</a>

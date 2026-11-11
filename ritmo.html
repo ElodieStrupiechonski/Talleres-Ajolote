@@ -187,7 +187,7 @@ class Mesa{
     const W=box.clientWidth||700;this.last=W;const tagW=this.o.ro?0:110;
     const pad=this.pad(),comp=this.o.ro?1:G.comp;
     const d0=disp(),rowU=Math.max(d0.n.reduce((x,f)=>x+f.u,0),d0.r.reduce((x,f)=>x+f.u,0)),rowN=Math.max(d0.n.length,d0.r.length);
-    this.p=Math.max(8,Math.min(30,Math.floor((W-tagW-8-pad)/(16*comp)),this.o.ro?99:Math.floor((W-12-(rowN-1)*18)/rowU)));
+    this.p=Math.max(8,Math.min(64,Math.floor((W-tagW-8-pad)/(16*comp)),this.o.ro?99:Math.floor((W-12-(rowN-1)*18)/rowU)));
     if(this.o.ro)this.p=Math.max(8,Math.min(24,Math.floor((W-8)/16)));
     const lw=pad+16*comp*this.p+6,nl=this.o.ro?this.lanes.filter(x=>x.length).length:(this.o.fixedLanes||2);
     this.ph=[];

@@ -55,6 +55,7 @@
 .nb .dg .dots i{width:clamp(9px,1.15vw,13px);height:clamp(9px,1.15vw,13px)}
 
 @media (min-aspect-ratio:1/1) and (max-height:520px){.pf .bd{grid-template-columns:50px repeat(7,minmax(0,1fr));grid-template-rows:repeat(7,auto) 20px}.pf .bwrap{width:min(100%,calc(var(--vis)*1.15))!important}.pf .bd .a{font-size:10px}}
+@media (min-height:521px){.nb,.mv{max-width:none}}
 </style></head><body>
 <div class="wrap">
   <a class="back" href="index.html">← Todos los talleres</a>
@@ -169,7 +170,7 @@ const $=s=>document.querySelector(s);
 const h=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;};
 const btn=(cls,txt,fn)=>{const b=h('button',cls,txt);b.type='button';b.addEventListener('click',fn);return b;};
 const rnd=n=>Math.floor(Math.random()*n);
-const NAMES={0:['unidad','unidades'],1:['decena','decenas'],2:['centena','centenas'],3:['millar','millares'],4:['decena de millar','decenas de millar'],5:['centena de millar','centenas de millar'],6:['millón','millones'],
+const NAMES={0:['unidad','unidades'],1:['decena','decenas'],2:['centena','centenas'],3:['unidad de millar','unidades de millar'],4:['decena de millar','decenas de millar'],5:['centena de millar','centenas de millar'],6:['millón','millones'],
  '-1':['décimo','décimos'],'-2':['centésimo','centésimos'],'-3':['milésimo','milésimos'],'-4':['diezmilésimo','diezmilésimos'],'-5':['cienmilésimo','cienmilésimos'],'-6':['millonésimo','millonésimos']};
 const nameOf=(e,d)=>NAMES[e][d===1?0:1];
 const sup=n=>String(n).replace('-','⁻').replace(/\d/g,x=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[x]);

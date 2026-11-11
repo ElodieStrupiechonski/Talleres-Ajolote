@@ -209,7 +209,7 @@ r2();
 /* ---- utilidades nuevas ---- */
 const rnd=n=>Math.floor(Math.random()*n),R0=(a,b)=>a+rnd(b-a+1),pick=a=>a[rnd(a.length)],shuffle=a=>a.sort(()=>Math.random()-.5);
 const INK='#41362b';
-const fracH=(n,d)=>`<span class="frac" style="display:inline-flex;vertical-align:middle"><span class="n">${n}</span><span class="bar"></span><span class="d">${d}</span></span>`;
+const fracH=(n,d,c)=>c?`<span class="frac" style="display:inline-flex;vertical-align:middle"><span class="n" style="color:var(--${c})">${n}</span><span class="bar"></span><span class="d" style="color:var(--fg)">${d}</span></span>`:`<span class="frac" style="display:inline-flex;vertical-align:middle"><span class="n">${n}</span><span class="bar"></span><span class="d">${d}</span></span>`;
 const frS=(n,d)=>{const g=gcd(n,d);return n===0?'0':(d/g===1?String(n/g):(n/g)+'/'+(d/g));};
 function barSVG(n,d,color,w){w=w||300;let s=`<svg class="fb" viewBox="0 0 ${w} 40">`;for(let i=0;i<d;i++)s+=`<rect x="${(i*(w-6)/d+3).toFixed(1)}" y="3" width="${((w-6)/d).toFixed(1)}" height="34" fill="${i<n?color:'#fffdf9'}" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/>`;return s+'</svg>';}
 const same=(a,b,c,d)=>a*d===b*c;
@@ -227,7 +227,7 @@ const same=(a,b,c,d)=>a*d===b*c;
     cur={a,b,ans:a[0]*b[1]>b[0]*a[1]?'>':a[0]*b[1]<b[0]*a[1]?'<':'='};
     see=L<4;draw();document.getElementById('cMsg').textContent='';}
   function draw(){const B=document.getElementById('cBars');
-    B.innerHTML=`<div class="cr">${fracH(cur.a[0],cur.a[1])}<div class="chips ops" id="cOp"></div>${fracH(cur.b[0],cur.b[1])}</div>`+(see?`<div class="fbr">${barSVG(cur.a[0],cur.a[1],'var(--red)')}</div><div class="fbr">${barSVG(cur.b[0],cur.b[1],'var(--blue)')}</div>`:'');
+    B.innerHTML=`<div class="cr">${fracH(cur.a[0],cur.a[1],'red')}<div class="chips ops" id="cOp"></div>${fracH(cur.b[0],cur.b[1],'blue')}</div>`+(see?`<div class="fbr">${barSVG(cur.a[0],cur.a[1],'var(--red)')}</div><div class="fbr">${barSVG(cur.b[0],cur.b[1],'var(--blue)')}</div>`:'');
     const o=document.getElementById('cOp');['<','=','>'].forEach(t=>{const bt=document.createElement('button');bt.type='button';bt.textContent=t;bt.onclick=()=>res(t);o.appendChild(bt);});
     document.getElementById('cSee').style.display=NV.get()===4&&!see?'':'none';}
   function res(t){const m=document.getElementById('cMsg');
@@ -250,7 +250,7 @@ const same=(a,b,c,d)=>a*d===b*c;
       const N=op==='+'?a[0]*b[1]+b[0]*a[1]:a[0]*b[1]-b[0]*a[1],D=a[1]*b[1];
       if(N>0&&N<=D&&!(op==='-'&&N===0)){cur={a,b,op,N,D,L};break;}}
     const g=gcd(cur.N,cur.D);cur.n=cur.N/g;cur.d=cur.D/g;
-    document.getElementById('sQ').innerHTML=`${fracH(a[0],a[1])} <span class="sg">${op==='+'?'+':'−'}</span> ${fracH(b[0],b[1])} <span class="sg">=</span> ?`;
+    document.getElementById('sQ').innerHTML=`${fracH(a[0],a[1],L<=2?'red':'')} <span class="sg">${op==='+'?'+':'−'}</span> ${fracH(b[0],b[1],L<=2?'blue':'')} <span class="sg">=</span> ?`;
     document.getElementById('sBars').innerHTML=(L<=2?`<div class="fbr">${barSVG(a[0],a[1],'var(--red)')}</div><div class="fbr">${barSVG(b[0],b[1],'var(--blue)')}</div>`:'');
     Construir(document.getElementById('sIn'),{n:2,sep:'/',labels:['arriba','abajo'],max:2,submit:v=>res(v[0],v[1])});
     document.getElementById('sMsg').textContent=L===3?'Escribe la fracción más pequeña posible.':(L===4?'Primero busca un denominador común.':'');}

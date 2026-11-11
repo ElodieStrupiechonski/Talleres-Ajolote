@@ -641,3 +641,5 @@ body.pf .gantt .gs:focus-visible{outline:3px solid #fff;outline-offset:1px}
 body.pf .chips.lv{position:absolute!important;width:1px;height:1px;margin:0;padding:0!important;overflow:hidden;clip:rect(0 0 0 0);opacity:0;pointer-events:none}
 /* La tecla Comprobar siempre se ve (azul con letras blancas) */
 .cn-k.cn-ok{background:var(--acc)!important;color:var(--acc-fg)!important;border-color:var(--fg);font-weight:800}
+.pf-ins-t .frac{font-size:1.6rem;vertical-align:middle;margin:0 .15em}
+.pf-ins-t .frac .n,.pf-ins-t .frac .d{line-height:1}

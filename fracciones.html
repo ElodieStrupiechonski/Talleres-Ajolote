@@ -338,6 +338,7 @@ function q(){
   const chk=t=>{
     const m=document.getElementById("qmsg");
     if(t===ans){score++;document.getElementById("score").textContent=score;m.innerHTML=`<span class="ok">¡Correcto!</span> ${n} piezas coloreadas de ${d} partes iguales${L===4?`, es decir ${n}/${d} = ${ans}`:''}.`;setTimeout(q,1400);}
+    else if(L!==4&&/^\d+\/\d+$/.test(t)&&(([a,b])=>b>0&&a*d===n*b&&a>0)(t.split('/').map(Number))){const [a,b]=t.split('/').map(Number);score++;document.getElementById("score").textContent=score;m.innerHTML=`<span class="ok">¡Correcto!</span> ${a}/${b} es lo mismo que ${n}/${d}: son fracciones equivalentes.`;setTimeout(q,2200);}
     else m.innerHTML=`<span class="bad">Casi.</span> Cuenta todas las partes (abajo) y las rojas (arriba).`;
   };
   Construir(document.getElementById("opts"),{n:2,sep:"/",labels:["rojas","partes en total"],submit:v=>chk(v[0]+"/"+v[1])});

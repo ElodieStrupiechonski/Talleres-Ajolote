@@ -4,7 +4,7 @@
   var wrap = document.querySelector('.wrap');
   var trays = [].slice.call(document.querySelectorAll('.wrap .tray'));
   if (!wrap || !trays.length) return;
-  var MIN = 0.5, MAX = 1.8, cur = 0, scale = [], fitting = false, timer = null;
+  var MIN = 0.5, MAX = 2.4, cur = 0, scale = [], fitting = false, timer = null;
   document.body.classList.add('pf');
   var SUG = {
     'divisiones:2': 'Elige 12 galletas y 3 platos y reparte. Luego prueba con 13: ¿qué pasa con la que sobra?',
@@ -245,7 +245,7 @@
   var ins = el('div', 'pf-ins'), insT = el('p', 'pf-ins-t'), insB = el('button', 'pf-ins-b', '🔊'), insObs = null;
   insB.type = 'button'; insB.setAttribute('aria-label', 'Escuchar la instrucción'); insB.title = 'Escuchar';
   ins.appendChild(insT); ins.appendChild(insB); wrap.insertBefore(ins, wrap.firstChild); wrap.classList.add('pf-wi');
-  insB.onclick = function(){ lee(insT.textContent); };
+  insB.onclick = function(){ lee(insT.dataset.txt || insT.textContent); };
   function insFuente(tr){
     var inner = tr.firstChild, h2 = tr.querySelector('h2'), f;
     f = tr.querySelector('.goal'); if (f) return { e: f, ocultar: true };
@@ -263,7 +263,13 @@
     trays.forEach(function(t){ [].forEach.call(t.querySelectorAll('.pf-ins-src'), function(x){ x.classList.remove('pf-ins-src'); }); });
     var f = insFuente(tr); if (!f || !f.e){ ins.hidden = true; return; }
     ins.hidden = false; f.e.classList.add('pf-ins-src');
-    function copia(){ var t = f.e.textContent.replace(/\s+/g, ' ').trim(); if (insT.textContent !== t){ insT.textContent = t; later(true); } ins.hidden = !t; }
+    function copia(){
+      var cl = f.e.cloneNode(true), fr = cl.querySelectorAll('.frac');
+      [].forEach.call(fr, function(x){ var n = x.querySelector('.n'), d = x.querySelector('.d'); x.setAttribute('data-t', (n ? n.textContent : '') + '/' + (d ? d.textContent : '')); });
+      var plano = cl.cloneNode(true); [].forEach.call(plano.querySelectorAll('.frac'), function(x){ x.textContent = ' ' + x.getAttribute('data-t') + ' '; });
+      var t = plano.textContent.replace(/\s+/g, ' ').trim();
+      if (insT.dataset.txt !== t){ insT.dataset.txt = t; if (fr.length){ insT.innerHTML = cl.innerHTML.replace(/\s+/g, ' ').trim(); } else insT.textContent = t; later(true); }
+      ins.hidden = !t; }
     copia(); insObs = new MutationObserver(copia); insObs.observe(f.e, { childList: true, subtree: true, characterData: true });
   }
   function show(i){

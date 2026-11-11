@@ -619,3 +619,21 @@ body.pf .pf-tab.on,body.pf .pf-tab[aria-current=true]{border-color:#fff;box-shad
 /* Estrellas de nivel: las ya superadas se quedan amarillas; la actual es más grande y más intensa */
 .niv button.pas{background:var(--lado-ac,#ffd96e)!important;color:#2b2110!important}
 .niv button.on{background:#ffc22e!important;transform:scale(1.14);z-index:1}
+/* Los niveles se eligen y se ven en la barra verde del panel derecho; las estrellas se ocultan para no duplicar */
+body.pf .niv{position:absolute!important;width:1px;height:1px;margin:0;padding:0!important;overflow:hidden;clip:rect(0 0 0 0);opacity:0;pointer-events:none}
+body.pf .gantt .gs{cursor:pointer;position:relative}
+body.pf .gantt .gs::after{content:"";position:absolute;inset:-8px -3px}
+body.pf .gantt .gs:focus-visible{outline:3px solid #fff;outline-offset:1px}
+@media (min-aspect-ratio:1/1) and (max-height:520px){
+  .pf .tray .btns button,.pf .tray .row>button,.pf .tray .acts button{min-height:44px;padding:4px 14px}
+  .pf .tray .cn-k{min-height:44px}
+}
+/* Edición especial: dedicatoria */
+.ed-card{display:flex;gap:14px;align-items:center;background:#fff7e0;border:3px solid #e9b44c;border-radius:18px;padding:10px 16px;margin:12px auto;max-width:900px}
+.ed-card h2,.ed-bx h2{margin:0 0 4px;font-family:var(--display);font-weight:900;font-size:clamp(1.1rem,3vw,1.5rem)}
+.ed-card p,.ed-bx p{margin:3px 0}.ed-fir{font-weight:800;color:#b3392a}
+.ed-axo{flex:none;width:84px}.ed-axo svg{width:100%;height:auto}
+.ed-ov{position:fixed;inset:0;z-index:400;background:rgba(40,32,22,.6);display:flex;align-items:center;justify-content:center;padding:10px}
+.ed-bx{background:#fffdf9;border:4px solid #e9b44c;border-radius:22px;padding:16px 22px;max-width:460px;text-align:center;max-height:96vh;overflow:auto}
+.ed-bx .ed-axo{width:110px;margin:0 auto 4px}
+.ed-go{margin-top:8px;min-height:52px;padding:6px 26px;font-size:1.15rem;font-weight:900;border-radius:14px;border:3px solid #e9b44c;background:#ffd96e;color:#2b2110;cursor:pointer}

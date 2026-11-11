@@ -75,7 +75,7 @@
   function temaAct(){ var p = window.Perf && Perf.activo(); return p ? p.tema : Ilu.tema(nombre); }
   var bubT = null;
   // La burbuja se queda el tiempo suficiente para leerla (más si el texto es largo)
-  function di(txt){ clearTimeout(bubT); bubT2.textContent = txt || ''; if (txt){ var ms = document.querySelector('.pf-mas svg'); bubA.innerHTML = ms ? ms.outerHTML : ''; } bub.classList.toggle('on', !!txt); if (txt) bubT = setTimeout(function(){ bub.classList.remove('on'); }, Math.max(7000, 2500 + 90 * txt.length)); }
+  function di(txt){ clearTimeout(bubT); bubT2.textContent = txt || ''; if (txt){ var ms = document.querySelector('.pf-mas svg'); bubA.innerHTML = ms ? ms.outerHTML : ''; } bub.classList.toggle('on', !!txt); if (txt){ var lado = window.matchMedia('(min-aspect-ratio:1/1) and (max-height:520px)').matches; bubT = setTimeout(function(){ bub.classList.remove('on'); }, lado ? Math.max(4500, 1800 + 70 * txt.length) : Math.max(7000, 2500 + 90 * txt.length)); } }
   function mood(e, ms){ if (!window.Ilu) return; var sv = Ilu.html('axo_' + e, {tema: temaAct()}); mas.innerHTML = sv; bigSv.innerHTML = sv;
     var f = FRASES[e]; if (f){ f = frasesOk(f); di(conNombre(gg(f[Math.floor(Math.random() * f.length)]))); }
     clearTimeout(masT); masT = null; if (ms) masT = setTimeout(function(){ masT = null; mood('feliz'); }, ms); }
@@ -124,9 +124,10 @@
   }
   function marcaSig(on){ [].forEach.call(nav.children, function(b, k){ b.classList.toggle('pf-pulse', !!on && k === cur + 1); }); }
   function ganttDe(info, st){
-    var g = el('div', 'gantt'); g.setAttribute('aria-hidden', 'true');
+    var g = el('div', 'gantt'); g.setAttribute('role', 'group'); g.setAttribute('aria-label', info.un ? 'Retos' : 'Niveles');
     info.bs.forEach(function(b, k){
       var c = Math.min(st.n[k] || 0, META), s = el('div', 'gs' + (c >= META ? ' dn' : '') + (k === info.lv ? ' cu' : '')), f = el('i');
+      s.setAttribute('role', 'button'); s.tabIndex = 0; s.setAttribute('aria-label', (info.un ? 'Reto ' : 'Nivel ') + (k + 1)); s.onclick = function(){ b.click(); }; s.onkeydown = function(e){ if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); b.click(); } };
       f.style.width = (info.un ? (c >= META ? 100 : 0) : 100 * c / META) + '%'; s.appendChild(f);
       if (info.bs.length <= 8) s.appendChild(el('span', null, String(k + 1)));
       g.appendChild(s); });

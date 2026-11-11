@@ -10,6 +10,12 @@ on:
         description: 'Nombre de la versión que verán las familias (por ejemplo 1.0.0)'
         required: true
         default: '1.0.0'
+      edicion:
+        description: 'Edición: normal (Google Play) o sierra (especial para los Niños y Niñas de la Sierra, aparte de la normal)'
+        required: true
+        type: choice
+        default: normal
+        options: [normal, sierra]
 
 permissions:
   contents: read
@@ -39,6 +45,15 @@ jobs:
           test -f www/index.html
           grep -q "navigator.serviceWorker.register('sw.js')" www/taller.js
           sed -i "s/navigator.serviceWorker.register('sw.js')/0/" www/taller.js
+
+      - name: Edición especial «sierra» (otro nombre y otro identificador, para que no se mezcle con la app de Google Play)
+        if: ${{ inputs.edicion == 'sierra' }}
+        run: |
+          set -euo pipefail
+          cd app-android
+          printf '%s\n' "window.EDICION = { id: 'sierra' };" > www/edicion-config.js
+          sed -i 's#"appId": "[^"]*"#"appId": "io.github.elodiestrupiechonski.ajolote.sierra"#; s#"appName": "[^"]*"#"appName": "Ajolote · Sierra"#' capacitor.config.json
+          grep -q 'ajolote.sierra' capacitor.config.json
 
       - name: Instalar Capacitor y crear el proyecto Android
         run: |
@@ -99,6 +114,6 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: talleres-ajolote-android
+          name: talleres-ajolote-android${{ inputs.edicion == 'sierra' && '-sierra' || '' }}
           path: salida/
           retention-days: 30

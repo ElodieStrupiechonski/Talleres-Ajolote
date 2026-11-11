@@ -25,7 +25,7 @@ function inspecciona(taller, anio) {
   const out = [], add = (sev, tipo, msg) => out.push({ sev, tipo, msg });
   const tr = document.querySelector('.tray.pf-on') || document.querySelector('.tray');
   if (!tr) { add('error', 'sin-bandeja', 'No hay bandeja visible'); return out; }
-  const vis = e => { const r = e.getBoundingClientRect(), cs = getComputedStyle(e); return r.width > 2 && r.height > 2 && cs.visibility !== 'hidden' && cs.display !== 'none' && e.offsetParent !== null; };
+  const vis = e => { const r = e.getBoundingClientRect(), cs = getComputedStyle(e); return r.width > 2 && r.height > 2 && cs.visibility !== 'hidden' && cs.display !== 'none' && e.offsetParent !== null && !(document.body.classList.contains('pf') && e.closest('.niv')); };
   const s = (window.PF && PF.escala && PF.escala()) || 1;
   if (s < 0.6) add('error', 'escala', 'Escala de pantalla ' + s.toFixed(2) + ' (< 0.6): todo se ve diminuto');
   else if (s < 0.8) add('aviso', 'escala', 'Escala de pantalla ' + s.toFixed(2) + ' (< 0.8): contenido algo chico');

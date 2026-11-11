@@ -68,6 +68,7 @@
   S.montar = function(slot){
     var b = document.createElement('button'); b.type = 'button'; b.className = 'snd-btn';
     function pinta(){ b.innerHTML = (on ? ICO_ON : ICO_OFF) + '<span>' + (on ? 'Sonido' : 'Sin sonido') + '</span>'; b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.setAttribute('aria-label', on ? 'Desactivar el sonido de esta actividad' : 'Activar el sonido de esta actividad'); }
-    b.onclick = function(){ S.toggle(); pinta(); }; pinta(); slot.insertBefore(b, slot.firstChild);
+    b.onclick = function(){ S.toggle(); pinta(); }; pinta(); slot.insertBefore(b, slot.firstChild); if (window.Musica) Musica.montar(slot);
   };
 })();
+;(function(){ if (window.Musica) return; var m = document.createElement('script'); m.src = 'musica.js'; (document.head || document.documentElement).appendChild(m); })();

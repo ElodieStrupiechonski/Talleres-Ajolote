@@ -94,7 +94,16 @@
     function puntaje(v){ var n = 0; if (/^es[-_]MX/i.test(v.lang)) n += 3; else if (/^es[-_]US/i.test(v.lang)) n += 2; if (/Dalia|Paloma|Sabina|Paulina|Mónica|Monica|Helena|Laura|Lucía|Lucia|Elena|female|mujer|femen|eea|-x-/i.test(v.name)) n += 2; if (/Jorge|Pablo|Raul|Raúl|Diego|Alvaro|Álvaro|male|hombre/i.test(v.name)) n -= 3; if (/natural|neural|online/i.test(v.name)) n += 1; return n; }
     function elegida(){ var l = lista(), nom = lee(K, ''); var v = nom && l.filter(function(x){ return x.name === nom; })[0]; if (v) return v; return l.slice().sort(function(a, b){ return puntaje(b) - puntaje(a); })[0] || null; }
     function tono(){ var t = parseFloat(lee(KP, '1.25')); return isNaN(t) ? 1.25 : Math.max(0.8, Math.min(2, t)); }
-    function habla(txt){ try { if (!('speechSynthesis' in window) || !txt) return; speechSynthesis.cancel(); var u = new SpeechSynthesisUtterance(txt), v = elegida(); u.lang = v ? v.lang : 'es-MX'; if (v) u.voice = v; u.pitch = tono(); u.rate = 0.92; speechSynthesis.speak(u); } catch (e) {} }
+    /* Convierte símbolos matemáticos en palabras para que la voz los lea bien */
+    function dictable(t){ return String(t)
+      .replace(/(\d)\s*[−–-]\s*(?=[\d(])/g, '$1 menos ').replace(/\s[−–]\s/g, ' menos ')
+      .replace(/\s*\+\s*/g, ' más ').replace(/\s*[×·✕]\s*/g, ' por ').replace(/\s*[÷]\s*(?=\d)/g, ' entre ').replace(/\s*\/\s*(?=\d)/g, ' entre ')
+      .replace(/\s*=\s*\?/g, ' igual a cuánto').replace(/\s*=\s*/g, ' igual a ').replace(/\s*≠\s*/g, ' es distinto de ')
+      .replace(/\s*≥\s*/g, ' mayor o igual que ').replace(/\s*≤\s*/g, ' menor o igual que ')
+      .replace(/(\d)\s*>\s*(\d)/g, '$1 mayor que $2').replace(/(\d)\s*<\s*(\d)/g, '$1 menor que $2')
+      .replace(/(\d)\s*%/g, '$1 por ciento').replace(/√/g, 'raíz de ').replace(/²/g, ' al cuadrado').replace(/³/g, ' al cubo').replace(/π/g, ' pi ')
+      .replace(/\?+\s*$/, '?'); }
+    function habla(txt){ try { if (!('speechSynthesis' in window) || !txt) return; speechSynthesis.cancel(); var u = new SpeechSynthesisUtterance(dictable(txt)), v = elegida(); u.lang = v ? v.lang : 'es-MX'; if (v) u.voice = v; u.pitch = tono(); u.rate = 0.92; speechSynthesis.speak(u); } catch (e) {} }
     return { habla: habla, lista: lista, elegida: elegida, tono: tono, pon: function(nom){ guarda(K, nom || ''); }, ponTono: function(t){ guarda(KP, String(t)); } };
   })();
   window.Voz = Voz;

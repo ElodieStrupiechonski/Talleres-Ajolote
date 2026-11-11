@@ -53,8 +53,8 @@
       var k=et===1?0:et===2?7:10;
       o+='<g transform="rotate(-12 112 50)">'+ell(112,50,24+k,11+k*0.3,R)+circ(112,38-k*0.3,4,R,3.5)+'</g>';
       if(et>=2)o+=circ(150,70,4,C.blue,0)+circ(142,62,3,C.yel,0)+circ(155,80,3,C.green,0);
-      if(et===3)o+='<rect x="58" y="82" width="36" height="21" rx="7" fill="#2b2430" stroke="'+C.ink+'" stroke-width="3.5"/><rect x="106" y="82" width="36" height="21" rx="7" fill="#2b2430" stroke="'+C.ink+'" stroke-width="3.5"/>'+path('M94 90 Q100 86 106 90',null,3.5)+'<path d="M65 88 L72 87 M113 88 L120 87" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none"/>';
-      if(et===2)o+=cej;}
+      if(et===3)o+='<circle cx="74" cy="92" r="17" fill="rgba(150,55,95,.5)" stroke="'+C.ink+'" stroke-width="4"/><circle cx="126" cy="92" r="17" fill="rgba(150,55,95,.5)" stroke="'+C.ink+'" stroke-width="4"/>'+path('M91 90 Q100 84 109 90',null,4)+'<path d="M64 86 Q68 82 74 81 M116 86 Q120 82 126 81" stroke="#fff" stroke-opacity=".8" stroke-width="3" stroke-linecap="round" fill="none"/>';
+      if(et===2&&ver)o+=path('M65 80 Q75 74 88 77',null,2.6)+path('M112 77 Q125 74 135 80',null,2.6);}
     else if(per==='deportista'){ // cinta, luego sudor y al final gorra al revés
       if(et===1)o+=path('M52 78 Q100 64 148 78',null,10)+'<path d="M52 78 Q100 64 148 78" fill="none" stroke="'+R+'" stroke-width="5.5" stroke-linecap="round"/>';
       else if(et===2){o+=path('M52 80 Q100 62 148 80',null,12)+'<path d="M52 80 Q100 62 148 80" fill="none" stroke="'+R+'" stroke-width="7.5" stroke-linecap="round"/>'+circ(150,81,6,R,3.5)+path('M150 84 L158 96 M150 84 L145 97',null,4)+path('M146 56 Q154 66 148 72 Q140 66 146 56 Z',C.blue,3);}
@@ -68,12 +68,10 @@
       o+=lente(74,et===1?14:16.5)+lente(126,et===1?14:16.5)+path('M88 91 Q100 85 112 91',null,3.6);
       if(et>=2)o+='<g transform="rotate(32 136 52)">'+rect(116,47,40,9,3,C.yel,3.5)+path('M156 47 L168 51.5 L156 56',C.pink,3)+rect(110,47,8,9,2,C.pink,3.5)+'</g>';
       if(et===3)o+=path('M82 56 V70 Q100 80 118 70 V56','#3b3552',4)+path('M52 52 L100 32 L148 52 L100 72 Z','#3b3552',4.5)+path('M142 53 L144 74',null,3.5)+circ(144,76,4.5,C.gold,3);}
-    else if(per==='timido'){ // capucha siempre igual; cordones en la etapa 2 y audífonos completos en la 3
-      var pw=ver?path('M64 83 Q76 81 88 76',null,4.5)+path('M112 76 Q124 81 136 83',null,4.5):'';
-      o+='<path d="M44 104 Q28 20 100 18 Q172 20 156 104 Q154 122 136 118 L64 118 Q46 122 44 104 Z M54 96 A46 38 0 1 0 146 96 A46 38 0 1 0 54 96 Z" fill="'+t.PD+'" fill-rule="evenodd" '+st(4.5)+'/>';
-      if(et>=2)o+=path('M92 124 Q90 140 94 152',null,3.5)+path('M108 124 Q110 140 106 152',null,3.5)+circ(94,153,3.2,C.cream,3)+circ(106,153,3.2,C.cream,3);
-      if(et===3)o+=arco(7,R,'M42 100 Q36 20 100 20 Q164 20 158 100')+ell(43,102,9,16,R)+ell(157,102,9,16,R);
-      if(et>=2)o+=pw;}
+    else if(per==='timido'){ // flequillo; audífonos completos en la etapa 2 y más grandes en la 3
+      if(et===1)o+=path('M54 72 Q66 42 112 46 Q106 68 82 82 Q64 86 54 72 Z',t.PD,4);
+      else{o+=path('M48 92 Q48 30 100 30 Q152 30 152 92',null,et===3?18:15)+'<path d="M48 92 Q48 30 100 30 Q152 30 152 92" fill="none" stroke="'+R+'" stroke-width="'+(et===3?13:10)+'" stroke-linecap="round"/>'+ell(47,98,10,16,R)+ell(153,98,10,16,R);
+        if(ver)o+=path('M62 84 Q74 76 88 82',null,5)+path('M138 84 Q126 76 112 82',null,5);}}
     else { // rebelde: cresta y, al final, bandana
       if(et<3)o+=path('M82 58 L88 30 L97 52 L106 24 L113 52 L124 32 L120 60 Z',R,4);
       else{o+=path('M148 74 L166 66 L164 82 L168 94 L150 84 Z',R,3.5)+path('M52 78 Q100 58 148 78 L148 62 Q100 42 52 62 Z',R,4)+circ(150,74,6,R,3.5);

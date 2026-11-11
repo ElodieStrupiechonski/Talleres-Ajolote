@@ -97,7 +97,7 @@
     /* Convierte símbolos matemáticos en palabras para que la voz los lea bien */
     var FR = { 2: ['medio', 'medios'], 3: ['tercio', 'tercios'], 4: ['cuarto', 'cuartos'], 5: ['quinto', 'quintos'], 6: ['sexto', 'sextos'], 7: ['séptimo', 'séptimos'], 8: ['octavo', 'octavos'], 9: ['noveno', 'novenos'], 10: ['décimo', 'décimos'] };
     function fraccion(m, a, b){ var f = FR[+b]; if (!f || +a === 0) return a + ' entre ' + b; if (!(document.body && document.body.classList.contains('pf-lector'))) return (+a === 1 ? 'un ' + f[0] : a + ' ' + f[1]) + ' '; return a + ' entre ' + b + ', o sea, ' + (+a === 1 ? 'un ' + f[0] : a + ' ' + f[1]) + ','; }
-    function dictable(t){ return String(t).replace(/(\d+)\s*\/\s*(\d+)/g, fraccion)
+    function dictable(t){ return String(t).replace(/[▲△↑⬆]/g, ' flecha hacia arriba ').replace(/[▼▽↓⬇]/g, ' flecha hacia abajo ').replace(/[◀←⬅]/g, ' flecha a la izquierda ').replace(/[▶►→➡]/g, ' flecha a la derecha ').replace(/⌫/g, ' borrar ').replace(/↶/g, ' deshacer ').replace(/[✓✔]/g, ' palomita ').replace(/[✕✖×](?!\s*\d)/g, ' cerrar ').replace(/[○◯]/g, ' signo ').replace(/\s+/g, ' ').replace(/(\d+)\s*\/\s*(\d+)/g, fraccion)
       .replace(/(\d)\s*[−–-]\s*(?=[\d(])/g, '$1 menos ').replace(/\s[−–]\s/g, ' menos ')
       .replace(/\s*\+\s*/g, ' más ').replace(/\s*[×·✕]\s*/g, ' por ').replace(/\s*[÷]\s*(?=\d)/g, ' entre ')
       .replace(/\s*=\s*\?/g, ' igual a cuánto').replace(/\s*=\s*/g, ' igual a ').replace(/\s*≠\s*/g, ' es distinto de ')

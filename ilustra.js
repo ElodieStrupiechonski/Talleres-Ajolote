@@ -64,9 +64,21 @@
     if(et===2){ // actitud: cejas decididas y una banda en la frente
       o+=path('M52 80 Q100 62 148 80',null,10)+'<path d="M52 80 Q100 62 148 80" fill="none" stroke="'+t.R+'" stroke-width="6" stroke-linecap="round"/>'+circ(150,81,6,t.R,3.5)+path('M150 84 L158 96 M150 84 L145 97',null,4);
       if(!up&&e!=='casi')o+=path('M62 78 L88 84',null,5.5)+path('M138 78 L112 84',null,5.5);}
-    if(et===3){ // cool: lentes oscuros y audífonos
-      o+=path('M48 92 Q48 30 100 30 Q152 30 152 92',null,10)+'<path d="M48 92 Q48 30 100 30 Q152 30 152 92" fill="none" stroke="'+t.R+'" stroke-width="5" stroke-linecap="round"/>'+ell(47,98,10,16,t.R)+ell(153,98,10,16,t.R);
-      o+='<rect x="58" y="82" width="36" height="22" rx="9" fill="#2b2430" stroke="'+C.ink+'" stroke-width="3.5"/><rect x="106" y="82" width="36" height="22" rx="9" fill="#2b2430" stroke="'+C.ink+'" stroke-width="3.5"/>'+path('M94 90 Q100 86 106 90',null,3.5)+'<path d="M64 89 L72 87 M112 89 L120 87" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none"/>';}
+    if(et===3){ // cool: cada ajolote con su propio estilo (no todos con lentes de sol)
+      var tk=TEMAS[tema]?tema:'rosa',cej=(!up&&e!=='casi')?path('M62 79 L88 85',null,5.5)+path('M138 79 L112 85',null,5.5):'';
+      var lentes='<rect x="58" y="82" width="36" height="22" rx="9" fill="#2b2430" stroke="'+C.ink+'" stroke-width="3.5"/><rect x="106" y="82" width="36" height="22" rx="9" fill="#2b2430" stroke="'+C.ink+'" stroke-width="3.5"/>'+path('M94 90 Q100 86 106 90',null,3.5)+'<path d="M64 89 L72 87 M112 89 L120 87" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none"/>';
+      var audif=path('M48 92 Q48 30 100 30 Q152 30 152 92',null,10)+'<path d="M48 92 Q48 30 100 30 Q152 30 152 92" fill="none" stroke="'+t.R+'" stroke-width="5" stroke-linecap="round"/>'+ell(47,98,10,16,t.R)+ell(153,98,10,16,t.R);
+      if(tk==='rosa')o+=audif+lentes;                                  // lentes de sol + audífonos
+      else if(tk==='azul'){ // gorra al revés
+        o+=path('M54 80 Q52 38 100 38 Q148 38 146 80 Q100 70 54 80 Z',t.R,4)+path('M146 78 Q172 76 176 86 Q160 90 146 86 Z',t.PD,4)+circ(100,40,5,C.cream,3)+cej;}
+      else if(tk==='amarillo'){ // audífonos grandes y cejas de "yo puedo"
+        o+=audif+cej;}
+      else if(tk==='menta'){ // lentes redondos de "intelectual cool"
+        o+='<circle cx="74" cy="92" r="17" fill="rgba(255,255,255,.28)" stroke="'+C.ink+'" stroke-width="4"/><circle cx="126" cy="92" r="17" fill="rgba(255,255,255,.28)" stroke="'+C.ink+'" stroke-width="4"/>'+path('M91 90 Q100 84 109 90',null,4)+path('M57 90 L50 86 M143 90 L150 86',null,4)+cej;}
+      else if(tk==='lila'){ // lentes de estrella
+        o+=star(74,93,21,'#2b2430')+star(126,93,21,'#2b2430')+path('M94 92 Q100 88 106 92',null,3.5);}
+      else { // durazno: gorro de lana con pompón
+        o+=path('M54 78 Q52 36 100 36 Q148 36 146 78 Z','#e9806c',4)+path('M52 76 Q100 88 148 76 L146 66 Q100 78 54 66 Z','#f6efe0',4)+circ(100,30,9,'#f6efe0',4)+cej;} }
     if(e==='piensa')o+='<text x="152" y="46" font-family="Urbanist,sans-serif" font-weight="800" font-size="38" fill="'+C.ink+'">?</text>';
     if(e==='casi')o+='<text x="150" y="40" font-family="Urbanist,sans-serif" font-weight="800" font-size="34" fill="'+C.ink+'">&#8230;</text>';
     if(up)o+=star(14,22,11,C.pink)+star(188,20,11,C.blue)+star(100,12,9,C.yel)+star(190,86,7,C.green);

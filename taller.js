@@ -95,9 +95,11 @@
     function elegida(){ var l = lista(), nom = lee(K, ''); var v = nom && l.filter(function(x){ return x.name === nom; })[0]; if (v) return v; return l.slice().sort(function(a, b){ return puntaje(b) - puntaje(a); })[0] || null; }
     function tono(){ var t = parseFloat(lee(KP, '1.25')); return isNaN(t) ? 1.25 : Math.max(0.8, Math.min(2, t)); }
     /* Convierte símbolos matemáticos en palabras para que la voz los lea bien */
-    function dictable(t){ return String(t)
+    var FR = { 2: ['medio', 'medios'], 3: ['tercio', 'tercios'], 4: ['cuarto', 'cuartos'], 5: ['quinto', 'quintos'], 6: ['sexto', 'sextos'], 7: ['séptimo', 'séptimos'], 8: ['octavo', 'octavos'], 9: ['noveno', 'novenos'], 10: ['décimo', 'décimos'] };
+    function fraccion(m, a, b){ var f = FR[+b]; if (!f || +a === 0) return a + ' entre ' + b; return a + ' entre ' + b + ', o sea, ' + (+a === 1 ? 'un ' + f[0] : a + ' ' + f[1]) + ','; }
+    function dictable(t){ return String(t).replace(/(\d+)\s*\/\s*(\d+)/g, fraccion)
       .replace(/(\d)\s*[−–-]\s*(?=[\d(])/g, '$1 menos ').replace(/\s[−–]\s/g, ' menos ')
-      .replace(/\s*\+\s*/g, ' más ').replace(/\s*[×·✕]\s*/g, ' por ').replace(/\s*[÷]\s*(?=\d)/g, ' entre ').replace(/\s*\/\s*(?=\d)/g, ' entre ')
+      .replace(/\s*\+\s*/g, ' más ').replace(/\s*[×·✕]\s*/g, ' por ').replace(/\s*[÷]\s*(?=\d)/g, ' entre ')
       .replace(/\s*=\s*\?/g, ' igual a cuánto').replace(/\s*=\s*/g, ' igual a ').replace(/\s*≠\s*/g, ' es distinto de ')
       .replace(/\s*≥\s*/g, ' mayor o igual que ').replace(/\s*≤\s*/g, ' menor o igual que ')
       .replace(/(\d)\s*>\s*(\d)/g, '$1 mayor que $2').replace(/(\d)\s*<\s*(\d)/g, '$1 menor que $2')

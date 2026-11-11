@@ -68,7 +68,7 @@ async function juega(p, nsig, ntap) {
     const tr = document.querySelector('.tray.pf-on') || document.querySelector('.tray');
     const vis = e => e.offsetParent !== null && e.getBoundingClientRect().width > 2;
     const nxt = () => [...tr.querySelectorAll('button')].find(b => vis(b) && !b.hidden && !b.classList.contains('ayuda') && re.test(b.textContent));
-    const sig = () => { const c = tr.firstChild.cloneNode(true); c.querySelectorAll('.msg,.ok,.bad,.cn,.niv,.chips.lv,h2,.pf-sug,button.ayuda,.note,.step,.pt-sug').forEach(e => e.remove()); return (c.textContent.replace(/(Aciertos|Puntos|Racha|Intentos|Nivel)[:\s]*\d+/gi, '').match(/\d+(?:[.,]\d+)?/g) || []).sort().join(','); };
+    const sig = () => { const c = tr.firstChild.cloneNode(true); c.querySelectorAll('.msg,.ok,.bad,.cn,.niv,.chips.lv,h2,.pf-sug,button.ayuda,.note,.step,.pt-sug').forEach(e => e.remove()); const txt = c.textContent.replace(/(Aciertos|Puntos|Racha|Intentos|Nivel)[:\s]*\d+/gi, ''), nums = (txt.match(/\d+(?:[.,]\d+)?/g) || []).sort().join(','); if (!nums) return ''; const glifos = (txt.match(/[\u2654-\u265F]/g) || []).join(''); const geo = [...c.querySelectorAll('svg *')].map(e => ['d', 'x1', 'x2', 'y1', 'y2', 'cx', 'cy', 'points', 'transform'].map(a => e.getAttribute(a) || '').join(',')).join(';'); let h = 0; for (let i = 0; i < geo.length; i++) h = (h * 31 + geo.charCodeAt(i)) | 0; return nums + '|' + glifos + '|' + h; };
     const w = ms => new Promise(r => setTimeout(r, ms));
     const vistos = [], u = new Set();
     if (nxt()) for (let k = 0; k < nsig; k++) { nxt() && nxt().click(); await w(750); const s = sig(); if (s && vistos.includes(s)) res.repetidos++; if (s) { vistos.push(s); u.add(s); } }

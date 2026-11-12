@@ -34,6 +34,7 @@
   }
   function bajo(f, t, v, dur){ dur = dur || 0.3; var o = osc('triangle', f, t, dur), g = ctx.createGain(); env(g, t, 0.006, v, dur - 0.02); o.connect(g); g.connect(master); }
   function flauta(f, t, dur, v){
+    if (inten() < 2) return;
     var o = osc('sine', f, t, dur + 0.3), o2 = osc('sine', f * 2, t, dur + 0.3), g = ctx.createGain(), g2 = ctx.createGain(), l = osc('sine', 5, t, dur + 0.3), lg = ctx.createGain();
     lg.gain.value = 7; l.connect(lg); lg.connect(o.detune); lg.connect(o2.detune);
     g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(v, t + 0.14); g.gain.setValueAtTime(v, t + dur * 0.7); g.gain.linearRampToValueAtTime(0.0001, t + dur + 0.25);
@@ -73,10 +74,10 @@
       prog: [['C','Am','F','G','C','Em','F','G'], ['C','F','Dm','G','C','Am','Dm','G'], ['C','Em','Am','G','F','C','Dm','G']],
       tick: function(s, t, r, tn, c){
         if (s === 0) bajo(F(r), t, 0.1); else if (s === 4) bajo(F(r + (Math.random() < 0.5 ? 7 : 0)), t, 0.085); else if (s === 6 && Math.random() < 0.5) bajo(F(r + 7), t, 0.06);
-        if (Math.random() > 0.14){ var o = [0, 1, 2, 1, 3, 2, 1, 2][s]; marimba(F(r + 24 + tn[o % tn.length]), t, s % 4 === 0 ? 0.05 : 0.034, 0.4); }
+        if (inten() >= 3 || Math.random() > 0.14){ var o = [0, 1, 2, 1, 3, 2, 1, 2][s]; marimba(F(r + 24 + tn[o % tn.length]), t, s % 4 === 0 ? 0.05 : 0.034, 0.4); }
         shaker(t, s % 2 ? 0.02 : 0.009);
         if (c >= 4 && s === 0 && Math.random() < 0.8) flauta(F(r + 24 + tn[1 + Math.floor(Math.random() * 2)]), t, PASO * 6, 0.03);
-        if (s === 3 && Math.random() < 0.09) pajaro(t + 0.02);
+        if (s === 3 && Math.random() < (inten() >= 3 ? 0.25 : 0.09)) pajaro(t + 0.02);
       } },
     pasteleria: { bpm: 100, pasos: 6, swing: 0.05, eco: [0.6, 0.28, 0.24], lead: 'celesta', vl: 0.06, k: [4, 6],
       pool: [79, 81, 83, 86, 88, 91],
@@ -87,7 +88,7 @@
         if (s === 2 || s === 4){ marimba(F(r + 24 + tn[1]), t, 0.03, 0.3); marimba(F(r + 24 + tn[2]), t + 0.004, 0.026, 0.3); } // pa-pa
         if (s === 0 && Math.random() < 0.75){ [0, 1, 2].forEach(function(i){ arpa(F(r + 12 + tn[i]), t + i * PASO * 0.5, 0.04, 1.1); }); }
         if (c >= 4 && s === 0 && Math.random() < 0.6) flauta(F(r + 24 + tn[2]), t, PASO * 5, 0.026);
-        if (s === 5 && Math.random() < 0.1) celesta(F(100 + Math.floor(Math.random() * 4) * 2), t, 0.02, 0.9);
+        if (s === 5 && Math.random() < (inten() >= 3 ? 0.3 : 0.1)) celesta(F(100 + Math.floor(Math.random() * 4) * 2), t, 0.02, 0.9);
       } },
     acuarela: { bpm: 66, pasos: 8, swing: 0, eco: [0.9, 0.34, 0.36], lead: 'arpa', vl: 0.05, k: [3, 4],
       pool: [74, 76, 78, 81, 83, 86, 88],
@@ -96,7 +97,7 @@
       tick: function(s, t, r, tn, c){
         if (s === 0){ bajo(F(r), t, 0.07, 1.6); colchon([F(r + 12), F(r + 12 + tn[2]), F(r + 24 + tn[1])], t, PASO * 8, 0.013); }
         var o = [0, 1, 2, 3, 2, 1, 2, 1][s]; if (Math.random() > 0.2) arpa(F(r + 24 + tn[o]), t, s % 4 === 0 ? 0.04 : 0.028, 1.8);
-        if (Math.random() < 0.05) gota(t + 0.03);
+        if (Math.random() < (inten() >= 3 ? 0.14 : 0.05)) gota(t + 0.03);
         if (c >= 4 && s === 0 && Math.random() < 0.6) flauta(F(r + 36 + tn[1]), t, PASO * 7, 0.024);
       } },
     estrellas: { bpm: 88, pasos: 8, swing: 0.06, eco: [0.7, 0.3, 0.3], lead: 'celesta', vl: 0.055, k: [4, 6],
@@ -107,7 +108,7 @@
         if (s === 0) bajo(F(r), t, 0.09); else if (s === 5 && Math.random() < 0.5) bajo(F(r + 7), t, 0.06);
         if (Math.random() > 0.2){ var o = [0, 2, 1, 3, 2, 1, 3, 2][s]; celesta(F(r + 24 + tn[o % tn.length]), t, s % 4 === 0 ? 0.035 : 0.024, 0.9); }
         if (s === 0 || s === 4) reloj(t, 0.012);
-        if (s === 6 && Math.random() < 0.16) celesta(F(96 + [0, 2, 4, 7, 9][Math.floor(Math.random() * 5)]), t, 0.018, 1.2);
+        if (s === 6 && Math.random() < (inten() >= 3 ? 0.4 : 0.16)) celesta(F(96 + [0, 2, 4, 7, 9][Math.floor(Math.random() * 5)]), t, 0.018, 1.2);
         if (c >= 4 && s === 0 && Math.random() < 0.5) flauta(F(r + 24 + tn[2]), t, PASO * 6, 0.022);
       } }
   };
@@ -145,6 +146,14 @@
   // Reacción al niño: la voz baja la música, un acierto toca una nota del acorde y un error la deja más tenue un momento
   var hablando = 0, perro = null, racha = 0, calmaHasta = 0, tCalma = null;
   function suave(){ return !!ctx && ctx.currentTime < calmaHasta; }
+  function inten(){ return suave() ? 1 : (racha >= 5 ? 3 : 2); }
+  // Ritmo del niño: si responde despacio la música se aquieta un poco; si va rápido, sube un poco el pulso
+  var ultimoEv = 0, ritmoEma = 10, factor = 1, factorMeta = 1;
+  function marcaRitmo(){
+    if (!ctx) return; var ahora = ctx.currentTime;
+    if (ultimoEv && ahora - ultimoEv < 90) ritmoEma = ritmoEma * 0.7 + (ahora - ultimoEv) * 0.3;
+    ultimoEv = ahora; factorMeta = ritmoEma > 20 ? 0.9 : ritmoEma > 12 ? 0.95 : ritmoEma < 5 ? 1.06 : 1;
+  }
   function nivel(){ if (!ctx || !master || !sonando) return; master.gain.setTargetAtTime(hablando > 0 ? 0.5 : (suave() ? 0.85 : 1.3), ctx.currentTime, 0.2); }
   function habla(on){
     hablando = Math.max(0, hablando + (on ? 1 : -1)); clearTimeout(perro);
@@ -153,13 +162,13 @@
   }
   function acierto(){
     if (!sonando || !ctx || !cur) return;
-    racha++; calmaHasta = 0; nivel();
+    racha++; calmaHasta = 0; marcaRitmo(); nivel();
     var t = ctx.currentTime + 0.22, i = (racha - 1) % 4, oct = Math.floor((racha - 1) / 4) % 2 * 12, tn = cur.tn, f = LEAD[A.lead];
     f(F(cur.r + 24 + tn[i % tn.length] + oct), t, 0.085, 1.2);
     if (racha % 3 === 0) f(F(cur.r + 36 + tn[(i + 2) % tn.length]), t + 0.11, 0.06, 1.2);   // cada tres seguidos, un destello arriba
   }
   function error(){
-    racha = 0; if (!sonando || !ctx) return;
+    racha = 0; if (!sonando || !ctx) return; marcaRitmo();
     calmaHasta = ctx.currentTime + 8; nivel(); clearTimeout(tCalma); tCalma = setTimeout(nivel, 8200);
   }
   function nuevoMotivo(){
@@ -174,13 +183,16 @@
   function programa(){
     var P = A.pasos, n = paso % (P * 8), compas = Math.floor(n / P), s = n % P, t = prox + (s % 2 ? PASO * A.swing * 2 : 0);
     if (n === 0) nuevaVuelta();
+    if (s === 0){ factor += (factorMeta - factor) * 0.35; PASO = 60 / (A.bpm * factor) / 2; }
     var ch = A.ch[prog[compas]], raiz = ch[0], tonos = ch[1], pcs = tonos.map(function(x){ return (raiz + x + TR + 120) % 12; });
     cur = { r: raiz, tn: tonos }; A.tick(s, t, raiz, tonos, compas);
+    if (s === 0 && inten() >= 3) colchon([F(raiz + 12), F(raiz + 12 + tonos[2])], t, PASO * P, 0.01);
     var mot = motivos[Math.floor(compas / 2)], p = (compas % 2) * P + s, i, pool = A.pool;
     for (i = 0; i < mot.length; i++){ if (mot[i][0] === p && !(suave() && i % 2)){
       var idx = mot[i][1], mn = pool[idx];
       if (p % 4 === 0){ for (var d = 0; d < pool.length; d++){ var c1 = pool[Math.max(0, Math.min(pool.length - 1, idx + (d % 2 ? -1 : 1) * Math.ceil(d / 2)))]; if (pcs.indexOf((c1 + TR + 120) % 12) >= 0){ mn = c1; break; } } }
       LEAD[A.lead](F(mn), t, A.vl, mot[i][2] > 1 ? 1.4 : 0.7);
+      if (inten() >= 3) LEAD[A.lead](F(mn - 12), t + 0.01, A.vl * 0.45, 0.9);
     } }
     paso++; prox += PASO;
   }
@@ -199,8 +211,8 @@
     sonando = false; clearTimeout(timer); if (ctx && master){ master.gain.cancelScheduledValues(ctx.currentTime); master.gain.setTargetAtTime(0, ctx.currentTime, 0.4); }
   }
   // Solo para pruebas: renderiza unos segundos sin altavoz
-  function prueba(seg, nombre, tr){
-    var oc = new OfflineAudioContext(1, 44100 * seg, 44100); ctx = oc; construye(oc); elige(nombre || 'bosque', tr || 0); master.gain.value = 1.3; sonando = true; paso = 0; prox = 0.1;
+  function prueba(seg, nombre, tr, r0){
+    var oc = new OfflineAudioContext(1, 44100 * seg, 44100); ctx = oc; construye(oc); elige(nombre || 'bosque', tr || 0); master.gain.value = 1.3; sonando = true; paso = 0; prox = 0.1; racha = r0 | 0; factor = factorMeta = 1;
     while (prox < seg - 0.5) programa(); sonando = false;
     return oc.startRendering().then(function(b){ ctx = null; master = null; eco = null; return Array.prototype.slice.call(b.getChannelData(0)); });
   }

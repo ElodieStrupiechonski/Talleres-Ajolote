@@ -51,8 +51,8 @@
     unlock: function(){ ac(); },
     nota: function(f, dur, o){ if (!on) return; voz(f, 0, dur, o); },
     // Notas de una escala pentatónica (agradable, sin disonancias)
-    ok: function(){ if (!on) return; [523.25, 659.25, 783.99, 1046.5].forEach(function(f, i){ voz(f, i * 0.085, 0.45, { vol: 0.11 }); }); },
-    bad: function(){ if (!on) return; voz(392, 0, 0.22, { vol: 0.07, armV: 0.05 }); voz(329.63, 0.16, 0.32, { vol: 0.07, armV: 0.05 }); },
+    ok: function(){ if (window.Musica) Musica.acierto(); if (!on) return; [523.25, 659.25, 783.99, 1046.5].forEach(function(f, i){ voz(f, i * 0.085, 0.45, { vol: 0.11 }); }); },
+    bad: function(){ if (window.Musica) Musica.error(); if (!on) return; voz(392, 0, 0.22, { vol: 0.07, armV: 0.05 }); voz(329.63, 0.16, 0.32, { vol: 0.07, armV: 0.05 }); },
     tick: function(){ if (!on) return; voz(1100, 0, 0.05, { vol: 0.035, armV: 0, ataque: 0.004 }); },
     pop: function(){ if (!on) return; voz(520, 0, 0.09, { vol: 0.08, tipo: 'triangle', armV: 0.05 }); },
     exchange: function(){ if (!on) return; voz(392, 0, 0.28, { vol: 0.09, desliza: 784 }); voz(1318.5, 0.26, 0.4, { vol: 0.07 }); },

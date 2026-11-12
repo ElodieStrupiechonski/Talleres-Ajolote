@@ -44,15 +44,18 @@
       g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(Math.max(0.002, v - i * 0.002), t + dur * 0.4); g.gain.linearRampToValueAtTime(0.0001, t + dur); o.connect(g); g.connect(master); }); });
   }
   function shaker(t, v){
+    if (suave()) return;
     var s = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain(); s.buffer = ruido; f.type = 'bandpass'; f.frequency.value = 7000; f.Q.value = 0.9;
     env(g, t, 0.003, v, 0.05); s.connect(f); f.connect(g); g.connect(master); s.start(t, Math.random() * 0.3, 0.08);
   }
   function reloj(t, v){
+    if (suave()) return;
     var s = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain(); s.buffer = ruido; f.type = 'bandpass'; f.frequency.value = 2300; f.Q.value = 9;
     env(g, t, 0.001, v, 0.04); s.connect(f); f.connect(g); g.connect(master); s.start(t, Math.random() * 0.3, 0.06);
     var o = osc('sine', 1000, t, 0.05), g2 = ctx.createGain(); env(g2, t, 0.001, v * 0.5, 0.04); o.connect(g2); g2.connect(master);
   }
   function pajaro(t){
+    if (suave()) return;
     var f0 = 2600 + Math.random() * 1400, n = 2 + Math.floor(Math.random() * 3);
     for (var i = 0; i < n; i++){ var tt = t + i * 0.12, o = osc('sine', f0, tt, 0.09), g = ctx.createGain(); o.frequency.setValueAtTime(f0, tt); o.frequency.exponentialRampToValueAtTime(f0 * 1.45, tt + 0.07); env(g, tt, 0.01, 0.014, 0.08); o.connect(g); g.connect(master); }
   }
@@ -138,7 +141,27 @@
   }
 
   // ---------- composición: se genera compás a compás; un motivo de 2 compases se repite y se contesta ----------
-  var paso = 0, prox = 0, prog = null, motivos = [];
+  var paso = 0, prox = 0, prog = null, motivos = [], cur = null;
+  // Reacción al niño: la voz baja la música, un acierto toca una nota del acorde y un error la deja más tenue un momento
+  var hablando = 0, perro = null, racha = 0, calmaHasta = 0, tCalma = null;
+  function suave(){ return !!ctx && ctx.currentTime < calmaHasta; }
+  function nivel(){ if (!ctx || !master || !sonando) return; master.gain.setTargetAtTime(hablando > 0 ? 0.5 : (suave() ? 0.85 : 1.3), ctx.currentTime, 0.2); }
+  function habla(on){
+    hablando = Math.max(0, hablando + (on ? 1 : -1)); clearTimeout(perro);
+    if (hablando > 0) perro = setTimeout(function(){ hablando = 0; nivel(); }, 20000);   // por si el sintetizador no avisa que terminó
+    nivel();
+  }
+  function acierto(){
+    if (!sonando || !ctx || !cur) return;
+    racha++; calmaHasta = 0; nivel();
+    var t = ctx.currentTime + 0.22, i = (racha - 1) % 4, oct = Math.floor((racha - 1) / 4) % 2 * 12, tn = cur.tn, f = LEAD[A.lead];
+    f(F(cur.r + 24 + tn[i % tn.length] + oct), t, 0.085, 1.2);
+    if (racha % 3 === 0) f(F(cur.r + 36 + tn[(i + 2) % tn.length]), t + 0.11, 0.06, 1.2);   // cada tres seguidos, un destello arriba
+  }
+  function error(){
+    racha = 0; if (!sonando || !ctx) return;
+    calmaHasta = ctx.currentTime + 8; nivel(); clearTimeout(tCalma); tCalma = setTimeout(nivel, 8200);
+  }
   function nuevoMotivo(){
     var P = A.pasos, k = A.k[0] + Math.floor(Math.random() * (A.k[1] - A.k[0] + 1)), pos = [0], i, intentos = 0;
     while (pos.length < k && intentos++ < 200){ var q = 1 + Math.floor(Math.random() * (2 * P - 2)); if (pos.indexOf(q) < 0 && Math.random() < (q % 2 ? 0.35 : 0.8)) pos.push(q); }
@@ -152,9 +175,9 @@
     var P = A.pasos, n = paso % (P * 8), compas = Math.floor(n / P), s = n % P, t = prox + (s % 2 ? PASO * A.swing * 2 : 0);
     if (n === 0) nuevaVuelta();
     var ch = A.ch[prog[compas]], raiz = ch[0], tonos = ch[1], pcs = tonos.map(function(x){ return (raiz + x + TR + 120) % 12; });
-    A.tick(s, t, raiz, tonos, compas);
+    cur = { r: raiz, tn: tonos }; A.tick(s, t, raiz, tonos, compas);
     var mot = motivos[Math.floor(compas / 2)], p = (compas % 2) * P + s, i, pool = A.pool;
-    for (i = 0; i < mot.length; i++){ if (mot[i][0] === p){
+    for (i = 0; i < mot.length; i++){ if (mot[i][0] === p && !(suave() && i % 2)){
       var idx = mot[i][1], mn = pool[idx];
       if (p % 4 === 0){ for (var d = 0; d < pool.length; d++){ var c1 = pool[Math.max(0, Math.min(pool.length - 1, idx + (d % 2 ? -1 : 1) * Math.ceil(d / 2)))]; if (pcs.indexOf((c1 + TR + 120) % 12) >= 0){ mn = c1; break; } } }
       LEAD[A.lead](F(mn), t, A.vl, mot[i][2] > 1 ? 1.4 : 0.7);
@@ -168,8 +191,8 @@
     timer = setTimeout(tic, 90);
   }
   function enciende(){
-    var c = ac(); if (!c) return; sonando = true; paso = 0; prox = c.currentTime + 0.15;
-    master.gain.cancelScheduledValues(c.currentTime); master.gain.setTargetAtTime(1.3, c.currentTime, 0.8);
+    var c = ac(); if (!c) return; sonando = true; paso = 0; prox = c.currentTime + 0.15; racha = 0; calmaHasta = 0;
+    master.gain.cancelScheduledValues(c.currentTime); master.gain.setTargetAtTime(hablando > 0 ? 0.5 : 1.3, c.currentTime, 0.8);
     clearTimeout(timer); tic();
   }
   function apaga(){
@@ -195,6 +218,6 @@
   function primerToque(){ if (pref() && !sonando) enciende(); }
   document.addEventListener('pointerdown', primerToque, { once: false, capture: true });
   document.addEventListener('visibilitychange', function(){ if (document.hidden){ if (ctx) { try { ctx.suspend(); } catch (e) {} } } else if (pref() && ctx){ try { ctx.resume(); } catch (e) {} } });
-  window.Musica = { montar: montar, alterna: alterna, enciende: enciende, apaga: apaga, activa: pref, _prueba: prueba };
+  window.Musica = { montar: montar, alterna: alterna, enciende: enciende, apaga: apaga, activa: pref, habla: habla, acierto: acierto, error: error, _prueba: prueba };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', montaExistentes); else montaExistentes();
 })();

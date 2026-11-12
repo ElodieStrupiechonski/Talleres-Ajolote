@@ -105,7 +105,7 @@
       .replace(/(\d)\s*>\s*(\d)/g, '$1 mayor que $2').replace(/(\d)\s*<\s*(\d)/g, '$1 menor que $2')
       .replace(/(\d)\s*%/g, '$1 por ciento').replace(/√/g, 'raíz de ').replace(/²/g, ' al cuadrado').replace(/³/g, ' al cubo').replace(/π/g, ' pi ')
       .replace(/\?+\s*$/, '?'); }
-    function habla(txt){ try { if (!('speechSynthesis' in window) || !txt) return; speechSynthesis.cancel(); var u = new SpeechSynthesisUtterance(dictable(txt)), v = elegida(); u.lang = v ? v.lang : 'es-MX'; if (v) u.voice = v; u.pitch = tono(); u.rate = 0.95; speechSynthesis.speak(u); } catch (e) {} }
+    function habla(txt){ try { if (!('speechSynthesis' in window) || !txt) return; speechSynthesis.cancel(); var u = new SpeechSynthesisUtterance(dictable(txt)), v = elegida(); u.lang = v ? v.lang : 'es-MX'; if (v) u.voice = v; u.pitch = tono(); u.rate = 0.95; if (window.Musica){ Musica.habla(true); u.onend = u.onerror = function(){ Musica.habla(false); }; } speechSynthesis.speak(u); } catch (e) {} }
     return { habla: habla, lista: lista, elegida: elegida, tono: tono, pon: function(nom){ guarda(K, nom || ''); }, ponTono: function(t){ guarda(KP, String(t)); } };
   })();
   window.Voz = Voz;

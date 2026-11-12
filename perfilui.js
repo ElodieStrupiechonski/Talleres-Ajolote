@@ -33,14 +33,14 @@
         }
         var g=el('button','pu-card pu-guest'); g.type='button'; g.appendChild(el('span','pu-plus','?')); g.appendChild(el('span','pu-nom','Jugar sin perfil')); g.appendChild(el('span','pu-sub','no se guarda nada'));
         g.onclick=function(){P.setActivo(null); try{sessionStorage.setItem('tm_inv','1');}catch(e){} c.fin(); if(cb)cb();}; lista.appendChild(g);
-        if(P.lista().length>=P.max()) pie.textContent='Ya hay '+P.max()+' perfiles. Un adulto puede borrar alguno o cambiar a «salón» en el Diario.'; else pie.textContent='';
+        if(P.lista().length>=P.max()) pie.textContent='Ya hay '+P.max()+' perfiles. Tu guía puede borrar alguno o cambiar a «salón» en el Diario.'; else pie.textContent='';
       }
       var pie=el('p','pu-pie'); b.appendChild(pie);
       function form(){
         b.innerHTML=''; b.appendChild(el('h2','pu-h','Perfil nuevo'));
         var f=el('div','pu-form'), l1=el('label',null,'Nombre'), inp=el('input'); inp.type='text'; inp.maxLength=14; inp.autocomplete='off'; inp.spellcheck=false; l1.appendChild(inp);
         var t=sel(TALL,2,'Taller'), a=sel({1:'Año 1',2:'Año 2',3:'Año 3'},1,'Año del ciclo');
-        var g=selGen(''), lg=el('label',null,'Cómo te habla el ajolote'); lg.appendChild(g); var l2=el('label',null,'Taller (un adulto puede ajustarlo)'); l2.appendChild(t); var l3=el('label',null,'Año del taller'); l3.appendChild(a);
+        var g=selGen(''), lg=el('label',null,'Cómo te habla el ajolote'); lg.appendChild(g); var l2=el('label',null,'Taller (tu guía puede ajustarlo)'); l2.appendChild(t); var l3=el('label',null,'Año del taller'); l3.appendChild(a);
         var er=el('p','pu-err'); er.setAttribute('role','alert');
         var ok=el('button','pu-go','Listo'); ok.type='button'; var ca=el('button','pu-sec','Volver'); ca.type='button';
         ok.onclick=function(){var r=P.crear(inp.value,t.value,a.value); if(r.ok){P.editar(r.ok.id,{gen:g.value}); P.setActivo(r.ok.id); c.fin(); window.PerfUI.mascota(cb,r.ok);} else er.textContent={nombre:'Escribe tu nombre (solo letras).',repetido:'Ese nombre ya existe. Agrega una letra o tu apellido.',lleno:'Ya no caben más perfiles.'}[r.err];};

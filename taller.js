@@ -116,7 +116,7 @@
     var P=window.Perf;
     if(!P||!P.tienePin||!P.tienePin()||P.abierto()){ ok(); return; }
     var v=document.createElement('div'); v.className='pin-ov'; v.setAttribute('role','dialog'); v.setAttribute('aria-modal','true');
-    v.innerHTML='<div class="pin-bx"><h3>🔒 Solo para personas adultas</h3><p>Escribe el número del candado (4 números).</p><input type="password" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="Número del candado"><p class="pin-er" role="alert"></p><div class="pin-bt"><button type="button" class="go">Entrar</button><button type="button" class="no">Cancelar</button></div></div>';
+    v.innerHTML='<div class="pin-bx"><h3>🔒 Solo para guías</h3><p>Escribe el número del candado (4 números).</p><input type="password" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="Número del candado"><p class="pin-er" role="alert"></p><div class="pin-bt"><button type="button" class="go">Entrar</button><button type="button" class="no">Cancelar</button></div></div>';
     var inp=v.querySelector('input'),er=v.querySelector('.pin-er');
     function cierra(){ v.remove(); }
     function va(){ if(P.revisaPin(inp.value)){ P.abre(); cierra(); ok(); } else { er.textContent='No es ese número.'; inp.value=''; inp.focus(); } }
@@ -141,7 +141,7 @@
   document.documentElement.classList.toggle('ver-aciertos', leer());
   if (isIndex) {
     var tg = document.createElement('button'); tg.type='button'; tg.className='tg-aciertos';
-    function rot(){ tg.textContent = leer() ? 'Ocultar aciertos y resumen (adultos)' : 'Mostrar aciertos y resumen (adultos)'; }
+    function rot(){ tg.textContent = leer() ? 'Ocultar aciertos y resumen (guía)' : 'Mostrar aciertos y resumen (guía)'; }
     tg.onclick = function(){ function aplica(){ guardar(!leer()); document.documentElement.classList.toggle('ver-aciertos', leer()); rot(); } if(leer()) aplica(); else pideAdulto(aplica); };
     rot(); document.body.appendChild(tg);
   }

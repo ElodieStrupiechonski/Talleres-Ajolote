@@ -119,7 +119,7 @@ h2.tm{margin:14px 0 6px;font-size:1.2rem}.nota{color:var(--muted);font-size:.95r
   // Eliminar el perfil: con confirmación; si el adulto puso un número secreto, se hace desde el Diario
   function borra(p){
     var d=el('details','elim'); d.appendChild(el('summary',null,'Eliminar este perfil'));
-    if(Perf.tienePin()&&!Perf.abierto()){ var a=el('a',null,'Pide a una persona adulta que lo elimine desde el Diario'); a.href='diario.html'; d.appendChild(el('p','nota','Este dispositivo tiene un número secreto de adulto.')); d.appendChild(a); }
+    if(Perf.tienePin()&&!Perf.abierto()){ var a=el('a',null,'Pide a tu guía que lo elimine desde el Diario'); a.href='diario.html'; d.appendChild(el('p','nota','Este dispositivo tiene un número secreto de adulto.')); d.appendChild(a); }
     else { d.appendChild(el('p','nota','Se borran el nombre, el ajolote y todo el avance de '+p.nombre+' de este dispositivo. No se puede deshacer.'));
       var b=el('button','pu-sec dng','Eliminar el perfil de '+p.nombre); b.type='button';
       b.onclick=function(){ if(b.dataset.s!=='1'){b.dataset.s='1';b.textContent='¿Seguro? Toca otra vez para eliminar';return;} Perf.borrar(p.id); anio=null;tema=null; pinta(); };

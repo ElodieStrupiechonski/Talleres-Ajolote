@@ -26,6 +26,11 @@ svg.ob.x{opacity:.28}
 .chips.lv{display:flex;flex-wrap:wrap;gap:8px}
 .msg:empty{display:none}
 .ob{cursor:pointer;transition:transform .12s}.ob.mk{transform:scale(1.08)}.ob.mk g{fill:#7fcf95;stroke:#2f7d4a;stroke-width:3.5}.ob.mk.x g{fill:#7fcf95}
+/* Bandeja 2 en horizontal: escena a la izquierda, teclado y mensajes a la derecha */
+@media (min-aspect-ratio:1/1){
+  #s2 .pf-inner{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);grid-template-areas:"st st" "ti ti" "sc ke" "sc ms" "sc ac";gap:6px 16px;align-content:start;align-items:start}
+  #s2 .step{grid-area:st}#s2 h2{grid-area:ti}#s2 .goal{grid-area:ti}#s2 #b2{grid-area:sc;min-width:0}#s2 #o2{grid-area:ke;min-width:0}#s2 #m2{grid-area:ms}#s2 .pf-inner>p:last-child{grid-area:ac;margin:0}
+}
 </style></head><body>
 <div class="wrap">
   <a class="back" href="index.html">← Todos los talleres</a>

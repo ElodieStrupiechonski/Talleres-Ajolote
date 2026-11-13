@@ -378,10 +378,16 @@
   document.addEventListener('pointerdown', function(){ ult = Date.now(); }, true);
   setInterval(function(){ if (document.hidden || Date.now() - ult > 60000) return; var o = ses(); o.seg = (o.seg || 0) + 5; guardaSes(o); if (LIM_MIN > 0 && o.seg / 60 >= LIM_MIN + 3) revisaPausa(); }, 5000);
 
-  // ---- Aviso en teléfono vertical ----
+  // ---- Teléfono en vertical: pantalla amable que pide girar (se puede seguir en vertical) ----
   try { if (window.matchMedia('(max-aspect-ratio:1/1) and (max-width:699px)').matches && !sessionStorage.getItem('tm_gira')){
-    var gi = el('div', 'pf-gira'); gi.setAttribute('role', 'status'); gi.appendChild(el('span', null, '↻ Gira el teléfono: se juega mejor en horizontal.'));
-    var gx = el('button', null, 'Ok'); gx.type = 'button'; gx.onclick = function(){ gi.remove(); try { sessionStorage.setItem('tm_gira', '1'); } catch (e) {} }; gi.appendChild(gx); document.body.appendChild(gi); } } catch (e) {}
+    var gi = el('div', 'pf-gira'); gi.setAttribute('role', 'dialog'); gi.setAttribute('aria-label', 'Gira el teléfono');
+    var gm = el('div', 'pf-gira-axo'); if (window.Ilu) gm.innerHTML = Ilu.html('axo_feliz', {tema: temaAct()}); gi.appendChild(gm);
+    var gt = el('div', 'pf-gira-tel'); gt.setAttribute('aria-hidden', 'true'); gi.appendChild(gt);
+    gi.appendChild(el('h2', null, 'Gira el teléfono'));
+    gi.appendChild(el('p', null, 'Los talleres se juegan mejor en horizontal: así todo se ve más grande.'));
+    var gx = el('button', 'pf-gira-ok', 'Jugar en vertical'); gx.type = 'button';
+    gx.onclick = function(){ gi.remove(); try { sessionStorage.setItem('tm_gira', '1'); } catch (e) {} setTimeout(function(){ try { window.dispatchEvent(new Event('resize')); } catch (e) {} }, 50); };
+    gi.appendChild(gx); document.body.appendChild(gi); } } catch (e) {}
 
   window.PF.show = show; window.PF.pausa = pausa; window.PF.deseq = function(){ return desequilibrio(); }; window.PF.escala = function(){ return scale[cur]; }; window.PF.fit = function(f){ fit(cur, f !== false); };
 })();

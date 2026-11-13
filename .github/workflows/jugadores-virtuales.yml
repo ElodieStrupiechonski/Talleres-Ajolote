@@ -32,12 +32,17 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Jugar
         run: node herramientas/jugadores_virtuales.js --perfiles "${{ github.event.inputs.perfiles || '1-1,1-2' }}" --rapido --salida informes-vv
+      - name: Jugar en modo oscuro (contraste)
+        run: node herramientas/jugadores_virtuales.js --perfiles "1-1" --rapido --oscuro --salida informes-vv-oscuro
       - name: Resumen en la página de la ejecución
         if: always()
         run: |
           if [ -f informes-vv/jugadores_virtuales.md ]; then head -c 60000 informes-vv/jugadores_virtuales.md >> "$GITHUB_STEP_SUMMARY"; fi
+          if [ -f informes-vv-oscuro/jugadores_virtuales.md ]; then printf '\n\n## Modo oscuro\n' >> "$GITHUB_STEP_SUMMARY"; head -c 30000 informes-vv-oscuro/jugadores_virtuales.md >> "$GITHUB_STEP_SUMMARY"; fi
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: jugadores-virtuales
-          path: informes-vv
+          path: |
+            informes-vv
+            informes-vv-oscuro

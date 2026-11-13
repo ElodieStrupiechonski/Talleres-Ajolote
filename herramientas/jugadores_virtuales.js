@@ -15,7 +15,7 @@ const arg = (k, d) => { const i = process.argv.indexOf('--' + k); return i > 0 ?
 const PERFILES = arg('perfiles', '1-1,1-2').split(',');
 const [VW, VH] = arg('viewport', '844x390').split('x').map(Number);
 const SALIDA = path.resolve(arg('salida', path.join(RAIZ, 'herramientas', 'informes')));
-const RAPIDO = process.argv.includes('--rapido');
+const RAPIDO = process.argv.includes('--rapido'), OSCURO = process.argv.includes('--oscuro');
 const NSIG = RAPIDO ? 4 : 8, NTAP = RAPIDO ? 8 : 20;
 const URL = f => 'file://' + path.join(RAIZ, f);
 fs.mkdirSync(path.join(SALIDA, 'capturas'), { recursive: true });
@@ -41,6 +41,13 @@ function inspecciona(taller, anio) {
   let chico = 0, ej = '';
   tr.querySelectorAll('h2,h3,p,span,label,button,td,th,b,small').forEach(e => { if (!vis(e) || !e.childNodes.length) return; const t = [...e.childNodes].filter(n => n.nodeType === 3 && n.textContent.trim()).map(n => n.textContent.trim()).join(''); if (!t) return; const fs = parseFloat(getComputedStyle(e).fontSize) * s; if (fs < 12) { chico++; ej = ej || t.slice(0, 20); } });
   if (chico) add('aviso', 'texto', chico + ' texto(s) con tamaño efectivo < 12 px, p. ej. «' + ej + '»');
+  // contraste del texto contra su fondo (sirve sobre todo en modo oscuro)
+  { const pc = s => { const m = (s || '').match(/rgba?\(([^)]+)\)/); if (!m) return null; const a = m[1].split(',').map(Number); return { r: a[0], g: a[1], b: a[2], a: a.length > 3 ? a[3] : 1 }; };
+    const lum = c => { const f = v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }; return 0.2126 * f(c[0]) + 0.7152 * f(c[1]) + 0.0722 * f(c[2]); };
+    const fondo = el => { const ls = []; while (el) { const c = pc(getComputedStyle(el).backgroundColor); if (c && c.a > 0) { ls.push(c); if (c.a >= 0.95) break; } el = el.parentElement; } let b = [255, 255, 255]; for (let i = ls.length - 1; i >= 0; i--) { const c = ls[i]; b = [b[0] * (1 - c.a) + c.r * c.a, b[1] * (1 - c.a) + c.g * c.a, b[2] * (1 - c.a) + c.b * c.a]; } return b; };
+    let malos = 0, eje = '';
+    document.querySelectorAll('body *').forEach(e => { if (['SCRIPT', 'STYLE'].includes(e.tagName) || !vis(e)) return; const t = [...e.childNodes].filter(n => n.nodeType === 3 && n.textContent.trim()).map(n => n.textContent.trim()).join(''); if (!t) return; const r = e.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight || r.right < 0 || r.left > innerWidth) return; const cs = getComputedStyle(e); if (+cs.opacity === 0) return; const f = pc(cs.color); if (!f) return; const bg = fondo(e), fm = [f.r, f.g, f.b].map((v, i) => v * f.a + bg[i] * (1 - f.a)), l1 = lum(fm), l2 = lum(bg), cr = (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05); if (cr < 3) { malos++; if (!eje) eje = t.slice(0, 26) + ' (' + cr.toFixed(1) + ':1, ' + e.tagName.toLowerCase() + '.' + String(e.className && e.className.baseVal === undefined ? e.className : '').slice(0, 20) + ')'; } });
+    if (malos) add('error', 'contraste', malos + ' texto(s) con contraste < 3:1, p. ej. «' + eje + '»'); }
   const cort = [...tr.querySelectorAll('button,.lbl2,.step,h2')].filter(e => vis(e) && e.scrollWidth > e.clientWidth + 3 && getComputedStyle(e).overflow !== 'visible');
   if (cort.length) add('aviso', 'cortado', 'Texto cortado en: «' + cort.slice(0, 3).map(e => e.textContent.trim().slice(0, 20)).join('», «') + '»');
   // superposición entre controles
@@ -86,7 +93,7 @@ async function juega(p, nsig, ntap) {
   const informe = [], resumen = {};
   for (const pf of PERFILES) {
     const [taller, anio] = pf.split('-').map(Number);
-    const ctx = await b.newContext({ viewport: { width: VW, height: VH }, isMobile: true, hasTouch: true });
+    const ctx = await b.newContext({ viewport: { width: VW, height: VH }, isMobile: true, hasTouch: true, colorScheme: OSCURO ? 'dark' : 'light' });
     const perfil = { v: 2, modo: 'hogar', pin: '', activo: 'v1', perfiles: [{ id: 'v1', nombre: 'Virtual', taller, anio, tema: 'rosa', mas: '', prog: {}, sup: {}, vis: {}, emo: [], ult: Date.now() }] };
     await ctx.addInitScript(pj => { try { localStorage.setItem('tm_v2', pj); sessionStorage.setItem('tm_inv', '1'); } catch (e) {} }, JSON.stringify(perfil));
     const p0 = await ctx.newPage(); await p0.goto(URL('camino.html')); await p0.waitForTimeout(500);

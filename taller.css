@@ -4,7 +4,7 @@
 @font-face{font-family:"Baloo 2";src:url("fonts/baloo2.woff") format("woff");font-weight:400 800;font-display:swap}
 @font-face{font-family:"Nunito";src:url("fonts/nunito.woff") format("woff");font-weight:200 1000;font-display:swap}
 /* Layout: una bandeja de madera Montessori por actividad, apiladas; material de color sobre madera */
-:root{
+:root{color-scheme:light dark;
   --bg:#f8f5ef; --tray:#f0e3c8; --tray-edge:#cfb386; --fg:#41362b; --muted:#716049;
   --red:#c24a33; --blue:#3f6fa3; --green:#2e7d4f; --gold:#d9a63a; --card:#fffdf9;
   --acc:#3f6fa3; --acc-fg:#fff; --grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='500' height='240'><filter id='n' x='0' y='0' width='100%' height='100%'><feTurbulence type='fractalNoise' baseFrequency='0.01 0.45' numOctaves='2' seed='8' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.667  0 0 0 0 0.510  0 0 0 0 0.275  1.4 0 0 0 -0.55'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
@@ -660,3 +660,6 @@ body.pf .chips.lv{position:absolute!important;width:1px;height:1px;margin:0;padd
   .pf .pf-nav{flex-wrap:wrap;overflow:visible;gap:6px;padding:6px 8px}
   .pf .pf-tab{flex:1 1 42%;white-space:normal;min-height:44px;font-size:.9rem;text-align:center;line-height:1.15}
 }
+:root[data-theme="light"]{color-scheme:light}:root[data-theme="dark"]{color-scheme:dark}
+.pf-gira-fs{min-height:56px;padding:8px 24px;font-size:1.1rem;font-weight:800;background:var(--acc);color:var(--acc-fg,#1b1712);border:3px solid var(--fg);border-radius:16px;margin-top:6px}
+.pf-gira-ok{background:transparent;border:2px solid var(--muted);color:var(--muted);font-size:.95rem;min-height:44px}

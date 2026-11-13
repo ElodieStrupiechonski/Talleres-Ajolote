@@ -83,7 +83,7 @@
   function pintaNom(){ var m = masInfo(); masNom.textContent = m.nombre; masNom.title = m.nombre + (m.propio ? ' (en náhuatl: ' + m.nat + ', ' + m.sig + ')' : ' significa ' + m.sig + ' en náhuatl'); bigSv.setAttribute('aria-label', 'Mi ajolote ' + m.nombre + (Perf.activo() ? '. Tócalo para cambiarlo' : '')); }
   function saludo(){ var m = masInfo(), p = Perf.activo();
     if (window.matchMedia('(min-aspect-ratio:1/1) and (max-height:520px)').matches){ di(p ? hola(p.nombre) + ' Soy ' + m.nombre + '.' : '¡Hola! Soy ' + m.nombre + '.'); return; }
-    di(p ? hola(p.nombre) + ' Soy ' + m.nombre + ' («' + m.sig + '» en náhuatl).' : '¡Hola! Soy ' + m.nombre + ' («' + m.sig + '» en náhuatl). Toca «¿Quién juega?» para guardar tu avance.'); }
+    di(p ? hola(p.nombre) + ' Soy ' + m.nombre + ' («' + m.sig + '» en náhuatl).' : '¡Hola! Soy ' + m.nombre + ' («' + m.sig + '» en náhuatl). Toca «¿Quién?» para guardar tu avance.'); }
   function cambiaMas(){ var p = Perf.activo(); if (!p) return; PerfUI.mascota(function(){ pintaWho(); pintaNom(); mood('celebra', 2500); di(hola(p.nombre) + ' Soy ' + masInfo().nombre + '.'); }, p); }
   bigSv.addEventListener('click', cambiaMas); bigSv.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); e.stopPropagation(); cambiaMas(); } });
   mood('feliz');
@@ -94,7 +94,7 @@
   function lector(){ var p = window.Perf && Perf.activo(); document.body.classList.toggle('pf-lector', !!(p && +p.taller === 1 && +p.anio === 1)); }
   lector();
   function pintaWho(){ lector(); var p = quien(); who.innerHTML = ''; var av = el('span', 'pu-av'); av.innerHTML = Ilu.html('axo_feliz', {tema: temaAct()}); who.appendChild(av);
-    who.appendChild(el('span', 't', p ? p.nombre : '¿Quién juega?')); who.setAttribute('aria-label', p ? 'Jugador: ' + p.nombre + '. Cambiar' : 'Elegir quién juega'); }
+    who.appendChild(el('span', 't', p ? p.nombre : '¿Quién?')); who.setAttribute('aria-label', p ? 'Jugador: ' + p.nombre + '. Cambiar' : 'Elegir quién juega'); }
   who.onclick = function(){ PerfUI.elegir(function(){ cargaStats(); pintaWho(); pintaNom(); mood('celebra', 2500); saludo(); renderTrack(); }); };
   track.appendChild(who); track.appendChild(body);
   function cargaStats(){ stats.forEach(function(s){ s.n = {}; s.flag = false; }); }
@@ -387,6 +387,7 @@
     gi.appendChild(el('p', null, 'Los talleres se juegan mejor en horizontal: así todo se ve más grande.'));
     var gx = el('button', 'pf-gira-ok', 'Jugar en vertical'); gx.type = 'button';
     gx.onclick = function(){ gi.remove(); try { sessionStorage.setItem('tm_gira', '1'); } catch (e) {} setTimeout(function(){ try { window.dispatchEvent(new Event('resize')); } catch (e) {} }, 50); };
+    if (window.PCompleta && PCompleta.disponible()){ var gf = el('button', 'pf-gira-fs', 'Pantalla completa y horizontal'); gf.type = 'button'; gf.onclick = function(){ PCompleta.entra(); gi.remove(); }; gi.appendChild(gf); }
     gi.appendChild(gx); document.body.appendChild(gi); } } catch (e) {}
 
   window.PF.show = show; window.PF.pausa = pausa; window.PF.deseq = function(){ return desequilibrio(); }; window.PF.escala = function(){ return scale[cur]; }; window.PF.fit = function(f){ fit(cur, f !== false); };

@@ -52,7 +52,7 @@ jobs:
           set -euo pipefail
           cd app-android
           printf '%s\n' "window.EDICION = { id: 'sierra' };" > www/edicion-config.js
-          sed -i 's#"appId": "[^"]*"#"appId": "io.github.elodiestrupiechonski.ajolote.sierra"#; s#"appName": "[^"]*"#"appName": "Ajolote · Sierra"#' capacitor.config.json
+          sed -i 's#"appId": "[^"]*"#"appId": "com.delunaapps.ajolote.sierra"#; s#"appName": "[^"]*"#"appName": "Ajolote · Sierra"#' capacitor.config.json
           grep -q 'ajolote.sierra' capacitor.config.json
 
       - name: Instalar Capacitor y crear el proyecto Android

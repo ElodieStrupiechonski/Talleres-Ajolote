@@ -52,7 +52,7 @@ El número interno de versión (`versionCode`) sube solo con cada ejecución, as
 
 - **Nombre que se ve bajo el ícono:** `app-android/capacitor.config.json`, campo `appName`.
 - **Ícono y pantalla de arranque:** reemplazar los PNG de `app-android/assets/` (mismos nombres y tamaños).
-- **Identificador (`appId`):** `io.github.elodiestrupiechonski.ajolote`. **No se puede cambiar después de publicar.** Si prefieren otro (por ejemplo, el de la asociación), hay que cambiarlo **antes** de la primera subida.
+- **Identificador (`appId`):** `com.delunaapps.ajolote`. **No se puede cambiar después de publicar.** Si prefieren otro (por ejemplo, el de la asociación), hay que cambiarlo **antes** de la primera subida.
 
 ## Si la receta falla
 
